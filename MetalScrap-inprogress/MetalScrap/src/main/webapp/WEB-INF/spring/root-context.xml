@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	
+	
+	
+	
+	
+	<bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+   		 <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+   		 <property name="url" value="jdbc:mysql://localhost:3306/metalscrap" />
+  		  <property name="username" value="root" />
+  	   <property name="password" value="krzaq666" />
+	</bean>
+ 
+    <bean id="sessionFactory"
+        class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation">
+            <value>classpath:hibernate.cfg.xml</value>
+        </property>
+        <property name="configurationClass">
+            <value>org.hibernate.cfg.AnnotationConfiguration</value>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+            </props>
+        </property>
+    </bean>
+ 
+    <bean id="transactionManager"
+        class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+	<bean name="userDAO" class="pl.krzaq.metalscrap.dao.UserDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean name="userService" class="pl.krzaq.metalscrap.service.impl.UserServiceImpl">
+		<property name="userDAO" ref="userDAO" />
+	</bean>
+	
+	<bean name="DBUserService" class="pl.krzaq.metalscrap.service.impl.DBUserServiceImpl">
+		<property name="userService" ref="userService" />
+	</bean>
+
+	<bean name="restLoginService" class="pl.krzaq.metalscrap.service.impl.RESTLoginServiceImpl">
+	
+	</bean>
+	
+	<context:component-scan base-package="pl.krzaq.metalscrap" />
+		
+</beans>
