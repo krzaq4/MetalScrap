@@ -1,0 +1,6 @@
+<?page title="Niepoprawne dane logowania" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="Niepoprawne dane logowania" border="normal">
+Błąd autoryzacji!
+</window>
+</zk>

@@ -5,11 +5,12 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import pl.krzaq.metalscrap.model.Address;
 import pl.krzaq.metalscrap.model.Company;
 
-
+@Transactional
 public class AddressDAO {
 
 	@Autowired

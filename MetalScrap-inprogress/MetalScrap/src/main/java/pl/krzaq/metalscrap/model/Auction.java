@@ -1,7 +1,7 @@
 package pl.krzaq.metalscrap.model;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -50,6 +50,14 @@ public class Auction implements Serializable {
 	@Column(name="description")
 	private String description ;
 	
+	@Column(name="invoice")
+	private Boolean invoice ;
+	
+	@Column(name="delivery_time")
+	private String deliveryTime ;
+	
+	
+	
 	@OneToOne
 	@JoinColumn(name="winner")
 	private Company winner ;
@@ -68,6 +76,13 @@ public class Auction implements Serializable {
 	@JoinColumn(name="status")
 	private AuctionStatus status ;
 	
+	@OneToOne
+	@JoinColumn(name="delivery_type")
+	private DeliveryType deliveryType ;
+	
+	@OneToOne
+	@JoinColumn(name="payment_method")
+	private PaymentMethod paymentMethod ;
 	
 	// -------------------------------------------------------------------------------
 	
@@ -159,6 +174,38 @@ public class Auction implements Serializable {
 
 	public void setCommodities(Set<Commodity> commodities) {
 		this.commodities = commodities;
+	}
+
+	public Boolean getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(Boolean invoice) {
+		this.invoice = invoice;
+	}
+
+	public String getDeliveryTime() {
+		return deliveryTime;
+	}
+
+	public void setDeliveryTime(String deliveryTime) {
+		this.deliveryTime = deliveryTime;
+	}
+
+	public DeliveryType getDeliveryType() {
+		return deliveryType;
+	}
+
+	public void setDeliveryType(DeliveryType deliveryType) {
+		this.deliveryType = deliveryType;
+	}
+
+	public PaymentMethod getPaymentMethod() {
+		return paymentMethod;
+	}
+
+	public void setPaymentMethod(PaymentMethod paymentMethod) {
+		this.paymentMethod = paymentMethod;
 	}
 	
 	

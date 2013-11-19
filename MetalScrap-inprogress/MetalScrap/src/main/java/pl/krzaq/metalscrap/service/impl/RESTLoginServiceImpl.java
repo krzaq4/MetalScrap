@@ -2,59 +2,69 @@ package pl.krzaq.metalscrap.service.impl;
 
 
 
-import javax.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.view.xml.MarshallingView;
 
-import pl.krzaq.metalscrap.HomeController;
+
+
+
+
+import pl.krzaq.metalscrap.dao.UserDAO;
 import pl.krzaq.metalscrap.service.RESTLoginService;
-import pl.krzaq.metalscrap.utils.ResponseMessage;
-import pl.krzaq.metalscrap.utils.Constants;
 
-public class RESTLoginServiceImpl implements RESTLoginService {
+
+
+
+
+public class RESTLoginServiceImpl implements RESTLoginService, ApplicationContextAware {
 
 	
 	private static final Logger logger = LoggerFactory.getLogger(RESTLoginServiceImpl.class);
 	
-	@Inject
+	@Autowired
 	@Qualifier("authenticationManager")
 	private AuthenticationManager authenticationManager;
 	
+	@Autowired
+	private UserDAO userDAO ;
+	
+	private ApplicationContext applicationContext ;
 	
 	@Override	
-	public ResponseMessage login(String login, String password) {
+	public void login(String login, String password) {
 		
 		logger.info("Attempting to authenticate user "+login);
-		ResponseMessage result = new ResponseMessage() ;
 		Authentication toAuthenticate = new UsernamePasswordAuthenticationToken(login, password);
+		logger.info("User credentials");
 		try {
-			
+		
+	
 		Authentication authenticated = authenticationManager.authenticate(toAuthenticate) ;
+		
+		logger.info("Authenticated");
 		SecurityContextHolder.getContext().setAuthentication(authenticated);
-		result.setStatus(Constants.AUTHENTICATION_SUCCESS);
-		result.setMsg("User "+login+" succesfully logged in!");
+		logger.info("Authenticated in context");
+		
+		
+		
 		} catch(BadCredentialsException bce) {
-			logger.info("Wrong user or password");
-			result.setStatus(Constants.AUTHENTICATION_FAILED);
-			result.setMsg("Username or password incorrect");
+			logger.error("Wrong user or password");
+			
+		
 		}
 		
 		
 		
-		return result ;
 	}
 
 
@@ -70,6 +80,14 @@ public class RESTLoginServiceImpl implements RESTLoginService {
 
 	public static Logger getLogger() {
 		return logger;
+	}
+
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext)
+			throws BeansException {
+		this.applicationContext = applicationContext ;
+		
 	}
 	
 	

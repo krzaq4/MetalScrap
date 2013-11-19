@@ -1,0 +1,6 @@
+<?page title="AukcjeZlomu.com.pl - Witamy!" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+Witaj <label value="${user}"></label>!
+
+</zk>

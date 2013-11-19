@@ -18,6 +18,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @SuppressWarnings("serial")
 @Entity
@@ -29,6 +31,7 @@ import javax.validation.constraints.NotNull;
 	
 	
 })
+@XmlRootElement(name = "userDetails")
 public class User implements Serializable {
 
 	
@@ -64,8 +67,7 @@ public class User implements Serializable {
 	@Column(name="email")
 	private String email ;
 	
-	@ManyToMany
-	@JoinTable(name="user_roles")
+	@OneToMany(fetch=FetchType.EAGER)
 	private Set<Role> roles ;
 	
 	
@@ -81,6 +83,7 @@ public class User implements Serializable {
 		return login;
 	}
 
+	@XmlElement
 	public void setLogin(String login) {
 		this.login = login;
 	}
@@ -97,6 +100,7 @@ public class User implements Serializable {
 		return firstName;
 	}
 
+	@XmlElement
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
@@ -105,6 +109,7 @@ public class User implements Serializable {
 		return secondName;
 	}
 
+	@XmlElement
 	public void setSecondName(String secondName) {
 		this.secondName = secondName;
 	}
@@ -113,6 +118,7 @@ public class User implements Serializable {
 		return lastName;
 	}
 
+	@XmlElement
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
@@ -121,6 +127,7 @@ public class User implements Serializable {
 		return email;
 	}
 
+	@XmlElement
 	public void setEmail(String email) {
 		this.email = email;
 	}

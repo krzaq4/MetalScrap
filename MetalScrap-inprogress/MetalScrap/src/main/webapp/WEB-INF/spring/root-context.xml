@@ -2,10 +2,15 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/tx
+					http://www.springframework.org/schema/tx/spring-tx.xsd
+					http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						">
 	
 	
 	
+	<import resource="/appServlet/servlet-context.xml"/>
 	
 	
 	
@@ -25,6 +30,7 @@
         <property name="configurationClass">
             <value>org.hibernate.cfg.AnnotationConfiguration</value>
         </property>
+        
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
@@ -34,9 +40,13 @@
         </property>
     </bean>
  
+
+ 	<bean id="formEvents" class="pl.krzaq.metalscrap.events.FormEvents"></bean>
+ 
     <bean id="transactionManager"
         class="org.springframework.orm.hibernate3.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory" />
+        <property name="dataSource" ref="dataSource" />
     </bean>
 
 	<bean name="userDAO" class="pl.krzaq.metalscrap.dao.UserDAO">
@@ -55,6 +65,6 @@
 	
 	</bean>
 	
-	<context:component-scan base-package="pl.krzaq.metalscrap" />
+
 		
 </beans>
