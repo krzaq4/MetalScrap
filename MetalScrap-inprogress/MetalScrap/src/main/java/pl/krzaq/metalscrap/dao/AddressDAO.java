@@ -28,5 +28,17 @@ public class AddressDAO {
 		result.setParameter("company", company) ;
 		return (List<Address>) result.list() ;
 	}
+
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+	
+	
+	
+	
 	
 }

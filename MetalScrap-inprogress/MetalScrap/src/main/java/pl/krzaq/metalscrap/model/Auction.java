@@ -2,6 +2,7 @@ package pl.krzaq.metalscrap.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -34,6 +36,11 @@ public class Auction implements Serializable {
 	@Column(name="id")
 	private Long id ;
 	
+	@Column(name="name")
+	private String name ;
+	
+	@Column(name="number")
+	private String number ;
 	
 	@Column(name="start_date")
 	private Date startDate ;
@@ -67,17 +74,17 @@ public class Auction implements Serializable {
 	private Company owner ;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="auction")
-	private Set<CompanyOffer> companyOffers ;
+	private List<CompanyOffer> companyOffers ;
 
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="auction")
-	private Set<Commodity> commodities ;
+	private List<Commodity> commodities ;
 	
 	@OneToOne
 	@JoinColumn(name="status")
 	private AuctionStatus status ;
 	
 	@OneToOne
-	@JoinColumn(name="delivery_type")
+    @JoinColumn(name="delivery_type")
 	private DeliveryType deliveryType ;
 	
 	@OneToOne
@@ -160,19 +167,19 @@ public class Auction implements Serializable {
 		this.status = status;
 	}
 
-	public Set<CompanyOffer> getCompanyOffers() {
+	public List<CompanyOffer> getCompanyOffers() {
 		return companyOffers;
 	}
 
-	public void setCompanyOffers(Set<CompanyOffer> companyOffers) {
+	public void setCompanyOffers(List<CompanyOffer> companyOffers) {
 		this.companyOffers = companyOffers;
 	}
 
-	public Set<Commodity> getCommodities() {
+	public List<Commodity> getCommodities() {
 		return commodities;
 	}
 
-	public void setCommodities(Set<Commodity> commodities) {
+	public void setCommodities(List<Commodity> commodities) {
 		this.commodities = commodities;
 	}
 
@@ -206,6 +213,22 @@ public class Auction implements Serializable {
 
 	public void setPaymentMethod(PaymentMethod paymentMethod) {
 		this.paymentMethod = paymentMethod;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
 	}
 	
 	

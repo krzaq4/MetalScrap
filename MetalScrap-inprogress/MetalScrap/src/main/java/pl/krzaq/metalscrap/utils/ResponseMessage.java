@@ -1,5 +1,7 @@
 package pl.krzaq.metalscrap.utils;
 
+
+
 public class ResponseMessage{
 	
 	private int status ;

@@ -37,7 +37,7 @@ public class DeliveryType implements Serializable {
 	@Column(name="name")
 	private String name ;
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="delivery_type")
+	@OneToMany(cascade=CascadeType.ALL)
 	private Set<Auction> auctions ;
 
 	public Long getId() {

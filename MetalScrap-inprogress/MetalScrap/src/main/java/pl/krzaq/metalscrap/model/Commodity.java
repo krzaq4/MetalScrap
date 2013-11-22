@@ -44,6 +44,9 @@ public class Commodity implements Serializable {
 	@Column(name="cpv")
 	private String cpv ;
 	
+	@Column(name="quantity")
+	private Double quantity ;
+	
 	@OneToOne
 	@JoinColumn(name="commodity_type")
 	private CommodityType commodityType ;
@@ -102,6 +105,26 @@ public class Commodity implements Serializable {
 
 	public void setCatalogues(Set<CommodityCatalogue> catalogues) {
 		this.catalogues = catalogues;
+	}
+
+	public Double getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Double quantity) {
+		this.quantity = quantity;
+	}
+
+	public Auction getAuction() {
+		return auction;
+	}
+
+	public void setAuction(Auction auction) {
+		this.auction = auction;
+	}
+
+	public void setCommodityType(CommodityType commodityType) {
+		this.commodityType = commodityType;
 	}
 	
 	

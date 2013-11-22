@@ -6,36 +6,28 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import pl.krzaq.metalscrap.model.Auction;
+import pl.krzaq.metalscrap.model.CommodityType;
 
-@Transactional
-public class AuctionDAO {
+public class CommodityTypeDAO {
 
+	
 	@Autowired
 	private SessionFactory sessionFactory ;
 	
 	
-	public List<Auction> findAll() {
-		List<Auction> result = new ArrayList<Auction>() ;
+	public List<CommodityType> findAll() {
+		List<CommodityType> result = new ArrayList<CommodityType>() ;
 		Session session = sessionFactory.openSession() ;
 		session.beginTransaction().begin(); ;
-		result =  (List<Auction>) session.getNamedQuery("Auction.findAll").list() ;
+		result =  (List<CommodityType>) session.getNamedQuery("CommodityType.findAll").list() ;
 		session.getTransaction().commit();
 		session.close() ;
 		return result ;
 	}
 
-	public void save(Auction a){
-		
-		Session session = sessionFactory.openSession() ;
-		session.beginTransaction().begin(); ;
-		session.save(a) ;
-		session.getTransaction().commit();
-		session.close() ;
-		
-	}
+	
 
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;
@@ -45,7 +37,6 @@ public class AuctionDAO {
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-	
 	
 	
 	

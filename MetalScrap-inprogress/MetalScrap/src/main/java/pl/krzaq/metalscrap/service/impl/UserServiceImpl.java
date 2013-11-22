@@ -1,5 +1,6 @@
 package pl.krzaq.metalscrap.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import pl.krzaq.metalscrap.model.User;
@@ -9,6 +10,7 @@ import pl.krzaq.metalscrap.dao.UserDAO;
 
 public class UserServiceImpl implements UserService {
 
+	@Autowired
 	private UserDAO userDAO ;
 	
 

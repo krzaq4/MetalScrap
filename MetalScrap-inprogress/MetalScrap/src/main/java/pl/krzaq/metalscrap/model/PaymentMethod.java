@@ -37,7 +37,7 @@ public class PaymentMethod implements Serializable {
 	@Column(name="name")
 	private String name ;
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="payment_method")
+	@OneToMany(cascade=CascadeType.ALL)
 	private Set<Auction> auctions ;
 
 	public Long getId() {

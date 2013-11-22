@@ -69,6 +69,12 @@ public class HomeController {
 		return "login_fail" ;
 	}
 	
+	
+	@RequestMapping(value="/{page}", method=RequestMethod.GET)
+	public String page(@PathVariable String page) {
+		return page ;
+	}
+	
 	/*@RequestMapping( value="/loginservice/{login}/{password}", method=RequestMethod.GET)
 	public @ResponseBody User user(@PathVariable String login, @PathVariable String password) {
 		
