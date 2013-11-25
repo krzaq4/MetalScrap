@@ -1,0 +1,204 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="pl.krzaq.metalscrap.pages.AuctionNew"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" name="binder"?>
+
+<?page id="new" title="Nowa aukcja" contentType="text/html;charset=UTF-8" ?>
+
+
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+
+
+	<div
+		style="width:970px;height: 740px;border:1px solid #a9a9a9;margin: 0 auto ;">
+
+		<div id="header" class="header">
+			<div class="logo">
+				<image src="../../resources/images/logo.jpg"></image>
+			</div>
+			<div class="headerinfo">
+
+			</div>
+		</div>
+
+		<div id="menu" class="menu">
+			<menubar id="main" orient="horizontal">
+
+				<menuitem id="about" label="O platformie"></menuitem>
+				<menuseparator />
+				<menuitem id="auctions" label="Aukcje"
+					onClick="pageEvents.showAuctionsSubeMenu(main,binder)">
+				</menuitem>
+				<menuitem id="companies" label="Firmy"
+					onClick="pageEvents.showCompaniesSubMenu(main,binder)">
+				</menuitem>
+				<menuseparator />
+				<menuitem id="regulations" label="Regulamin"></menuitem>
+				<menuitem id="help" label="Pomoc"></menuitem>
+				<menuseparator />
+				<menuitem id="contact" label="Kontakt"></menuitem>
+
+			</menubar>
+
+			<menubar id="submenu" visible="true" orient="horizontal">
+				<menuitem id="auctions_list" label="Lista aukcji"
+					visible="@{auctionsSubMenu}" value="/secured/auctions/list.zul"
+					onClick="pageEvents.open(auctions_list.getValue())" />
+				<menuitem id="new_auction" label="Nowa aukcja"
+					visible="@{auctionsSubMenu}" />
+				<menuitem id="companies_list" label="Lista firm"
+					visible="@{companiesSubMenu}" />
+
+
+			</menubar>
+
+		</div>
+
+<panel id="parameters" height="900px">
+<caption label="Parametry aukcji"></caption>
+<panelchildren>
+<div>
+	<groupbox>
+
+				
+				<grid>
+					<columns>
+						<column width="180px"></column>
+						<column width="400px"></column>
+					</columns>
+					<rows>
+						<row>
+							<label value="Tytuł aukcji:" />	<textbox id="auction_name" value="@{auction.name}" />
+						</row>
+						<row>
+							<label value="Numer:" />	<textbox id="auction_number" value="@{auction.number}" />
+						</row>
+						<row>
+							<label value="Data rozpoczęcia:" />	<div><datebox id="auction_start_date" lenient="false" compact="false" buttonVisible="true" value="@{auction.startDate}" /> <timebox id="auction_start_time" onCreate="self.value = new Date()"></timebox></div>
+						</row>
+						<row>	
+							<label value="Data zakończenia:" /> <div><datebox id="auction_end_date" lenient="false" compact="false" buttonVisible="true" value="@{auction.endDate}" /><timebox id="auction_end_time" onCreate="self.value = new Date()"></timebox></div>
+						</row>
+					</rows>
+				</grid>
+	</groupbox>
+	<groupbox>
+				<grid>
+					<columns>
+						<column width="180px"></column>
+						<column width="400px"></column>
+					</columns>
+					<rows>
+						<row>
+							<label value="Czy wystawiasz fakturę VAT:" />	<checkbox id="auction_invoice" value="@{auction.invoice}" />
+						</row>
+						<row>
+							<label value="Sposób płatności:" />	
+							<combobox id="auction_payment"  model="@{paymentMethods}" selectedItem="@{auction.paymentMethod}"  value="@{auction.paymentMethod.name}"   >
+								<comboitem self="@{each=method}" label="@{method.name}" value="@{method}"></comboitem>
+							</combobox>
+															
+						</row>
+						<row>
+							<label value="Rodzaj dostawy:" />
+							<combobox id="auction_delivery" model="@{deliveryTypes}" selectedItem="@{auction.deliveryType}" value="@{auction.deliveryType.name}">
+								<comboitem self="@{each=type}" label="@{type.name}" value="@{type}"></comboitem>
+							</combobox>
+						</row>
+						<row>
+							<label value="Czas dostawy:" /><textbox id="auction_delivery_time"  value="@{auction.deliveryTime}"/>
+						</row>
+					</rows>
+				</grid>
+	</groupbox>
+	<groupbox >
+				<grid>
+					<columns>
+						<column width="180px"></column>
+						<column width="700px"></column>
+					</columns>
+					<rows>
+						<row>
+						
+							<label value="Opis aukcji:" />
+							<ckeditor id="auction_desc" width="700px" value="@{auction.description}">
+								<attribute name="value"><![CDATA[
+									<span>Tu wpisz opis aukcji</span>
+							]]></attribute>
+							</ckeditor>
+						</row>
+						<row>
+						<label id="info"/><button label="Dodaj pozycje do aukcji >>" onClick="formEvents.showAuctionPositions(parameters, positions)"></button>
+						</row>
+					</rows>
+				</grid>
+	</groupbox>
+
+			
+
+</div>
+</panelchildren>
+</panel>
+		
+<panel id="positions" visible="false">
+<caption label="Przedmioty aukcji" />
+<panelchildren>
+<div>
+	<groupbox>
+	<div id="listMenu"><button popup="addPositionsPopup" >Dodaj pozycję</button><button onClick="auctionEvents.delPosition(positionsList)">Usuń pozycję</button></div>
+	<listbox id="positionsList" model="@{auction.commodities}" selectedItem="@{commodity}" mold="paging" pageSize="10" checkmark="true" sizedByContent="false" height="400px" multiple="true">
+					<listhead>
+						<listheader label="Nazwa" />
+						<listheader label="Ilość" />
+						<listheader label="Rodzaj" />						
+					</listhead>
+					<listitem self="@{each=commodity}" value="@{commodity}">
+						<listcell onDoubleClick="auctionEvents.editPositionPopup(editPositionsPopup, self, binder)">
+							<label value="@{commodity.name}" />
+						</listcell>
+						<listcell>
+							<label value="@{commodity.quantity}" />
+						</listcell>
+						<listcell>
+							<label value="@{commodity.commodityType.name}" />
+						</listcell>
+					</listitem>
+	</listbox>
+	
+	</groupbox>
+	<grid>
+					<columns>
+						<column width="180px"></column>
+						<column width="700px"></column>
+					</columns>
+					<rows>
+						<row>
+							<button onClick="formEvents.showAuctionParameters(parameters, positions)">Powrót</button><button>Zapisz aukcję</button>						
+						</row>
+					</rows>
+	</grid>
+</div>
+
+</panelchildren>
+</panel>
+
+
+ <popup id="addPositionsPopup"  width="600px" onCreate="formEvents.clearForms(self)" onOpen="formEvents.clearForms(self)">
+ 
+                            <include src="windows/add_position.zul"/>
+                                
+ </popup>
+ 
+ <popup id="editPositionsPopup"  width="600px">
+ 
+                            <include src="windows/edit_position.zul" />
+                                
+ </popup>
+
+
+		<div>
+			<div id="additional" class="additional"></div>
+
+			<div id="footer" class="footer"></div>
+		</div>
+	</div>
+</zk>

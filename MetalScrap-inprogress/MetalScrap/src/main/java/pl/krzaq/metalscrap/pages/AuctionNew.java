@@ -8,9 +8,11 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.util.Initiator;
@@ -25,18 +27,29 @@ import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 
 public class AuctionNew extends HomePage{
 
+	private AnnotateDataBinder binder ;
 	
 	
-	
-	
-	public void doAfterCompose(Page page) throws Exception { 
+	@Override
+	public void doAfterCompose(Page arg0, Component[] arg1) throws Exception {
+		// TODO Auto-generated method stub
+		super.doAfterCompose(arg0, arg1);
+		
 		
 	}
 
-	
 
+	@Override
+	public boolean doCatch(Throwable arg0) throws Exception {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
 	public void doFinally() throws Exception {
-		// the finally cleanup
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
@@ -54,9 +67,11 @@ public class AuctionNew extends HomePage{
 		page.setAttribute("deliveryTypes", ServicesImpl.getDeliveryTypeService().findAll()) ;
 		
 		
+		System.out.println("Page init") ;
 		
-		
-		
+		this.getPageData(page);
+		this.binder = new AnnotateDataBinder(page) ;
+		binder.loadAll();
 	}
 
 

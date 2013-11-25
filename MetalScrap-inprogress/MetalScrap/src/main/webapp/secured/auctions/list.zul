@@ -1,0 +1,110 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="pl.krzaq.metalscrap.pages.AuctionList"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+
+<?page title="Lista aukcji" contentType="text/html;charset=UTF-8" ?>
+
+
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+
+
+	<div
+		style="width:970px;height: 740px;border:1px solid #a9a9a9;margin: 0 auto ;">
+
+		<div id="header" class="header">
+			<div class="logo">
+				<image src="../../resources/images/logo.jpg"></image>
+			</div>
+			<div class="headerinfo">
+
+			</div>
+		</div>
+
+		<div id="menu" class="menu">
+			<menubar id="main" orient="horizontal">
+
+				<menuitem id="about" label="O platformie"></menuitem>
+				<menuseparator />
+				<menuitem id="auctions" label="Aukcje"
+					onClick="pageEvents.showAuctionsSubeMenu(main,binder)">
+				</menuitem>
+				<menuitem id="companies" label="Firmy"
+					onClick="pageEvents.showCompaniesSubMenu(main,binder)">
+				</menuitem>
+				<menuseparator />
+				<menuitem id="regulations" label="Regulamin"></menuitem>
+				<menuitem id="help" label="Pomoc"></menuitem>
+				<menuseparator />
+				<menuitem id="contact" label="Kontakt"></menuitem>
+
+			</menubar>
+
+			<menubar id="submenu" visible="true" orient="horizontal">
+				<menuitem id="auctions_list" label="Lista aukcji"
+					visible="@{auctionsSubMenu}" value="/secured/auctions/list.zul"
+					onClick="pageEvents.open(auctions_list.getValue())" />
+				<menuitem id="new_auction" label="Nowa aukcja"
+					visible="@{auctionsSubMenu}" />
+				<menuitem id="companies_list" label="Lista firm"
+					visible="@{companiesSubMenu}" />
+
+
+			</menubar>
+
+		</div>
+
+		<panel id="content" border="rounded">
+			<panelchildren>
+
+				<listbox id="auctionList" model="@{auctions}"
+					mold="paging" pageSize="10" checkmark="true">
+					<listhead>
+						<listheader label="Nazwa" />
+						<listheader label="Status" />
+						<listheader label="Data rozpoczęcia" />
+						<listheader label="Data zakończenia" />
+						<listheader label="Forma płatności" />
+						<listheader label="Sposób dostawy" />
+					</listhead>
+					<listitem forEach="@{auction}">
+						<listcell>
+							<label value="@{auction.name}" />
+						</listcell>
+						<listcell>
+							<label value="@{auction.status.name}" />
+						</listcell>
+						<listcell>
+							<label
+								value="@{auction.startDate, converter='pl.krzaq.metalscrap.converter.DateConverter'}" />
+						</listcell>
+						<listcell>
+							<label
+								value="@{auction.endDate, converter='pl.krzaq.metalscrap.converter.DateConverter'}" />
+						</listcell>
+						<listcell>
+							<label
+								value="@{auction.paymentMethod.name}" />
+						</listcell>
+						<listcell>
+							<label value="@{auction.deliveryType.name}" />
+						</listcell>
+
+					</listitem>
+
+				</listbox>
+
+
+
+			</panelchildren>
+		</panel>
+
+
+
+
+		<div>
+			<div id="additional" class="additional"></div>
+
+			<div id="footer" class="footer"></div>
+		</div>
+	</div>
+</zk>

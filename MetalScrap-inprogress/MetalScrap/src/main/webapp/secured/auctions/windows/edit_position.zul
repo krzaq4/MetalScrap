@@ -1,0 +1,31 @@
+<?page title="Dodaj pozycję" contentType="text/html;charset=UTF-8"?>
+<?init class="pl.krzaq.metalscrap.pages.window.AddPosition" ?>
+<zk>
+
+
+
+
+<groupbox id="new_pos">
+<caption>Edytuj pozycję</caption>
+<grid>
+<columns>
+<column width="150px"></column>
+<column width="400px"></column>
+</columns>
+<rows>
+<row><label value="Nazwa"/> <textbox id="commodity_name" value="@{commodity.name}" ></textbox></row>
+<row><label value="Ilość"/> <textbox id="commodity_quantity" value="@{commodity.quantity}"></textbox></row>
+<row><label value="Rodzaj"/> <combobox id="commodity_type" model="@{commodityTypes}" selectedItem="@{commodity.commodityType}" value="@{commodity.commodityType.name}" readonly="true">
+								<comboitem self="@{each=type}" label="@{type.name}" value="@{type}"></comboitem>
+							</combobox>
+</row>
+<row>
+<button onClick="auctionEvents.updatePosition(commodity, new_pos)" label="Zmień"></button>
+</row>
+</rows>
+</grid>
+
+</groupbox>
+
+
+</zk>

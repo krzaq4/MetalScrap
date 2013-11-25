@@ -41,7 +41,7 @@
     </bean>
  
 
- 	<bean id="formEvents" class="pl.krzaq.metalscrap.events.FormEvents"></bean>
+ 	
  
     <bean id="transactionManager"
         class="org.springframework.orm.hibernate3.HibernateTransactionManager">
@@ -53,8 +53,48 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	
+	<bean name="commodityTypeDAO" class="pl.krzaq.metalscrap.dao.CommodityTypeDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean name="companyDAO" class="pl.krzaq.metalscrap.dao.CompanyDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean name="auctionDAO" class="pl.krzaq.metalscrap.dao.AuctionDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean name="paymentMethodDAO" class="pl.krzaq.metalscrap.dao.PaymentMethodDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean name="deliveryTypeDAO" class="pl.krzaq.metalscrap.dao.DeliveryTypeDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean name="roleDAO" class="pl.krzaq.metalscrap.dao.RoleDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean name="addressDAO" class="pl.krzaq.metalscrap.dao.AddressDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
 	<bean name="userService" class="pl.krzaq.metalscrap.service.impl.UserServiceImpl">
 		<property name="userDAO" ref="userDAO" />
+	</bean>
+	
+	<bean name="paymentMethodService" class="pl.krzaq.metalscrap.service.impl.PaymentMethodServiceImpl">
+		<property name="paymentMethodDAO" ref="paymentMethodDAO" />
+	</bean>
+	
+	<bean name="deliveryTypeService" class="pl.krzaq.metalscrap.service.impl.DeliveryTypeServiceImpl">
+		<property name="deliveryTypeDAO" ref="deliveryTypeDAO" />
+	</bean>
+	
+	<bean name="commodityTypeService" class="pl.krzaq.metalscrap.service.impl.CommodityTypeServiceImpl">
+		<property name="commodityTypeDAO" ref="commodityTypeDAO" />
 	</bean>
 	
 	<bean name="DBUserService" class="pl.krzaq.metalscrap.service.impl.DBUserServiceImpl">
@@ -65,6 +105,33 @@
 	
 	</bean>
 	
-
+	<bean name="auctionService" class="pl.krzaq.metalscrap.service.impl.AuctionServiceImpl">
+		<property name="auctionDAO" ref="auctionDAO"></property>
+	</bean>
+	
+	<bean name="services" class="pl.krzaq.metalscrap.service.impl.ServicesImpl">
+		<property name="userService" ref="userService"/>
+		<property name="auctionService" ref="auctionService"/>
+		<property name="paymentMethodService" ref="paymentMethodService"/>
+		<property name="deliveryTypeService" ref="deliveryTypeService"/>
+		<property name="commodityTypeService" ref="commodityTypeService"/>
+	</bean>
+	
+	
+	
+	
+	<bean id="formEvents" class="pl.krzaq.metalscrap.events.FormEvents"></bean>
+ 	<bean id="pageEvents" class="pl.krzaq.metalscrap.events.PageEvents"></bean>
+ 	<bean id="auctionEvents" class="pl.krzaq.metalscrap.events.AuctionEvents">
+ 		<property name="auctionDAO" ref="auctionDAO"/>
+ 		<property name="paymentMethodDAO" ref="paymentMethodDAO"/>
+ 		<property name="deliveryTypeDAO" ref="deliveryTypeDAO"/>
+ 		<property name="companyDAO" ref="companyDAO" />
+ 		<property name="addressDAO" ref="addressDAO" />
+ 		<property name="userDAO" ref="userDAO" />
+ 		
+ 	</bean>
+ 	
+ 	
 		
 </beans>

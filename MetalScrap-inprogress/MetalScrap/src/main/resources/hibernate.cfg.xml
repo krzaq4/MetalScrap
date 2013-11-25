@@ -19,6 +19,8 @@
   <mapping class="pl.krzaq.metalscrap.model.CompanyOffer"/>
   <mapping class="pl.krzaq.metalscrap.model.ContactsCatalogue"/>
   <mapping class="pl.krzaq.metalscrap.model.PkdClassification"/>
+  <mapping class="pl.krzaq.metalscrap.model.DeliveryType"/>
+  <mapping class="pl.krzaq.metalscrap.model.PaymentMethod"/>
   <mapping class="pl.krzaq.metalscrap.model.User"/>
   <mapping class="pl.krzaq.metalscrap.model.Role"/>
   

@@ -1,5 +1,7 @@
 package pl.krzaq.metalscrap.events;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +13,12 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zkplus.databind.AnnotateDataBinder;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Messagebox.ClickEvent;
+import org.zkoss.zul.Popup;
 import org.zkoss.zul.Window;
 
 import pl.krzaq.metalscrap.dao.AddressDAO;
@@ -65,13 +70,18 @@ public void addPosition(Commodity commodity, Component c) {
 	Page p = c.getPage() ;
 	
 	Auction a = (Auction) p.getAttribute("auction") ;
+	Commodity nc = new Commodity() ;
+	nc.setName(commodity.getName());
+	nc.setCommodityType(commodity.getCommodityType());
+	nc.setAuction(a);
+	nc.setQuantity(commodity.getQuantity());
 	
-	commodity.setAuction(a);
 	
-	a.getCommodities().add(commodity) ;
+	
+	a.getCommodities().add(nc) ;
 	
 	p.setAttribute("auction", a) ;
-	
+	p.setAttribute("commodity", new Commodity()) ;
 	refreshPositionsList(p) ;
 	
 	
@@ -79,23 +89,118 @@ public void addPosition(Commodity commodity, Component c) {
 	
 }
 
-public void delPosition(Listitem c) {
+
+public void updatePosition(Commodity commodity, Component c) {
 	
-	Commodity com = (Commodity) c.getValue() ;
-	Page p = c.getPage();
-	int d = showConfirmDialog(p) ;
-if (d == Messagebox.OK) {
-	
+	Page p = c.getPage() ;
 	
 	Auction a = (Auction) p.getAttribute("auction") ;
-	List<Commodity> old = a.getCommodities() ;
-	old.remove(com) ;
-	a.getCommodities().clear();
-	a.getCommodities().addAll(old) ;
-	p.setAttribute("auction", a) ;
+	Commodity nc = new Commodity() ;
+	nc.setName(commodity.getName());
+	nc.setCommodityType(commodity.getCommodityType());
+	nc.setAuction(a);
+	nc.setQuantity(commodity.getQuantity());
 	
+	
+	
+	//a.getCommodities().s.add(nc) ;
+	
+	a.getCommodities().set(a.getCommodities().indexOf(commodity), nc) ;
+	
+	p.setAttribute("auction", a) ;
+	p.setAttribute("commodity", new Commodity()) ;
 	refreshPositionsList(p) ;
+	
+	
+	
+	
 }
+
+
+
+public void delPosition(Listbox lbx) {
+	
+	
+	final Page p = lbx.getPage();
+	
+	
+	// Usuwanie wiêcej niz jedn¹ pozycjê
+	if(lbx.getSelectedCount()>1) {
+		
+		final List<Commodity> selected = new ArrayList<Commodity>() ;
+		
+		Iterator<Listitem> it = lbx.getSelectedItems().iterator() ;
+		
+		while(it.hasNext()) {
+			
+			selected.add((Commodity)it.next().getValue()) ;
+			
+		}
+		
+		int selectedCount = lbx.getSelectedCount() ;
+		
+		Messagebox.show("Czy napewno usun¹æ wybrane "+selectedCount+" pozycji/e?", "Usuñ pozycje", Messagebox.YES|Messagebox.CANCEL, "", new EventListener<Event>(){
+
+			@Override
+			public void onEvent(Event arg0) throws Exception {
+				
+				if (arg0.getName().equalsIgnoreCase("onyes")) {
+				Auction a = (Auction) p.getAttribute("auction") ;
+				List<Commodity> coms = a.getCommodities() ;
+				coms.removeAll(selected) ;
+				a.setCommodities(coms);
+				
+				p.setAttribute("auction", a) ;
+				
+				refreshPositionsList(p) ;
+				
+				}
+			}
+			
+			
+		}) ;
+		
+	// Usuwanie jednej pozycji
+	} else if(lbx.getSelectedCount()>0) {
+		
+		
+		final Commodity com = (Commodity) lbx.getSelectedItem().getValue() ;
+		
+		
+		
+		Messagebox.show("Czy napewno usun¹æ pozycjê?", "Usuñ pozycjê", Messagebox.YES|Messagebox.CANCEL, "", new EventListener<Event>(){
+
+			@Override
+			public void onEvent(Event arg0) throws Exception {
+				
+				System.out.println(arg0.getName()) ;
+				Auction a = (Auction) p.getAttribute("auction") ;
+				List<Commodity> coms = a.getCommodities() ;
+				coms.remove(com) ;
+				a.setCommodities(coms);
+				
+				p.setAttribute("auction", a) ;
+				
+				refreshPositionsList(p) ;
+				
+			}
+			
+			
+		}) ;
+		
+	}
+	
+		
+}
+
+
+public void editPositionPopup(Popup pop, Listcell cell, AnnotateDataBinder binder) {
+	
+	Commodity com = ((Listitem) cell.getParent()).getValue() ;
+	pop.setAttribute("commodity", com) ;
+	binder.loadComponent(pop);
+	pop.open(cell.getListbox());
+	
 	
 }
 
@@ -109,20 +214,6 @@ private void refreshPositionsList(Page p) {
 
 
 
-private int showConfirmDialog(Page p) {
-	
-	return Messagebox.show("Czy napewno usun¹æ pozycjê?", "Usuñ pozycjê", Messagebox.YES|Messagebox.CANCEL, "", new EventListener<Event>(){
-
-		@Override
-		public void onEvent(Event arg0) throws Exception {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		
-	}) ;
-	
-}
 
 //--------------------------------------------------------------------------------
 	
