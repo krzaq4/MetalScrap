@@ -19,7 +19,7 @@ public class DateConverter implements TypeConverter {
 	public Object coerceToUi(Object arg0, Component arg1) {
 
 		Date date = (Date) arg0 ;
-		SimpleDateFormat df = new SimpleDateFormat("dd-MM-YYYY") ;
+		SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy") ;
 		return df.format(date) ;
 		
 	}

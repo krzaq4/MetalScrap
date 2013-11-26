@@ -50,6 +50,9 @@ public class Address implements Serializable {
 	@Column(name="country")
 	private String country ;
 	
+	@Column(name="city")
+	private String city ;
+	
 	@ManyToOne
 	@JoinColumn(name="company")
 	private Company company ;
@@ -116,6 +119,14 @@ public class Address implements Serializable {
 
 	public void setCompany(Company company) {
 		this.company = company;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
 	
 	

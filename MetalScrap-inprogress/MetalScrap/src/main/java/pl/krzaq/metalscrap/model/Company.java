@@ -45,11 +45,11 @@ public class Company implements Serializable {
 	@Column(name="regon")
 	private String regon ;
 	
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="address_main")
 	private Address addressMain ;
 	
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="address_additional")
 	private Address addressAdditional ;
 	

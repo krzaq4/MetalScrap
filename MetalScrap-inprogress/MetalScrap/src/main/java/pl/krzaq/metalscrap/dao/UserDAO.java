@@ -36,6 +36,17 @@ public class UserDAO {
 		
 	}
 	
+	
+	public void saveUser(User user) {
+		
+		Session session = sessionFactory.openSession() ;
+		session.beginTransaction().begin(); ;
+		session.save(user) ;
+		session.getTransaction().commit();
+		session.close() ;
+		
+	}
+	
 
 public User getUserByLoginAndPass(String login, String pass) {
 		

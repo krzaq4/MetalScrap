@@ -19,8 +19,8 @@
 
 			</div>
 		</div>
-
-		<div id="menu" class="menu">
+	<include src="../common/menu.zul"></include>
+		<!-- <div id="menu" class="menu">
 			<menubar id="main" orient="horizontal">
 
 				<menuitem id="about" label="O platformie"></menuitem>
@@ -51,13 +51,13 @@
 
 			</menubar>
 
-		</div>
+		</div> -->
 
 		<panel id="content" border="rounded">
 			<panelchildren>
 
 				<listbox id="auctionList" model="@{auctions}"
-					mold="paging" pageSize="10" checkmark="true">
+					mold="paging" pageSize="10" checkmark="true" selectedItem="@{auction}" multiple="true">
 					<listhead>
 						<listheader label="Nazwa" />
 						<listheader label="Status" />
@@ -66,7 +66,7 @@
 						<listheader label="Forma płatności" />
 						<listheader label="Sposób dostawy" />
 					</listhead>
-					<listitem forEach="@{auction}">
+					<listitem self="@{each=auction}">
 						<listcell>
 							<label value="@{auction.name}" />
 						</listcell>

@@ -18,32 +18,43 @@
 </div>
 </div>
 
-<div id="menu" class="menu">
-<menubar id="main" orient="horizontal" >
+<include src="/common/menu.zul"></include>
 
-<menuitem id="about" label="O platformie" ></menuitem>
-<menuseparator/>
-<menuitem id="auctions" label="Aukcje" onClick="pageEvents.showAuctionsSubeMenu(main,binder)" ></menuitem>
-<menuitem id="companies" label="Firmy" onClick="pageEvents.showCompaniesSubMenu(main,binder)" ></menuitem>
-<menuseparator/>
-<menuitem id="regulations" label="Regulamin" ></menuitem>
-<menuitem id="help" label="Pomoc" ></menuitem>
-<menuseparator/>
-<menuitem id="contact" label="Kontakt" ></menuitem>
+<!-- 	<div id="menu" class="menu">
+		<menubar id="main" orient="horizontal">
 
-</menubar>
+			<menuitem id="about" label="O platformie"></menuitem>
+			<menuseparator />
+			<menuitem id="auctions" label="Aukcje"
+				onClick="pageEvents.showAuctionsSubeMenu(main,binder)">
+			</menuitem>
+			<menuitem id="companies" label="Firmy"
+				onClick="pageEvents.showCompaniesSubMenu(main,binder)">
+			</menuitem>
+			<menuseparator />
+			<menuitem id="regulations" label="Regulamin"></menuitem>
+			<menuitem id="help" label="Pomoc"></menuitem>
+			<menuseparator />
+			<menuitem id="contact" label="Kontakt"></menuitem>
 
-<menubar id="submenu" visible="true" orient="horizontal" >
-<menuitem id="auctions_list" label="Lista aukcji" visible="@{auctionsSubMenu}" value="/secured/auctions/list.zul" onClick="pageEvents.open(auctions_list.getValue())"/>
-<menuitem id="new_auction" label="Nowa aukcja" visible="@{auctionsSubMenu}" value="/secured/auctions/new.zul" onClick="pageEvents.open(new_auction.getValue())"/>
-<menuitem id="companies_list" label="Lista firm" visible="@{companiesSubMenu}"/>
+		</menubar>
+
+		<menubar id="submenu" visible="true" orient="horizontal">
+			<menuitem id="auctions_list" label="Lista aukcji"
+				visible="@{auctionsSubMenu}" value="/secured/auctions/list.zul"
+				onClick="pageEvents.open(auctions_list.getValue())" />
+			<menuitem id="new_auction" label="Nowa aukcja"
+				visible="@{auctionsSubMenu}" value="/secured/auctions/new.zul"
+				onClick="pageEvents.open(new_auction.getValue())" />
+			<menuitem id="companies_list" label="Lista firm"
+				visible="@{companiesSubMenu}" />
 
 
-</menubar>
+		</menubar>
 
-</div>
+	</div>
 
-<panel id="content" border="rounded">
+	 --><panel id="content" border="rounded">
 <panelchildren >
 
 </panelchildren>

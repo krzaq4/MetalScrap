@@ -20,7 +20,8 @@
 			</div>
 		</div>
 
-		<div id="menu" class="menu">
+<include src="../common/menu.zul"></include>
+		<!-- <div id="menu" class="menu">
 			<menubar id="main" orient="horizontal">
 
 				<menuitem id="about" label="O platformie"></menuitem>
@@ -51,7 +52,7 @@
 
 			</menubar>
 
-		</div>
+		</div> -->
 
 <panel id="parameters" height="900px">
 <caption label="Parametry aukcji"></caption>
@@ -172,7 +173,7 @@
 					</columns>
 					<rows>
 						<row>
-							<button onClick="formEvents.showAuctionParameters(parameters, positions)">Powrót</button><button>Zapisz aukcję</button>						
+							<button onClick="formEvents.showAuctionParameters(parameters, positions)">Powrót</button><button onClick="auctionEvents.saveNewAuction(auction)">Zapisz aukcję</button>						
 						</row>
 					</rows>
 	</grid>

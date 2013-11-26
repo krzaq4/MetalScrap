@@ -26,6 +26,15 @@ public class CompanyDAO {
 		return result ;
 	}
 
+	
+	public void saveCompany(Company company) {
+		
+		Session session = sessionFactory.openSession() ;
+		session.beginTransaction().begin(); ;
+		session.save(company) ;
+		session.getTransaction().commit();
+		session.close() ;
+	}
 
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;

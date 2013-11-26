@@ -27,7 +27,7 @@ import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 
 public class AuctionNew extends HomePage{
 
-	private AnnotateDataBinder binder ;
+	
 	
 	
 	@Override
@@ -69,9 +69,9 @@ public class AuctionNew extends HomePage{
 		
 		System.out.println("Page init") ;
 		
-		this.getPageData(page);
+		/*this.getPageData(page);
 		this.binder = new AnnotateDataBinder(page) ;
-		binder.loadAll();
+		binder.loadAll();*/
 	}
 
 

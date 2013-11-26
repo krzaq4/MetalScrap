@@ -1,86 +1,343 @@
 <?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
-
+<?init class="pl.krzaq.metalscrap.pages.Login"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
 <?page title="Logowanie do systemu" contentType="text/html;charset=UTF-8" ?>
 
 
 <zk xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript>
+<![CDATA[
+	String popPos = "overlap";
+]]>
+</zscript>
+
+	<div
+		style="width:970px;height: 740px;border:1px solid #a9a9a9;margin: 0 auto ;">
+
+		<div id="header" class="header">
+			<div class="logo">
+				<image src="../resources/images/logo.jpg"></image>
+			</div>
+			<div class="headerinfo">
+				<a onClick="loginPopup.open(content,popPos)">
+					Zaloguj się
+				</a>
+				<separator></separator>
+				<a onClick="registerPopup.open(content,popPos)">
+					Rejestracja - to nic nie kosztuje!
+				</a>
+			</div>
+		</div>
+
+		<include src="/common/menu.zul"></include>
+
+		<!-- <div id="menu" class="menu">
+			<menubar id="main" orient="horizontal">
+			
+			<menuitem id="about" label="O platformie"></menuitem>
+			<menuseparator />
+			<menuitem id="auctions" label="Aukcje"></menuitem>
+			<menuitem id="companies" label="Firmy"></menuitem>
+			<menuseparator />
+			<menuitem id="regulations" label="Regulamin"></menuitem>
+			<menuitem id="help" label="Pomoc"></menuitem>
+			<menuseparator />
+			<menuitem id="contact" label="Kontakt"></menuitem>
+			
+			</menubar>
+			
+			<menubar id="submenu" visible="false">
+			<menuitem id="auctions_list" label="Lista aukcji"
+			visible="false" />
+			<menuitem id="new_auction" label="Nowa aukcja"
+			visible="false" />
+			<menuitem id="companies_list" label="Lista firm"
+			visible="false" />
+			
+			
+			</menubar>
+			
+			</div> -->
+
+		<panel id="content" border="rounded">
+			<panelchildren>
+
+				<div id="homeinfo" class="homeinfo"></div>
+				<div class="loginform">
 
 
-<div style="width:970px;height: 740px;border:1px solid #a9a9a9;margin: 0 auto ;">
+				</div>
 
-<div id="header" class="header">
-<div class="logo">
-<image src="../resources/images/logo.jpg"></image>
-</div>
-<div class="headerinfo">
+			</panelchildren>
+		</panel>
 
-</div>
-</div>
-
-<div id="menu" class="menu">
-<menubar id="main" orient="horizontal" >
-
-<menuitem id="about" label="O platformie" ></menuitem>
-<menuseparator/>
-<menuitem id="auctions" label="Aukcje" ></menuitem>
-<menuitem id="companies" label="Firmy" ></menuitem>
-<menuseparator/>
-<menuitem id="regulations" label="Regulamin" ></menuitem>
-<menuitem id="help" label="Pomoc" ></menuitem>
-<menuseparator/>
-<menuitem id="contact" label="Kontakt" ></menuitem>
-
-</menubar>
-
-<menubar id="submenu" visible="false">
-<menuitem id="auctions_list" label="Lista aukcji" visible="false"/>
-<menuitem id="new_auction" label="Nowa aukcja" visible="false"/>
-<menuitem id="companies_list" label="Lista firm" visible="false"/>
+		<popup id="loginPopup" action="show: slideDown;hide: slideUp"
+			width="350px" height="120px">
 
 
-</menubar>
+			<panel id="login" width="100%">
+				<panelchildren>
+					<h:form method="post" id="j_spring_security_check"
+						action="../j_spring_security_check"
+						style="width:100%;height:120px">
+						<grid>
+							<columns>
+								<column width="120px"></column>
+								<column width="140px"></column>
+							</columns>
+							<rows>
+								<row>
+									<label>Nazwa uzytkownika</label>
+									<textbox id="j_username"
+										name="j_username">
+									</textbox>
 
-</div>
-
-<panel id="content" border="rounded">
-<panelchildren >
-
-<div id="homeinfo" class="homeinfo"></div>
-
-<div class="loginform">
-<h:form method="post" id="j_spring_security_check" action="../j_spring_security_check" style="width:260px;height:250px">
-<grid>
-<columns>
-<column width="120px"></column>
-<column width="140px"></column>
-</columns>
-<rows>
-<row>
-<label>Nazwa uzytkownika</label>
-<textbox id="j_username" name="j_username"></textbox>
-
-</row>
-<row>
-<label>Haslo</label>
-<textbox id="j_password" name="j_password" type="password"></textbox>
-</row>
-</rows>
-</grid>
-<h:input type="submit" value="Login" />
-</h:form>
-
-</div>
-
-</panelchildren>
-</panel>
+								</row>
+								<row>
+									<label>Haslo</label>
+									<textbox id="j_password"
+										name="j_password" type="password">
+									</textbox>
+								</row>
+							</rows>
+						</grid>
+						<h:input type="submit" value="Login" />
+					</h:form>
+				</panelchildren>
+			</panel>
 
 
+		</popup>
 
 
-<div>
-<div id="additional" class="additional"></div>
+		<popup id="registerPopup" action="show: slideDown;hide: slideUp"
+			width="480px" height="auto">
 
-<div id="footer" class="footer"></div>
-</div>
-</div>
+
+			<panel id="register" visible="true">
+				<panelchildren>
+					<div id="step1" width="460px">
+						<grid>
+							<columns>
+								<column width="150px"></column>
+								<column width="300px"></column>
+							</columns>
+							<rows>
+								<row>
+									<label value="Dane firmy" />
+									<label />
+								</row>
+								<row>
+									<label value="Nazwa firmy:"></label>
+									<textbox id="company_name"
+										value="@{company.name}">
+									</textbox>
+								</row>
+								<row>
+									<label value="NIP:"></label>
+									<textbox id="company_nip"
+										value="@{company.nip}">
+									</textbox>
+								</row>
+								<row>
+									<label value="Regon:"></label>
+									<textbox id="company_regon"
+										value="@{company.regon}">
+									</textbox>
+								</row>
+
+								<row>
+									<label value="Adres siedziby" />
+									<label />
+								</row>
+								<row>
+									<label value="Ulica:"></label>
+									<textbox id="company_street"
+										value="@{company.addressMain.street}">
+									</textbox>
+								</row>
+								<row>
+									<label value="Numer domu:"></label>
+									<textbox id="company_houseno"
+										value="@{company.addressMain.houseNo}">
+									</textbox>
+								</row>
+								<row>
+									<label value="Numer lokalu:">
+									</label>
+									<textbox id="company_flatno"
+										value="@{company.addressMain.flatNo}">
+									</textbox>
+								</row>
+								<row>
+									<label value="Kod pocztowy:">
+									</label>
+									<textbox id="company_postal"
+										value="@{company.addressMain.postal}">
+									</textbox>
+								</row>
+								<row>
+									<label value="Miasto:"></label>
+									<textbox id="company_city"
+										value="@{company.addressMain.city}">
+									</textbox>
+								</row>
+								<row>
+									<label value="Kraj:"></label>
+									<textbox id="company_country"
+										value="@{company.addressMain.country}">
+									</textbox>
+								</row>
+
+
+
+							</rows>
+						</grid>
+						<div style="text-align:right;">
+							<button
+								onClick="formEvents.showAuctionPositions(step1, step2)">
+								Dalej >>
+							</button>
+						</div>
+					</div>
+					<div id="step2" visible="false" width="460px">
+						<grid>
+							<columns>
+								<column width="150px"></column>
+								<column width="300px"></column>
+							</columns>
+							<rows>
+								<row>
+									<label
+										value="Adres do korespondencji" />
+									<label />
+								</row>
+								<row>
+									<label value="Ulica:"></label>
+									<textbox id="company_street2"
+										value="@{company.addressAdditional.street}" width="300px">
+									</textbox>
+								</row>
+								<row>
+									<label value="Numer domu:"></label>
+									<textbox id="company_houseno2"
+										value="@{company.addressAdditional.houseNo}" width="300px">
+									</textbox>
+								</row>
+								<row>
+									<label value="Numer lokalu:">
+									</label>
+									<textbox id="company_flatno2"
+										value="@{company.addressAdditional.flatNo}" width="300px">
+									</textbox>
+								</row>
+								<row>
+									<label value="Kod pocztowy:">
+									</label>
+									<textbox id="company_postal2"
+										value="@{company.addressAdditional.postal}" width="300px">
+									</textbox>
+								</row>
+								<row>
+									<label value="Miasto:"></label>
+									<textbox id="company_city2"
+										value="@{company.addressAdditional.city}" width="300px">
+									</textbox>
+								</row>
+								<row>
+									<label value="Kraj:"></label>
+									<textbox id="company_country2"
+										value="@{company.addressAdditional.country}" width="300px">
+									</textbox>
+								</row>
+
+							</rows>
+						</grid>
+
+
+
+						<div style="width:50%;float:left;">
+							<button
+								onClick="formEvents.showAuctionParameters(step1, step2)"
+								label="&lt;&lt; Wstecz" />
+						</div>
+						<div style="width:50%;float:right;">
+							<button
+								onClick="formEvents.showAuctionPositions(step2, step3)">
+								Dalej >>
+							</button>
+
+						</div>
+					</div>
+
+					<div id="step3" visible="false" width="460px">
+						<grid>
+							<columns>
+								<column width="150px"></column>
+								<column width="300px"></column>
+							</columns>
+							<rows>
+								<row>
+									<label value="Imię:"></label>
+									<textbox id="user_first"
+										value="@{user.firstName}" width="300px" />
+								</row>
+								<row>
+									<label value="Drugie imię:"></label>
+									<textbox id="user_second"
+										value="@{user.secondName}" width="300px" />
+								</row>
+								<row>
+									<label value="Nazwisko:"></label>
+									<textbox id="user_name"
+										value="@{user.lastName}" width="300px" />
+								</row>
+								<row>
+									<label value="Adres e-mail:"></label>
+									<textbox id="user_email"
+										value="@{user.email}" width="300px" />
+								</row>
+								<row>
+									<label value="Login:"></label>
+									<textbox id="user_login"
+										value="@{user.login}" width="300px" />
+								</row>
+								<row>
+									<label value="Hasło:"></label>
+									<textbox type="password"
+										id="user_pass" value="@{user.password}" width="300px" />
+								</row>
+								<row>
+									<label value="Powtórz hasło:"></label>
+									<textbox type="password"
+										id="user_repass" width="300px" />
+								</row>
+
+
+
+							</rows>
+						</grid>
+						<div style="width:50%;float:left;">
+							<button
+								onClick="formEvents.showAuctionParameters(step2, step3)"
+								label="&lt;&lt; Wstecz" />
+						</div>
+						<div style="width:50%;float:right;">
+							<button
+								onClick="auctionEvents.registerCompanyUser(company,user)">
+								Zarejestruj
+							</button>
+						</div>
+					</div>
+				</panelchildren>
+			</panel>
+
+		</popup>
+
+		<div>
+			<div id="additional" class="additional"></div>
+
+			<div id="footer" class="footer"></div>
+		</div>
+	</div>
 </zk>

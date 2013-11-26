@@ -21,14 +21,14 @@ public class FormEvents {
 
 	
 	
-	public void showAuctionPositions(Panel a, Panel b) {
+	public void showAuctionPositions(Component a, Component b) {
 		
 		a.setVisible(false) ;
 		b.setVisible(true) ;
 		
 	}
 	
-	public void showAuctionParameters(Panel a, Panel b) {
+	public void showAuctionParameters(Component a, Component b) {
 		
 		b.setVisible(false) ;
 		a.setVisible(true) ;

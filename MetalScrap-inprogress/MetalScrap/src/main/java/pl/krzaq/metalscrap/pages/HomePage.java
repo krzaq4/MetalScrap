@@ -22,42 +22,12 @@ public class HomePage implements Initiator, InitiatorExt {
 	}	
 	
 	
-public void clearPageData(Page p) {
-		
-		for (String attribute:p.getAttributes().keySet()){
-			
-			Executions.getCurrent().getSession().removeAttribute(attribute) ;
-			
-		}
-		
-	}
-	
-	
-public void setPageData(Page p) {
-		
-		
-		for (String attribute:p.getAttributes().keySet()){
-			
-			Executions.getCurrent().getSession().setAttribute(attribute, p.getAttribute(attribute)) ;
-			
-		}
-		
-	}
-
-public void getPageData(Page p){
-	
-	for (String attribute:Executions.getCurrent().getSession().getAttributes().keySet()){
-		
-		p.setAttribute(attribute, Executions.getCurrent().getSession().getAttribute(attribute)) ;
-		
-	}
-}
 
 
 @Override
 public void doAfterCompose(Page arg0, Component[] arg1) throws Exception {
 	// TODO Auto-generated method stub
-	Executions.getCurrent().getSession().setAttribute("oldPage", arg0.getId()) ;
+	//Executions.getCurrent().getSession().setAttribute("oldPage", arg0.getId()) ;
 }
 
 
@@ -71,11 +41,41 @@ public boolean doCatch(Throwable arg0) throws Exception {
 @Override
 public void doFinally() throws Exception {
 	// TODO Auto-generated method stub
-	System.out.println("doFinally");
+
 }
 
 
 
+protected void clearPageData(Page p) {
+		
+		for (String attribute:p.getAttributes().keySet()){
+			
+			Executions.getCurrent().getSession().removeAttribute(attribute) ;
+			
+		}
+		
+	}
+	
+	
+protected void setPageData(Page p) {
+		
+		
+		for (String attribute:p.getAttributes().keySet()){
+			
+			Executions.getCurrent().getSession().setAttribute(attribute, p.getAttribute(attribute)) ;
+			
+		}
+		
+	}
+
+protected void getPageData(Page p){
+	
+	for (String attribute:Executions.getCurrent().getSession().getAttributes().keySet()){
+		
+		p.setAttribute(attribute, Executions.getCurrent().getSession().getAttribute(attribute)) ;
+		
+	}
+}
 	
 
 }

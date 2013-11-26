@@ -36,7 +36,7 @@
  
    
   <security:form-login 
-    login-page="/app/login" default-target-url="/app/home" authentication-failure-url="/app/login_fail" />
+    login-page="/app/login" always-use-default-target="true"  default-target-url="/app/home" authentication-failure-url="/app/login_fail" />
     
  </security:http>
   

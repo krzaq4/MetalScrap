@@ -1,5 +1,8 @@
 package pl.krzaq.metalscrap.events;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -32,6 +35,7 @@ import pl.krzaq.metalscrap.model.Commodity;
 import pl.krzaq.metalscrap.model.CommodityType;
 import pl.krzaq.metalscrap.model.Company;
 import pl.krzaq.metalscrap.model.User;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class AuctionEvents {
 
@@ -64,6 +68,26 @@ public void saveNewAuction(Auction auction) {
 		
 	}
 	
+
+public void registerCompanyUser(Company company, User user) {
+	try {
+	user.setCompany(company);
+	company.getUsers().add(user) ;
+	String md5Pass;
+	
+		
+	
+	user.setPassword(Utilities.md5(user.getPassword()));
+	
+	companyDAO.saveCompany(company);
+	
+	
+	} catch (NoSuchAlgorithmException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} 
+	
+}
 
 public void addPosition(Commodity commodity, Component c) {
 	
