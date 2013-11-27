@@ -16,9 +16,6 @@
 			
 	</device-config>
 	
-	<listener>
-		
-		<listener-class>pl.krzaq.metalscrap.listener.PageListener</listener-class>
-	</listener>
+	
 	
 </zk>

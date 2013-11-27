@@ -1,3 +1,14 @@
+body {
+	
+	
+	background: url(../images/bck.jpg) center repeat-x;
+	
+	 -webkit-background-size: auto 100%;
+  -moz-background-size: auto 100%;
+  -o-background-size: auto 100%;
+  background-size: auto 100%;
+}
+
 
 .header {
 	
@@ -29,7 +40,7 @@
 	display: block ;
 	width:100%;
 	height: 40px ;
-	
+	border-radius: 15px;
 	
 }
 

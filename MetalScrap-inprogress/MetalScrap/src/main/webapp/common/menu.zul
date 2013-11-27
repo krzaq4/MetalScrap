@@ -2,7 +2,7 @@
 <zk>
 	<div id="menu" class="menu">
 		<div>
-			<menubar id="main" orient="horizontal">
+			<menubar id="main" orient="horizontal" >
 
 				<menuitem id="about" label="O platformie"></menuitem>
 				<menuseparator />

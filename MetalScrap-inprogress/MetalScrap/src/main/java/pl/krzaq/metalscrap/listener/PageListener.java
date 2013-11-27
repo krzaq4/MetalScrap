@@ -30,18 +30,18 @@ public class PageListener implements UiLifeCycle {
 
 	@Override
 	public void afterPageAttached(Page arg0, Desktop arg1) {
-		// TODO Auto-generated method stub
+		/*// TODO Auto-generated method stub
 		System.out.println("afterPageAttached") ;
 		String oldPageId = (String) Executions.getCurrent().getSession().getAttribute("oldPage") ;
 		Page oldPage = Executions.getCurrent().getDesktop().getPage(oldPageId) ;
-		setPageData(oldPage) ;
+		setPageData(oldPage) ;*/
 		
 	}
 
 	@Override
 	public void afterPageDetached(Page p, Desktop arg1) {
-		System.out.println("afterPageDetached") ;
-		setPageData(p) ;
+		/*System.out.println("afterPageDetached") ;
+		setPageData(p) ;*/
 
 	}
 	
