@@ -12,13 +12,15 @@
 	
 	<import resource="/appServlet/servlet-context.xml"/>
 	
-	
+	<bean id="applicationProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+   		 <property name="location" value="classpath:app.properties"/>
+	</bean>
 	
 	<bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
    		 <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-   		 <property name="url" value="jdbc:mysql://localhost:3306/metalscrap" />
-  		  <property name="username" value="root" />
-  	   <property name="password" value="krzaq666" />
+   		 <property name="url" value="${jdbc.url}" />
+  		 <property name="username" value="${jdbc.user}" />
+  	   	 <property name="password" value="${jdbc.pass}" />
 	</bean>
  
     <bean id="sessionFactory"
@@ -36,6 +38,7 @@
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
                 <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
+                
             </props>
         </property>
     </bean>
@@ -129,9 +132,10 @@
  		<property name="companyDAO" ref="companyDAO" />
  		<property name="addressDAO" ref="addressDAO" />
  		<property name="userDAO" ref="userDAO" />
+ 		<property name="roleDAO" ref="roleDAO" />
  		
  	</bean>
  	
- 	
+ 	<tx:annotation-driven/>
 		
 </beans>

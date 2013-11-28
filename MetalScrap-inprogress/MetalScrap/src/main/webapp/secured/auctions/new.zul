@@ -9,18 +9,18 @@
 
 
 	<div
-		style="width:970px;height: 740px;border:1px solid #a9a9a9;margin: 0 auto ;">
+		style="width:970px;height: 740px;margin: 0 auto ;">
 
 		<div id="header" class="header">
 			<div class="logo">
-				<image src="../../resources/images/logo.jpg"></image>
+				<image src="../../resources/images/logo.png"></image>
 			</div>
 			<div class="headerinfo">
 
 			</div>
 		</div>
 
-<include src="../common/menu.zul"></include>
+<include src="../../common/menu.zul"></include>
 		<!-- <div id="menu" class="menu">
 			<menubar id="main" orient="horizontal">
 
@@ -54,7 +54,7 @@
 
 		</div> -->
 
-<panel id="parameters" height="900px">
+<panel id="parameters" height="900px" border="none" collapsible="true"  action="show:slideIn;hide:slideOut">
 <caption label="Parametry aukcji"></caption>
 <panelchildren>
 <div>
@@ -63,8 +63,8 @@
 				
 				<grid>
 					<columns>
-						<column width="180px"></column>
-						<column width="400px"></column>
+						<column width="20%"></column>
+						<column width="80%"></column>
 					</columns>
 					<rows>
 						<row>
@@ -85,8 +85,8 @@
 	<groupbox>
 				<grid>
 					<columns>
-						<column width="180px"></column>
-						<column width="400px"></column>
+						<column width="20%"></column>
+						<column width="80%"></column>
 					</columns>
 					<rows>
 						<row>
@@ -114,21 +114,21 @@
 	<groupbox >
 				<grid>
 					<columns>
-						<column width="180px"></column>
-						<column width="700px"></column>
+						<column width="20%"></column>
+						<column width="80%"></column>
 					</columns>
 					<rows>
 						<row>
 						
 							<label value="Opis aukcji:" />
-							<ckeditor id="auction_desc" width="700px" value="@{auction.description}">
+							<ckeditor id="auction_desc" width="700px" mold="" value="@{auction.description}">
 								<attribute name="value"><![CDATA[
 									<span>Tu wpisz opis aukcji</span>
 							]]></attribute>
 							</ckeditor>
 						</row>
 						<row>
-						<label id="info"/><button label="Dodaj pozycje do aukcji >>" onClick="formEvents.showAuctionPositions(parameters, positions)"></button>
+						<label id="info"/><button label="Dodaj pozycje do aukcji >>" mold="trendy" onClick="formEvents.showAuctionPositions(parameters, positions)"></button>
 						</row>
 					</rows>
 				</grid>
@@ -140,7 +140,7 @@
 </panelchildren>
 </panel>
 		
-<panel id="positions" visible="false">
+<panel id="positions" visible="false"  border="none" collapsible="true"  action="show:slideIn;hide:slideOut">
 <caption label="Przedmioty aukcji" />
 <panelchildren>
 <div>
@@ -173,7 +173,7 @@
 					</columns>
 					<rows>
 						<row>
-							<button onClick="formEvents.showAuctionParameters(parameters, positions)">Powrót</button><button onClick="auctionEvents.saveNewAuction(auction)">Zapisz aukcję</button>						
+							<button onClick="formEvents.showAuctionParameters(parameters, positions)" mold="trendy">Powrót</button><button onClick="auctionEvents.saveNewAuction(auction)" mold="trendy">Zapisz aukcję</button>						
 						</row>
 					</rows>
 	</grid>

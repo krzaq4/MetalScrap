@@ -1,6 +1,7 @@
 package pl.krzaq.metalscrap.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 
 import pl.krzaq.metalscrap.model.User;
@@ -25,6 +26,16 @@ public class UserServiceImpl implements UserService {
 		return userDAO.getUserByLoginAndPass(login, pass) ;
 	}
 
+	
+	@Override 
+	public User getLoggedinUser() {
+		
+		return userDAO.getUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName()) ;
+		
+	}
+	
+	//-----------------------------------------------------------------------------
+	
 	public UserDAO getUserDAO() {
 		return userDAO;
 	}

@@ -29,12 +29,14 @@ import pl.krzaq.metalscrap.dao.AuctionDAO;
 import pl.krzaq.metalscrap.dao.CompanyDAO;
 import pl.krzaq.metalscrap.dao.DeliveryTypeDAO;
 import pl.krzaq.metalscrap.dao.PaymentMethodDAO;
+import pl.krzaq.metalscrap.dao.RoleDAO;
 import pl.krzaq.metalscrap.dao.UserDAO;
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.Commodity;
 import pl.krzaq.metalscrap.model.CommodityType;
 import pl.krzaq.metalscrap.model.Company;
 import pl.krzaq.metalscrap.model.User;
+import pl.krzaq.metalscrap.utils.Constants;
 import pl.krzaq.metalscrap.utils.Utilities;
 
 public class AuctionEvents {
@@ -57,6 +59,9 @@ public class AuctionEvents {
 	@Autowired
 	private UserDAO userDAO ;
 	
+	@Autowired
+	private RoleDAO roleDAO ;
+	
 	//-----------------------------------------------------------------------
 	
 public void saveNewAuction(Auction auction) {
@@ -72,8 +77,9 @@ public void saveNewAuction(Auction auction) {
 public void registerCompanyUser(Company company, User user) {
 	try {
 	user.setCompany(company);
+	user.getRoles().add(roleDAO.findRoleByName(Constants.ROLE_USER)) ;
 	company.getUsers().add(user) ;
-	String md5Pass;
+	
 	
 		
 	
@@ -291,6 +297,16 @@ private void refreshPositionsList(Page p) {
 
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
+	}
+
+
+	public RoleDAO getRoleDAO() {
+		return roleDAO;
+	}
+
+
+	public void setRoleDAO(RoleDAO roleDAO) {
+		this.roleDAO = roleDAO;
 	}
 
 	

@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
+import org.zkoss.zk.ui.Executions;
 
 import pl.krzaq.metalscrap.model.Role;
 import pl.krzaq.metalscrap.service.DBUserService;
@@ -38,8 +39,9 @@ public class DBUserServiceImpl implements UserDetailsService {
 			
 		}
 		
-		User user = new User(username, password, authorities) ;
 		
+		User user = new User(username, password, authorities) ;
+		Executions.getCurrent().getSession().setAttribute("currentUser", userService.getUserByLogin(username)) ;
 		return user ;
 	}
 

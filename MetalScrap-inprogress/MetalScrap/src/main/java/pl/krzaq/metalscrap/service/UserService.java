@@ -9,6 +9,5 @@ public User getUserByLogin(String login) ;
 
 public User getUserByLoginAndPass(String login, String pass) ;
 	
-	
-	
+public User getLoggedinUser();	
 }

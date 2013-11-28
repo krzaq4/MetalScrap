@@ -9,6 +9,7 @@ import org.zkoss.zk.ui.Page;
 
 import pl.krzaq.metalscrap.model.Address;
 import pl.krzaq.metalscrap.model.Company;
+import pl.krzaq.metalscrap.model.Role;
 import pl.krzaq.metalscrap.model.User;
 
 public class Login extends HomePage {
@@ -24,6 +25,8 @@ public class Login extends HomePage {
 		Company company = new Company() ;
 		User user = new User() ;
 		Set<User> users = new HashSet<User>() ;
+		Set<Role> roles = new HashSet<Role>() ;
+		user.setRoles(roles);
 		company.setUsers(users);
 		company.setAddressMain(main);
 		company.setAddressAdditional(additional);
