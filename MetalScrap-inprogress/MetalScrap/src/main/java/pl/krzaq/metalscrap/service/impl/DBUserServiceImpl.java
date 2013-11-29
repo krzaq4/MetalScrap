@@ -41,7 +41,7 @@ public class DBUserServiceImpl implements UserDetailsService {
 		
 		
 		User user = new User(username, password, authorities) ;
-		Executions.getCurrent().getSession().setAttribute("currentUser", userService.getUserByLogin(username)) ;
+		
 		return user ;
 	}
 

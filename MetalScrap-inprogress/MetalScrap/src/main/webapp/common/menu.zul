@@ -1,4 +1,5 @@
 <?page title="menu" contentType="text/html;charset=UTF-8"?>
+
 <zk>
 <zscript>
 <![CDATA[
@@ -12,12 +13,16 @@
 				<menuitem id="about" label="O platformie"></menuitem>
 				<menuseparator />
 				<menuitem id="auctions" label="Aukcje"
-					onClick="pageEvents.showAuctionsSubeMenu(submenu,binder)">
+					onClick="pageEvents.showSubMenu(self.getId(), menu, binder)">
 				</menuitem>
 				<menuitem id="companies" label="Firmy"
-					onClick="pageEvents.showCompaniesSubMenu(submenu,binder)">
+					onClick="pageEvents.showSubMenu(self.getId(), menu, binder)">
 				</menuitem>
-				<menuitem id="admin" label="Administracja"></menuitem>
+				<menuitem id="admin" label="Administracja" visible="@{isAdmin}"
+					onClick="pageEvents.showSubMenu(self.getId(), menu, binder)"></menuitem>
+				<menuseparator />
+				<menuitem id="cms" label="CMS"  visible="@{isAdmin}"
+					onClick="pageEvents.showSubMenu(self.getId(), menu, binder)"></menuitem>
 				<menuseparator />
 				<menuitem id="regulations" label="Regulamin"></menuitem>
 				<menuitem id="help" label="Pomoc"></menuitem>
@@ -27,17 +32,45 @@
 			</menubar>
 		</div>
 		<div id="sub">
-			<menubar class="subMenu" id="submenu"  orient="horizontal" visible="@{subMenuVisible}" action="show:slideDown; hide:slideUp">
+			<menubar class="subMenu" id="auctionsSubMenu"  orient="horizontal" visible="false" action="show:slideDown; hide:slideUp">
+				
+				<!-- AUKCJE -->
 				<menuitem id="auctions_list" label="Lista aukcji"
-					visible="@{auctionsSubMenu}" value="/secured/auctions/list.zul"
+					value="/secured/auctions/list.zul"
 					onClick="pageEvents.open(auctions_list.getValue())"/>
 				<menuitem id="new_auction" label="Nowa aukcja"
-					visible="@{auctionsSubMenu}" value="/secured/auctions/new.zul"
+					value="/secured/auctions/new.zul"
 					onClick="pageEvents.open(new_auction.getValue())"/>
-				<menuitem id="companies_list" label="Lista firm"
-					visible="@{companiesSubMenu}"/>
+			</menubar>
+			<menubar  class="subMenu" id="companiesSubMenu"  orient="horizontal" visible="false" action="show:slideDown; hide:slideUp">
+				<!-- FIRMY -->
+				<menuitem id="companies_list" label="Lista firm" />
+			</menubar>
+			<menubar  class="subMenu" id="adminSubMenu"  orient="horizontal" visible="false" action="show:slideDown; hide:slideUp">
+				<!-- ADMIN -->
+				<menuitem id="delivery_types" label="Sposoby dostawy"
+					value="/secured/admin/delivery_types.zul"
+					onClick="pageEvents.open(delivery_types.getValue())"/>
+					
+				<menuitem id="payment_methods" label="Metody płatności"
+					value="/secured/admin/payment_methods.zul"
+					onClick="pageEvents.open(payment_methods.getValue())"/>
+					
+				<menuitem id="measure_units" label="Jednostki miary"
+					value="/secured/admin/measure_units.zul"
+					onClick="pageEvents.open(measure_units.getValue())"/>
+					
+				<menuitem id="users" label="Użytkownicy"
+					value="/secured/admin/users.zul"
+					onClick="pageEvents.open(users.getValue())"/>
+					
+			</menubar>
+			<menubar  class="subMenu" id="cmsSubMenu"  orient="horizontal" visible="false" action="show:slideDown; hide:slideUp">
+				<!-- CMS -->
 
-
+				<menuitem id="cms_edit" label="Edytuj treści"
+					visible="@{cmsSubMenu}" value="/secured/cms/edit.zul"
+					onClick="pageEvents.open(cms_edit.getValue())"/>
 			</menubar>
 		</div>
 	</div>

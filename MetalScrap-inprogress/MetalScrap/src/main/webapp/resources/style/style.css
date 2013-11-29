@@ -33,6 +33,16 @@ body {
 	
 }
 
+.userInfo {
+	
+	width:450px;
+	height: 40px; 
+	color: #444444;
+	font-family: Verdana ;
+	font-size: 1.0em;
+	
+}
+
 .menu {
 	
 	display: block ;

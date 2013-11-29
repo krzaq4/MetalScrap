@@ -38,7 +38,7 @@
 			</div>
 		</div>
 
-		<include src="/common/menu.zul"></include>
+		<include mode="defer" src="/common/menu.zul"></include>
 
 		<!-- <div id="menu" class="menu">
 			<menubar id="main" orient="horizontal">

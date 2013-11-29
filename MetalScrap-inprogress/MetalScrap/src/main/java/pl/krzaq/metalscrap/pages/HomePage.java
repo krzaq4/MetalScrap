@@ -1,20 +1,35 @@
 package pl.krzaq.metalscrap.pages;
 
+import java.util.Iterator;
 import java.util.Map;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.select.annotation.VariableResolver;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.Initiator;
 import org.zkoss.zk.ui.util.InitiatorExt;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import pl.krzaq.metalscrap.model.Role;
 import pl.krzaq.metalscrap.model.User;
+import pl.krzaq.metalscrap.service.UserService;
 import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.service.impl.UserServiceImpl;
+import pl.krzaq.metalscrap.utils.ApplicationContextProvider;
 import pl.krzaq.metalscrap.utils.Constants;
 
+@VariableResolver(org.zkoss.zkplus.spring.DelegatingVariableResolver.class)
 public class HomePage implements Initiator, InitiatorExt {
 
+	
+	private UserServiceImpl userService ;
+	
+	
+	
 	@Override
 	public void doInit(Page page, Map<String, Object> arg1) throws Exception {
 
@@ -24,21 +39,27 @@ public class HomePage implements Initiator, InitiatorExt {
 
 		Executions.getCurrent().getSession().setAttribute("page", page);
 
+		userService = (UserServiceImpl) ApplicationContextProvider.getApplicationContext().getBean("userService") ;
+		
 		boolean isUser = false;
 		boolean isAdmin = false;
 		boolean isSuperAdmin = false;
 		
+		
+		String login = ((UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername() ;
+		System.out.println("Logged in user: "+login) ;
+		
+		
 		// Aktualnie zalogowany u¿ytkownik
-		User currentUser = (User) Executions.getCurrent().getSession().getAttribute("currentUser") ;
+		User currentUser =userService.getUserByLogin(login); //ServicesImpl.getUserService().getUserByLogin(((UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()) ;
 		if (currentUser != null) {
 		page.setAttribute("currentUser", currentUser);
 
+		Iterator<Role> iterator = currentUser.getRoles().iterator() ; 
 		
-		
-			while (currentUser.getRoles().iterator().hasNext()) {
+			while (iterator.hasNext()) {
 
-				String roleName = currentUser.getRoles().iterator().next()
-						.getName();
+				String roleName = iterator.next().getName();
 
 				isUser = roleName.equalsIgnoreCase(Constants.ROLE_USER);
 				isAdmin = roleName.equalsIgnoreCase(Constants.ROLE_ADMIN);
@@ -54,14 +75,14 @@ public class HomePage implements Initiator, InitiatorExt {
 		page.setAttribute("isUser", isUser);
 		page.setAttribute("isAdmin", isAdmin);
 		page.setAttribute("isSuperAdmin", isSuperAdmin);
+		
 
 	}
 
 	@Override
-	public void doAfterCompose(Page arg0, Component[] arg1) throws Exception {
-		// TODO Auto-generated method stub
-		// Executions.getCurrent().getSession().setAttribute("oldPage",
-		// arg0.getId()) ;
+	public void doAfterCompose(Page page, Component[] arg1) throws Exception {
+		
+		
 	}
 
 	@Override
@@ -107,5 +128,9 @@ public class HomePage implements Initiator, InitiatorExt {
 
 		}
 	}
+
+	
+	
+	
 
 }

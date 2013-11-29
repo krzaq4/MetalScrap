@@ -1,5 +1,5 @@
 <?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
-<?init class="pl.krzaq.metalscrap.pages.HomePage" ?>
+<?init class="pl.krzaq.metalscrap.pages.Welcome" ?>
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
 <?page title="Strona główna" contentType="text/html;charset=UTF-8" ?>
 
@@ -14,11 +14,11 @@
 <image src="../resources/images/logo.png"></image>
 </div>
 <div class="headerinfo">
-
+<div class="userInfo">Zalogowany jako: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/></div>
 </div>
 </div>
 
-<include src="/common/menu.zul"></include>
+<include id="men"  src="/common/menu.zul" ></include>
 
 <!-- 	<div id="menu" class="menu">
 		<menubar id="main" orient="horizontal">

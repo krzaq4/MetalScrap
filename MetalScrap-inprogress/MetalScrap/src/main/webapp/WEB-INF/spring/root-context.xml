@@ -112,6 +112,9 @@
 		<property name="auctionDAO" ref="auctionDAO"></property>
 	</bean>
 	
+	<bean name="applicationContextProvider" class="pl.krzaq.metalscrap.utils.ApplicationContextProvider" >
+	</bean>
+	
 	<bean name="services" class="pl.krzaq.metalscrap.service.impl.ServicesImpl">
 		<property name="userService" ref="userService"/>
 		<property name="auctionService" ref="auctionService"/>
