@@ -47,7 +47,7 @@ public class Commodity implements Serializable {
 	@Column(name="quantity")
 	private Double quantity ;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name="commodity_type")
 	private CommodityType commodityType ;
 	

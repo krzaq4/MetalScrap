@@ -6,10 +6,12 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.PaymentMethod;
 
+@Transactional
 public class PaymentMethodDAO {
 
 	
@@ -18,13 +20,8 @@ public class PaymentMethodDAO {
 	
 	
 	public List<PaymentMethod> findAll() {
-		List<PaymentMethod> result = new ArrayList<PaymentMethod>() ;
-		Session session = sessionFactory.openSession() ;
-		session.beginTransaction().begin(); ;
-		result =  (List<PaymentMethod>) session.getNamedQuery("PaymentMethod.findAll").list() ;
-		session.getTransaction().commit();
-		session.close() ;
-		return result ;
+		return sessionFactory.getCurrentSession().getNamedQuery("PaymentMethod.findAll").list() ;
+		
 	}
 
 

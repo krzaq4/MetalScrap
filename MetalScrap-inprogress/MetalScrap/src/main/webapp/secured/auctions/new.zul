@@ -74,10 +74,10 @@
 							<label value="Numer:" />	<textbox id="auction_number" value="@{auction.number}" />
 						</row>
 						<row>
-							<label value="Data rozpoczęcia:" />	<div><datebox id="auction_start_date" lenient="false" compact="false" buttonVisible="true" value="@{auction.startDate}" /> <timebox id="auction_start_time" onCreate="self.value = new Date()"></timebox></div>
+							<label value="Data rozpoczęcia:" />	<div><datebox id="auction_start_date" cols="12" width="230px" format="long+medium" onCreate="self.value = new Date()" value="@{auction.startDate}" /> </div>
 						</row>
 						<row>	
-							<label value="Data zakończenia:" /> <div><datebox id="auction_end_date" lenient="false" compact="false" buttonVisible="true" value="@{auction.endDate}" /><timebox id="auction_end_time" onCreate="self.value = new Date()"></timebox></div>
+							<label value="Data zakończenia:" /> <div><datebox id="auction_end_date" cols="12" width="230px"   format="long+medium" onCreate="self.value = new Date()" value="@{auction.endDate}" /></div>
 						</row>
 					</rows>
 				</grid>

@@ -16,6 +16,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zkplus.databind.AnnotateDataBinder;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
@@ -66,10 +67,16 @@ public class AuctionEvents {
 	
 public void saveNewAuction(Auction auction) {
 		
+	
+	
 		User currentUser = userDAO.getUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName()) ;
 		Company currentCompany = currentUser.getCompany() ;
 		
 		auctionDAO.save(auction);
+		
+		Window okWindow = (Window)Executions.getCurrent().createComponents("Aukcja utworzona", null,null) ;
+		okWindow.setClosable(true);
+		okWindow.doModal();
 		
 	}
 	

@@ -3,17 +3,38 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="http://www.springframework.org/schema/tx
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc 
+					http://www.springframework.org/schema/mvc/spring-mvc.xsd
+					http://www.springframework.org/schema/tx					
 					http://www.springframework.org/schema/tx/spring-tx.xsd
+					http://www.springframework.org/schema/context 
+					http://www.springframework.org/schema/context/spring-context.xsd
 					http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						">
 	
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<mvc:annotation-driven />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/secured/" />
+		<property name="suffix" value=".zul" />
+	</bean>
 	
 	
-	<import resource="/appServlet/servlet-context.xml"/>
+	<context:component-scan base-package="pl.krzaq.metalscrap"></context:component-scan>
+	<context:annotation-config/>
+	
+	<mvc:resources mapping="/resources/**" location="/, classpath:/resources/" />
+	
+	<!-- <import resource="/appServlet/servlet-context.xml"/> -->
 	
 	<bean id="applicationProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
    		 <property name="location" value="classpath:app.properties"/>
+   		 
 	</bean>
 	
 	<bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -36,15 +57,14 @@
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 
             </props>
         </property>
     </bean>
  
-
- 	
+	
  
     <bean id="transactionManager"
         class="org.springframework.orm.hibernate3.HibernateTransactionManager">
@@ -138,6 +158,52 @@
  		<property name="roleDAO" ref="roleDAO" />
  		
  	</bean>
+ 	
+ 	
+ 	<bean name="checkStartedAuctions" class="pl.krzaq.metalscrap.quartz.jobs.CheckStartedAuctions" >
+ 		<property name="auctionDAO" ref="auctionDAO" />
+ 	</bean>
+ 	
+ 	<bean name="auctionStartJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+ 
+ 	<property name="durability" value="true" />
+	<property name="jobClass" value="pl.krzaq.metalscrap.quartz.AuctionStartJob" />
+ 
+	<property name="jobDataAsMap">
+		<map>
+			<entry key="checkStartedAuctions" value-ref="checkStartedAuctions" />
+		</map>
+	</property>
+	</bean>
+	
+	
+	<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+ 
+		<property name="jobDetail" ref="auctionStartJob"></property>
+		<property name="cronExpression" value="0/1 * * * * ?"></property>
+ 
+	</bean>
+	
+	
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+	<property name="jobDetails">
+	   <list>
+	      <ref bean="auctionStartJob" />
+	   </list>
+	</property>
+ 
+	<property name="triggers">
+	    <list>
+		<ref bean="cronTrigger" />
+	    </list>
+	</property>
+   </bean>
+	
+	
+	
+ 
+
+ 	
  	
  	<tx:annotation-driven/>
 		
