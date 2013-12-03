@@ -1,6 +1,7 @@
 package pl.krzaq.metalscrap.model;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -18,6 +19,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 @Entity
@@ -42,10 +45,12 @@ public class Auction implements Serializable {
 	@Column(name="number")
 	private String number ;
 	
-	@Column(name="start_date")
+	@Column(name = "start_date", columnDefinition="DATETIME NOT NULL")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date startDate ;
 	
-	@Column(name="end_date")
+	@Column(name = "end_date", columnDefinition="DATETIME NOT NULL")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date endDate ;
 	
 	@Column(name="start_price")

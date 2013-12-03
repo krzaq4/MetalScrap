@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import pl.krzaq.metalscrap.model.User;
 
-
+@Transactional
 public class UserDAO {
 
 	
@@ -18,19 +18,8 @@ public class UserDAO {
 	
 	
 	public User getUserByLogin(String login) {
-		Session session = sessionFactory.openSession(); 
-		session.beginTransaction().begin();
-		List<User> users = session.getNamedQuery("User.findByLogin").setParameter("login", login).list() ;
 		
-		if (users.size()>0) {
-			User u = (User)users.get(0) ;
-			session.getTransaction().commit();
-			
-			return u;
-		} else {
-			session.getTransaction().commit();
-			return null ;
-		}
+		return  (User)sessionFactory.getCurrentSession().getNamedQuery("User.findByLogin").setParameter("login", login).list().get(0) ;
 		
 		
 		
@@ -39,11 +28,8 @@ public class UserDAO {
 	
 	public void saveUser(User user) {
 		
-		Session session = sessionFactory.openSession() ;
-		session.beginTransaction().begin(); ;
-		session.save(user) ;
-		session.getTransaction().commit();
-		session.close() ;
+		
+		sessionFactory.getCurrentSession().save(user) ;
 		
 	}
 	

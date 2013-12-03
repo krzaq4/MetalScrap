@@ -23,6 +23,14 @@ import javax.persistence.Table;
 })
 public class AuctionStatus implements Serializable{
 
+	
+	public static final int STATUS_NEW =1 ;
+	public static final int STATUS_STARTED =2 ;
+	public static final int STATUS_FINISHED =3 ;
+	
+	
+	
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="id")

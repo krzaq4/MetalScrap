@@ -19,26 +19,28 @@
 	
 ]]>
 </zscript>
-
+<div class="head"></div>
+<div class="log"></div>
 	<div
 		style="width:970px;height: 740px;margin: 0 auto ;">
 
 		<div id="header" class="header">
 			<div class="logo">
-				<image src="../resources/images/logo.png"></image>
+				
 			</div>
 			<div class="headerinfo">
-				<a onClick="loginPopup.open(content,popPos)">
+				<div class="userInfo"><a onClick="loginPopup.open(content,popPos)">
 					Zaloguj się
 				</a>
 				<separator></separator>
 				<a onClick="registerPopup.open(content,popPos)">
 					Rejestracja - to nic nie kosztuje!
 				</a>
+				</div>
 			</div>
 		</div>
 
-		<include src="/common/menu.zul"></include>
+		<include id="men"  src="/common/menu.zul" ></include>
 
 		<!-- <div id="menu" class="menu">
 			<menubar id="main" orient="horizontal">

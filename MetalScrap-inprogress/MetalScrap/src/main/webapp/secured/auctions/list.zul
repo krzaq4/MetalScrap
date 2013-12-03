@@ -13,13 +13,13 @@
 
 		<div id="header" class="header">
 			<div class="logo">
-				<image src="../../resources/images/logo.png"></image>
+				<image src="/resources/images/logo.png"></image>
 			</div>
 			<div class="headerinfo">
-
+<div class="userInfo">Zalogowany jako: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/></div>
 			</div>
 		</div>
-	<include src="../../common/menu.zul"></include>
+	<include id="men"  src="/common/menu.zul" ></include>
 		<!-- <div id="menu" class="menu">
 			<menubar id="main" orient="horizontal">
 

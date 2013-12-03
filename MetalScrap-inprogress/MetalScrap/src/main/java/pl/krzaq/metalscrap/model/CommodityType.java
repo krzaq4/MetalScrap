@@ -1,6 +1,7 @@
 package pl.krzaq.metalscrap.model;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -19,7 +20,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="commodity_type")
 @NamedQueries({
-	@NamedQuery(name="CommodityType.findAll", query="from CommodityType" )
+	@NamedQuery(name="CommodityType.findAll", query="from CommodityType c" )
 	
 	
 })
@@ -34,8 +35,8 @@ public class CommodityType implements Serializable {
 	@Column(name="name")
 	private String name ;
 	
-	@OneToOne(optional=false, mappedBy="commodityType")
-	private Commodity commodity ;
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="commodityType")
+	private List<Commodity> commodities ;
 
 	public Long getId() {
 		return id;
@@ -53,12 +54,12 @@ public class CommodityType implements Serializable {
 		this.name = name;
 	}
 
-	public Commodity getCommodity() {
-		return commodity;
+	public List<Commodity> getCommodities() {
+		return commodities;
 	}
 
-	public void setCommodity(Commodity commodity) {
-		this.commodity = commodity;
+	public void setCommodities(List<Commodity> commodities) {
+		this.commodities = commodities;
 	}
 	
 	
