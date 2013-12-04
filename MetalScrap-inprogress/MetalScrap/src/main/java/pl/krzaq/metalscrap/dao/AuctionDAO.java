@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,11 @@ public class AuctionDAO {
 		
 		return sessionFactory.getCurrentSession().createCriteria(Auction.class).add(Restrictions.eq("status", status)).list() ;
 		
+	}
+	
+	public int findCountByStatus(int status) {
+		
+		return ((Number)sessionFactory.getCurrentSession().createCriteria(AuctionStatus.class).add(Restrictions.eq("status", status)).setProjection(Projections.rowCount()).uniqueResult()).intValue() ;
 	}
 	
 	public List<Auction> findByStartTime(Date start) {
@@ -60,6 +66,13 @@ public class AuctionDAO {
 		return (AuctionStatus) sessionFactory.getCurrentSession().createCriteria(AuctionStatus.class).add(Restrictions.eq("code", code)).list().get(0) ;
 	}
 
+	
+	public List<AuctionStatus> findAllStatuses() {
+		
+		return sessionFactory.getCurrentSession().getNamedQuery("AuctionStatus.findAll").list() ;
+		
+	}
+	
 	public void save(Auction a){
 		
 		sessionFactory.getCurrentSession().save(a) ;

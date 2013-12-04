@@ -63,9 +63,7 @@
             </props>
         </property>
     </bean>
- 
-	
- 
+ 	 
     <bean id="transactionManager"
         class="org.springframework.orm.hibernate3.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory" />
@@ -104,6 +102,11 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	
+	<bean name="categoryDAO" class="pl.krzaq.metalscrap.dao.CategoryDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+		
 	<bean name="userService" class="pl.krzaq.metalscrap.service.impl.UserServiceImpl">
 		<property name="userDAO" ref="userDAO" />
 	</bean>
@@ -143,9 +146,6 @@
 		<property name="commodityTypeService" ref="commodityTypeService"/>
 	</bean>
 	
-	
-	
-	
 	<bean id="formEvents" class="pl.krzaq.metalscrap.events.FormEvents"></bean>
  	<bean id="pageEvents" class="pl.krzaq.metalscrap.events.PageEvents"></bean>
  	<bean id="auctionEvents" class="pl.krzaq.metalscrap.events.AuctionEvents">
@@ -158,8 +158,7 @@
  		<property name="roleDAO" ref="roleDAO" />
  		
  	</bean>
- 	
- 	
+ 	 	
  	<bean name="checkStartedAuctions" class="pl.krzaq.metalscrap.quartz.jobs.CheckStartedAuctions" >
  		<property name="auctionDAO" ref="auctionDAO" />
  	</bean>
