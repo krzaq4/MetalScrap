@@ -22,7 +22,7 @@
 <div class="head"></div>
 <div class="log"></div>
 	<div
-		style="width:970px;height: 740px;margin: 0 auto ;">
+		style="width:80%;height: 740px;margin: 0 auto ;">
 
 		<div id="header" class="header">
 			<div class="logo">
@@ -40,7 +40,10 @@
 			</div>
 		</div>
 
+
 		<include id="men"  src="/common/menu.zul" ></include>
+
+	
 
 		<!-- <div id="menu" class="menu">
 			<menubar id="main" orient="horizontal">
@@ -70,11 +73,15 @@
 			
 			</div> -->
 
-		<panel id="content" border="rounded">
+		<panel id="content" height="500px" border="rounded">
 			<panelchildren>
 
-				<div id="homeinfo" class="homeinfo"></div>
-				<div class="loginform">
+				<div id="categoriesMenu" class="categoriesMenu">
+				
+				<include mode="defer" src="/common/categories.zul"></include>
+				</div>
+				
+				<div class="otherContent">
 
 
 				</div>

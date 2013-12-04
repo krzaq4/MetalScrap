@@ -1,3 +1,4 @@
+
 package pl.krzaq.metalscrap.dao;
 
 import java.util.ArrayList;
@@ -53,6 +54,11 @@ public class AuctionDAO {
 		
 		return sessionFactory.getCurrentSession().createCriteria(Auction.class).add(Restrictions.eq("endDate", to)).list() ;
 		
+	}
+	
+public List<AuctionStatus> findAllStatuses() {
+		
+		return sessionFactory.getCurrentSession().getNamedQuery("AuctionStatus.findAll").list();
 	}
 	
 	public AuctionStatus findStatusByCode(int code) {

@@ -44,4 +44,40 @@ public class AuctionStatus implements Serializable{
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="status")
 	private Set<Auction> auctions ;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Integer getCode() {
+		return code;
+	}
+
+	public void setCode(Integer code) {
+		this.code = code;
+	}
+
+	public Set<Auction> getAuctions() {
+		return auctions;
+	}
+
+	public void setAuctions(Set<Auction> auctions) {
+		this.auctions = auctions;
+	}
+	
+	
+	
+	
 }

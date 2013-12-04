@@ -23,21 +23,6 @@
 	
     
 
-	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
-	<!-- Enables the Spring MVC @Controller programming model -->
-	<mvc:annotation-driven />
-
-	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
-	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<beans:property name="prefix" value="/secured/" />
-		<beans:property name="suffix" value=".zul" />
-	</beans:bean>
-	
-	
-	<context:component-scan base-package="pl.krzaq.metalscrap"></context:component-scan>
-	<context:annotation-config/>
-	
-	<mvc:resources mapping="/resources/**" location="/, classpath:/resources/" />
 	
 </beans:beans>

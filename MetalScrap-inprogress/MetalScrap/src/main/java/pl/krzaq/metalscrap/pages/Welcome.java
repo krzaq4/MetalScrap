@@ -1,3 +1,4 @@
+
 package pl.krzaq.metalscrap.pages;
 
 import java.util.Map;

@@ -57,7 +57,15 @@
 
 	 --><panel id="content" border="rounded">
 <panelchildren >
+<div id="categoriesMenu" class="categoriesMenu">
+				
+				<include mode="defer" src="/common/categories.zul"></include>
+				</div>
+				
+				<div class="otherContent">
 
+
+				</div>
 </panelchildren>
 </panel>
 

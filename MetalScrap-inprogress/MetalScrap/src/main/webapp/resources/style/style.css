@@ -186,6 +186,44 @@ h1{
 	
 }
 
+.categoriesMenu {
+	
+	display: block ;
+	width: 25% ;
+	height: 100%;
+	float: left ;
+	
+}
+
+.categoryDiv{
+	width: auto ;
+	height: auto ;
+	overflow: hidden ;
+	font-size: 1.2em;
+}
+
+.categoryDesc{
+	display: block ;
+	width: 100% ;
+	font-size: 0.6em;
+	
+}
+
+.categoryName{
+	display: block ;
+	font-weight: bold; 
+	width: 100% ;
+}
+
+.otherContent{
+	
+	display: block ;
+	width: 75% ;
+	height: 100%;
+	float: right ;
+	
+}
+
 
 
 .z-button .z-button-cm{
@@ -198,13 +236,25 @@ h1{
 }
 
 
+div.z-tree-header tr.z-treecols, div.z-tree-header tr.z-auxhead {
+	
+	background-image: url(../images/menubar.jpg) ;
+	background-repeat: repeat-x ;
+	
+}
+
+div.z-treefooter-cnt, div.z-treecol-cnt {
+	color: #444444;
+	font-size: 1.0em;
+	
+}
 .z-button{
 	
 	height: 32px ;
 }
 
 .z-label{
-	color:#fefefe;
+	color:#444444;
 	
 }
 
@@ -256,5 +306,77 @@ tr.z-row td.z-row-inner{
 	height: 40px ;
 	
 	
+}
+
+
+
+.z-tree-ico.z-tree-root-close {
+	display: none ;
+	background: none ;
+	
+}
+
+
+.z-tree-ico.z-tree-root-open {
+	display: none ;
+	background:none ;
+}
+
+.z-tree-ico.z-tree-tee-close {
+	display: none ;
+	background: none ;
+	
+}
+
+
+.z-tree-ico.z-tree-tee-open {
+	display: none ;
+	background:none ;
+}
+
+.z-tree-ico.z-tree-last-close {
+	display: none ;
+	background: none ;
+	
+}
+
+
+.z-tree-ico.z-tree-last-open {
+	display: none ;
+	background:none ;
+}
+
+.z-tree-ico.z-tree-firstspacer{
+	
+	display: none ;
+}
+
+.z-tree-line.z-tree-spacer{
+	display: block;
+	float: left ;
+	width:10px;
+	
+}
+
+.z-tree-line.z-tree-last {
+	display: none;
+	
+}
+
+.z-tree-line.z-tree-vbar {
+	display: block;
+	float: left ;
+	width:20px;
+	
+}
+
+.z-tree-row.z-tree-row-seld{
+	
+	margin-left:5px ;
+}
+
+tr.z-tree-row td.z-tree-row-focus{
+	
+	background:none ;
 }
 

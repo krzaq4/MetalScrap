@@ -1,3 +1,4 @@
+
 package pl.krzaq.metalscrap.utils;
 
 import org.springframework.beans.BeansException;
@@ -11,5 +12,4 @@ return ctx;
  }
  public void setApplicationContext(ApplicationContext ctx) throws BeansException {
 this.ctx = ctx;
- }
-}
+ }}

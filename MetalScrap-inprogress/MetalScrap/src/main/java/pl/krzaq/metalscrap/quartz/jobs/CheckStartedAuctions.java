@@ -1,15 +1,13 @@
 package pl.krzaq.metalscrap.quartz.jobs;
 
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
-
-
-
-
-
 
 
 
@@ -20,6 +18,7 @@ import pl.krzaq.metalscrap.dao.AuctionDAO;
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.AuctionStatus;
 
+
 public class CheckStartedAuctions {
 
 	
@@ -28,45 +27,69 @@ public class CheckStartedAuctions {
 	private List<Auction> startedAuctions ;
 	private List<Auction> allAuctions ;
 	
+	private AuctionStatus[] allStatuses;
+	
 	private AuctionDAO auctionDAO ; 
 	
 	
 	public void checkIfStarted() {
 		
+		//Aktualny czas serwera
 		Date currentTime = new Date() ;
+		
+		// sp³aszczenie milisekund
+		Calendar cal = new GregorianCalendar() ;
+		cal.setTime(currentTime);
+		cal.set(Calendar.MILLISECOND, 0);
+		currentTime = cal.getTime() ;
+		
+		
+		
 		DateFormat df = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss:SS") ;
-		logger.info("Checking started/finished auctions "+df.format(currentTime));
+		
+		// lista stanów aukcji
+		
+		if (allStatuses==null) {
+			List<AuctionStatus> tl = auctionDAO.findAllStatuses() ;
+			allStatuses = new AuctionStatus[tl.size()+1] ;
+			
+			for (AuctionStatus as:tl) {
+				allStatuses[as.getCode()] = as ;
+			}
+		}
+		
+		
+		// pobranie listy rozpoczêtych aukcji
 		
 		if (startedAuctions==null) {
 		
 			startedAuctions = auctionDAO.findByStartTime(currentTime);
 		}
 		
-		if(allAuctions==null) {
-			
-			allAuctions = auctionDAO.findAll() ;
-		}
 		
-		if (startedAuctions != null && allAuctions != null) {
+		// w³aœciwe sprawdzenie rozpoczêtych i zakoñczonych aukcji
+		
+		if (startedAuctions != null ) {
 			
 			for (Auction a:auctionDAO.findByStartTime(currentTime)) {
 				
 				if (!startedAuctions.contains(a)) {
 					startedAuctions.add(a) ;
-					a.setStatus(auctionDAO.findStatusByCode(AuctionStatus.STATUS_STARTED));
+					a.setStatus(allStatuses[AuctionStatus.STATUS_STARTED]);
 					auctionDAO.update(a);
-					logger.info("StartedAuction id "+a.getId());
+					logger.info("StartedAuction id "+a.getId()+" @ "+df.format(currentTime));
 				}
 			}
 			
-			for (Auction a:auctionDAO.findByEndTime(currentTime)) {
+			for (Iterator<Auction>it = startedAuctions.iterator();it.hasNext();) {
 				
-				if (startedAuctions.contains(a)) {
-					a.setStatus(auctionDAO.findStatusByCode(AuctionStatus.STATUS_FINISHED));
+				Auction a = it.next() ;
+				if (a.getEndDate().compareTo(currentTime)==0) {
+					a.setStatus(allStatuses[AuctionStatus.STATUS_FINISHED]);
 					auctionDAO.update(a);
-					startedAuctions.remove(a) ;
-					logger.info("FinishedAuction id "+a.getId());
-				}
+					it.remove();
+					logger.info("FinishedAuction id "+a.getId()+" @ "+df.format(currentTime));
+			}
 				
 			}
 			

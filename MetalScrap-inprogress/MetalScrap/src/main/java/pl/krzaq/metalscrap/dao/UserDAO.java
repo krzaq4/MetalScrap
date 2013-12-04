@@ -1,3 +1,4 @@
+
 package pl.krzaq.metalscrap.dao;
 
 import java.util.List;

@@ -96,6 +96,11 @@ public class Auction implements Serializable {
 	@JoinColumn(name="payment_method")
 	private PaymentMethod paymentMethod ;
 	
+
+	@ManyToOne
+	@JoinColumn(name="category")
+	private Category category ;
+	
 	// -------------------------------------------------------------------------------
 	
 	
@@ -234,6 +239,15 @@ public class Auction implements Serializable {
 
 	public void setNumber(String number) {
 		this.number = number;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+
 	}
 	
 	
