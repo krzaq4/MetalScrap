@@ -1,6 +1,8 @@
 package pl.krzaq.metalscrap.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -29,7 +31,7 @@ import javax.persistence.Table;
 	
 	
 })
-public class Category implements Serializable {
+public class Category implements Serializable, Comparable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -41,6 +43,9 @@ public class Category implements Serializable {
 	
 	@Column(name="description")
 	private String description ;
+	
+	@Column(name="position")
+	private int position ;
 	
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="parent")
@@ -67,11 +72,66 @@ public class Category implements Serializable {
 		this.name = name ;
 		this.description = description ;
 		this.parent = parent ;
+		this.auctions = new ArrayList<Auction>() ;
+		this.children = new ArrayList<Category>() ;
 	}
+	
+	public Category(Category category) {
+		
+		this.auctions = new ArrayList<Auction>() ;
+		
+		
+		if (category.getChildren()!=null) Collections.sort(category.getChildren()) ;
+		this.children = category.getChildren()==null ? null : new ArrayList<Category>(category.getChildren()) ;
+		this.description = new String(category.getDescription()) ;
+		this.id = category.getId()==null ? null : new Long(category.getId()) ;
+		this.name = new String(category.getName()) ;
+		this.parent = category.getParent() ==null ? null :new Category(category.getParent()) ;
+		this.position = new Integer(category.getPosition()).intValue() ;
+		
+	}
+	
+	
 	
 	
 	//-----------------------------------------------------------------------
 	
+	@Override
+	public int hashCode() {
+		
+		int hc = this.getId().intValue()*this.getPosition()*111 ;
+		return hc ;
+		
+	}
+
+
+
+	@Override
+	public boolean equals(Object obj) {
+		
+		boolean eq = true ;
+		if (obj!=null) {
+		Category toCompare = (Category) obj ;
+			if (this.getId()!=null) {
+			
+				if (this.getId()!=toCompare.getId())
+					eq = false ;
+			
+			}
+			
+			if (!this.getName().equals(toCompare.getName()))
+				eq = false ;
+			
+			if (this.getPosition()!=toCompare.getPosition())
+				eq = false ;
+		
+		} else eq=false ;
+		
+		return eq ;
+	}
+
+
+
 	public Long getId() {
 		return id;
 	}
@@ -120,6 +180,31 @@ public class Category implements Serializable {
 
 	public void setChildren(List<Category> children) {
 		this.children = children;
+	}
+
+
+
+	public int getPosition() {
+		return position;
+	}
+
+
+
+	public void setPosition(int position) {
+		this.position = position;
+	}
+
+
+
+	@Override
+	public int compareTo(Object o) {
+		
+		Category toCompare = (Category) o ;
+		int cmp = 0 ;
+		if (this.getPosition()<toCompare.getPosition()) cmp=-1 ;
+		if (this.getPosition()>toCompare.getPosition()) cmp=1 ;
+		if (this.getPosition()==toCompare.getPosition()) cmp=0 ;
+		return cmp ;
 	}
 	
 	

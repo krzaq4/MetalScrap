@@ -41,6 +41,10 @@
 				<menuitem id="new_auction" label="Nowa aukcja"
 					value="/secured/auctions/new.zul"
 					onClick="pageEvents.open(new_auction.getValue())"/>
+				<menuitem id="auction_categories" label="Kategorie aukcji" visible="@{isCategoriesVisible}"
+					value="/secured/auctions/auction_categories.zul"
+					onClick="pageEvents.open(auction_categories.getValue())"/>
+					
 			</menubar>
 			<menubar  class="subMenu" id="companiesSubMenu"  orient="horizontal" visible="false" action="show:slideDown; hide:slideUp">
 				<!-- FIRMY -->
@@ -63,6 +67,10 @@
 				<menuitem id="users" label="Użytkownicy"
 					value="/secured/admin/users.zul"
 					onClick="pageEvents.open(users.getValue())"/>
+					
+				<menuitem id="config" label="Konfiguracja"
+					value="/secured/admin/config.zul"
+					onClick="pageEvents.open(config.getValue())"/>
 					
 			</menubar>
 			<menubar  class="subMenu" id="cmsSubMenu"  orient="horizontal" visible="false" action="show:slideDown; hide:slideUp">

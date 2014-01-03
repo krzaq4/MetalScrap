@@ -60,6 +60,7 @@
                 <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 
+                
             </props>
         </property>
     </bean>
@@ -70,6 +71,9 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
 
+	<bean name="attachementFileDAO" class="pl.krzaq.metalscrap.dao.AttachementFileDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
 
 	<bean name="userDAO" class="pl.krzaq.metalscrap.dao.UserDAO">
 		<property name="sessionFactory" ref="sessionFactory" />
@@ -84,6 +88,10 @@
 	</bean>
 	
 	<bean name="auctionDAO" class="pl.krzaq.metalscrap.dao.AuctionDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean name="configDAO" class="pl.krzaq.metalscrap.dao.ConfigDAO">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	
@@ -107,6 +115,13 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	
+	<bean name="attachementFileService" class="pl.krzaq.metalscrap.service.impl.AttachementFileServiceImpl">
+		<property name="attachementFileDAO" ref="attachementFileDAO" />
+	</bean>
+		
+	<bean name="categoryService" class="pl.krzaq.metalscrap.service.impl.CategoryServiceImpl">
+		<property name="categoryDAO" ref="categoryDAO" />
+	</bean>	
 		
 	<bean name="userService" class="pl.krzaq.metalscrap.service.impl.UserServiceImpl">
 		<property name="userDAO" ref="userDAO" />
@@ -127,6 +142,10 @@
 	<bean name="DBUserService" class="pl.krzaq.metalscrap.service.impl.DBUserServiceImpl">
 		<property name="userService" ref="userService" />
 	</bean>
+	
+	<bean name="configService" class="pl.krzaq.metalscrap.service.impl.ConfigServiceImpl">
+		<property name="configDAO" ref="configDAO" />
+	</bean>
 
 	<bean name="restLoginService" class="pl.krzaq.metalscrap.service.impl.RESTLoginServiceImpl">
 	
@@ -145,9 +164,14 @@
 		<property name="paymentMethodService" ref="paymentMethodService"/>
 		<property name="deliveryTypeService" ref="deliveryTypeService"/>
 		<property name="commodityTypeService" ref="commodityTypeService"/>
+		<property name="configService" ref="configService"/>
+		<property name="categoryService" ref="categoryService"/>
+		<property name="attachementFileService" ref="attachementFileService"/>
 	</bean>
 	
 	<bean id="formEvents" class="pl.krzaq.metalscrap.events.FormEvents"></bean>
+	<bean id="categoryEvents" class="pl.krzaq.metalscrap.events.CategoryEvents"></bean>
+	<bean id="configEvents" class="pl.krzaq.metalscrap.events.ConfigEvents"></bean>
  	<bean id="pageEvents" class="pl.krzaq.metalscrap.events.PageEvents"></bean>
  	<bean id="auctionEvents" class="pl.krzaq.metalscrap.events.AuctionEvents">
  		<property name="auctionDAO" ref="auctionDAO"/>

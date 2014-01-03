@@ -20,6 +20,15 @@ public class ServicesImpl {
 	@Autowired
 	private static CommodityTypeServiceImpl commodityTypeService ;
 	
+	@Autowired 
+	private static ConfigServiceImpl configService ;
+	
+	@Autowired 
+	private static CategoryServiceImpl categoryService ;
+	
+	@Autowired
+	private static AttachementFileServiceImpl attachementFileService ;
+	
 	public static AuctionServiceImpl getAuctionService() {
 		return auctionService ;
 	}
@@ -54,15 +63,48 @@ public class ServicesImpl {
 			PaymentMethodServiceImpl paymentMethodService) {
 		this.paymentMethodService = paymentMethodService;
 	}
-
-	public static CommodityTypeServiceImpl getCommodityTypeService() {
-		return commodityTypeService;
+	
+	public  void setConfigService(ConfigServiceImpl configService) {
+		this.configService = configService;
 	}
 
 	public void setCommodityTypeService(
 			CommodityTypeServiceImpl commodityTypeService) {
 		this.commodityTypeService = commodityTypeService;
 	}
+
+	public static CommodityTypeServiceImpl getCommodityTypeService() {
+		return commodityTypeService;
+	}
+	
+	
+	public void setCategoryService(CategoryServiceImpl categoryService) {
+		this.categoryService = categoryService;
+	}
+
+	public static AttachementFileServiceImpl getAttachementFileService() {
+		return attachementFileService ;
+	}
+	
+	public void setAttachementFileService(AttachementFileServiceImpl attachementFileService) {
+		this.attachementFileService = attachementFileService ;
+	}
+	
+	public static ConfigServiceImpl getConfigService() {
+		
+		return configService ;
+		
+	}
+	
+	public static CategoryServiceImpl getCategoryService() {
+		
+		return categoryService ;
+		
+	}
+	
+	
+
+	
 	
 	
 	

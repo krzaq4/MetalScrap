@@ -12,6 +12,7 @@
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="hibernate.hbm2ddl.auto">update</property>
 		<property name="hibernate.current_session_context_class">org.hibernate.context.ThreadLocalSessionContext</property>
+		<property name="hibernate.show_sql">true</property>
 		<mapping class="pl.krzaq.metalscrap.model.Address" />
 		<mapping class="pl.krzaq.metalscrap.model.Auction" />
 		<mapping class="pl.krzaq.metalscrap.model.AuctionStatus" />
@@ -27,5 +28,7 @@
 		<mapping class="pl.krzaq.metalscrap.model.User" />
 		<mapping class="pl.krzaq.metalscrap.model.Role" />
 		<mapping class="pl.krzaq.metalscrap.model.Category" />
+		<mapping class="pl.krzaq.metalscrap.model.Config" />
+		<mapping class="pl.krzaq.metalscrap.model.AttachementFile" />
 	</session-factory>
 	</hibernate-configuration>

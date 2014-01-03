@@ -6,6 +6,10 @@
 
 <zk>
 
+	 <language-config>
+        <addon-uri>/WEB-INF/ckez-bind-addon.xml</addon-uri>
+    </language-config>
+
 	<desktop-config>
     	<theme-uri>/resources/style/style.css</theme-uri>
     	
@@ -16,6 +20,8 @@
 			
 	</device-config>
 	
-	
+	<listener>
+		<listener-class>pl.krzaq.metalscrap.listener.PageListener</listener-class>
+	</listener> 
 	
 </zk>

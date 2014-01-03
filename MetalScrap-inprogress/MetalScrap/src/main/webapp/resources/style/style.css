@@ -363,6 +363,12 @@ tr.z-row td.z-row-inner{
 	
 }
 
+
+.z-tree-line.z-tree-tee {
+	display: none;
+	
+}
+
 .z-tree-line.z-tree-vbar {
 	display: block;
 	float: left ;
@@ -380,3 +386,6 @@ tr.z-tree-row td.z-tree-row-focus{
 	background:none ;
 }
 
+div.z-treecell-cnt {
+	white-space: nowrap;
+}

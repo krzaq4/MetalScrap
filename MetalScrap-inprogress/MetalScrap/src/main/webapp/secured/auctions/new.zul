@@ -1,6 +1,6 @@
 <?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
 <?init class="pl.krzaq.metalscrap.pages.AuctionNew"?>
-<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" name="binder"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" name="binder" arg2="binder" ?>
 
 <?page id="new" title="Nowa aukcja" contentType="text/html;charset=UTF-8" ?>
 
@@ -10,7 +10,7 @@
 <div class="head"></div>
 <div class="log"></div>
 	<div
-		style="width:970px;height: 740px;margin: 0 auto ;">
+		style="width:970px;height: auto;margin: 0 auto ;">
 
 		<div id="header" class="header">
 			<div class="logo">
@@ -55,7 +55,7 @@
 
 		</div> -->
 
-<panel id="parameters" height="900px" border="none" collapsible="true"  action="show:slideIn;hide:slideOut">
+<panel id="parameters" height="auto" border="none" collapsible="true"  action="show:slideIn;hide:slideOut">
 <caption label="Parametry aukcji"></caption>
 <panelchildren>
 <div>
@@ -75,10 +75,10 @@
 							<label value="Numer:" />	<textbox id="auction_number" value="@{auction.number}" />
 						</row>
 						<row>
-							<label value="Data rozpoczęcia:" />	<div><datebox id="auction_start_date" cols="12" width="230px" format="long+medium" onCreate="self.value = new Date()" value="@{auction.startDate}" /> </div>
+							<label value="Data rozpoczęcia:" />	<div><datebox id="auction_start_date" cols="12" width="230px" format="long+medium"  value="@{auction.startDate}" /> </div>
 						</row>
 						<row>	
-							<label value="Data zakończenia:" /> <div><datebox id="auction_end_date" cols="12" width="230px"   format="long+medium" onCreate="self.value = new Date()" value="@{auction.endDate}" /></div>
+							<label value="Data zakończenia:" /> <div><datebox id="auction_end_date" cols="12" width="230px"   format="long+medium"  value="@{auction.endDate}" /></div>
 						</row>
 					</rows>
 				</grid>
@@ -91,7 +91,7 @@
 					</columns>
 					<rows>
 						<row>
-							<label value="Czy wystawiasz fakturę VAT:" />	<checkbox id="auction_invoice" value="@{auction.invoice}" />
+							<label value="Czy wystawiasz fakturę VAT:" />	<checkbox id="auction_invoice"  checked="@{auction.invoice}" />
 						</row>
 						<row>
 							<label value="Sposób płatności:" />	
@@ -102,8 +102,8 @@
 						</row>
 						<row>
 							<label value="Rodzaj dostawy:" />
-							<combobox id="auction_delivery" model="@{deliveryTypes}" selectedItem="@{auction.deliveryType}" value="@{auction.deliveryType.name}">
-								<comboitem self="@{each=type}" label="@{type.name}" value="@{type}"></comboitem>
+							<combobox id="auction_delivery" model="@{deliveryTypes}" selectedItem="@{auction.deliveryType}" value="@{auction.deliveryType.name}" >
+								<comboitem self="@{each=dtype}" label="@{dtype.name}" value="@{dtype}"></comboitem>
 							</combobox>
 						</row>
 						<row>
@@ -122,14 +122,28 @@
 						<row>
 						
 							<label value="Opis aukcji:" />
-							<ckeditor id="auction_desc" width="700px" mold="" value="@{auction.description}">
-								<attribute name="value"><![CDATA[
-									<span>Tu wpisz opis aukcji</span>
-							]]></attribute>
+							<ckeditor id="auction_desc" width="700px" value="@{auction.description}">
+								
 							</ckeditor>
 						</row>
+						<row visible="@{isCategoriesVisible}">
+							<label value="Dołącz zdjęcie:"/>
+							<fileupload id="img_upload" label="Wybierz z dysku..." onUpload="formEvents.uploadPhoto(event.getMedia(), photos, binder )"/>
+							
+						</row>
+						<row spans="2">
+						
+							<grid id="photos" width="100%" height="auto">
+								<columns>
+									<column width="100%"></column>
+								</columns>
+								<rows>
+									<row></row>
+								</rows>
+							</grid>
+						</row>
 						<row>
-						<label id="info"/><button label="Dodaj pozycje do aukcji >>" mold="trendy" onClick="formEvents.showAuctionPositions(parameters, positions)"></button>
+						<label id="info"/><button label="Dodaj pozycje do aukcji >>" mold="trendy" onClick="formEvents.showAuctionPositions(parameters, positions)" visible="@{isCategoriesVisible}"></button>
 						</row>
 					</rows>
 				</grid>

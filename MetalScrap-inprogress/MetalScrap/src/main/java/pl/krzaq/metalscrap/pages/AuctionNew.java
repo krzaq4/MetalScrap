@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -17,7 +18,13 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.util.Initiator;
 import org.zkoss.zkplus.databind.AnnotateDataBinder;
+import org.zkoss.zul.Grid;
+import org.zkoss.zul.Image;
+import org.zkoss.zul.ListModel;
+import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Row;
 
+import pl.krzaq.metalscrap.model.AttachementFile;
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.Commodity;
 import pl.krzaq.metalscrap.model.CommodityType;
@@ -35,6 +42,28 @@ public class AuctionNew extends HomePage{
 		// TODO Auto-generated method stub
 		super.doAfterCompose(arg0, arg1);
 		
+		HttpSession ses = (HttpSession) Executions.getCurrent().getSession().getNativeSession() ;
+		
+		// zdjêcia
+		
+		if(ses.getAttribute("files")!=null) {
+			
+			List<Image> images = (ArrayList<Image>) ses.getAttribute("files") ;
+			Grid grid = (Grid) arg0.getFellow("photos") ;
+			AnnotateDataBinder binder = (AnnotateDataBinder) arg0.getAttribute("binder") ;
+			for (Image img:images) {
+				Row row = new Row() ;
+				row.appendChild(img) ;
+				grid.getRows().appendChild(row) ;	
+			}
+			
+			
+			
+		}
+		
+		
+		// parametry aukcji
+		
 		
 	}
 
@@ -48,7 +77,8 @@ public class AuctionNew extends HomePage{
 
 	@Override
 	public void doFinally() throws Exception {
-		// TODO Auto-generated method stub
+		System.out.println("doFinally") ;
+		super.doFinally();
 		
 	}
 
@@ -61,6 +91,11 @@ public class AuctionNew extends HomePage{
 		Auction auction = new Auction() ;
 		List<Commodity> commodities = new ArrayList<Commodity>(); 
 		auction.setCommodities(commodities);
+		
+		List<Image> files = new ArrayList<Image>() ; 
+		ListModelList<Image> lml = new ListModelList<Image>(files) ;
+		
+		
 		page.setAttribute("auction", auction) ;
 		page.setAttribute("commodity", new Commodity() ) ;
 		page.setAttribute("paymentMethods", ServicesImpl.getPaymentMethodService().findAll()) ;

@@ -68,7 +68,8 @@ public class Auction implements Serializable {
 	@Column(name="delivery_time")
 	private String deliveryTime ;
 	
-	
+	@OneToMany(cascade=CascadeType.ALL)
+	private List<AttachementFile> files ;
 	
 	@OneToOne
 	@JoinColumn(name="winner")
@@ -248,6 +249,14 @@ public class Auction implements Serializable {
 	public void setCategory(Category category) {
 		this.category = category;
 
+	}
+
+	public List<AttachementFile> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<AttachementFile> files) {
+		this.files = files;
 	}
 	
 	
