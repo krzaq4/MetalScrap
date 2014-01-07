@@ -122,6 +122,8 @@
 						<row>
 						
 							<label value="Opis aukcji:" />
+							
+							
 							<ckeditor id="auction_desc" width="700px" value="@{auction.description}">
 								
 							</ckeditor>
@@ -143,7 +145,9 @@
 							</grid>
 						</row>
 						<row>
-						<label id="info"/><button label="Dodaj pozycje do aukcji >>" mold="trendy" onClick="formEvents.showAuctionPositions(parameters, positions)" visible="@{isCategoriesVisible}"></button>
+						
+						<button label="Dodaj pozycje do aukcji >>" mold="trendy" onClick="formEvents.showAuctionPositions(parameters, positions)" visible="@{isCommoditiesVisible}"></button>
+						<button onClick="auctionEvents.saveNewAuction(auction, self.getPage())" mold="trendy" visible="@{isCommoditiesVisible, converter='pl.krzaq.metalscrap.converter.NegativeConverter'}" label="Zapisz aukcję"></button>
 						</row>
 					</rows>
 				</grid>

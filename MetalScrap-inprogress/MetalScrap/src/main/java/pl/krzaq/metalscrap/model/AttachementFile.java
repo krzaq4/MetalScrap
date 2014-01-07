@@ -39,6 +39,20 @@ public class AttachementFile {
 	@Column(name="main")
 	private Boolean main ;
 
+	//--------------------------------------------------------------------------
+	
+	
+	public AttachementFile(String name, String path, Auction auction, Boolean main) {
+		
+		this.name = name ;
+		this.path = path ;
+		this.auction = auction ;
+		this.main = main ;
+		
+	}
+	
+	//--------------------------------------------------------------------------
+	
 	public Long getId() {
 		return id;
 	}

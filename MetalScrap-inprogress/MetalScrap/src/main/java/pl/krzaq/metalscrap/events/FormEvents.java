@@ -55,7 +55,7 @@ public class FormEvents {
 			fo.write(media.getByteData());
 			AttachementFile af = new AttachementFile() ;
 			af.setName(nextName);
-			af.setPath(uploadPath+"/"+nextName+"."+media.getFormat());
+			af.setPath(uploadPath+nextName+"."+media.getFormat());
 			af.setMain(false);
 			ServicesImpl.getAttachementFileService().save(af);
 			

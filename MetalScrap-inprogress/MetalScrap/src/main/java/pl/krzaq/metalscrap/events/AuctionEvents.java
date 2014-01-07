@@ -4,8 +4,11 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +20,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zkplus.databind.AnnotateDataBinder;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Datebox;
+import org.zkoss.zul.Image;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
@@ -32,6 +36,7 @@ import pl.krzaq.metalscrap.dao.DeliveryTypeDAO;
 import pl.krzaq.metalscrap.dao.PaymentMethodDAO;
 import pl.krzaq.metalscrap.dao.RoleDAO;
 import pl.krzaq.metalscrap.dao.UserDAO;
+import pl.krzaq.metalscrap.model.AttachementFile;
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.Commodity;
 import pl.krzaq.metalscrap.model.CommodityType;
@@ -65,18 +70,66 @@ public class AuctionEvents {
 	
 	//-----------------------------------------------------------------------
 	
-public void saveNewAuction(Auction auction) {
+@SuppressWarnings("unchecked")
+public void saveNewAuction(Auction auction, Page p) {
 		
-	
+		String pref = p.getId() ;
 	
 		User currentUser = userDAO.getUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName()) ;
 		Company currentCompany = currentUser.getCompany() ;
 		
-		auctionDAO.save(auction);
 		
-		Window okWindow = (Window)Executions.getCurrent().createComponents("Aukcja utworzona", null,null) ;
-		okWindow.setClosable(true);
-		okWindow.doModal();
+		
+		
+		
+		//usuwanie atrybutów sesji z zapamietanymi danymi aukcji
+		
+		HttpSession ses = (HttpSession) Executions.getCurrent().getSession().getNativeSession() ;
+		
+		Enumeration<String> keys = ses.getAttributeNames();
+		
+		while(keys.hasMoreElements()){
+			
+			String attr = (String) keys.nextElement() ;
+			if (attr.substring(0, pref.length()).equalsIgnoreCase(pref)) {
+				
+				ses.removeAttribute(attr);
+				
+			}
+			
+		}
+		
+		List<Image> files = (ArrayList<Image>) ses.getAttribute("files") ;
+		List<AttachementFile> attchs = new ArrayList<AttachementFile>() ;
+		int i = 0 ;
+		for (Image img:files) {
+			
+			attchs.add(new AttachementFile(pref+String.valueOf(i), img.getSrc(), auction, false));
+			i++ ;
+		}
+		
+		auction.getFiles().addAll(attchs) ;
+		ses.removeAttribute("files");
+		
+		
+		// zapis aukcji
+		
+				auctionDAO.save(auction);
+		
+		// okienko potwierdzaj¹ce i przekierowanie do edycji aukcji
+		
+		final String id = String.valueOf(auction.getId()) ;
+		Messagebox.show("Aukcja utworzona", "Informacja", Messagebox.OK, "", new EventListener<Event>(){
+
+			@Override
+			public void onEvent(Event arg0) throws Exception {
+				
+				Executions.getCurrent().sendRedirect("/secured/auctions/new.zul?id="+id) ;
+				
+			}
+			
+			
+		}) ;
 		
 	}
 	

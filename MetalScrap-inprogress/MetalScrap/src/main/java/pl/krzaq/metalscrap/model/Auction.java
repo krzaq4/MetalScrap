@@ -2,6 +2,7 @@ package pl.krzaq.metalscrap.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -26,7 +27,8 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name="auction")
 @NamedQueries({
-	@NamedQuery(name="Auction.findAll", query="from Auction a" )
+	@NamedQuery(name="Auction.findAll", query="from Auction a" ),
+	@NamedQuery(name="Auction.findById", query="from Auction a where a.id=:id")
 	
 	
 	
@@ -68,8 +70,8 @@ public class Auction implements Serializable {
 	@Column(name="delivery_time")
 	private String deliveryTime ;
 	
-	@OneToMany(cascade=CascadeType.ALL)
-	private List<AttachementFile> files ;
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="auction")
+	private List<AttachementFile> files = new ArrayList<AttachementFile>();
 	
 	@OneToOne
 	@JoinColumn(name="winner")
@@ -80,10 +82,10 @@ public class Auction implements Serializable {
 	private Company owner ;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="auction")
-	private List<CompanyOffer> companyOffers ;
+	private List<CompanyOffer> companyOffers = new ArrayList<CompanyOffer>() ;
 
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="auction")
-	private List<Commodity> commodities ;
+	private List<Commodity> commodities = new ArrayList<Commodity>() ;
 	
 	@OneToOne
 	@JoinColumn(name="status")

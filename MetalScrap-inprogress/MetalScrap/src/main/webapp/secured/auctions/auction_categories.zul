@@ -1,0 +1,153 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="pl.krzaq.metalscrap.pages.AuctionCategories" ?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<?page title="Kategorie aukcji" contentType="text/html;charset=UTF-8" ?>
+
+
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+
+	<div class="head"></div>
+	<div class="log"></div>
+	<div style="width:80%;height: 740px;margin: 0 auto ;">
+
+		<div id="header" class="header">
+			<div class="logo">
+
+			</div>
+			<div class="headerinfo">
+				<div class="userInfo">
+					Zalogowany jako:
+					<label value="@{currentUser.login}" />
+					,
+					<label value="@{currentUser.firstName}" />
+					<label value="@{currentUser.lastName}" />
+				</div>
+			</div>
+		</div>
+
+		<include id="men" src="/common/menu.zul"></include>
+
+		<panel id="content" border="rounded">
+			<panelchildren>
+				<!-- <div id="categoriesMenu" class="categoriesMenu" visible="@{isCategoriesVisible}">
+					
+					<include mode="defer" src="/common/categories.zul"></include>
+					</div>
+					
+					<div class="otherContent">
+					
+					
+					</div> -->
+
+				<div>
+				<button id="add_category_button" label="Dodaj kategorię" onClick="categoryEvents.openNewCategoryWindow(new_category_popup, binder)"/>
+				<button id="edit_category_button" label="Edytuj kategorię" onClick="categoryEvents.openEditCategoryWindow(edit_category_popup, binder)"  disabled="@{category, converter='pl.krzaq.metalscrap.converter.CategoryNotSelectedConverter'}"/>
+				<button id="delete_category_button" label="Usuń kategorię" onClick="categoryEvents.deleteCategory(category, cat_tree, binder)" disabled="@{category, converter='pl.krzaq.metalscrap.converter.CategoryNotSelectedConverter'}"/>
+				<button id="pos_up" label="&#x25B2;" onClick="categoryEvents.moveCategoryUp(category, cat_tree, binder)" disabled="@{category, converter='pl.krzaq.metalscrap.converter.CategoryUpNotPossibleConverter'}"/>
+				<button id="pos_down" label="&#x25BC;" onClick="categoryEvents.moveCategoryDown(category, cat_tree, binder)" disabled="@{category, converter='pl.krzaq.metalscrap.converter.CategoryDownNotPossibleConverter'}"/>
+				</div>
+
+				<tree id="cat_tree" use="pl.krzaq.metalscrap.components.CategoryTree"
+					width="100%" height="100%" onSelect="categoryEvents.admin_onSelectCategory(self.getSelectedItem(), self,binder)" >
+
+					<treecols>
+						<treecol label="Kategorie"></treecol>
+					</treecols>
+					<treechildren forEach="${cat}" >
+						<treeitem value="${cat}">
+							<treerow>
+								<treecell>
+									<label value="cat.name" />
+									<label style="font-size: 0.5em;"
+										value="cat.descrption" />
+								</treecell>
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</tree>
+
+			</panelchildren>
+		</panel>
+
+
+
+
+		<div>
+			<div id="additional" class="additional"></div>
+
+			<div id="footer" class="footer"></div>
+		</div>
+	</div>
+	
+	
+	
+	<window id="edit_category_popup" mode="modal" closable="false" visible="false" width="395px" title="Edytuj kategorię">
+	
+	<grid>
+		<columns>
+			<column width="120px"/>
+			<column width="260px" />
+		</columns>
+		<rows>
+			<row visible="@{parent, converter='pl.krzaq.metalscrap.converter.CategorySelectedConverter'}">
+				<label value="Grupa nadrzędna" />
+				<textbox disabled="true" value="@{parent.name}" width="260px" />
+			</row>
+			<row>
+				<label value="Nazwa grupy" />
+				<textbox value="@{category.name}" width="260px"/>
+			</row>
+			<row>
+				<label value="Opis grupy" />
+				<textbox value="@{category.description}" width="260px"></textbox>
+			</row>
+		</rows>
+	</grid>
+	<div>
+		<button label="Zapisz zmiany"  onClick="categoryEvents.updateCategory(category, edit_category_popup, cat_tree, binder )" />
+		<button label="Anuluj" onClick="edit_category_popup.setVisible(false)"/>
+	</div>
+	
+	</window>
+	
+	<window id="new_category_popup" mode="modal" closable="false" visible="false" width="395px" title="Dodaj kategorię" >
+	
+	
+	<grid>
+		<columns>
+			<column width="120px"/>
+			<column width="260px" />
+		</columns>
+		<rows>
+			<row>
+				<label value="Grupa nadrzędna" />
+				<listbox id="selectedCategory" mold="select" rows="1" model="@{rootCategories}" multiple="false" selectedItem="@{selectedCat}">
+					<listitem self="@{each=rootCat}" label="@{rootCat.name}" value="@{rootCat}"></listitem>
+				</listbox>
+				
+				<!-- <combobox id="selectedCategory" model="@{rootCategories}" selectedItem="@{selectedCat}">
+					<comboitem self="@{each=rootCat}" label="@{rootCat.name}" value="@{rootCat}">
+						
+					</comboitem>
+				</combobox>
+				 -->
+				<textbox value="@{parent.name}" width="260px" />
+			</row>
+			<row>
+				<label value="Nazwa grupy" />
+				<textbox value="@{category.name}" width="260px" constraint="no empty"/>
+			</row>
+			<row>
+				<label value="Opis grupy" />
+				<textbox value="@{category.description}" width="260px" constraint="no empty"></textbox>
+			</row>
+		</rows>
+	</grid>
+	<div>
+		<button label="Zapisz kategorię" onClick="categoryEvents.saveCategory(category, new_category_popup, cat_tree, binder )" />
+		<button label="Anuluj" onClick="new_category_popup.setVisible(false)"/>
+	</div>
+	
+	</window>
+	
+</zk>

@@ -66,6 +66,11 @@ public List<AuctionStatus> findAllStatuses() {
 		return (AuctionStatus) sessionFactory.getCurrentSession().createCriteria(AuctionStatus.class).add(Restrictions.eq("code", code)).list().get(0) ;
 	}
 
+	public Auction findById(Long id) {
+		
+		return (Auction) sessionFactory.getCurrentSession().getNamedQuery("Auction.findById").setParameter("id", id).list().get(0) ; 
+	}
+	
 	public void save(Auction a){
 		
 		sessionFactory.getCurrentSession().save(a) ;

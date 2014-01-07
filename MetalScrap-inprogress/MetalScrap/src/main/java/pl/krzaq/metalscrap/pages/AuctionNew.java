@@ -53,7 +53,9 @@ public class AuctionNew extends HomePage{
 			AnnotateDataBinder binder = (AnnotateDataBinder) arg0.getAttribute("binder") ;
 			for (Image img:images) {
 				Row row = new Row() ;
+				
 				row.appendChild(img) ;
+				
 				grid.getRows().appendChild(row) ;	
 			}
 			
@@ -88,12 +90,35 @@ public class AuctionNew extends HomePage{
 		
 		super.doInit(page, arg1) ;
 		
+		HttpServletRequest request = (HttpServletRequest) Executions.getCurrent().getNativeRequest() ; 
+		
 		Auction auction = new Auction() ;
+		
 		List<Commodity> commodities = new ArrayList<Commodity>(); 
 		auction.setCommodities(commodities);
 		
 		List<Image> files = new ArrayList<Image>() ; 
 		ListModelList<Image> lml = new ListModelList<Image>(files) ;
+		
+		
+		// Tryb edycji
+		
+		if (request.getParameter("id")!=null) {
+			Long id = Long.valueOf(request.getParameter("id")) ;
+			auction = ServicesImpl.getAuctionService().findById(id) ;
+			List<Image> imgs = new ArrayList<Image>() ;
+			
+			for (AttachementFile af:ServicesImpl.getAttachementFileService().findByAuction(auction)) {
+				Image im = new Image(af.getPath()) ;
+				imgs.add(im) ;
+			}
+			
+			lml = new ListModelList<Image>(imgs) ;
+		}
+		
+		
+		
+		
 		
 		
 		page.setAttribute("auction", auction) ;
