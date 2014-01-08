@@ -8,6 +8,9 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+
+
+
 import org.zkforge.ckez.CKeditor;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -27,8 +30,7 @@ public class ComponentEventInterceptor implements EventInterceptor {
 	public void afterProcessEvent(Event arg0) {
 		
 		
-		
-		if (arg0.getName().equalsIgnoreCase("onLoadOnSave") || (arg0.getTarget() instanceof CKeditor && arg0.getName().equalsIgnoreCase("onSave"))) {
+		if (arg0.getName().equalsIgnoreCase("onLoadOnSave") || (arg0.getTarget() instanceof CKeditor && arg0.getName().equalsIgnoreCase("onChange"))) {
 			AnnotateDataBinder binder = (AnnotateDataBinder) arg0.getTarget().getPage().getAttribute("binder") ;
 			
 			HttpSession ses = (HttpSession) Executions.getCurrent().getSession().getNativeSession() ;

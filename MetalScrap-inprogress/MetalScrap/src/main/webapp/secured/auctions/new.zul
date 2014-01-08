@@ -22,38 +22,7 @@
 		</div>
 
 <include id="men"  src="/common/menu.zul" ></include>
-		<!-- <div id="menu" class="menu">
-			<menubar id="main" orient="horizontal">
-
-				<menuitem id="about" label="O platformie"></menuitem>
-				<menuseparator />
-				<menuitem id="auctions" label="Aukcje"
-					onClick="pageEvents.showAuctionsSubeMenu(main,binder)">
-				</menuitem>
-				<menuitem id="companies" label="Firmy"
-					onClick="pageEvents.showCompaniesSubMenu(main,binder)">
-				</menuitem>
-				<menuseparator />
-				<menuitem id="regulations" label="Regulamin"></menuitem>
-				<menuitem id="help" label="Pomoc"></menuitem>
-				<menuseparator />
-				<menuitem id="contact" label="Kontakt"></menuitem>
-
-			</menubar>
-
-			<menubar id="submenu" visible="true" orient="horizontal">
-				<menuitem id="auctions_list" label="Lista aukcji"
-					visible="@{auctionsSubMenu}" value="/secured/auctions/list.zul"
-					onClick="pageEvents.open(auctions_list.getValue())" />
-				<menuitem id="new_auction" label="Nowa aukcja"
-					visible="@{auctionsSubMenu}" />
-				<menuitem id="companies_list" label="Lista firm"
-					visible="@{companiesSubMenu}" />
-
-
-			</menubar>
-
-		</div> -->
+		
 
 <panel id="parameters" height="auto" border="none" collapsible="true"  action="show:slideIn;hide:slideOut">
 <caption label="Parametry aukcji"></caption>
@@ -69,16 +38,27 @@
 					</columns>
 					<rows>
 						<row>
-							<label value="Tytuł aukcji:" />	<textbox id="auction_name" value="@{auction.name}" />
+							<label value="Tytuł aukcji:" />	<textbox id="auction_name" value="@{auction.name}" constraint="no empty"/>
 						</row>
 						<row>
-							<label value="Numer:" />	<textbox id="auction_number" value="@{auction.number}" />
+							<label value="Numer:" />	<textbox id="auction_number" value="@{auction.number}" constraint="no empty"/>
 						</row>
 						<row>
-							<label value="Data rozpoczęcia:" />	<div><datebox id="auction_start_date" cols="12" width="230px" format="long+medium"  value="@{auction.startDate}" /> </div>
+							<label value="Data rozpoczęcia:" />	<div><datebox id="auction_start_date" cols="12" width="230px" format="long+medium"  value="@{auction.startDate}" constraint="no past"/> </div>
 						</row>
 						<row>	
-							<label value="Data zakończenia:" /> <div><datebox id="auction_end_date" cols="12" width="230px"   format="long+medium"  value="@{auction.endDate}" /></div>
+							<label value="Data zakończenia:" /> <div><datebox id="auction_end_date" cols="12" width="230px"   format="long+medium"  value="@{auction.endDate}" >
+							<attribute name="onChange">
+								<![CDATA[
+								
+								         if(auction_start_date.getValue().compareTo(auction_end_date.getValue())>0){
+								        	 throw new WrongValueException(auction_end_date, "Data zakończenia musi być późniejsza niż data początku") ;
+								         }
+								
+								]]>
+							</attribute>
+							</datebox>
+							</div>
 						</row>
 					</rows>
 				</grid>
@@ -91,23 +71,23 @@
 					</columns>
 					<rows>
 						<row>
-							<label value="Czy wystawiasz fakturę VAT:" />	<checkbox id="auction_invoice"  checked="@{auction.invoice}" />
+							<label value="Czy wystawiasz fakturę VAT:" />	<checkbox id="auction_invoice"  checked="@{auction.invoice}"/>
 						</row>
 						<row>
 							<label value="Sposób płatności:" />	
-							<combobox id="auction_payment"  model="@{paymentMethods}" selectedItem="@{auction.paymentMethod}"  value="@{auction.paymentMethod.name}"   >
+							<combobox id="auction_payment"  model="@{paymentMethods}" selectedItem="@{auction.paymentMethod}"  value="@{auction.paymentMethod.name}" constraint="no empty"  >
 								<comboitem self="@{each=method}" label="@{method.name}" value="@{method}"></comboitem>
 							</combobox>
 															
 						</row>
 						<row>
 							<label value="Rodzaj dostawy:" />
-							<combobox id="auction_delivery" model="@{deliveryTypes}" selectedItem="@{auction.deliveryType}" value="@{auction.deliveryType.name}" >
+							<combobox id="auction_delivery" model="@{deliveryTypes}" selectedItem="@{auction.deliveryType}" value="@{auction.deliveryType.name}" constraint="no empty">
 								<comboitem self="@{each=dtype}" label="@{dtype.name}" value="@{dtype}"></comboitem>
 							</combobox>
 						</row>
 						<row>
-							<label value="Czas dostawy:" /><textbox id="auction_delivery_time"  value="@{auction.deliveryTime}"/>
+							<label value="Czas dostawy:" /><textbox id="auction_delivery_time"  value="@{auction.deliveryTime}" constraint="no empty"/>
 						</row>
 					</rows>
 				</grid>
@@ -123,10 +103,23 @@
 						
 							<label value="Opis aukcji:" />
 							
+							<ckeditor id="auction_description" value="@{auction.description}" height="300px">
+							<attribute name="onCreate">
+							<![CDATA[
+								self.setValue(((pl.krzaq.metalscrap.model.Auction)page.getAttribute("auction")).getDescription());
+							]]>
+							</attribute>
+							<attribute name="onChange">
 							
-							<ckeditor id="auction_desc" width="700px" value="@{auction.description}" use="pl.krzaq.metalscrap.components.WYSIWYGeditor">
+							<![CDATA[
+								pl.krzaq.metalscrap.model.Auction a=((pl.krzaq.metalscrap.model.Auction)page.getAttribute("auction")) ;
+								a.setDescription(event.value) ;
+								page.setAttribute("auction",a);
 								
+							]]>
+							</attribute>
 							</ckeditor>
+							
 						</row>
 						<row visible="@{isCategoriesVisible}">
 							<label value="Dołącz zdjęcie:"/>

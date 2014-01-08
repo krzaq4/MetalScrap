@@ -132,10 +132,7 @@ public class AuctionNew extends HomePage{
 			ses.setAttribute("files", ServicesImpl.getAttachementFileService().findByAuction(auction));
 			
 			
-		} else {
-			
-			ses.removeAttribute("files");
-		}
+		} 
 		
 		
 		

@@ -6,9 +6,7 @@
 
 <zk>
 
-	 <language-config>
-        <addon-uri>/WEB-INF/ckez-bind-addon.xml</addon-uri>
-    </language-config>
+	
 
 	<desktop-config>
     	<theme-uri>/resources/style/style.css</theme-uri>

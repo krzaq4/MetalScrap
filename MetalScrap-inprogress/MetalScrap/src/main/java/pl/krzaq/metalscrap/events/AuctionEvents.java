@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -16,18 +17,22 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zkplus.databind.AnnotateDataBinder;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Image;
+import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Messagebox.ClickEvent;
 import org.zkoss.zul.Popup;
+import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import pl.krzaq.metalscrap.dao.AddressDAO;
@@ -39,10 +44,14 @@ import pl.krzaq.metalscrap.dao.RoleDAO;
 import pl.krzaq.metalscrap.dao.UserDAO;
 import pl.krzaq.metalscrap.model.AttachementFile;
 import pl.krzaq.metalscrap.model.Auction;
+import pl.krzaq.metalscrap.model.AuctionStatus;
 import pl.krzaq.metalscrap.model.Commodity;
 import pl.krzaq.metalscrap.model.CommodityType;
 import pl.krzaq.metalscrap.model.Company;
+import pl.krzaq.metalscrap.model.DeliveryType;
+import pl.krzaq.metalscrap.model.PaymentMethod;
 import pl.krzaq.metalscrap.model.User;
+import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 import pl.krzaq.metalscrap.utils.Constants;
 import pl.krzaq.metalscrap.utils.Utilities;
 
@@ -82,9 +91,12 @@ public void saveNewAuction(Auction auction, Page p) {
 	
 		User currentUser = userDAO.getUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName()) ;
 		Company currentCompany = currentUser.getCompany() ;
-		
-		
-		
+		if (ServicesImpl.getAuctionService().findByNumber(auction.getNumber())!=null) {
+			
+			throw new WrongValueException(p.getFellow("auction_number"), "Aukcja o podanym numerze istnieje ju¿ w systemie") ;
+			
+		} else {
+			
 		
 		
 		//usuwanie atrybutów sesji z zapamietanymi danymi aukcji
@@ -114,11 +126,13 @@ public void saveNewAuction(Auction auction, Page p) {
 		
 		auction.getFiles().addAll(files) ;
 		
-		
+		auction.setStatus(ServicesImpl.getAuctionService().findStatusByCode(AuctionStatus.STATUS_NEW));
 		
 		// zapis aukcji
 		
 				auctionDAO.save(auction);
+				
+		ses.removeAttribute("files");
 		
 		// okienko potwierdzaj¹ce i przekierowanie do edycji aukcji
 		
@@ -134,6 +148,8 @@ public void saveNewAuction(Auction auction, Page p) {
 			
 			
 		}) ;
+		
+		}
 		
 	}
 	
@@ -158,6 +174,171 @@ public void registerCompanyUser(Company company, User user) {
 	} 
 	
 }
+
+
+public void redirectToAuctionEdit(Long id){
+	
+	Executions.getCurrent().sendRedirect("/secured/auctions/new.zul?id="+String.valueOf(id));
+}
+
+
+public void onSelectAuctions(Listbox lbx, AnnotateDataBinder binder) {
+	
+	Page page = lbx.getPage() ;
+	List<Auction> selectedAuctions = new ArrayList<Auction>() ;
+	
+	
+	
+	for (Listitem li:lbx.getSelectedItems()){
+		
+		selectedAuctions.add((Auction)li.getValue()) ;
+		
+	}
+	
+	page.setAttribute("selectedAuctions", selectedAuctions) ;
+		
+	binder.loadComponent(page.getFellow("del_auction"));
+	binder.loadComponent(page.getFellow("end_auction"));
+	binder.loadComponent(page.getFellow("change_status"));
+	
+}
+
+
+public void deleteSelectedAuctions(final Listbox lbx, final AnnotateDataBinder binder) {
+	
+	final Page page = lbx.getPage() ;
+	
+	
+	if(page.getAttribute("selectedAuctions")!=null) {
+		
+		final List<Auction> selectedAuctions = (ArrayList<Auction>) page.getAttribute("selectedAuctions") ;
+		
+	
+	
+	int selectedCount = lbx.getSelectedCount() ;
+	
+	if (selectedCount>1){
+		
+		Messagebox.show("Zaznaczy³aœ/eœ "+selectedCount+" aukcji. Czy napewno chcesz usun¹æ wybrane pozycje?", "Uwaga!", Messagebox.YES|Messagebox.CANCEL, "", new EventListener<Event>(){
+
+			@Override
+			public void onEvent(Event arg0) throws Exception {
+				if(arg0.getName().equalsIgnoreCase("onOK")) {
+					
+				ListModelList lml = ( (ListModelList) lbx.getListModel()); 
+				lml.removeAll(selectedAuctions) ;
+				lbx.setModel(lml);
+				
+				page.setAttribute("selectedAuctions",null) ;
+				
+				binder.loadComponent(lbx);
+				binder.loadComponent(page.getFellow("del_auction"));
+				binder.loadComponent(page.getFellow("end_auction"));
+				binder.loadComponent(page.getFellow("change_status"));
+				
+				}
+			}
+			
+			
+			
+		}) ;
+		
+	}
+	
+	}
+}
+
+
+public void changeSelectedAuctionsStatus(Listbox lbx, AnnotateDataBinder binder) {
+	
+	final Page page = lbx.getPage() ;
+	
+	
+	if(page.getAttribute("selectedAuctions")!=null) {
+		
+		final List<Auction> selectedAuctions = (ArrayList<Auction>) page.getAttribute("selectedAuctions") ;
+	
+	}
+	
+	
+}
+
+public void endSelectedAuctions(final Listbox lbx, final AnnotateDataBinder binder) {
+
+	final Page page = lbx.getPage() ;
+	
+	
+	if(page.getAttribute("selectedAuctions")!=null) {
+		
+		final List<Auction> selectedAuctions = (ArrayList<Auction>) page.getAttribute("selectedAuctions") ;
+		
+	
+	
+	int selectedCount = lbx.getSelectedCount() ;
+	
+	if (selectedCount>1){
+		
+		Messagebox.show("Zaznaczy³aœ/eœ "+selectedCount+" aukcji. Czy napewno chcesz zakoñczyæ wybrane aukcje?", "Uwaga!", Messagebox.YES|Messagebox.CANCEL, "", new EventListener<Event>(){
+
+			@Override
+			public void onEvent(Event arg0) throws Exception {
+				
+				if(arg0.getName().equalsIgnoreCase("onOK")) {
+					
+				List<Auction> newModel = new ArrayList<Auction>() ;
+				
+				for (Auction a:selectedAuctions){
+					
+					a.setStatus(ServicesImpl.getAuctionService().findStatusByCode(AuctionStatus.STATUS_FINISHED));
+					ServicesImpl.getAuctionService().update(a);
+					newModel.add(a) ;
+					
+				}	
+				
+				ListModelList lml = ( (ListModelList) lbx.getListModel()); 
+				lml.clear();
+				lml.addAll(newModel) ;
+				lbx.setModel(lml);
+				
+				page.setAttribute("selectedAuctions",null) ;
+				
+				binder.loadComponent(lbx);
+				binder.loadComponent(page.getFellow("del_auction"));
+				binder.loadComponent(page.getFellow("end_auction"));
+				binder.loadComponent(page.getFellow("change_status"));
+				
+				}
+			}
+			
+			
+			
+		}) ;
+		
+	}
+	
+	}
+}
+
+public void filterAuctionList(Listbox lbx, AnnotateDataBinder binder) {
+	
+	Page page = lbx.getPage() ;
+	String searchPhrase = ((Textbox)page.getFellow("phraseSearch")).getValue() ;
+	PaymentMethod searchPayment = ((Combobox) page.getFellow("paymentSearch")).getSelectedItem().getValue() ;
+	AuctionStatus searchStatus = ((Combobox) page.getFellow("statusSearch")).getSelectedItem().getValue() ;
+	DeliveryType searchDelivery = ((Combobox) page.getFellow("deliverySearch")).getSelectedItem().getValue() ;
+	Date searchStartDate = ((Datebox) page.getFellow("startDateSearch")).getValue() ;
+	Date searchEndDate = ((Datebox) page.getFellow("endDateSearch")).getValue() ;
+	
+	List<Auction> result = ServicesImpl.getAuctionService().filter(searchPhrase, searchStatus, searchPayment, searchDelivery, searchStartDate, searchEndDate) ;
+	
+	ListModelList lml = ((ListModelList) lbx.getListModel()) ;
+	lml.clear();
+	lml.addAll(result) ;
+	lbx.setModel(lml);
+	binder.loadComponent(lbx);
+	
+}
+
 
 public void addPosition(Commodity commodity, Component c) {
 	

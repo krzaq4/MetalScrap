@@ -7,57 +7,68 @@
 
 <zk xmlns:h="http://www.w3.org/1999/xhtml">
 
-
+<div class="head"></div>
+<div class="log"></div>
 	<div
-		style="width:970px;height: 740px;border:1px solid #a9a9a9;margin: 0 auto ;">
+		style="width:970px;height: auto;margin: 0 auto ;">
 
 		<div id="header" class="header">
 			<div class="logo">
-				<image src="/resources/images/logo.png"></image>
+				
 			</div>
 			<div class="headerinfo">
 <div class="userInfo">Zalogowany jako: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/></div>
 			</div>
 		</div>
-	<include id="men"  src="/common/menu.zul" ></include>
-		<!-- <div id="menu" class="menu">
-			<menubar id="main" orient="horizontal">
 
-				<menuitem id="about" label="O platformie"></menuitem>
-				<menuseparator />
-				<menuitem id="auctions" label="Aukcje"
-					onClick="pageEvents.showAuctionsSubeMenu(main,binder)">
-				</menuitem>
-				<menuitem id="companies" label="Firmy"
-					onClick="pageEvents.showCompaniesSubMenu(main,binder)">
-				</menuitem>
-				<menuseparator />
-				<menuitem id="regulations" label="Regulamin"></menuitem>
-				<menuitem id="help" label="Pomoc"></menuitem>
-				<menuseparator />
-				<menuitem id="contact" label="Kontakt"></menuitem>
-
-			</menubar>
-
-			<menubar id="submenu" visible="true" orient="horizontal">
-				<menuitem id="auctions_list" label="Lista aukcji"
-					visible="@{auctionsSubMenu}" value="/secured/auctions/list.zul"
-					onClick="pageEvents.open(auctions_list.getValue())" />
-				<menuitem id="new_auction" label="Nowa aukcja"
-					visible="@{auctionsSubMenu}" />
-				<menuitem id="companies_list" label="Lista firm"
-					visible="@{companiesSubMenu}" />
-
-
-			</menubar>
-
-		</div> -->
+<include id="men"  src="/common/menu.zul" ></include>
 
 		<panel id="content" border="rounded">
+		<caption label="Lista aukcji"></caption>
 			<panelchildren>
+			<div sclass="searchMenu">
+			<vbox>
+				<label value="Fraza do wyszukania"/>
+				<textbox id="phraseSearch" />
+			</vbox>
+			<vbox>
+				<label value="Status aukcji" />
+				<combobox id="statusSearch" model="@{statuses}" selectedItem="@{selectedStatus}">
+					
+					<comboitem self="@{each=status}" label="@{status.name}" value="@{status}"></comboitem>
+					
+				</combobox>
+			</vbox>
+			<vbox>
+				<label value="Sposób płatności" />
+				<combobox id="paymentSearch" model="@{payments}" selectedItem="@{selectedPayment}">
+					<comboitem self="@{each=payment}" label="@{payment.name}" value="@{payment}"></comboitem>
+				</combobox>
+			</vbox>
+			<vbox>
+				<label value="Rodzaj dostawy" />
+				<combobox id="deliverySearch" model="@{deliveries}" selectedItem="@{selectedDelivery}">
+					<comboitem self="@{each=delivery}" label="@{delivery.name}" value="@{delivery}"></comboitem>
+				</combobox>
+			</vbox>
+			<vbox>
+				<label value="Data rozpoczęcia" />
+				<datebox id="startDateSearch" format="medium+long"/>
+			</vbox>
+			<vbox>
+				<label value="Data zakończenia" />
+				<datebox id="endDateSearch" format="medium+long" />
+			</vbox>
+			<button label="Szukaj" onClick="auctionEvents.filterAuctionList(auctionList, binder)"/>
+			</div>
+			<div sclass="listMenu">
+				<button id="del_auction" label="Usuń aukcję" disabled="@{auctionList, converter='pl.krzaq.metalscrap.converter.ListboxMultipleNotSelected'}" />
+				<button id="change_status" label="Zmień status" disabled="@{auctionList, converter='pl.krzaq.metalscrap.converter.ListboxMultipleNotSelected'}"/>
+				<button id="end_auction" label="Zakończ aukcję" onClick="auctionEvents.deleteSelectedAuctions(auctionList, binder)" disabled="@{auctionList, converter='pl.krzaq.metalscrap.converter.ListboxMultipleNotSelected'}"/>
+			</div>
 
 				<listbox id="auctionList" model="@{auctions}"
-					mold="paging" pageSize="10" checkmark="true" selectedItem="@{auction}" multiple="true">
+					mold="paging" pageSize="10" checkmark="true" multiple="true" onSelect="auctionEvents.onSelectAuctions(self, binder)">
 					<listhead>
 						<listheader label="Nazwa" />
 						<listheader label="Status" />
@@ -68,7 +79,7 @@
 					</listhead>
 					<listitem self="@{each=auction}">
 						<listcell>
-							<label value="@{auction.name}" />
+							<label sclass="asLink" value="@{auction.name}" onClick="auctionEvents.redirectToAuctionEdit(auction.id)"/>
 						</listcell>
 						<listcell>
 							<label value="@{auction.status.name}" />

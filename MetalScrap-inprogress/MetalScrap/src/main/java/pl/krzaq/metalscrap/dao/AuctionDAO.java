@@ -30,9 +30,9 @@ public class AuctionDAO {
 		
 	}
 	
-	public List<Auction> findByStatus(int status) {
+	public List<Auction> findByStatus(AuctionStatus status) {
 		
-		return sessionFactory.getCurrentSession().createCriteria(Auction.class).add(Restrictions.eq("status", status)).list() ;
+		return sessionFactory.getCurrentSession().getNamedQuery("Auction.findByStatus").setParameter("status", status).list() ;
 		
 	}
 	
@@ -57,7 +57,19 @@ public class AuctionDAO {
 		
 	}
 	
-public List<AuctionStatus> findAllStatuses() {
+	public Auction findByName(String name) {
+	
+		return sessionFactory.getCurrentSession().getNamedQuery("Auction.findByName").setParameter("name", name).list().size()>0 ? (Auction)sessionFactory.getCurrentSession().getNamedQuery("Auction.findByName").setParameter("name", name).list().get(0): null ;
+		
+	}
+	
+	public Auction findByNumber(String number){
+	
+		return sessionFactory.getCurrentSession().getNamedQuery("Auction.findByNumber").setParameter("number", number).list().size()>0 ? (Auction) sessionFactory.getCurrentSession().getNamedQuery("Auction.findByNumber").setParameter("number", number).list().get(0) : null ;
+		
+	}
+	
+	public List<AuctionStatus> findAllStatuses() {
 		
 		return sessionFactory.getCurrentSession().getNamedQuery("AuctionStatus.findAll").list();
 	}

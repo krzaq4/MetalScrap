@@ -28,7 +28,10 @@ import javax.persistence.TemporalType;
 @Table(name="auction")
 @NamedQueries({
 	@NamedQuery(name="Auction.findAll", query="from Auction a" ),
-	@NamedQuery(name="Auction.findById", query="from Auction a where a.id=:id")
+	@NamedQuery(name="Auction.findById", query="from Auction a where a.id=:id"),
+	@NamedQuery(name="Auction.findByName", query="from Auction a where a.name=:name"),
+	@NamedQuery(name="Auction.findByNumber", query="from Auction a where a.number=:number"),
+	@NamedQuery(name="Auction.findByStatus", query="from Auction a where a.status=:status")
 	
 	
 	

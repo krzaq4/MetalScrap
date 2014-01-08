@@ -1,13 +1,19 @@
 package pl.krzaq.metalscrap.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.mysql.jdbc.StringUtils;
+
 import pl.krzaq.metalscrap.dao.AuctionDAO;
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.AuctionStatus;
+import pl.krzaq.metalscrap.model.DeliveryType;
+import pl.krzaq.metalscrap.model.PaymentMethod;
 import pl.krzaq.metalscrap.service.AuctionService;
 
 public class AuctionServiceImpl implements AuctionService {
@@ -24,7 +30,7 @@ public class AuctionServiceImpl implements AuctionService {
 	
 
 	@Override
-	public List<Auction> findByStatus(int status) {
+	public List<Auction> findByStatus(AuctionStatus status) {
 		return auctionDAO.findByStatus(status) ;
 	}
 
@@ -59,6 +65,75 @@ public class AuctionServiceImpl implements AuctionService {
 		result.getCommodities().addAll(auctionDAO.findAuctionCommodities(result)) ;
 		return result ;
 	}
+	
+	@Override
+	public Auction findByName(String name) {
+		return auctionDAO.findByName(name) ;
+	}
+
+
+
+	@Override
+	public Auction findByNumber(String number) {
+		return auctionDAO.findByNumber(number) ;
+	}
+
+	@Override
+	public List<Auction> filter(String phrase, AuctionStatus status,
+			PaymentMethod method, DeliveryType type, Date startDate,
+			Date endDate) {
+		List<Auction> result = this.auctionDAO.findAll() ;
+		Iterator<Auction> it = result.iterator() ;
+		while(it.hasNext()) {
+			Auction next = it.next() ;
+			boolean remove = false ;
+			if (status!=null) {
+				if (!next.getStatus().getCode().equals(status.getCode()) && status.getCode()>=0) {
+					remove = true ;
+				}
+			}
+		
+			if (method!=null){
+				if (!next.getPaymentMethod().getCode().equals(method.getCode()) && method.getCode()>=0) {
+					remove = true ;
+				}
+			}
+			
+			if (type!=null) {
+				if(!next.getDeliveryType().getCode().equals(type.getCode()) && type.getCode()>=0) {
+					remove = true ;
+				}
+				
+			}
+			
+			if (startDate!=null) {
+				if (next.getStartDate().compareTo(startDate)<0) {
+					remove = true ;
+				}
+			}
+			
+			if (endDate!=null) {
+				if (next.getEndDate().compareTo(endDate)>0){
+					remove = true ;
+				}
+			}
+		
+			if (!StringUtils.isNullOrEmpty(phrase)) {
+				
+				if (!next.getName().toLowerCase().contains(phrase.toLowerCase()) && !next.getNumber().toLowerCase().contains(phrase.toLowerCase())) {
+					remove = true ;
+				}
+				
+			}
+		
+			if (remove){
+				it.remove();
+			}
+			 
+		}
+		
+		return result ;
+	}
 
 	@Override
 	public void save(Auction a) {
@@ -80,6 +155,13 @@ public class AuctionServiceImpl implements AuctionService {
 		this.auctionDAO = auctionDAO;
 	}
 
+
+
+	
+
+
+
+	
 
 
 	
