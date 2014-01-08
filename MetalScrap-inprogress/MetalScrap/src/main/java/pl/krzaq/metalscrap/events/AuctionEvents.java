@@ -11,6 +11,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -68,6 +69,10 @@ public class AuctionEvents {
 	@Autowired
 	private RoleDAO roleDAO ;
 	
+	
+	@Value("${upload.path}")
+	private String uploadPath ;
+	
 	//-----------------------------------------------------------------------
 	
 @SuppressWarnings("unchecked")
@@ -99,17 +104,16 @@ public void saveNewAuction(Auction auction, Page p) {
 			
 		}
 		
-		List<Image> files = (ArrayList<Image>) ses.getAttribute("files") ;
-		List<AttachementFile> attchs = new ArrayList<AttachementFile>() ;
+		List<AttachementFile> files = (ArrayList<AttachementFile>) ses.getAttribute("files") ;
+		
 		int i = 0 ;
-		for (Image img:files) {
+		for (AttachementFile af:files) {
 			
-			attchs.add(new AttachementFile(pref+String.valueOf(i), img.getSrc(), auction, false));
-			i++ ;
+			af.setAuction(auction);	
 		}
 		
-		auction.getFiles().addAll(attchs) ;
-		ses.removeAttribute("files");
+		auction.getFiles().addAll(files) ;
+		
 		
 		
 		// zapis aukcji

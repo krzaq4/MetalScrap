@@ -22,7 +22,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name="commodity")
 @NamedQueries({
-	@NamedQuery(name="Commodity.findAll", query="from Commodity" )
+	@NamedQuery(name="Commodity.findAll", query="from Commodity" ),
+	@NamedQuery(name="Commodity.findByAuction", query="from Commodity c where c.auction=:auction")
 	
 	
 })

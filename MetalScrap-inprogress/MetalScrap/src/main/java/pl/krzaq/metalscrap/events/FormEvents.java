@@ -57,20 +57,22 @@ public class FormEvents {
 			af.setName(nextName);
 			af.setPath(uploadPath+nextName+"."+media.getFormat());
 			af.setMain(false);
-			ServicesImpl.getAttachementFileService().save(af);
+			//ServicesImpl.getAttachementFileService().save(af);
 			
 			
 			Image img = new Image() ;
+			
 			img.setContent(((org.zkoss.image.Image)media));
+			img.setId(nextName);
 			img.setWidth("50%");
 			img.setHeight("50%");
-			List<Image> files = new ArrayList<Image>() ;
+			List<AttachementFile> files = new ArrayList<AttachementFile>() ;
 			HttpSession ses = (HttpSession) Executions.getCurrent().getSession().getNativeSession() ;
 			if( ses.getAttribute("files")!=null ){
-				files = (ArrayList<Image>) ses.getAttribute("files") ;
+				files = (ArrayList<AttachementFile>) ses.getAttribute("files") ;
 			}
 			
-			files.add(img) ;
+			files.add(af) ;
 			
 			
 			ses.setAttribute("files", files);

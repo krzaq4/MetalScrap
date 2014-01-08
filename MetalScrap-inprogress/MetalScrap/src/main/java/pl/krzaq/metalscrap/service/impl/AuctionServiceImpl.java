@@ -52,6 +52,13 @@ public class AuctionServiceImpl implements AuctionService {
 	public Auction findById(Long id) {
 		return auctionDAO.findById(id) ;
 	}
+	
+	@Override
+	public Auction findWithCollection(Long id) {
+		Auction result = auctionDAO.findById(id) ;
+		result.getCommodities().addAll(auctionDAO.findAuctionCommodities(result)) ;
+		return result ;
+	}
 
 	@Override
 	public void save(Auction a) {
@@ -72,5 +79,9 @@ public class AuctionServiceImpl implements AuctionService {
 	public void setAuctionDAO(AuctionDAO auctionDAO) {
 		this.auctionDAO = auctionDAO;
 	}
+
+
+
+	
 	
 }

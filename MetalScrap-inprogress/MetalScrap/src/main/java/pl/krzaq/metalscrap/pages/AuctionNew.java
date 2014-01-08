@@ -1,5 +1,6 @@
 package pl.krzaq.metalscrap.pages;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.zkoss.image.AImage;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
@@ -48,12 +50,17 @@ public class AuctionNew extends HomePage{
 		
 		if(ses.getAttribute("files")!=null) {
 			
-			List<Image> images = (ArrayList<Image>) ses.getAttribute("files") ;
+			List<AttachementFile> files = (ArrayList<AttachementFile>) ses.getAttribute("files") ;
 			Grid grid = (Grid) arg0.getFellow("photos") ;
 			AnnotateDataBinder binder = (AnnotateDataBinder) arg0.getAttribute("binder") ;
-			for (Image img:images) {
+			for (AttachementFile af:files) {
 				Row row = new Row() ;
-				
+				File imgFile = new File(af.getPath()) ;
+				AImage aimg = new AImage(imgFile) ;
+				Image img = new Image() ;
+				img.setContent(aimg);
+				img.setWidth("50%");
+				img.setHeight("50%");
 				row.appendChild(img) ;
 				
 				grid.getRows().appendChild(row) ;	
@@ -97,23 +104,37 @@ public class AuctionNew extends HomePage{
 		List<Commodity> commodities = new ArrayList<Commodity>(); 
 		auction.setCommodities(commodities);
 		
-		List<Image> files = new ArrayList<Image>() ; 
-		ListModelList<Image> lml = new ListModelList<Image>(files) ;
+		List<AttachementFile> files = new ArrayList<AttachementFile>() ; 
 		
+		HttpSession ses = (HttpSession) Executions.getCurrent().getSession().getNativeSession() ;
 		
 		// Tryb edycji
 		
 		if (request.getParameter("id")!=null) {
+			
 			Long id = Long.valueOf(request.getParameter("id")) ;
-			auction = ServicesImpl.getAuctionService().findById(id) ;
+			
+			
+			auction = ServicesImpl.getAuctionService().findWithCollection(id) ;
+			
 			List<Image> imgs = new ArrayList<Image>() ;
 			
 			for (AttachementFile af:ServicesImpl.getAttachementFileService().findByAuction(auction)) {
-				Image im = new Image(af.getPath()) ;
+				Image im = new Image() ;
+				File fi = new File(af.getPath()) ;
+				org.zkoss.image.AImage cnt = new org.zkoss.image.AImage(fi) ; 
+				im.setContent(cnt);
+				
+				
 				imgs.add(im) ;
 			}
 			
-			lml = new ListModelList<Image>(imgs) ;
+			ses.setAttribute("files", ServicesImpl.getAttachementFileService().findByAuction(auction));
+			
+			
+		} else {
+			
+			ses.removeAttribute("files");
 		}
 		
 		

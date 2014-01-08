@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.AuctionStatus;
+import pl.krzaq.metalscrap.model.Commodity;
 
 @Transactional
 public class AuctionDAO {
@@ -78,6 +79,10 @@ public List<AuctionStatus> findAllStatuses() {
 		
 	}
 
+	public List<Commodity> findAuctionCommodities(Auction auction) {
+		
+		return sessionFactory.getCurrentSession().getNamedQuery("Commodity.findByAuction").setParameter("auction", auction).list() ;
+	}
 	
 	public void update(Auction a) {
 	

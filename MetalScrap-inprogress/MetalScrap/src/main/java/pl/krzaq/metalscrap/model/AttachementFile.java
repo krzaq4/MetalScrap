@@ -42,6 +42,8 @@ public class AttachementFile {
 	//--------------------------------------------------------------------------
 	
 	
+	public AttachementFile() {}
+	
 	public AttachementFile(String name, String path, Auction auction, Boolean main) {
 		
 		this.name = name ;

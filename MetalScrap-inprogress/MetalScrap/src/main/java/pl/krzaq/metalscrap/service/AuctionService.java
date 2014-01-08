@@ -28,6 +28,8 @@ public interface AuctionService {
 
 	public Auction findById(Long id) ;
 	
+	public Auction findWithCollection(Long id) ;
+	
 	public void save(Auction a);
 
 	

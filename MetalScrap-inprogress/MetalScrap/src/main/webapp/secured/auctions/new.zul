@@ -124,7 +124,7 @@
 							<label value="Opis aukcji:" />
 							
 							
-							<ckeditor id="auction_desc" width="700px" value="@{auction.description}">
+							<ckeditor id="auction_desc" width="700px" value="@{auction.description}" use="pl.krzaq.metalscrap.components.WYSIWYGeditor">
 								
 							</ckeditor>
 						</row>
@@ -159,10 +159,10 @@
 </panelchildren>
 </panel>
 		
-<panel id="positions" visible="false"  border="none" collapsible="true"  action="show:slideIn;hide:slideOut">
+<panel id="positions" visible="@{isCommoditiesVisible}"  border="none" collapsible="true"  action="show:slideIn;hide:slideOut">
 <caption label="Przedmioty aukcji" />
 <panelchildren>
-<div>
+<div if="${false}">
 	<groupbox>
 	<div id="listMenu"><button popup="addPositionsPopup" >Dodaj pozycję</button><button onClick="auctionEvents.delPosition(positionsList)">Usuń pozycję</button></div>
 	<listbox id="positionsList" model="@{auction.commodities}" selectedItem="@{commodity}" mold="paging" pageSize="10" checkmark="true" sizedByContent="false" height="400px" multiple="true">
