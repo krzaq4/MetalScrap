@@ -101,6 +101,11 @@ public class AuctionDAO {
 		sessionFactory.getCurrentSession().update(a);
 	}
 	
+	public void delete(Auction a) {
+		
+		sessionFactory.getCurrentSession().delete(a);
+	}
+	
 	
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;

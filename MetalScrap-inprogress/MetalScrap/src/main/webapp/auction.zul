@@ -1,0 +1,37 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="pl.krzaq.metalscrap.pages.AuctionView"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" name="binder" arg2="binder" ?>
+
+<?page title="" contentType="text/html;charset=UTF-8"?>
+
+
+
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+
+<div class="head"></div>
+<div class="log"></div>
+	<div
+		style="width:970px;height: auto;margin: 0 auto ;">
+
+		<div id="header" class="header">
+			<div class="logo">
+				
+			</div>
+			<div class="headerinfo">
+<div class="userInfo">Zalogowany jako: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/></div>
+			</div>
+		</div>
+
+<include id="men"  src="/common/menu.zul" ></include>
+		
+
+<panel id="parameters" height="auto" border="none" collapsible="true"  action="show:slideIn;hide:slideOut">
+<caption label="@{auction.name}"></caption>
+<panelchildren>
+
+<div id="galleryView" use="pl.krzaq.metalscrap.components.GalleryDiv" model="@{images}"></div>
+
+</panelchildren>
+</panel>
+</div>
+</zk>

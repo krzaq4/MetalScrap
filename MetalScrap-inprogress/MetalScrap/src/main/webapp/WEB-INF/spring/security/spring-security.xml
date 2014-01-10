@@ -21,7 +21,7 @@
   <import resource="../root-context.xml"/>
   
  <!-- This is where we configure Spring-Security  -->
- <security:http create-session="always" auto-config="true" use-expressions="true" authentication-manager-ref="authenticationManager" >
+ <security:http create-session="always" auto-config="true" use-expressions="true" authentication-manager-ref="authenticationManager"  access-denied-page="/app/login">
   
   <security:intercept-url pattern="/app/login" access="permitAll"/>
  
@@ -33,10 +33,13 @@
   
   <security:intercept-url pattern="/app/auction/new" access="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN', 'ROLE_USER')"/>
   
+  <security:intercept-url pattern="/secured/**" access="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN', 'ROLE_USER')"/>
+  
+  
  
    
   <security:form-login 
-    login-page="/app/login" always-use-default-target="true"  default-target-url="/app/home" authentication-failure-url="/app/login_fail" />
+    login-page="/app/login" always-use-default-target="true"  default-target-url="/app/home" authentication-success-handler-ref="savedRequestAwareHandler" authentication-failure-url="/app/login_fail" />
     
  </security:http>
   

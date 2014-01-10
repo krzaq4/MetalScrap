@@ -48,8 +48,12 @@ public class ComponentEventInterceptor implements EventInterceptor {
 			if(binder.existBinding(cmp, "selectedItem"))
 				exp =binder.getBinding(cmp, "selectedItem").getExpression() ;
 			
+			if(exp.indexOf(".")>0) {
+				ses.setAttribute(pref+exp.substring(0, exp.indexOf(".")), arg0.getTarget().getPage().getAttribute(exp.substring(0, exp.indexOf("."))));
+			} else {
+				ses.setAttribute("pref"+exp, arg0.getTarget().getPage().getAttribute(exp));
+			}
 			
-			ses.setAttribute(pref+exp.substring(0, exp.indexOf(".")), arg0.getTarget().getPage().getAttribute(exp.substring(0, exp.indexOf("."))));
 			
 			System.out.println("onBlur  "+arg0.getPage().getTitle()+" | "+arg0.getTarget().getClass().getCanonicalName());
 			

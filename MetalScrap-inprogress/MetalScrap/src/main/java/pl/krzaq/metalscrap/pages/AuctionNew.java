@@ -28,6 +28,7 @@ import org.zkoss.zul.Row;
 
 import pl.krzaq.metalscrap.model.AttachementFile;
 import pl.krzaq.metalscrap.model.Auction;
+import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.model.Commodity;
 import pl.krzaq.metalscrap.model.CommodityType;
 import pl.krzaq.metalscrap.service.Services;
@@ -108,6 +109,8 @@ public class AuctionNew extends HomePage{
 		
 		HttpSession ses = (HttpSession) Executions.getCurrent().getSession().getNativeSession() ;
 		
+		List<Category> auctionCategories = ServicesImpl.getCategoryService().findRootCategories() ;
+		
 		// Tryb edycji
 		
 		if (request.getParameter("id")!=null) {
@@ -131,6 +134,11 @@ public class AuctionNew extends HomePage{
 			
 			ses.setAttribute("files", ServicesImpl.getAttachementFileService().findByAuction(auction));
 			
+			if (auction.getCategory()!=null) {
+				
+				page.setAttribute("selectedCategory", auction.getCategory()) ;
+				
+			}
 			
 		} 
 		
@@ -138,7 +146,7 @@ public class AuctionNew extends HomePage{
 		
 		
 		
-		
+		page.setAttribute("auctionCategories", auctionCategories) ;
 		page.setAttribute("auction", auction) ;
 		page.setAttribute("commodity", new Commodity() ) ;
 		page.setAttribute("paymentMethods", ServicesImpl.getPaymentMethodService().findAll()) ;

@@ -1,0 +1,47 @@
+<?page id="auction_status_change" title="" contentType="text/html;charset=UTF-8" ?>
+<?init class="pl.krzaq.metalscrap.pages.window.ChangeAuctionStatusWindow" ?>
+
+<zk>
+<window id="changeStatus" title="Zmień status aukcji" border="normal" mode="modal" width="420px" closable="true" >
+
+
+<grid>
+	<columns>
+		<column width="120px"></column>
+		<column width="260px"></column>
+	</columns>
+	<rows>
+		<row>
+			<label value="Zaznaczonych aukcji**: " />
+			<label id="selected" value="${arg.auctionCount}" tooltip="tooltippop"/>
+		</row>
+		<row>
+			<label value="Status*:" />
+			<combobox id="status" model="${arg.statuses}"  selectedItem="@{selectedStat}" value="Wybierz status...">
+					
+					
+					
+			</combobox>
+		</row>
+		<row>
+		<label/><button label="Zmień status" onClick="auctionEvents.changeSelectedStatus(changeStatus, binder)"/>
+		</row>
+	</rows>
+	<foot>
+		<footer span="2">
+		<vbox>
+			<label sclass="footer" value="* - wybierz status z listy" />
+			<label sclass="footer" value="** - najedź kursorem myszy na ilość wybranych aukcji aby uzyskać szczegółowe informacje" />
+		</vbox>
+		</footer>
+	</foot>
+</grid>
+<popup id="tooltippop">
+	<html>
+	${arg.auctionDetails}
+	</html>
+</popup>
+</window>
+
+
+</zk>

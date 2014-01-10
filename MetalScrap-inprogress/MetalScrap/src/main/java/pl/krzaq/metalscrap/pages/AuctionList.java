@@ -35,9 +35,9 @@ public class AuctionList extends HomePage{
 		Combobox paymentCombo = (Combobox) page.getFellow("paymentSearch") ;
 		Combobox deliveryCombo = (Combobox) page.getFellow("deliverySearch") ;
 		
-		statusCombo.setSelectedItem(statusCombo.getItems().get(0)) ;
+		/*statusCombo.setSelectedItem(statusCombo.getItems().get(0)) ;
 		paymentCombo.setSelectedItem(paymentCombo.getItems().get(0));
-		deliveryCombo.setSelectedItem(deliveryCombo.getItems().get(0));
+		deliveryCombo.setSelectedItem(deliveryCombo.getItems().get(0));*/
 		
 		
 		/*

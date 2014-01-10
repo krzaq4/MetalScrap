@@ -65,6 +65,9 @@
         </property>
     </bean>
 
+	<bean id="savedRequestAwareHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+	</bean>
+
     <bean id="transactionManager"
         class="org.springframework.orm.hibernate3.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory" />

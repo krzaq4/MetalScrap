@@ -144,6 +144,13 @@ public class AuctionServiceImpl implements AuctionService {
 	public void update(Auction a) {
 		auctionDAO.update(a);
 	}
+	
+	@Override
+	public void delete(Auction a) {
+		auctionDAO.delete(a) ;
+		
+	}
+
 
 	//------------------------------------------------------------------------------------
 	
@@ -155,6 +162,9 @@ public class AuctionServiceImpl implements AuctionService {
 		this.auctionDAO = auctionDAO;
 	}
 
+
+
+	
 
 
 	

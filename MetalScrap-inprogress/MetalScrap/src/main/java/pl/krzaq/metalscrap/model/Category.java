@@ -98,9 +98,8 @@ public class Category implements Serializable, Comparable {
 	
 	@Override
 	public int hashCode() {
+		return (this.getName().length()+1)*(this.getDescription().length()+1)+this.getPosition()*12 ;
 		
-		int hc = this.getId().intValue()*this.getPosition()*111 ;
-		return hc ;
 		
 	}
 

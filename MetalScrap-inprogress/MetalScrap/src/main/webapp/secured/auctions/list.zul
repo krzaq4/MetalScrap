@@ -2,7 +2,7 @@
 <?init class="pl.krzaq.metalscrap.pages.AuctionList"?>
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
 
-<?page title="Lista aukcji" contentType="text/html;charset=UTF-8" ?>
+<?page id="auction_list" title="Lista aukcji" contentType="text/html;charset=UTF-8" ?>
 
 
 <zk xmlns:h="http://www.w3.org/1999/xhtml">
@@ -27,11 +27,11 @@
 		<caption label="Lista aukcji"></caption>
 			<panelchildren>
 			<div sclass="searchMenu">
-			<vbox>
+			<vbox sclass="search">
 				<label value="Fraza do wyszukania"/>
-				<textbox id="phraseSearch" />
+				<textbox id="phraseSearch" value="@{sphrase}" />
 			</vbox>
-			<vbox>
+			<vbox sclass="search">
 				<label value="Status aukcji" />
 				<combobox id="statusSearch" model="@{statuses}" selectedItem="@{selectedStatus}">
 					
@@ -39,32 +39,32 @@
 					
 				</combobox>
 			</vbox>
-			<vbox>
+			<vbox sclass="search">
 				<label value="Sposób płatności" />
 				<combobox id="paymentSearch" model="@{payments}" selectedItem="@{selectedPayment}">
 					<comboitem self="@{each=payment}" label="@{payment.name}" value="@{payment}"></comboitem>
 				</combobox>
 			</vbox>
-			<vbox>
+			<vbox sclass="search">
 				<label value="Rodzaj dostawy" />
 				<combobox id="deliverySearch" model="@{deliveries}" selectedItem="@{selectedDelivery}">
 					<comboitem self="@{each=delivery}" label="@{delivery.name}" value="@{delivery}"></comboitem>
 				</combobox>
 			</vbox>
-			<vbox>
+			<vbox sclass="search">
 				<label value="Data rozpoczęcia" />
 				<datebox id="startDateSearch" format="medium+long"/>
 			</vbox>
-			<vbox>
+			<vbox sclass="search">
 				<label value="Data zakończenia" />
 				<datebox id="endDateSearch" format="medium+long" />
 			</vbox>
 			<button label="Szukaj" onClick="auctionEvents.filterAuctionList(auctionList, binder)"/>
 			</div>
 			<div sclass="listMenu">
-				<button id="del_auction" label="Usuń aukcję" disabled="@{auctionList, converter='pl.krzaq.metalscrap.converter.ListboxMultipleNotSelected'}" />
-				<button id="change_status" label="Zmień status" disabled="@{auctionList, converter='pl.krzaq.metalscrap.converter.ListboxMultipleNotSelected'}"/>
-				<button id="end_auction" label="Zakończ aukcję" onClick="auctionEvents.deleteSelectedAuctions(auctionList, binder)" disabled="@{auctionList, converter='pl.krzaq.metalscrap.converter.ListboxMultipleNotSelected'}"/>
+				<button id="del_auction" label="Usuń aukcję" onClick="auctionEvents.deleteSelectedAuctions(auctionList, binder)" disabled="@{auctionList, converter='pl.krzaq.metalscrap.converter.ListboxMultipleNotSelected'}" />
+				<button id="change_status" label="Zmień status" onClick="auctionEvents.changeSelectedAuctionsStatus(auctionList, binder)" disabled="@{auctionList, converter='pl.krzaq.metalscrap.converter.ListboxMultipleNotSelected'}"/>
+				<button id="end_auction" label="Zakończ aukcję" onClick="auctionEvents.endSelectedAuctions(auctionList, binder)" disabled="@{auctionList, converter='pl.krzaq.metalscrap.converter.ListboxMultipleNotSelected'}"/>
 			</div>
 
 				<listbox id="auctionList" model="@{auctions}"
@@ -77,7 +77,7 @@
 						<listheader label="Forma płatności" />
 						<listheader label="Sposób dostawy" />
 					</listhead>
-					<listitem self="@{each=auction}">
+					<listitem self="@{each=auction}" value="@{auction}">
 						<listcell>
 							<label sclass="asLink" value="@{auction.name}" onClick="auctionEvents.redirectToAuctionEdit(auction.id)"/>
 						</listcell>

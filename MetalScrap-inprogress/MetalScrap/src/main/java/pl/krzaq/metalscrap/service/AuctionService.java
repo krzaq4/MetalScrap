@@ -40,8 +40,9 @@ public interface AuctionService {
 	
 	public void save(Auction a);
 
-	
 	public void update(Auction a) ;
+	
+	public void delete(Auction a) ;
 	
 	
 }
