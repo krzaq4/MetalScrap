@@ -170,6 +170,7 @@ public void saveNewAuction(Auction auction, Page p) {
 		
 		auction.setStatus(ServicesImpl.getAuctionService().findStatusByCode(AuctionStatus.STATUS_NEW));
 		
+		auction.setOwnerUser(currentUser);
 		// zapis aukcji
 		
 		if (auction.getId()!=null) {

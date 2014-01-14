@@ -2,19 +2,27 @@ package pl.krzaq.metalscrap.pages;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import org.zkoss.image.AImage;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Image;
+import org.zkoss.zul.Messagebox;
 
 import pl.krzaq.metalscrap.model.AttachementFile;
 import pl.krzaq.metalscrap.model.Auction;
+import pl.krzaq.metalscrap.model.UserOffer;
 import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 
 public class AuctionView extends HomePage {
@@ -44,8 +52,43 @@ public class AuctionView extends HomePage {
 				images.add(img) ;
 			}
 			
+			
+			List<UserOffer> offers = ServicesImpl.getUserOfferService().findByAuction(auction) ;
+			Collections.sort(offers);
+			
+			if (offers!=null && offers.size()>0) {
+				
+				page.setAttribute("currentOffer", offers.get(offers.size()-1)) ;
+			} else {
+				
+				page.setAttribute("currentOffer", null) ;
+			}
+			
+			
+			DateTime now = new DateTime(new Date()) ;
+			DateTime end = new DateTime(auction.getEndDate()) ;
+			Duration d = new Duration(now, end);
+			Long daysToGo = d.getStandardDays() ;
+			
+			
+			page.setAttribute("daysToGo", daysToGo) ;
+			page.setAttribute("offers", offers) ;
+			
+			page.setAttribute("auction", auction) ;
 			page.setAttribute("images", images) ;
 			
+		} else {
+			
+			Messagebox.show("Niew³aœciwe wywo³anie strony.", "B³¹d", Messagebox.OK, "", new EventListener<Event>(){
+
+				@Override
+				public void onEvent(Event arg0) throws Exception {
+					
+					Executions.getCurrent().sendRedirect("/home");
+					
+				}
+				
+			}) ;
 		}
 		
 	}

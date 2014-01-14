@@ -25,11 +25,66 @@
 <include id="men"  src="/common/menu.zul" ></include>
 		
 
-<panel id="parameters" height="auto" border="none" collapsible="true"  action="show:slideIn;hide:slideOut">
+<panel id="parameters" height="600px" border="none" collapsible="true"  action="show:slideIn;hide:slideOut">
 <caption label="@{auction.name}"></caption>
 <panelchildren>
 
 <div id="galleryView" use="pl.krzaq.metalscrap.components.GalleryDiv" model="@{images}"></div>
+
+<div id="auction_price" sclass="AuctionInfoPanel" width="350px">
+<grid>
+	<columns>
+		<column width="40%"></column>
+		<column width="60%"></column>
+	</columns>
+	<rows>
+		<row>
+			<label value="Aktualna cena: " /><label id="current_price" value="@{currentOffer, converter='pl.krzaq.metalscrap.converter.UserOfferValueConverter'}" />		
+		</row>
+		<row spans="2">
+			<hbox><label value="Twoja cena: "/><decimalbox id="new_price" format="######,##" width="140px" /><button label="Licytuj!" mold="trendy"/></hbox>		
+		</row>
+		<row spans="2" align="right">
+					
+		</row>
+		<row spans="2">
+			<separator bar="true" orient="horizontal"></separator>
+		</row>
+		<row >
+			<label value="Do końca aukcji: " /> 
+			<vbox>
+				<label id="till_end" sclass="normalLabel" value="@{daysToGo}" />
+				<label id="end_date" sclass="smallLabel" value="@{auction.endDate, converter='pl.krzaq.metalscrap.converter.DateConverter'}" />	
+			</vbox>
+		</row>
+		<row spans="2">
+			<label value="" />		
+		</row>
+		<row spans="2">
+			<button label="Dodaj do obserwowanych" />		
+		</row>
+		<row spans="2">
+			<separator orient="horizontal" bar="true"></separator>
+		</row>
+		<row>
+			<label value="Wystawił: "/><label value="@{auction.ownerUser.login}" />			
+		</row>
+		<row spans="2">
+			<label value="Zobacz inne aukcje sprzedającego" />		
+		</row>
+	</rows>
+</grid>
+
+
+
+
+
+
+
+
+
+
+</div>
 
 </panelchildren>
 </panel>

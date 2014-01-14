@@ -25,7 +25,7 @@
 		
 
 <panel id="parameters" height="auto" border="none" collapsible="true"  action="show:slideIn;hide:slideOut">
-<caption label="Parametry aukcji - @{auction, converter='pl.krzaq.metalscrap.converter.AuctionNameConverter'}"></caption>
+<caption label="Parametry aukcji"></caption>
 <panelchildren>
 <div>
 	<groupbox>

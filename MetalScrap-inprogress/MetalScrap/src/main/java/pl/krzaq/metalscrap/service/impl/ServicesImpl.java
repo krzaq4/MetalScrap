@@ -29,6 +29,9 @@ public class ServicesImpl {
 	@Autowired
 	private static AttachementFileServiceImpl attachementFileService ;
 	
+	@Autowired
+	private static UserOfferServiceImpl userOfferService ;
+	
 	public static AuctionServiceImpl getAuctionService() {
 		return auctionService ;
 	}
@@ -102,7 +105,13 @@ public class ServicesImpl {
 		
 	}
 	
+	public static UserOfferServiceImpl getUserOfferService() {
+		return userOfferService ;
+	}
 	
+	public void setUserOfferService(UserOfferServiceImpl userOfferService) {
+		this.userOfferService = userOfferService ;
+	}
 
 	
 	

@@ -81,11 +81,22 @@ public class Auction implements Serializable {
 	private Company winner ;
 	
 	@OneToOne
+	@JoinColumn(name="winner_user")
+	private User winnerUser ;
+	
+	@OneToOne
 	@JoinColumn(name="owner")
 	private Company owner ;
 	
+	@OneToOne
+	@JoinColumn(name="owner_user")
+	private User ownerUser ;
+	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="auction")
 	private List<CompanyOffer> companyOffers = new ArrayList<CompanyOffer>() ;
+	
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="auction")
+	private List<UserOffer> userOffers = new ArrayList<UserOffer>() ;
 
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="auction")
 	private List<Commodity> commodities = new ArrayList<Commodity>() ;
@@ -262,6 +273,30 @@ public class Auction implements Serializable {
 
 	public void setFiles(List<AttachementFile> files) {
 		this.files = files;
+	}
+
+	public List<UserOffer> getUserOffers() {
+		return userOffers;
+	}
+
+	public void setUserOffers(List<UserOffer> userOffers) {
+		this.userOffers = userOffers;
+	}
+
+	public User getWinnerUser() {
+		return winnerUser;
+	}
+
+	public void setWinnerUser(User winnerUser) {
+		this.winnerUser = winnerUser;
+	}
+
+	public User getOwnerUser() {
+		return ownerUser;
+	}
+
+	public void setOwnerUser(User ownerUser) {
+		this.ownerUser = ownerUser;
 	}
 	
 	
