@@ -25,9 +25,11 @@
 <include id="men"  src="/common/menu.zul" ></include>
 		
 
-<panel id="parameters" height="600px" border="none" collapsible="true"  action="show:slideIn;hide:slideOut">
+<panel id="parameters" height="auto" border="normal" collapsible="true"  action="show:slideIn;hide:slideOut">
 <caption label="@{auction.name}"></caption>
-<panelchildren>
+<panelchildren style="padding: 5px 5px 5px 5px">
+
+<div width="100%" height="600px">
 
 <div id="galleryView" use="pl.krzaq.metalscrap.components.GalleryDiv" model="@{images}"></div>
 
@@ -38,14 +40,20 @@
 		<column width="60%"></column>
 	</columns>
 	<rows>
+		<row spans="2" align="right">
+			<button label="Odśwież" onClick="auctionEvents.onClickRefreshAuctionForm(auction, self, binder)"/>
+		</row>
+		<row id="auction_status_row" spans="2" align="center" visible="@{auction, converter='pl.krzaq.metalscrap.converter.AuctionIsNotStartedConverter'}">
+			<label value="-- aukcja zakończona --" sclass="strongLabel"/>
+		</row>
 		<row>
 			<label value="Aktualna cena: " /><label id="current_price" value="@{currentOffer, converter='pl.krzaq.metalscrap.converter.UserOfferValueConverter'}" />		
 		</row>
 		<row spans="2">
-			<hbox><label value="Twoja cena: "/><decimalbox id="new_price" format="######,##" width="140px" /><button label="Licytuj!" mold="trendy"/></hbox>		
+			<hbox><label value="Twoja cena: "/><decimalbox id="new_price" format="#########.##" width="140px" /><button id="place_bid" disabled="@{auction, converter='pl.krzaq.metalscrap.converter.AuctionIsNotStartedConverter'}" label="Licytuj!" mold="trendy" onClick="auctionEvents.onClickPlaceBid(new_price, auction, binder)" /></hbox>		
 		</row>
-		<row spans="2" align="right">
-					
+		<row>
+			<label value="Ilość ofert"/><label id="offers_qty" value="@{offersQty}" />		
 		</row>
 		<row spans="2">
 			<separator bar="true" orient="horizontal"></separator>
@@ -53,7 +61,7 @@
 		<row >
 			<label value="Do końca aukcji: " /> 
 			<vbox>
-				<label id="till_end" sclass="normalLabel" value="@{daysToGo}" />
+				<label id="till_end" sclass="normalLabel" value="@{toGo}" />
 				<label id="end_date" sclass="smallLabel" value="@{auction.endDate, converter='pl.krzaq.metalscrap.converter.DateConverter'}" />	
 			</vbox>
 		</row>
@@ -85,6 +93,100 @@
 
 
 </div>
+</div>
+
+<div id="auction_details" width="100%" height="auto" sclass="auctionDetails">
+<div sclass="divCaptionOuter"><div sclass="divCaption">Parametry aukcji</div></div>
+
+<tabbox width="100%" height="100%">
+        <tabs>
+            <tab label="Parametry przedmiotu" />
+            <tab label="Lokalizacja" />
+            <tab label="Inne" />
+        </tabs>
+        <tabpanels>
+            <tabpanel>
+            	<grid>
+            		<columns>
+            			<column width="120px"></column>
+            			<column width="240px"></column>
+            		</columns>
+            		<rows>
+            			<row>
+            				<label value="Sposób dostawy:" />
+            				<label value="@{auction.deliveryType.name}" />
+            			</row>
+            			<row>
+            				<label value="Rodzaj płatności:" />
+            				<label value="@{auction.paymentMethod.name}" />
+            			</row>
+            			<row>
+            				<label value="Data rozpoczęcia:" />
+            				<label value="@{auction.startDate, converter='pl.krzaq.metalscrap.converter.DateConverter'}" />
+            			</row>
+            			<row>
+            				<label value="Data zakończenia:" />
+            				<label value="@{auction.endDate, converter='pl.krzaq.metalscrap.converter.DateConverter'}" />
+            			</row>
+            		</rows>
+            	</grid>
+            </tabpanel>
+            <tabpanel>
+            	<grid>
+            		<columns>
+            			<column width="120px"></column>
+            			<column width="240px"></column>
+            		</columns>
+            		<rows>
+            			<row>
+            				<label value="Kraj:" />
+            				<label value="Polska" />
+            			</row>
+            			<row>
+            				<label value="Miasto:" />
+            				<!-- <label value="@{auction.ownerUser.company.addressMain.city}" /> -->
+            			</row>
+            		</rows>
+            	</grid>
+            </tabpanel>
+            <tabpanel>
+            </tabpanel>
+        </tabpanels>
+</tabbox>
+
+
+</div>
+<space></space>
+<div id="auction_description" width="100%" height="auto">
+
+<div sclass="divCaptionOuter"><div sclass="divCaption">Opis aukcji</div></div>
+<html content="@{auction.description}">
+
+
+</html>
+
+</div>
+
+<div id="bid_history" sclass="bidHistory">
+<div sclass="divCaptionOuter"><div sclass="divCaption">Historia ofert</div></div>
+<grid id="offers_history" model="@{offersHistory}">
+	<columns>
+		<column width="45%" label="Użytkownik"></column>
+		<column width="30%" label="Cena"></column>
+		<column width="25%" label="Data złożenia oferty"></column>
+	</columns>
+	<rows>
+		<row self="@{each=offering}">
+			<label value="@{offering.user.login}" />
+			<label value="@{offering, converter='pl.krzaq.metalscrap.converter.UserOfferValueConverter'}" />
+			<label value="@{offering, converter='pl.krzaq.metalscrap.converter.UserOfferDateConverter'}" />
+		</row>
+	</rows>
+</grid>
+
+</div>
+<space></space>
+<div sclass="pageFooter"></div>
 
 </panelchildren>
 </panel>

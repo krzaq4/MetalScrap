@@ -3,6 +3,7 @@ package pl.krzaq.metalscrap.service.impl;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -28,7 +29,7 @@ public class DBUserServiceImpl implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
 		String password = userService.getUserByLogin(username).getPassword() ;
-		Set<Role> roles = userService.getUserByLogin(username).getRoles() ;
+		List<Role> roles = userService.getUserByLogin(username).getRoles() ;
 		
 		Set<GrantedAuthorityImpl> authorities = new HashSet<GrantedAuthorityImpl>() ;
 		Iterator<Role> i = roles.iterator() ;

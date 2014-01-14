@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
+import org.joda.time.Period;
 import org.zkoss.image.AImage;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -59,8 +60,11 @@ public class AuctionView extends HomePage {
 			if (offers!=null && offers.size()>0) {
 				
 				page.setAttribute("currentOffer", offers.get(offers.size()-1)) ;
+				Collections.sort(offers, Collections.reverseOrder()) ;
+				page.setAttribute("offersHistory", offers) ;
+				page.setAttribute("offersQty", offers.size()) ;
 			} else {
-				
+				page.setAttribute("offersQty", 0) ;
 				page.setAttribute("currentOffer", null) ;
 			}
 			
@@ -68,10 +72,20 @@ public class AuctionView extends HomePage {
 			DateTime now = new DateTime(new Date()) ;
 			DateTime end = new DateTime(auction.getEndDate()) ;
 			Duration d = new Duration(now, end);
+			
+			StringBuffer toGo = new StringBuffer() ;
 			Long daysToGo = d.getStandardDays() ;
+			toGo.append(daysToGo+" dni, ") ;
+			
+			Period p = d.toPeriod().minusDays(daysToGo.intValue()) ;
+			toGo.append(p.getHours()+" godz., "+p.getMinutes()+" min., "+p.getSeconds()+" sek.") ; 
 			
 			
-			page.setAttribute("daysToGo", daysToGo) ;
+			
+			
+			
+			
+			page.setAttribute("toGo", toGo.toString()) ;
 			page.setAttribute("offers", offers) ;
 			
 			page.setAttribute("auction", auction) ;

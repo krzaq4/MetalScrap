@@ -1,10 +1,12 @@
 package pl.krzaq.metalscrap.events;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -14,6 +16,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.joda.time.Period;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,7 +35,10 @@ import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.ComboitemRenderer;
 import org.zkoss.zul.Constraint;
 import org.zkoss.zul.Datebox;
+import org.zkoss.zul.Decimalbox;
+import org.zkoss.zul.Grid;
 import org.zkoss.zul.Image;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
@@ -39,6 +47,7 @@ import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Messagebox.ClickEvent;
 import org.zkoss.zul.Popup;
+import org.zkoss.zul.Row;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
@@ -59,6 +68,7 @@ import pl.krzaq.metalscrap.model.Company;
 import pl.krzaq.metalscrap.model.DeliveryType;
 import pl.krzaq.metalscrap.model.PaymentMethod;
 import pl.krzaq.metalscrap.model.User;
+import pl.krzaq.metalscrap.model.UserOffer;
 import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 import pl.krzaq.metalscrap.utils.Constants;
 import pl.krzaq.metalscrap.utils.Utilities;
@@ -201,6 +211,83 @@ public void saveNewAuction(Auction auction, Page p) {
 		
 	}
 	
+
+public void onClickRefreshAuctionForm(Auction auction, Button but, AnnotateDataBinder binder) {
+	
+	Page page = but.getPage() ;
+	
+	
+	
+	Label currentPrice = (Label) page.getFellow("current_price") ;
+	Label tillEnd = (Label) page.getFellow("till_end") ;
+	Button placeBid = (Button) page.getFellow("place_bid") ;
+	Row status_row = (Row) page.getFellow("auction_status_row") ;
+	Grid offers_history = (Grid) page.getFellow("offers_history") ;
+	Label offers_qty = (Label) page.getFellow("offers_qty") ;
+	
+	List<UserOffer> offers = ServicesImpl.getUserOfferService().findByAuction(auction) ;
+	Collections.sort(offers);
+	if (offers!=null && offers.size()>0) {
+		
+		page.setAttribute("currentOffer", offers.get(offers.size()-1)) ;
+		Collections.sort(offers,Collections.reverseOrder());
+		page.setAttribute("offersHistory", offers) ;
+		page.setAttribute("offersQty", offers.size()) ;
+	}
+	
+	DateTime now = new DateTime(new Date()) ;
+	DateTime end = new DateTime(auction.getEndDate()) ;
+	Duration d = new Duration(now, end);
+	
+	StringBuffer toGo = new StringBuffer() ;
+	Long daysToGo = d.getStandardDays() ;
+	toGo.append(daysToGo+" dni, ") ;
+	
+	Period p = d.toPeriod().minusDays(daysToGo.intValue()) ;
+	toGo.append(p.getHours()+" godz., "+p.getMinutes()+" min., "+p.getSeconds()+" sek.") ; 
+	
+	
+	page.setAttribute("toGo", toGo.toString()) ;
+	
+	binder.loadComponent(status_row);
+	binder.loadComponent(placeBid);
+	binder.loadComponent(tillEnd);
+	binder.loadComponent(currentPrice);
+	binder.loadComponent(offers_history);
+	binder.loadComponent(offers_qty);
+	
+	
+}
+
+
+public void onClickPlaceBid(Decimalbox dbox, Auction auction, AnnotateDataBinder binder) {
+	
+	UserOffer currentOffer = (UserOffer)dbox.getPage().getAttribute("currentOffer") ;
+	BigDecimal price = dbox.getValue() ;
+	
+	if (price!=null && currentOffer.getPrice()<price.doubleValue()) {
+	
+		UserOffer newOffer = new UserOffer() ;
+		newOffer.setAuction(auction);
+		newOffer.setDateIssued(new Date());
+		newOffer.setPrice(price.doubleValue());
+		newOffer.setUser(ServicesImpl.getUserService().getLoggedinUser());
+	
+		ServicesImpl.getUserOfferService().save(newOffer);
+		List<UserOffer> offers = ServicesImpl.getUserOfferService().findByAuction(auction) ;
+		Collections.sort(offers, Collections.reverseOrder());
+	
+		dbox.getPage().setAttribute("offersHistory", offers) ;
+	
+		dbox.getPage().setAttribute("currentOffer", newOffer) ;
+		binder.loadComponent(dbox.getPage().getFellow("current_price"));
+		binder.loadComponent(dbox.getPage().getFellow("offers_history"));
+	} else {
+		
+		throw new WrongValueException(dbox, "Cena musi byæ wy¿sza ni¿ aktualna oferta") ;
+		
+	}
+}
 
 
 private boolean validateForm(Page p) {

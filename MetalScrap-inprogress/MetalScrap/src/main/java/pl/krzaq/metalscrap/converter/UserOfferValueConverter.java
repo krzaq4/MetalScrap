@@ -19,8 +19,8 @@ public class UserOfferValueConverter implements TypeConverter {
 		UserOffer uo = (UserOffer) arg0 ;
 		String result = "----- brak oferty -----" ;
 		if(uo!=null) {
-			DecimalFormat df = new DecimalFormat("#,##") ;
-			result = df.format(uo.getPrice()) ; 
+			DecimalFormat df = new DecimalFormat("##########.##") ;
+			result = df.format(uo.getPrice())+" PLN" ; 
 		} 
 		return result ;
 	}

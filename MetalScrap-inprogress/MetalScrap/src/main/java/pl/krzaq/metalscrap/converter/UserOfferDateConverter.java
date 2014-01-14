@@ -22,7 +22,7 @@ public class UserOfferDateConverter implements TypeConverter {
 		UserOffer uo = (UserOffer) arg0 ;
 		String result = "------" ;
 		if(uo!=null) {
-			DateFormat df = new SimpleDateFormat("HH:mm:ss dd:MM:YYYY") ;
+			DateFormat df = new SimpleDateFormat("HH:mm:ss dd:MM:yyyy") ;
 			result = df.format(uo.getDateIssued()) ; 
 		} 
 		return result ;

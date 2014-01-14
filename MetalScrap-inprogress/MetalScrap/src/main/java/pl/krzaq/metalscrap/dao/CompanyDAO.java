@@ -6,10 +6,11 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.Company;
-
+@Transactional
 public class CompanyDAO {
 
 	@Autowired
@@ -17,23 +18,14 @@ public class CompanyDAO {
 	
 	
 	public List<Company> findAll() {
-		List<Company> result = new ArrayList<Company>() ;
-		Session session = sessionFactory.openSession() ;
-		session.beginTransaction().begin(); ;
-		result =  (List<Company>) session.getNamedQuery("Company.findAll").list() ;
-		session.getTransaction().commit();
-		session.close() ;
-		return result ;
+		return sessionFactory.getCurrentSession().getNamedQuery("Company.findAll").list() ;
+		
 	}
 
 	
 	public void saveCompany(Company company) {
 		
-		Session session = sessionFactory.openSession() ;
-		session.beginTransaction().begin(); ;
-		session.save(company) ;
-		session.getTransaction().commit();
-		session.close() ;
+		sessionFactory.getCurrentSession().save(company) ;
 	}
 
 	public SessionFactory getSessionFactory() {

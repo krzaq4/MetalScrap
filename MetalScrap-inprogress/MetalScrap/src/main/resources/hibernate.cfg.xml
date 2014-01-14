@@ -30,5 +30,6 @@
 		<mapping class="pl.krzaq.metalscrap.model.Category" />
 		<mapping class="pl.krzaq.metalscrap.model.Config" />
 		<mapping class="pl.krzaq.metalscrap.model.AttachementFile" />
+		<mapping class="pl.krzaq.metalscrap.model.UserOffer" />
 	</session-factory>
 	</hibernate-configuration>

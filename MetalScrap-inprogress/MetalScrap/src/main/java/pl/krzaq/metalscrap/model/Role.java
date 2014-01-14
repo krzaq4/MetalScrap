@@ -1,6 +1,7 @@
 package pl.krzaq.metalscrap.model;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -35,8 +36,9 @@ public class Role implements Serializable{
 	@Column(name="name")
 	private String name ;
 	
-	@OneToMany(fetch=FetchType.EAGER)
-	private Set<User> users ;
+	@ManyToMany(fetch=FetchType.EAGER)
+	@JoinTable(name="user_roles")
+	private List<User> users ;
 
 	public Long getId() {
 		return id;
@@ -54,13 +56,14 @@ public class Role implements Serializable{
 		this.name = name;
 	}
 
-	public Set<User> getUsers() {
+	public List<User> getUsers() {
 		return users;
 	}
 
-	public void setUsers(Set<User> users) {
+	public void setUsers(List<User> users) {
 		this.users = users;
 	}
+
 	
 	
 	

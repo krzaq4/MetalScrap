@@ -70,9 +70,9 @@ public class AuctionNew extends HomePage{
 			}
 			
 			int i = 0 ;
-			if (cat!=null && cat.getParent()!=null) {
+			/*if (cat!=null && cat.getParent()!=null) {
 				i = 1 ;
-			} 
+			} */
 			
 			int selectedCatIndex = -1 ;
 			if (cat!=null) {

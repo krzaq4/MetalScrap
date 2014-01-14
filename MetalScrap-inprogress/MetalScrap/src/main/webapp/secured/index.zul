@@ -312,7 +312,7 @@
 								<row>
 									<label value="Adres e-mail:"></label>
 									<textbox id="user_email"
-										value="@{user.email}" width="300px"  constraint="/[a-zA-Z0-9-_]+@{1}[a-zA-z0-9-_]+.{1}[a-zA-Z0-9]+/: Niepoprawny adres e-mail" />
+										value="@{user.email}" width="300px"  constraint="/.+@.+\.[a-z]+/: Niepoprawny adres e-mail" />
 								</row>
 								<row>
 									<label value="Login:"></label>
