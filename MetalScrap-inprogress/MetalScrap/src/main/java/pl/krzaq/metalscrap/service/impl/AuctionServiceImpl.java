@@ -63,6 +63,7 @@ public class AuctionServiceImpl implements AuctionService {
 	public Auction findWithCollection(Long id) {
 		Auction result = auctionDAO.findById(id) ;
 		result.getCommodities().addAll(auctionDAO.findAuctionCommodities(result)) ;
+		result.setFiles(ServicesImpl.getAttachementFileService().findByAuction(result)) ;
 		return result ;
 	}
 	

@@ -18,12 +18,19 @@ import org.zkoss.image.AImage;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.util.Initiator;
 import org.zkoss.zkplus.databind.AnnotateDataBinder;
+import org.zkoss.zul.Button;
+import org.zkoss.zul.Div;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Image;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listcell;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Row;
 
 import pl.krzaq.metalscrap.model.AttachementFile;
@@ -45,31 +52,132 @@ public class AuctionNew extends HomePage{
 		// TODO Auto-generated method stub
 		super.doAfterCompose(arg0, arg1);
 		
+		Auction currentAuction = (Auction) arg0.getAttribute("auction") ;
+		
+		if (currentAuction!=null){
+			
+			Category cat = currentAuction.getCategory() ;
+			
+			List<Category> model = new ArrayList<Category>() ;
+			
+			if (cat!=null && cat.getParent()!=null){
+				Category previous = new Category(" << Powrót", "Powrót do nadrzêdnej kategorii", cat.getParent().getParent()) ;
+				model = ServicesImpl.getCategoryService().findSubCategories(cat.getParent()) ;
+				model.add(0,previous) ;
+				
+			} else {
+				model = ServicesImpl.getCategoryService().findRootCategories() ;
+			}
+			
+			int i = 0 ;
+			if (cat!=null && cat.getParent()!=null) {
+				i = 1 ;
+			} 
+			
+			int selectedCatIndex = -1 ;
+			if (cat!=null) {
+			for (Category c:model) {
+				if (cat.getName().equalsIgnoreCase(c.getName()) && cat.getDescription().equalsIgnoreCase(c.getDescription()) ){
+					selectedCatIndex = i ;
+				}
+				i++ ;
+			}
+			}
+			arg0.setAttribute("auctionCategories", model) ;
+			arg0.setAttribute("selectedCategoryIndex", selectedCatIndex) ;
+			
+		}
+		
 		HttpSession ses = (HttpSession) Executions.getCurrent().getSession().getNativeSession() ;
 		
 		// zdjêcia
 		
-		if(ses.getAttribute("files")!=null) {
-			
-			List<AttachementFile> files = (ArrayList<AttachementFile>) ses.getAttribute("files") ;
-			Grid grid = (Grid) arg0.getFellow("photos") ;
-			AnnotateDataBinder binder = (AnnotateDataBinder) arg0.getAttribute("binder") ;
-			for (AttachementFile af:files) {
-				Row row = new Row() ;
-				File imgFile = new File(af.getPath()) ;
-				AImage aimg = new AImage(imgFile) ;
-				Image img = new Image() ;
-				img.setContent(aimg);
-				img.setWidth("50%");
-				img.setHeight("50%");
-				row.appendChild(img) ;
+		final Div overflow = new Div() ;
+		overflow.setSclass("galleryOverflow");
+		overflow.setId("galleryOverflow");
+		overflow.setVisible(false) ;
+		Image overflowImage = new Image() ;
+		overflowImage.setId("overflowImage");
+		overflow.appendChild(overflowImage) ;
+		
+		Button closeOverflow = new Button("X") ;
+		closeOverflow.setSclass("overflowClose");
+		closeOverflow.addEventListener("onClick", new EventListener<Event>(){
+
+			@Override
+			public void onEvent(Event event) throws Exception {
 				
-				grid.getRows().appendChild(row) ;	
+				overflow.setVisible(false) ;
+				
 			}
 			
 			
 			
+		}) ;
+		
+		overflow.appendChild(closeOverflow) ;
+		
+		
+		overflow.setPage(arg0);
+		
+		
+		if(ses.getAttribute("files")!=null) {
+			
+			List<AttachementFile> files = (ArrayList<AttachementFile>) ses.getAttribute("files") ;
+			Listbox grid = (Listbox) arg0.getFellow("photos") ;
+			AnnotateDataBinder binder = (AnnotateDataBinder) arg0.getAttribute("binder") ;
+			int i=1 ;
+			int selectedPhotoIndex = -1 ;
+			for (AttachementFile af:files) {
+				if (af.getMain()) {
+					selectedPhotoIndex = i ;
+				}
+				Listitem li = new Listitem() ;
+				Listcell lc = new Listcell() ;
+				File imgFile = new File(af.getPath()) ;
+				AImage aimg = new AImage(imgFile) ;
+				Image img = new Image() ;
+				img.setContent(aimg);
+				final Image orig = (Image) img.clone() ;
+				
+				img.addEventListener("onClick", new EventListener<Event>(){
+					
+					@Override
+					public void onEvent(Event event) throws Exception {
+						
+						if(event.getName().equalsIgnoreCase("onClick")) {
+							
+							Image main = (Image) event.getTarget() ;
+							overflow.removeChild(overflow.getFellow("overflowImage"));
+							
+							orig.setId("overflowImage") ;
+							overflow.appendChild(orig) ;
+							overflow.setVisible(true) ;
+						}
+						
+					}
+					
+				}) ;
+				
+				
+				img.setWidth("50%");
+				img.setHeight("50%");
+				
+				lc.appendChild(img) ;
+				li.appendChild(lc) ;
+				
+				grid.getItems().add(li) ;	
+				i++ ;
+				
+			}
+			
+			arg0.setAttribute("selectedPhotoIndex", selectedPhotoIndex) ;
+			
+			
 		}
+		
+		
+		
 		
 		
 		// parametry aukcji
@@ -121,8 +229,13 @@ public class AuctionNew extends HomePage{
 			auction = ServicesImpl.getAuctionService().findWithCollection(id) ;
 			
 			List<Image> imgs = new ArrayList<Image>() ;
-			
+			int i=1 ;
+			int selectedPhotoIndex = -1 ;
 			for (AttachementFile af:ServicesImpl.getAttachementFileService().findByAuction(auction)) {
+				if (af.getMain()) {
+					selectedPhotoIndex = i ;
+				}
+				
 				Image im = new Image() ;
 				File fi = new File(af.getPath()) ;
 				org.zkoss.image.AImage cnt = new org.zkoss.image.AImage(fi) ; 
@@ -130,6 +243,7 @@ public class AuctionNew extends HomePage{
 				
 				
 				imgs.add(im) ;
+				i++ ;
 			}
 			
 			ses.setAttribute("files", ServicesImpl.getAttachementFileService().findByAuction(auction));
@@ -139,6 +253,10 @@ public class AuctionNew extends HomePage{
 				page.setAttribute("selectedCategory", auction.getCategory()) ;
 				
 			}
+			
+			
+				page.setAttribute("selectedPhotoIndex", selectedPhotoIndex) ;
+			
 			
 		} 
 		

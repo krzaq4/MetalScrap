@@ -18,12 +18,19 @@ import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zkplus.databind.AnnotateDataBinder;
+import org.zkoss.zul.Div;
 import org.zkoss.zul.Fileupload;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Image;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listcell;
+import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Panel;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Textbox;
@@ -41,10 +48,17 @@ public class FormEvents {
 	private String uploadPath ;
 	
 	
-	public void uploadPhoto(Media media, Grid grid, AnnotateDataBinder binder) {
+	public void uploadPhoto(Media media, Listbox grid, AnnotateDataBinder binder) {
 		
+		final Page page = grid.getPage() ;
+		String format = media.getFormat() ;
+		if (format !=null && !format.equalsIgnoreCase("jpg") && !format.equalsIgnoreCase("png") && !format.equalsIgnoreCase("gif") && !format.equalsIgnoreCase("jpeg")){
+			
+			Messagebox.show("Nieobs³ugiwany format pliku. \n Obs³ugiwane formaty to .jpeg, .jpg, .gif, .png") ;
+			
+		} else {
 		
-		
+		final Div overflow = (Div)page.getFellow("galleryOverflow") ;
 		
 		String nextName = ServicesImpl.getAttachementFileService().getNextName() ;
 		File file = new File(uploadPath+"/"+nextName+"."+media.getFormat()) ;
@@ -57,12 +71,36 @@ public class FormEvents {
 			af.setName(nextName);
 			af.setPath(uploadPath+nextName+"."+media.getFormat());
 			af.setMain(false);
-			//ServicesImpl.getAttachementFileService().save(af);
+			ServicesImpl.getAttachementFileService().save(af);
 			
 			
 			Image img = new Image() ;
 			
 			img.setContent(((org.zkoss.image.Image)media));
+			
+			
+			final Image orig = (Image) img.clone() ;
+			
+			img.addEventListener("onClick", new EventListener<Event>(){
+				
+				@Override
+				public void onEvent(Event event) throws Exception {
+					
+					if(event.getName().equalsIgnoreCase("onClick")) {
+						
+						Image main = (Image) event.getTarget() ;
+						overflow.removeChild(overflow.getFellow("overflowImage"));
+						
+						orig.setId("overflowImage") ;
+						overflow.appendChild(orig) ;
+						overflow.setVisible(true) ;
+					}
+					
+				}
+				
+			}) ;
+			
+			
 			img.setId(nextName);
 			img.setWidth("50%");
 			img.setHeight("50%");
@@ -78,10 +116,13 @@ public class FormEvents {
 			ses.setAttribute("files", files);
 			
 			
-			
-			Row row = new Row() ;
-			row.appendChild(img) ;
-			grid.getRows().appendChild(row) ;
+			Listitem li = new Listitem() ;
+			Listcell lc = new Listcell() ;
+			lc.appendChild(img) ; 
+			li.appendChild(lc) ;
+			//Row row = new Row() ;
+			//row.appendChild(img) ;
+			grid.getItems().add(li) ; //.getRows().appendChild(row) ;
 			binder.loadComponent(grid);
 			
 			
@@ -94,6 +135,7 @@ public class FormEvents {
 		}
 		
 		
+		}
 		
 	}
 	

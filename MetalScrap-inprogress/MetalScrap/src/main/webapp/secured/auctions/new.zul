@@ -25,7 +25,7 @@
 		
 
 <panel id="parameters" height="auto" border="none" collapsible="true"  action="show:slideIn;hide:slideOut">
-<caption label="Parametry aukcji"></caption>
+<caption label="Parametry aukcji - @{auction, converter='pl.krzaq.metalscrap.converter.AuctionNameConverter'}"></caption>
 <panelchildren>
 <div>
 	<groupbox>
@@ -62,7 +62,7 @@
 						</row>
 						<row visible="@{isCategoriesVisible}">
 							<label value="Kategoria aukcji:" />
-							<listbox id="auction_category" mold="select" rows="4" multiple="false" model="@{auctionCategories}" selectedItem="@{auction.category}" width="230px">
+							<listbox id="auction_category" mold="select" rows="4" multiple="false" model="@{auctionCategories}" selectedItem="@{auction.category}" selectedIndex="@{selectedCategoryIndex}" width="230px">
 								<listitem self="@{each=cat}" value="@{cat}" onClick="auctionEvents.onSelectAuctionCategory(self, binder)" tooltiptext="@{cat.description}">
 									<listcell label="@{cat.name}"  >
 										
@@ -133,19 +133,21 @@
 						</row>
 						<row visible="@{isCategoriesVisible}">
 							<label value="Dołącz zdjęcie:"/>
-							<fileupload id="img_upload" label="Wybierz z dysku..." onUpload="formEvents.uploadPhoto(event.getMedia(), photos, binder )"/>
+							<fileupload id="img_upload" label="Wybierz z dysku..." onUpload="formEvents.uploadPhoto(event.getMedia(), photos, binder )" maxsize="100000"/>
 							
 						</row>
 						<row spans="2">
 						
-							<grid id="photos" width="100%" height="auto">
-								<columns>
-									<column width="100%"></column>
-								</columns>
-								<rows>
-									<row></row>
-								</rows>
-							</grid>
+							<listbox id="photos" width="65%" height="auto" checkmark="true" multiple="false" selectedIndex="@{selectedPhotoIndex}">
+								<listhead>
+									<listheader width="100%" label="Wybierz zdjęcie główne"></listheader>
+									
+								</listhead>
+								<listitem>
+									
+								</listitem>
+							</listbox>
+							
 						</row>
 						<row>
 						

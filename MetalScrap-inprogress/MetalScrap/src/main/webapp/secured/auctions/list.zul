@@ -68,7 +68,7 @@
 			</div>
 
 				<listbox id="auctionList" model="@{auctions}"
-					mold="paging" pageSize="10" checkmark="true" multiple="true" onSelect="auctionEvents.onSelectAuctions(self, binder)">
+					mold="paging" pageSize="10" checkmark="true" multiple="true" onSelect="auctionEvents.onSelectAuctions(self, binder)" selectedItem="@{auction}">
 					<listhead>
 						<listheader label="Nazwa" />
 						<listheader label="Status" />
@@ -79,7 +79,7 @@
 					</listhead>
 					<listitem self="@{each=auction}" value="@{auction}">
 						<listcell>
-							<label sclass="asLink" value="@{auction.name}" onClick="auctionEvents.redirectToAuctionEdit(auction.id)"/>
+							<label sclass="asLink" value="@{auction.name}"  onClick="auctionEvents.redirectToAuctionEdit(auction.id)"/>
 						</listcell>
 						<listcell>
 							<label value="@{auction.status.name}" />

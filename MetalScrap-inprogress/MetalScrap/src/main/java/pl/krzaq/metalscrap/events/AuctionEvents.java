@@ -100,10 +100,14 @@ public void saveNewAuction(Auction auction, Page p) {
 		
 		String pref = p.getId() ;
 	
+		/*if (auction.getId()!=null) {
+			auction = ServicesImpl.getAuctionService().findWithCollection(auction.getId()) ;
+		}*/
+		
 		User currentUser = userDAO.getUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName()) ;
 		Company currentCompany = currentUser.getCompany() ;
 		
-		if (ServicesImpl.getAuctionService().findByNumber(auction.getNumber())!=null) {
+		if (auction.getId()==null && ServicesImpl.getAuctionService().findByNumber(auction.getNumber())!=null) {
 			wrongValueComponent = p.getFellow("auction_number") ;
 			wrongValueMessage = "Aukcja o podanym numerze istnieje ju¿ w systemie" ;
 			throw new WrongValueException(wrongValueComponent, wrongValueMessage) ;
@@ -116,7 +120,16 @@ public void saveNewAuction(Auction auction, Page p) {
 		} else 
 		if (validateForm(p)) {
 		
-		
+			int selectedPhotoIndex = -1 ;
+			
+		if (((Listbox)p.getFellow("photos")).getSelectedItem()==null && ((Listbox)p.getFellow("photos")).getItems().size()>0) {
+			
+			throw new WrongValueException((Listbox)p.getFellow("photos"), "Wybierz zdjêcie g³ówne") ;
+		} else {
+			
+			selectedPhotoIndex = ((Listbox)p.getFellow("photos")).getSelectedIndex() ; 
+			
+		}
 				
 				
 		//usuwanie atrybutów sesji z zapamietanymi danymi aukcji
@@ -138,12 +151,16 @@ public void saveNewAuction(Auction auction, Page p) {
 		
 		List<AttachementFile> files = (ArrayList<AttachementFile>) ses.getAttribute("files") ;
 		if(files!=null) {
-		int i = 0 ;
+		int i = 1 ;
 		for (AttachementFile af:files) {
+			if (selectedPhotoIndex>0 && selectedPhotoIndex==i){
+				af.setMain(true);
+			}
 			
 			af.setAuction(auction);	
+			i++ ;
 		}
-		
+		auction.getFiles().clear(); 
 		auction.getFiles().addAll(files) ;
 		
 				

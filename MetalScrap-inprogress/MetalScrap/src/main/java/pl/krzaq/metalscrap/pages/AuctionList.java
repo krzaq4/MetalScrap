@@ -99,6 +99,7 @@ public class AuctionList extends HomePage{
 		page.setAttribute("selectedPayment", pm) ;
 		page.setAttribute("selectedDelivery", dt) ;
 		
+		page.setAttribute("auction", null) ;
 		page.setAttribute("auctions", auctions) ;
 		page.setAttribute("statuses", statuses) ;
 		page.setAttribute("payments", payments) ;

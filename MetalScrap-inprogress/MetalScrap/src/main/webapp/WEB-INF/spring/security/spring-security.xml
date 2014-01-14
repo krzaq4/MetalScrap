@@ -27,6 +27,8 @@
  
   <security:intercept-url pattern="/app/loginservice/*" access="permitAll"/>
   
+  <security:intercept-url pattern="/auction.zul" access="permitAll"/>
+  
   <security:intercept-url pattern="/app/home" access="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN', 'ROLE_USER')"/>
   
   <security:intercept-url pattern="/app/auction/list" access="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN', 'ROLE_USER')"/>
