@@ -43,9 +43,6 @@
 		<row spans="2" align="right">
 			<button label="Odśwież" onClick="auctionEvents.onClickRefreshAuctionForm(auction, self, binder)"/>
 		</row>
-		<row id="auction_status_row" spans="2" align="center" visible="@{auction, converter='pl.krzaq.metalscrap.converter.AuctionIsNotStartedConverter'}">
-			<label value="-- aukcja zakończona --" sclass="strongLabel"/>
-		</row>
 		<row>
 			<label value="Aktualna cena: " /><label id="current_price" value="@{currentOffer, converter='pl.krzaq.metalscrap.converter.UserOfferValueConverter'}" />		
 		</row>

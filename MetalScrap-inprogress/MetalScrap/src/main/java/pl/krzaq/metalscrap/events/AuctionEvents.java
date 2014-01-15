@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -253,8 +254,8 @@ public void onClickPlaceBid(Decimalbox dbox, Auction auction, AnnotateDataBinder
 	Page page = dbox.getPage() ;
 	UserOffer currentOffer = (UserOffer)dbox.getPage().getAttribute("currentOffer") ;
 	BigDecimal price = dbox.getValue() ;
-	
-	if(auction.getEndDate().compareTo(new Date())>=0){
+	Timestamp current = new Timestamp(new Date().getTime()) ;
+	if(current.compareTo(auction.getEndDate())>=0){
 		
 		Messagebox.show("Aukcja zakoñczy³a siê") ;
 		
@@ -273,7 +274,7 @@ public void onClickPlaceBid(Decimalbox dbox, Auction auction, AnnotateDataBinder
 		
 		
 	} else
-	if (price!=null && currentOffer.getPrice()<price.doubleValue()) {
+	if (price!=null && (currentOffer==null || currentOffer.getPrice()<price.doubleValue() )) {
 	
 		UserOffer newOffer = new UserOffer() ;
 		newOffer.setAuction(auction);
@@ -284,7 +285,8 @@ public void onClickPlaceBid(Decimalbox dbox, Auction auction, AnnotateDataBinder
 		ServicesImpl.getUserOfferService().save(newOffer);
 		List<UserOffer> offers = ServicesImpl.getUserOfferService().findByAuction(auction) ;
 		Collections.sort(offers, Collections.reverseOrder());
-	
+		auction.setBestUserOffer(newOffer);
+		ServicesImpl.getAuctionService().update(auction);
 		dbox.getPage().setAttribute("offersHistory", offers) ;
 	
 		dbox.getPage().setAttribute("currentOffer", newOffer) ;

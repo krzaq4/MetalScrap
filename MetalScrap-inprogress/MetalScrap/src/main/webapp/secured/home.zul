@@ -20,7 +20,7 @@
 </div>
 
 <include id="men"  src="/common/menu.zul" ></include>
-
+<div id="bread_crumb" use="pl.krzaq.metalscrap.components.Breadcrumb"></div>
 <panel id="content" border="rounded">
 <panelchildren >
 <div id="categoriesMenu" class="categoriesMenu" visible="@{isCategoriesVisible}">
@@ -29,7 +29,24 @@
 				</div>
 				
 				<div class="otherContent">
-
+					<grid  model="@{categoryAuctions}">
+						<columns>
+							<column width="100px"></column>
+							<column width="260px" label="Nazwa"></column>
+							<column width="60px" label="Cena"></column>
+							<column width="50px" label="Ilość ofert"></column>
+							<column width="110px" label="Data zakończenia"></column>
+						</columns>
+						<rows>
+							<row self="@{each=auction}">
+								<Label/>
+								<label value="@{auction.name}" />
+								<label value="@{auction.bestUserOffer.price}" />
+								<label value="@{auction.userOffers.size}" />
+								<label value="@{auction.endDate}" />
+							</row>
+						</rows>
+					</grid>
 
 				</div>
 </panelchildren>

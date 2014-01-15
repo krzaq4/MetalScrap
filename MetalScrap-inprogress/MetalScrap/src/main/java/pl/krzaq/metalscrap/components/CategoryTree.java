@@ -23,7 +23,9 @@ import org.zkoss.zul.TreeitemRenderer;
 import org.zkoss.zul.Treerow;
 
 import pl.krzaq.metalscrap.dao.CategoryDAO;
+import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.Category;
+import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 import pl.krzaq.metalscrap.utils.ApplicationContextProvider;
 
 public class CategoryTree extends Tree {
@@ -35,7 +37,7 @@ public class CategoryTree extends Tree {
 		
 		System.out.println("onCreate") ;
 		
-		
+		this.binder = (AnnotateDataBinder) this.getPage().getAttribute("binder") ;
 		this.setModel(this.getCategoryTreeModel());
 		
 		this.setItemRenderer(new CategoryInfoRenderer());
@@ -166,8 +168,13 @@ public class CategoryTree extends Tree {
 			
 			if(event.getName().equalsIgnoreCase("onClick")) {
 				
+				Category selectedCategory = ((Treeitem) event.getTarget()).getValue() ;
 				
 				((Treeitem) event.getTarget()).setOpen(!((Treeitem) event.getTarget()).isOpen());
+				event.getTarget().getPage().setAttribute("selectedCategory", selectedCategory) ;
+				
+				List<Auction> auctions = selectedCategory.getAuctions() ;
+				event.getTarget().getPage().setAttribute("categoryAuctions", auctions) ;
 				
 			}
 			

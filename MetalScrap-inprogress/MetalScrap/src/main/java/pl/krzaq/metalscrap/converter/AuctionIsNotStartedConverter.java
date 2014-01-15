@@ -1,5 +1,6 @@
 package pl.krzaq.metalscrap.converter;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import org.zkoss.zk.ui.Component;
@@ -20,7 +21,8 @@ public class AuctionIsNotStartedConverter implements TypeConverter {
 	public Object coerceToUi(Object arg0, Component arg1) {
 		Auction a = (Auction) arg0 ;
 		Date now = new Date() ;
-		return  (a!=null && a.getStatus().getCode()!=AuctionStatus.STATUS_STARTED ||( a.getEndDate().after(now))) ;
+		Timestamp current = new Timestamp(now.getTime()) ;
+		return  (a!=null && a.getStatus().getCode()!=AuctionStatus.STATUS_STARTED ||( current.after(a.getEndDate()))) ;
 	}
 
 }

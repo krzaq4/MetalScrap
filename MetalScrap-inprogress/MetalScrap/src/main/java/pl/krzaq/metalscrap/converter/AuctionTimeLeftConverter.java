@@ -1,5 +1,6 @@
 package pl.krzaq.metalscrap.converter;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,8 +25,8 @@ public class AuctionTimeLeftConverter implements TypeConverter {
 	public Object coerceToUi(Object arg0, Component arg1) {
 		Auction a = (Auction) arg0 ;
 		String result = "-" ;
-		Date current = new Date() ;
-		if (a!=null && a.getEndDate().before(current)) {
+		Timestamp current = new Timestamp(new Date().getTime()) ;
+		if (a!=null && current.before(a.getEndDate())) {
 			
 			DateTime now = new DateTime(new Date()) ;
 			DateTime end = new DateTime(a.getEndDate()) ;

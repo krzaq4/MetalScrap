@@ -92,6 +92,10 @@ public class Auction implements Serializable {
 	@JoinColumn(name="owner_user")
 	private User ownerUser ;
 	
+	@OneToOne
+	@JoinColumn(name="")
+	private UserOffer bestUserOffer ;
+	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="auction")
 	private List<CompanyOffer> companyOffers = new ArrayList<CompanyOffer>() ;
 	
@@ -297,6 +301,14 @@ public class Auction implements Serializable {
 
 	public void setOwnerUser(User ownerUser) {
 		this.ownerUser = ownerUser;
+	}
+
+	public UserOffer getBestUserOffer() {
+		return bestUserOffer;
+	}
+
+	public void setBestUserOffer(UserOffer bestUserOffer) {
+		this.bestUserOffer = bestUserOffer;
 	}
 	
 	
