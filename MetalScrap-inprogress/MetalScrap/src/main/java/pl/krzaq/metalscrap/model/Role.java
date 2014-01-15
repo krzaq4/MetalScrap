@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -36,8 +37,7 @@ public class Role implements Serializable{
 	@Column(name="name")
 	private String name ;
 	
-	@ManyToMany(fetch=FetchType.EAGER)
-	@JoinTable(name="user_roles")
+	@ManyToMany
 	private List<User> users ;
 
 	public Long getId() {
@@ -63,6 +63,8 @@ public class Role implements Serializable{
 	public void setUsers(List<User> users) {
 		this.users = users;
 	}
+
+	
 
 	
 	

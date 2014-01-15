@@ -42,7 +42,7 @@ public class User implements Serializable {
 	private Long id ;
 	
 	
-	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL, targetEntity=pl.krzaq.metalscrap.model.Company.class)
+	@ManyToOne
 	private Company company ;
 	
 	@NotNull
@@ -68,8 +68,7 @@ public class User implements Serializable {
 	@Column(name="email")
 	private String email ;
 	
-	@ManyToMany(fetch=FetchType.EAGER)
-	@JoinTable(name="user_roles")
+	@ManyToMany
 	private List<Role> roles ;
 	
 	

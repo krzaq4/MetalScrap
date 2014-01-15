@@ -61,7 +61,7 @@
 		<row >
 			<label value="Do końca aukcji: " /> 
 			<vbox>
-				<label id="till_end" sclass="normalLabel" value="@{toGo}" />
+				<label id="till_end" sclass="normalLabel" value="@{auction, converter='pl.krzaq.metalscrap.converter.AuctionTimeLeftConverter'}" />
 				<label id="end_date" sclass="smallLabel" value="@{auction.endDate, converter='pl.krzaq.metalscrap.converter.DateConverter'}" />	
 			</vbox>
 		</row>

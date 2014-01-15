@@ -21,6 +21,7 @@ public class RoleDAO {
 	}
 	
 	
+	
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}

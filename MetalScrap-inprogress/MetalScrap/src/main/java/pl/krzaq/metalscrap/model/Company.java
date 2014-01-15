@@ -1,6 +1,7 @@
 package pl.krzaq.metalscrap.model;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -57,7 +58,7 @@ public class Company implements Serializable {
 	private Set<PkdClassification> pkdClassification ;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="company")
-	private Set<User> users ;
+	private List<User> users ;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="owner")
 	private Set<Auction> auctions ;
@@ -116,11 +117,13 @@ public class Company implements Serializable {
 		this.pkdClassification = pkdClassification;
 	}
 
-	public Set<User> getUsers() {
+	
+
+	public List<User> getUsers() {
 		return users;
 	}
 
-	public void setUsers(Set<User> users) {
+	public void setUsers(List<User> users) {
 		this.users = users;
 	}
 

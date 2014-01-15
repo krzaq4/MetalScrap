@@ -3,8 +3,10 @@ package pl.krzaq.metalscrap.dao;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +22,9 @@ public class UserDAO {
 	
 	public User getUserByLogin(String login) {
 		
-		return  (User)sessionFactory.getCurrentSession().getNamedQuery("User.findByLogin").setParameter("login", login).list().get(0) ;
-		
+		User u =  (User)sessionFactory.getCurrentSession().getNamedQuery("User.findByLogin").setParameter("login", login).list().get(0) ;
+		Hibernate.initialize(u.getRoles());
+		return u ;
 		
 		
 	}

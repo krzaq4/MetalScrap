@@ -1,6 +1,8 @@
 package pl.krzaq.metalscrap.pages;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,8 +28,8 @@ public class Login implements Initiator, InitiatorExt {
 		Address additional = new Address() ;
 		Company company = new Company() ;
 		User user = new User() ;
-		Set<User> users = new HashSet<User>() ;
-		Set<Role> roles = new HashSet<Role>() ;
+		List<User> users = new ArrayList<User>() ;
+		List<Role> roles = new ArrayList<Role>() ;
 		user.setRoles(roles);
 		company.setUsers(users);
 		company.setAddressMain(main);

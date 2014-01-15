@@ -221,7 +221,7 @@ public void onClickRefreshAuctionForm(Auction auction, Button but, AnnotateDataB
 	Label currentPrice = (Label) page.getFellow("current_price") ;
 	Label tillEnd = (Label) page.getFellow("till_end") ;
 	Button placeBid = (Button) page.getFellow("place_bid") ;
-	Row status_row = (Row) page.getFellow("auction_status_row") ;
+	//Row status_row = (Row) page.getFellow("auction_status_row") ;
 	Grid offers_history = (Grid) page.getFellow("offers_history") ;
 	Label offers_qty = (Label) page.getFellow("offers_qty") ;
 	
@@ -235,21 +235,8 @@ public void onClickRefreshAuctionForm(Auction auction, Button but, AnnotateDataB
 		page.setAttribute("offersQty", offers.size()) ;
 	}
 	
-	DateTime now = new DateTime(new Date()) ;
-	DateTime end = new DateTime(auction.getEndDate()) ;
-	Duration d = new Duration(now, end);
 	
-	StringBuffer toGo = new StringBuffer() ;
-	Long daysToGo = d.getStandardDays() ;
-	toGo.append(daysToGo+" dni, ") ;
-	
-	Period p = d.toPeriod().minusDays(daysToGo.intValue()) ;
-	toGo.append(p.getHours()+" godz., "+p.getMinutes()+" min., "+p.getSeconds()+" sek.") ; 
-	
-	
-	page.setAttribute("toGo", toGo.toString()) ;
-	
-	binder.loadComponent(status_row);
+	//binder.loadComponent(status_row);
 	binder.loadComponent(placeBid);
 	binder.loadComponent(tillEnd);
 	binder.loadComponent(currentPrice);
@@ -257,14 +244,35 @@ public void onClickRefreshAuctionForm(Auction auction, Button but, AnnotateDataB
 	binder.loadComponent(offers_qty);
 	
 	
+	
 }
 
 
 public void onClickPlaceBid(Decimalbox dbox, Auction auction, AnnotateDataBinder binder) {
 	
+	Page page = dbox.getPage() ;
 	UserOffer currentOffer = (UserOffer)dbox.getPage().getAttribute("currentOffer") ;
 	BigDecimal price = dbox.getValue() ;
 	
+	if(auction.getEndDate().compareTo(new Date())>=0){
+		
+		Messagebox.show("Aukcja zakoñczy³a siê") ;
+		
+		Label currentPrice = (Label) page.getFellow("current_price") ;
+		Label tillEnd = (Label) page.getFellow("till_end") ;
+		Button placeBid = (Button) page.getFellow("place_bid") ;
+		Grid offers_history = (Grid) page.getFellow("offers_history") ;
+		Label offers_qty = (Label) page.getFellow("offers_qty") ;
+		
+		
+		binder.loadComponent(placeBid);
+		binder.loadComponent(tillEnd);
+		binder.loadComponent(currentPrice);
+		binder.loadComponent(offers_history);
+		binder.loadComponent(offers_qty);
+		
+		
+	} else
 	if (price!=null && currentOffer.getPrice()<price.doubleValue()) {
 	
 		UserOffer newOffer = new UserOffer() ;
@@ -282,7 +290,7 @@ public void onClickPlaceBid(Decimalbox dbox, Auction auction, AnnotateDataBinder
 		dbox.getPage().setAttribute("currentOffer", newOffer) ;
 		binder.loadComponent(dbox.getPage().getFellow("current_price"));
 		binder.loadComponent(dbox.getPage().getFellow("offers_history"));
-	} else {
+	}  else {
 		
 		throw new WrongValueException(dbox, "Cena musi byæ wy¿sza ni¿ aktualna oferta") ;
 		

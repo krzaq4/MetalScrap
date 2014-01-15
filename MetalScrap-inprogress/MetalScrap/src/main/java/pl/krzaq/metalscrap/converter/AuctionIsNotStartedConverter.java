@@ -17,8 +17,8 @@ public class AuctionIsNotStartedConverter implements TypeConverter {
 	@Override
 	public Object coerceToUi(Object arg0, Component arg1) {
 		Auction a = (Auction) arg0 ;
-		
-		return  (a!=null && a.getStatus().getCode()!=AuctionStatus.STATUS_STARTED) ;
+		Date now = new Date() ;
+		return  (a!=null && a.getStatus().getCode()!=AuctionStatus.STATUS_STARTED ||( a.getEndDate().after(now))) ;
 	}
 
 }
