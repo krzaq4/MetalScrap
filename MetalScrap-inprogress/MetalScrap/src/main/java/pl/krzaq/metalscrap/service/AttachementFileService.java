@@ -9,6 +9,7 @@ public interface AttachementFileService {
 
 	public List<AttachementFile> findAll() ;
 	public List<AttachementFile> findByAuction(Auction auction);
+	public AttachementFile findAuctionMain(Auction auction) ;
 	public void save(AttachementFile file) ;
 	public void update(AttachementFile file) ;
 	public void merge(AttachementFile file) ;

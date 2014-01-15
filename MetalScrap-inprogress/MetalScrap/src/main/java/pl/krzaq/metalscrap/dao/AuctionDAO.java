@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.AuctionStatus;
+import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.model.Commodity;
 
 @Transactional
@@ -55,6 +56,11 @@ public class AuctionDAO {
 		
 		return sessionFactory.getCurrentSession().createCriteria(Auction.class).add(Restrictions.eq("endDate", to)).list() ;
 		
+	}
+	
+	public List<Auction> findByCategory(Category category) {
+		
+		return sessionFactory.getCurrentSession().getNamedQuery("Auction.findByCategory").setParameter("category", category).list() ;
 	}
 	
 	public Auction findByName(String name) {

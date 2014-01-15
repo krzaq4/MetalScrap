@@ -9,6 +9,7 @@ import org.hibernate.criterion.Restrictions;
 
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.AuctionStatus;
+import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.model.DeliveryType;
 import pl.krzaq.metalscrap.model.PaymentMethod;
 
@@ -35,6 +36,10 @@ public interface AuctionService {
 	public Auction findByName(String name) ;
 	
 	public Auction findByNumber(String number);
+	
+	public List<Auction> findByCategory(Category category) ;
+	
+	public List<Auction> findByCategoryDown(Category category) ;
 	
 	public List<Auction> filter(String phrase, AuctionStatus status, PaymentMethod method, DeliveryType type, Date startDate, Date endDate) ;
 	

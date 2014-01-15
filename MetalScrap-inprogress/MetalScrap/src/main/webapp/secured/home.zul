@@ -25,11 +25,18 @@
 <panelchildren >
 <div id="categoriesMenu" class="categoriesMenu" visible="@{isCategoriesVisible}">
 				
-				<include mode="defer" src="/common/categories.zul"></include>
+				<!-- <include mode="defer" src="/common/categories.zul" ></include> -->
+				
+				<tree id="cat_tree" use="pl.krzaq.metalscrap.components.CategoryTree" width="100%" height="100%" selectedItem="@{selItem}">
+					<treecols>
+						<treecol label="Kategorie"></treecol>
+					</treecols>					
+				</tree>
+				
 				</div>
 				
 				<div class="otherContent">
-					<grid  model="@{categoryAuctions}">
+					<grid id="allAuctions" model="@{categoryAuctions}">
 						<columns>
 							<column width="100px"></column>
 							<column width="260px" label="Nazwa"></column>
@@ -39,7 +46,7 @@
 						</columns>
 						<rows>
 							<row self="@{each=auction}">
-								<Label/>
+								<image content="@{auction, converter='pl.krzaq.metalscrap.converter.AuctionMainImageConverter'}"/>
 								<label value="@{auction.name}" />
 								<label value="@{auction.bestUserOffer.price}" />
 								<label value="@{auction.userOffers.size}" />

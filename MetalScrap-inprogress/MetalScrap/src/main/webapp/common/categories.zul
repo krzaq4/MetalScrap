@@ -2,7 +2,7 @@
 <?init class="pl.krzaq.metalscrap.pages.Categories"?>
 <zk>
 
-<tree use="pl.krzaq.metalscrap.components.CategoryTree" width="100%" height="100%">
+<tree use="pl.krzaq.metalscrap.components.CategoryTree" width="100%" height="100%" selectedItem="@{selectedCategory}">
 
 <treecols>
 <treecol label="Kategorie"></treecol>

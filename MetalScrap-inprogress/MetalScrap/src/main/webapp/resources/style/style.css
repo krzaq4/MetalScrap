@@ -616,6 +616,23 @@ div.z-treecell-cnt {
 	
 }
 
+.breadCrumbItem.z-label {
+	
+	color: #3e1b61 ;
+	cursor: pointer ;
+	padding:0px 4px 0px 4px ;
+	
+	}
+	
+.breadCrumbItemActive.z-label {
+	
+	color: #3e1b61 ;
+	cursor: pointer ;
+	font-weight: bold ;
+	padding:0px 4px 0px 4px ;
+	
+	}	
+
 .mainImg.z-image{
 	
 	

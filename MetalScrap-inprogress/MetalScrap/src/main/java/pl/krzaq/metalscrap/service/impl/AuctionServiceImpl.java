@@ -12,6 +12,7 @@ import com.mysql.jdbc.StringUtils;
 import pl.krzaq.metalscrap.dao.AuctionDAO;
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.AuctionStatus;
+import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.model.DeliveryType;
 import pl.krzaq.metalscrap.model.PaymentMethod;
 import pl.krzaq.metalscrap.service.AuctionService;
@@ -161,6 +162,57 @@ public class AuctionServiceImpl implements AuctionService {
 
 	public void setAuctionDAO(AuctionDAO auctionDAO) {
 		this.auctionDAO = auctionDAO;
+	}
+
+
+
+	@Override
+	public List<Auction> findByCategory(Category category) {
+		return auctionDAO.findByCategory(category) ;
+	}
+
+
+
+	@Override
+	public List<Auction> findByCategoryDown(Category category) {
+		
+		
+		List<Auction> result = new ArrayList<Auction>() ;
+		List<Category> subCategories = new ArrayList<Category>() ;
+		subCategories.add(category) ;
+		
+		return findAuctions(subCategories, result) ;
+		
+		}
+		
+		
+		private List<Auction> findAuctions(List<Category> cats, List<Auction> result) {
+			
+			
+			while (cats.size()>0) {
+				
+				Iterator<Category> it = cats.iterator() ;
+				while (it.hasNext()) {
+					Category cat = it.next() ;
+					List<Auction> auctions = auctionDAO.findByCategory(cat) ;
+					
+					for (Auction a:auctions) {
+						if(!result.contains(a)) {
+							result.add(a) ;
+						}
+					}
+					
+					it.remove(); 
+					
+					if (ServicesImpl.getCategoryService().findSubCategories(cat).size()>0)
+						findAuctions(ServicesImpl.getCategoryService().findSubCategories(cat), result) ;
+					
+				}
+			
+		}
+			
+			return result ;
+		
 	}
 
 

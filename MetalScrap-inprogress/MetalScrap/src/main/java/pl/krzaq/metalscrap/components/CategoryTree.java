@@ -173,8 +173,10 @@ public class CategoryTree extends Tree {
 				((Treeitem) event.getTarget()).setOpen(!((Treeitem) event.getTarget()).isOpen());
 				event.getTarget().getPage().setAttribute("selectedCategory", selectedCategory) ;
 				
-				List<Auction> auctions = selectedCategory.getAuctions() ;
+				List<Auction> auctions = ServicesImpl.getAuctionService().findByCategoryDown(selectedCategory) ;
 				event.getTarget().getPage().setAttribute("categoryAuctions", auctions) ;
+				binder.loadComponent(event.getTarget().getPage().getFellow("allAuctions"));
+				((Breadcrumb)event.getTarget().getPage().getFellow("bread_crumb")).refresh();
 				
 			}
 			

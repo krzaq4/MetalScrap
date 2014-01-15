@@ -15,7 +15,8 @@ import javax.persistence.Table;
 @Table(name="file")
 @NamedQueries({
 	@NamedQuery(name="File.findAll", query="from AttachementFile a" ),
-	@NamedQuery(name="File.findByAuction", query="from AttachementFile a where a.auction=:auction")
+	@NamedQuery(name="File.findByAuction", query="from AttachementFile a where a.auction=:auction"),
+	@NamedQuery(name="File.findAuctionMain", query="from AttachementFile a where a.auction=:auction and a.main=true")
 	
 })
 public class AttachementFile {

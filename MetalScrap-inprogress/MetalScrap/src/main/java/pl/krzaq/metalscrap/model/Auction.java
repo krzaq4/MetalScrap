@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +32,8 @@ import javax.persistence.TemporalType;
 	@NamedQuery(name="Auction.findById", query="from Auction a where a.id=:id"),
 	@NamedQuery(name="Auction.findByName", query="from Auction a where a.name=:name"),
 	@NamedQuery(name="Auction.findByNumber", query="from Auction a where a.number=:number"),
-	@NamedQuery(name="Auction.findByStatus", query="from Auction a where a.status=:status")
+	@NamedQuery(name="Auction.findByStatus", query="from Auction a where a.status=:status"),
+	@NamedQuery(name="Auction.findByCategory", query="from Auction a where a.category=:category")
 	
 	
 	
@@ -93,13 +95,13 @@ public class Auction implements Serializable {
 	private User ownerUser ;
 	
 	@OneToOne
-	@JoinColumn(name="")
+	@JoinColumn(name="best_useroffer")
 	private UserOffer bestUserOffer ;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="auction")
 	private List<CompanyOffer> companyOffers = new ArrayList<CompanyOffer>() ;
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="auction")
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="auction", fetch=FetchType.EAGER)
 	private List<UserOffer> userOffers = new ArrayList<UserOffer>() ;
 
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="auction")

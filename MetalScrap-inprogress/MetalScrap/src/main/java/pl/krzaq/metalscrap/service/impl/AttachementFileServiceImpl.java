@@ -59,6 +59,11 @@ public class AttachementFileServiceImpl implements AttachementFileService {
 		this.attachementFileDAO = attachementFileDAO;
 	}
 
+	@Override
+	public AttachementFile findAuctionMain(Auction auction) {
+		return attachementFileDAO.findAuctionMain(auction) ;
+	}
+
 	
 	
 }
