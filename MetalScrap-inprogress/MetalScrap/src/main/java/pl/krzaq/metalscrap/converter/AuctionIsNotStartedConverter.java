@@ -1,5 +1,7 @@
 package pl.krzaq.metalscrap.converter;
 
+import java.util.Date;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zkplus.databind.TypeConverter;
 
