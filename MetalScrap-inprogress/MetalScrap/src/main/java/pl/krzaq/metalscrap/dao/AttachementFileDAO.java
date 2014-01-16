@@ -27,7 +27,10 @@ public class AttachementFileDAO {
 	}
 
 	public AttachementFile findAuctionMain(Auction auction) {
-		return (AttachementFile)sessionFactory.getCurrentSession().getNamedQuery("File.findAuctionMain").setParameter("auction", auction).list().get(0) ;
+		List<AttachementFile> list = sessionFactory.getCurrentSession().getNamedQuery("File.findAuctionMain").setParameter("auction", auction).list() ;
+		if (list.size()>0)
+			return (AttachementFile)sessionFactory.getCurrentSession().getNamedQuery("File.findAuctionMain").setParameter("auction", auction).list().get(0) ;
+		else return null ;
 	}
 	
 	public void save(AttachementFile file) {

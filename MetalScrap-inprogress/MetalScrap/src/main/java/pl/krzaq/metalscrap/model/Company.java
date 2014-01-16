@@ -66,6 +66,8 @@ public class Company implements Serializable {
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="company")
 	private Set<CommodityCatalogue> commodityCatalogues ;
 
+	@OneToOne(mappedBy="company")
+	private CompanyOffer companyOffer ;
 	
 	// -------------------------------------------------------------------------------
 	
@@ -145,6 +147,14 @@ public class Company implements Serializable {
 
 	public Long getId() {
 		return id;
+	}
+
+	public CompanyOffer getCompanyOffer() {
+		return companyOffer;
+	}
+
+	public void setCompanyOffer(CompanyOffer companyOffer) {
+		this.companyOffer = companyOffer;
 	}
 	
 	

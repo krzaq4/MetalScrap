@@ -23,6 +23,7 @@ import org.zkoss.zul.Messagebox;
 
 import pl.krzaq.metalscrap.model.AttachementFile;
 import pl.krzaq.metalscrap.model.Auction;
+import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.model.UserOffer;
 import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 
@@ -82,9 +83,9 @@ public class AuctionView extends HomePage {
 			
 			
 			
+			Category selectedCategory = auction.getCategory() ;
 			
-			
-			
+			page.setAttribute("selectedCategory", selectedCategory) ;
 			page.setAttribute("toGo", toGo.toString()) ;
 			page.setAttribute("offers", offers) ;
 			

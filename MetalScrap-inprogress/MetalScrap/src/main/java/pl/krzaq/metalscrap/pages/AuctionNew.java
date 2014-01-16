@@ -88,7 +88,7 @@ public class AuctionNew extends HomePage{
 			
 		}
 		
-		HttpSession ses = (HttpSession) Executions.getCurrent().getSession().getNativeSession() ;
+		final HttpSession ses = (HttpSession) Executions.getCurrent().getSession().getNativeSession() ;
 		
 		// zdjêcia
 		
@@ -124,15 +124,17 @@ public class AuctionNew extends HomePage{
 		if(ses.getAttribute("files")!=null) {
 			
 			List<AttachementFile> files = (ArrayList<AttachementFile>) ses.getAttribute("files") ;
-			Listbox grid = (Listbox) arg0.getFellow("photos") ;
-			AnnotateDataBinder binder = (AnnotateDataBinder) arg0.getAttribute("binder") ;
+			final Listbox grid = (Listbox) arg0.getFellow("photos") ;
+			final AnnotateDataBinder binder = (AnnotateDataBinder) arg0.getAttribute("binder") ;
 			int i=1 ;
 			int selectedPhotoIndex = -1 ;
-			for (AttachementFile af:files) {
+			for (final AttachementFile af:files) {
 				if (af.getMain()) {
 					selectedPhotoIndex = i ;
 				}
-				Listitem li = new Listitem() ;
+				
+				
+				final Listitem li = new Listitem() ;
 				Listcell lc = new Listcell() ;
 				File imgFile = new File(af.getPath()) ;
 				AImage aimg = new AImage(imgFile) ;
@@ -163,8 +165,30 @@ public class AuctionNew extends HomePage{
 				img.setWidth("50%");
 				img.setHeight("50%");
 				
+				Listcell lc2 = new Listcell() ;
+				
+				Button delImage = new Button("Usuñ") ;
+				delImage.addEventListener("onClick", new EventListener<Event>(){
+
+					@Override
+					public void onEvent(Event event) throws Exception {
+						grid.getItems().remove(li) ;
+						List<AttachementFile> afiles = (ArrayList<AttachementFile>) ses.getAttribute("files") ;
+						if (afiles!=null && afiles.size()>0) {
+							afiles.remove(af) ;
+							ses.setAttribute("files", afiles);
+							//binder.loadComponent(grid);
+						}
+						
+					}
+					
+				}) ;
+				
+				lc2.appendChild(delImage) ;
+				
 				lc.appendChild(img) ;
 				li.appendChild(lc) ;
+				li.appendChild(lc2) ;
 				
 				grid.getItems().add(li) ;	
 				i++ ;

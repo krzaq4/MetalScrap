@@ -1,6 +1,7 @@
 package pl.krzaq.metalscrap.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -11,12 +12,14 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
@@ -68,8 +71,21 @@ public class User implements Serializable {
 	@Column(name="email")
 	private String email ;
 	
-	@ManyToMany
+	@ManyToMany(cascade=CascadeType.ALL)
+	@JoinTable(name="user_roles", joinColumns=@JoinColumn(name="user_id", referencedColumnName="id"),
+								inverseJoinColumns=@JoinColumn(name="role_id", referencedColumnName="id"))
 	private List<Role> roles ;
+	
+	@ManyToMany(cascade=CascadeType.ALL)
+	@JoinTable(name="user_observed_auctions", joinColumns=@JoinColumn(name="user_id", referencedColumnName="id"),
+											  inverseJoinColumns=@JoinColumn(name="auction_id", referencedColumnName="id"))
+	private List<Auction> observed = new ArrayList<Auction>();
+	
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="ownerUser")
+	private List<Auction> auctions ;
+	
+	@OneToMany(mappedBy="user")
+	private List<UserOffer> userOffers ;
 	
 	
 	public Company getCompany() {
@@ -145,6 +161,31 @@ public class User implements Serializable {
 		this.roles = roles;
 	}
 
+	public List<Auction> getObserved() {
+		return observed;
+	}
+
+	public void setObserved(List<Auction> observed) {
+		this.observed = observed;
+	}
+
+	public List<Auction> getAuctions() {
+		return auctions;
+	}
+
+	public void setAuctions(List<Auction> auctions) {
+		this.auctions = auctions;
+	}
+
+	public List<UserOffer> getUserOffers() {
+		return userOffers;
+	}
+
+	public void setUserOffers(List<UserOffer> userOffers) {
+		this.userOffers = userOffers;
+	}
+
+	
 	
 	
 	

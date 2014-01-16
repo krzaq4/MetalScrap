@@ -1,6 +1,7 @@
 package pl.krzaq.metalscrap.model;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -37,8 +38,8 @@ public class PaymentMethod implements Serializable {
 	@Column(name="name")
 	private String name ;
 	
-	@OneToMany(cascade=CascadeType.ALL)
-	private Set<Auction> auctions ;
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="paymentMethod")
+	private List<Auction> auctions ;
 
 	public Long getId() {
 		return id;
@@ -64,13 +65,14 @@ public class PaymentMethod implements Serializable {
 		this.name = name;
 	}
 
-	public Set<Auction> getAuctions() {
+	public List<Auction> getAuctions() {
 		return auctions;
 	}
 
-	public void setAuctions(Set<Auction> auctions) {
+	public void setAuctions(List<Auction> auctions) {
 		this.auctions = auctions;
 	}
+
 	
 	
 	

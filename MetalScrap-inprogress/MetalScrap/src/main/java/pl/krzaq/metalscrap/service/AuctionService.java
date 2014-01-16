@@ -12,6 +12,7 @@ import pl.krzaq.metalscrap.model.AuctionStatus;
 import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.model.DeliveryType;
 import pl.krzaq.metalscrap.model.PaymentMethod;
+import pl.krzaq.metalscrap.model.User;
 
 public interface AuctionService {
 
@@ -37,9 +38,11 @@ public interface AuctionService {
 	
 	public Auction findByNumber(String number);
 	
+	public List<Auction> findByObserver(User user) ;
+	
 	public List<Auction> findByCategory(Category category) ;
 	
-	public List<Auction> findByCategoryDown(Category category) ;
+	public List<Auction> findByCategoryDown(Category category, AuctionStatus status) ;
 	
 	public List<Auction> filter(String phrase, AuctionStatus status, PaymentMethod method, DeliveryType type, Date startDate, Date endDate) ;
 	

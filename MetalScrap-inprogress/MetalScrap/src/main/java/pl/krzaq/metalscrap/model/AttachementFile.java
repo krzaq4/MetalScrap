@@ -34,7 +34,7 @@ public class AttachementFile {
 	private String name ;
 	
 	@ManyToOne
-	@JoinColumn(name="auction")
+	@JoinColumn(name="auction_id")
 	private Auction auction ;
 	
 	@Column(name="main")

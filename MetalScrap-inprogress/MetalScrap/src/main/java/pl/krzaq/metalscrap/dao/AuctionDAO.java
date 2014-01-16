@@ -17,6 +17,7 @@ import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.AuctionStatus;
 import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.model.Commodity;
+import pl.krzaq.metalscrap.model.User;
 
 @Transactional
 public class AuctionDAO {
@@ -58,9 +59,17 @@ public class AuctionDAO {
 		
 	}
 	
+	public List<Auction> findByObserver(User user) {
+		return sessionFactory.getCurrentSession().createCriteria(Auction.class).createAlias("obeservers", "observer").add(Restrictions.eq("observer.id", user.getId())).list() ;
+	}
+	
 	public List<Auction> findByCategory(Category category) {
 		
 		return sessionFactory.getCurrentSession().getNamedQuery("Auction.findByCategory").setParameter("category", category).list() ;
+	}
+	
+	public List<Auction> findByCategoryAndStatus(Category category, AuctionStatus status) {
+		return sessionFactory.getCurrentSession().getNamedQuery("Auction.findByCategoryAndStatus").setParameter("category", category).setParameter("status", status).list() ;
 	}
 	
 	public Auction findByName(String name) {

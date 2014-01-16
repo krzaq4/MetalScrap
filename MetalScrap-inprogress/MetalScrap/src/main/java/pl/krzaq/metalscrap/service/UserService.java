@@ -10,4 +10,10 @@ public User getUserByLogin(String login) ;
 public User getUserByLoginAndPass(String login, String pass) ;
 	
 public User getLoggedinUser();	
+
+public void save(User user) ;
+
+public void update(User user) ;
+
+public void delete(User user) ;
 }

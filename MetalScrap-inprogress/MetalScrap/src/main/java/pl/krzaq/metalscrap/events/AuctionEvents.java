@@ -213,6 +213,31 @@ public void saveNewAuction(Auction auction, Page p) {
 	}
 	
 
+
+public void addToObserved(Auction auction, Button btn) {
+	Page p = btn.getPage();
+	//auction.getObeservers().add(e)
+	User currentUser = 	(User) p.getAttribute("currentUser") ; //ServicesImpl.getUserService().getLoggedinUser();
+	List<Auction> observed = ServicesImpl.getAuctionService().findByObserver(currentUser) ;
+	String message = "Dodano aukcjê "+auction.getName()+" do obserwowanych" ;
+	if (observed==null || observed.size()==0) {
+		observed = new ArrayList<Auction>() ;
+		
+	} 
+	if (!observed.contains(auction)) {
+		observed.add(auction) ;
+		currentUser.setObserved(observed);
+		ServicesImpl.getUserService().update(currentUser);
+	} else {
+		message="Aukcja znajduje siê ju¿ na liœcie aukcji obserwowanych" ; 
+	}
+	
+	
+	
+	Messagebox.show(message) ;
+	
+}
+
 public void onClickRefreshAuctionForm(Auction auction, Button but, AnnotateDataBinder binder) {
 	
 	Page page = but.getPage() ;
@@ -393,6 +418,11 @@ public void registerCompanyUser(Company company, User user) {
 public void redirectToAuctionEdit(Long id){
 	
 	Executions.getCurrent().sendRedirect("/secured/auctions/new.zul?id="+String.valueOf(id));
+}
+
+public void redirectToAuctionView(Auction auction) {
+	
+	Executions.getCurrent().sendRedirect("/auction.zul?id="+String.valueOf(auction.getId()));
 }
 
 

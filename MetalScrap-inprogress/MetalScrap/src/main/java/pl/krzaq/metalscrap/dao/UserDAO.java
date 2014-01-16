@@ -37,6 +37,13 @@ public class UserDAO {
 		
 	}
 	
+	public void update(User user) {
+		sessionFactory.getCurrentSession().update(user);
+	}
+	
+	public void delete(User user) {
+		sessionFactory.getCurrentSession().delete(user);
+	}
 
 public User getUserByLoginAndPass(String login, String pass) {
 		

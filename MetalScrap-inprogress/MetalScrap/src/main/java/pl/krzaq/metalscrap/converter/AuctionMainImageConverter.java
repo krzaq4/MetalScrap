@@ -35,7 +35,7 @@ public class AuctionMainImageConverter implements TypeConverter {
 			File file = new File(af.getPath()) ;
 			aimg = new AImage(file) ;
 		} else {
-			File file = new File(noImagePath) ;
+			File file = new File("c:\\temp\\noimage.png") ;
 			aimg = new AImage(file) ;
 			
 		}

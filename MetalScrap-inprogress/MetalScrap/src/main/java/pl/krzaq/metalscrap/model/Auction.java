@@ -15,6 +15,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -33,7 +35,8 @@ import javax.persistence.TemporalType;
 	@NamedQuery(name="Auction.findByName", query="from Auction a where a.name=:name"),
 	@NamedQuery(name="Auction.findByNumber", query="from Auction a where a.number=:number"),
 	@NamedQuery(name="Auction.findByStatus", query="from Auction a where a.status=:status"),
-	@NamedQuery(name="Auction.findByCategory", query="from Auction a where a.category=:category")
+	@NamedQuery(name="Auction.findByCategory", query="from Auction a where a.category=:category"),
+	@NamedQuery(name="Auction.findByCategoryAndStatus", query="from Auction a where a.category=:category and status=:status")
 	
 	
 	
@@ -86,17 +89,23 @@ public class Auction implements Serializable {
 	@JoinColumn(name="winner_user")
 	private User winnerUser ;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name="owner")
 	private Company owner ;
 	
-	@OneToOne
+	@Column(name="min_price")
+	private Double minPrice ;
+	
+	@ManyToOne
 	@JoinColumn(name="owner_user")
 	private User ownerUser ;
 	
 	@OneToOne
 	@JoinColumn(name="best_useroffer")
 	private UserOffer bestUserOffer ;
+	
+	@ManyToMany(mappedBy="observed")
+	private List<User> obeservers ;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="auction")
 	private List<CompanyOffer> companyOffers = new ArrayList<CompanyOffer>() ;
@@ -111,17 +120,17 @@ public class Auction implements Serializable {
 	@JoinColumn(name="status")
 	private AuctionStatus status ;
 	
-	@OneToOne
-    @JoinColumn(name="delivery_type")
+	@ManyToOne
+    @JoinColumn(name="delivery_type_id")
 	private DeliveryType deliveryType ;
 	
-	@OneToOne
-	@JoinColumn(name="payment_method")
+	@ManyToOne
+	@JoinColumn(name="payment_method_id")
 	private PaymentMethod paymentMethod ;
 	
 
 	@ManyToOne
-	@JoinColumn(name="category")
+	@JoinColumn(name="category_id")
 	private Category category ;
 	
 	// -------------------------------------------------------------------------------
@@ -312,6 +321,74 @@ public class Auction implements Serializable {
 	public void setBestUserOffer(UserOffer bestUserOffer) {
 		this.bestUserOffer = bestUserOffer;
 	}
+
+	public List<User> getObeservers() {
+		return obeservers;
+	}
+
+	public void setObeservers(List<User> obeservers) {
+		this.obeservers = obeservers;
+	}
+
+	public Double getMinPrice() {
+		return minPrice;
+	}
+
+	public void setMinPrice(Double minPrice) {
+		this.minPrice = minPrice;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((number == null) ? 0 : number.hashCode());
+		result = prime * result
+				+ ((startDate == null) ? 0 : startDate.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Auction other = (Auction) obj;
+		if (endDate == null) {
+			if (other.endDate != null)
+				return false;
+		} else if (!endDate.equals(other.endDate))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (number == null) {
+			if (other.number != null)
+				return false;
+		} else if (!number.equals(other.number))
+			return false;
+		if (startDate == null) {
+			if (other.startDate != null)
+				return false;
+		} else if (!startDate.equals(other.startDate))
+			return false;
+		return true;
+	}
+
+	
 	
 	
 	

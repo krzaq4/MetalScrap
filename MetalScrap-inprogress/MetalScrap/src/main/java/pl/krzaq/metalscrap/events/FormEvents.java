@@ -21,6 +21,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zkplus.databind.AnnotateDataBinder;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Fileupload;
 import org.zkoss.zul.Grid;
@@ -48,7 +49,7 @@ public class FormEvents {
 	private String uploadPath ;
 	
 	
-	public void uploadPhoto(Media media, Listbox grid, AnnotateDataBinder binder) {
+	public void uploadPhoto(Media media, final Listbox grid, final AnnotateDataBinder binder) {
 		
 		final Page page = grid.getPage() ;
 		String format = media.getFormat() ;
@@ -67,7 +68,7 @@ public class FormEvents {
 		try {
 			fo = new FileOutputStream(file);
 			fo.write(media.getByteData());
-			AttachementFile af = new AttachementFile() ;
+			final AttachementFile af = new AttachementFile() ;
 			af.setName(nextName);
 			af.setPath(uploadPath+nextName+"."+media.getFormat());
 			af.setMain(false);
@@ -105,7 +106,7 @@ public class FormEvents {
 			img.setWidth("50%");
 			img.setHeight("50%");
 			List<AttachementFile> files = new ArrayList<AttachementFile>() ;
-			HttpSession ses = (HttpSession) Executions.getCurrent().getSession().getNativeSession() ;
+			final HttpSession ses = (HttpSession) Executions.getCurrent().getSession().getNativeSession() ;
 			if( ses.getAttribute("files")!=null ){
 				files = (ArrayList<AttachementFile>) ses.getAttribute("files") ;
 			}
@@ -116,10 +117,31 @@ public class FormEvents {
 			ses.setAttribute("files", files);
 			
 			
-			Listitem li = new Listitem() ;
+			final Listitem li = new Listitem() ;
 			Listcell lc = new Listcell() ;
+			Listcell lc2 = new Listcell() ;
+			
+			Button delImage = new Button("Usuñ") ;
+			delImage.addEventListener("onClick", new EventListener<Event>(){
+
+				@Override
+				public void onEvent(Event event) throws Exception {
+					grid.getItems().remove(li) ;
+					List<AttachementFile> afiles = (ArrayList<AttachementFile>) ses.getAttribute("files") ;
+					if (afiles!=null && afiles.size()>0) {
+						afiles.remove(af) ;
+						ses.setAttribute("files", afiles);
+						binder.loadComponent(grid);
+					}
+					
+				}
+				
+			}) ;
+			
+			lc2.appendChild(delImage) ;
 			lc.appendChild(img) ; 
 			li.appendChild(lc) ;
+			li.appendChild(lc2) ;
 			//Row row = new Row() ;
 			//row.appendChild(img) ;
 			grid.getItems().add(li) ; //.getRows().appendChild(row) ;

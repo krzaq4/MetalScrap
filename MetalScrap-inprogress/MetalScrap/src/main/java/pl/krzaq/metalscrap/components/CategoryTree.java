@@ -24,6 +24,7 @@ import org.zkoss.zul.Treerow;
 
 import pl.krzaq.metalscrap.dao.CategoryDAO;
 import pl.krzaq.metalscrap.model.Auction;
+import pl.krzaq.metalscrap.model.AuctionStatus;
 import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 import pl.krzaq.metalscrap.utils.ApplicationContextProvider;
@@ -132,6 +133,7 @@ public class CategoryTree extends Tree {
 	private class CategoryInfoRenderer implements TreeitemRenderer<DefaultTreeNode<Category>> {
 	    public void render(Treeitem item, DefaultTreeNode<Category> data, int index) throws Exception {
 	        Category fi = data.getData();
+	        AuctionStatus status = ServicesImpl.getAuctionService().findStatusByCode(AuctionStatus.STATUS_STARTED) ;
 	        Treerow tr = new Treerow();
 	        tr.setSclass("category");
 	        
@@ -139,7 +141,7 @@ public class CategoryTree extends Tree {
 	        
 	        item.appendChild(tr);
 	        item.setValue(fi);
-	        item.addEventListener("onClick", new CategoryClickListener()) ;
+	        item.addEventListener("onClick", new CategoryClickListener(status)) ;
 	        Treecell tc = new Treecell() ;
 	        Div cellInside = new Div() ;
 	        cellInside.setSclass("categoryDiv");
@@ -163,6 +165,17 @@ public class CategoryTree extends Tree {
 	
 	private class CategoryClickListener implements EventListener {
 
+		
+		private AuctionStatus status ;
+		
+		public CategoryClickListener() {
+			
+		}
+		
+		public CategoryClickListener(AuctionStatus status){
+			this.status = status ;
+		}
+		
 		@Override
 		public void onEvent(Event event) throws Exception {
 			
@@ -173,7 +186,7 @@ public class CategoryTree extends Tree {
 				((Treeitem) event.getTarget()).setOpen(!((Treeitem) event.getTarget()).isOpen());
 				event.getTarget().getPage().setAttribute("selectedCategory", selectedCategory) ;
 				
-				List<Auction> auctions = ServicesImpl.getAuctionService().findByCategoryDown(selectedCategory) ;
+				List<Auction> auctions = ServicesImpl.getAuctionService().findByCategoryDown(selectedCategory, status) ;
 				event.getTarget().getPage().setAttribute("categoryAuctions", auctions) ;
 				binder.loadComponent(event.getTarget().getPage().getFellow("allAuctions"));
 				((Breadcrumb)event.getTarget().getPage().getFellow("bread_crumb")).refresh();

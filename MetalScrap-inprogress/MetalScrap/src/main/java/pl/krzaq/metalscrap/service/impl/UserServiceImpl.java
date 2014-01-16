@@ -43,6 +43,23 @@ public class UserServiceImpl implements UserService {
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
 	}
+
+	@Override
+	public void save(User user) {
+		userDAO.saveUser(user);
+		
+	}
+
+	@Override
+	public void update(User user) {
+		userDAO.update(user);
+		
+	}
+
+	@Override
+	public void delete(User user) {
+		userDAO.delete(user);
+	}
 	
 	
 

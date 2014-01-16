@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -31,12 +32,12 @@ public class UserOffer implements Serializable, Comparable<UserOffer>{
 	@Column(name="id")
 	private Long id ;
 	
-	@OneToOne
-	@JoinColumn(name="user")
+	@ManyToOne
+	@JoinColumn(name="user_id")
 	private User user ;
 	
-	@OneToOne
-	@JoinColumn(name="auction")
+	@ManyToOne
+	@JoinColumn(name="auction_id")
 	private Auction auction ;
 	
 	@Column(name="price")

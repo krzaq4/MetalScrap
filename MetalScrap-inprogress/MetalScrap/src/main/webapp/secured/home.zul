@@ -39,14 +39,14 @@
 					<grid id="allAuctions" model="@{categoryAuctions}">
 						<columns>
 							<column width="100px"></column>
-							<column width="260px" label="Nazwa"></column>
+							<column width="300px" label="Nazwa"></column>
 							<column width="60px" label="Cena"></column>
-							<column width="50px" label="Ilość ofert"></column>
-							<column width="110px" label="Data zakończenia"></column>
+							<column width="90px" label="Ilość ofert"></column>
+							<column width="200px" label="Data zakończenia"></column>
 						</columns>
 						<rows>
-							<row self="@{each=auction}">
-								<image content="@{auction, converter='pl.krzaq.metalscrap.converter.AuctionMainImageConverter'}"/>
+							<row self="@{each=auction}" value="@{auction}" onClick="auctionEvents.redirectToAuctionView(self.getValue())">
+								<image width="100px" height="auto" content="@{auction, converter='pl.krzaq.metalscrap.converter.AuctionMainImageConverter'}"/>
 								<label value="@{auction.name}" />
 								<label value="@{auction.bestUserOffer.price}" />
 								<label value="@{auction.userOffers.size}" />

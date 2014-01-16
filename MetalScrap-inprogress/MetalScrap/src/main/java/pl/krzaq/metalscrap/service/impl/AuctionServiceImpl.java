@@ -15,6 +15,7 @@ import pl.krzaq.metalscrap.model.AuctionStatus;
 import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.model.DeliveryType;
 import pl.krzaq.metalscrap.model.PaymentMethod;
+import pl.krzaq.metalscrap.model.User;
 import pl.krzaq.metalscrap.service.AuctionService;
 
 public class AuctionServiceImpl implements AuctionService {
@@ -174,19 +175,19 @@ public class AuctionServiceImpl implements AuctionService {
 
 
 	@Override
-	public List<Auction> findByCategoryDown(Category category) {
+	public List<Auction> findByCategoryDown(Category category, AuctionStatus status) {
 		
 		
 		List<Auction> result = new ArrayList<Auction>() ;
 		List<Category> subCategories = new ArrayList<Category>() ;
 		subCategories.add(category) ;
 		
-		return findAuctions(subCategories, result) ;
+		return findAuctions(subCategories, result, status) ;
 		
 		}
 		
 		
-		private List<Auction> findAuctions(List<Category> cats, List<Auction> result) {
+		private List<Auction> findAuctions(List<Category> cats, List<Auction> result, AuctionStatus status) {
 			
 			
 			while (cats.size()>0) {
@@ -194,7 +195,7 @@ public class AuctionServiceImpl implements AuctionService {
 				Iterator<Category> it = cats.iterator() ;
 				while (it.hasNext()) {
 					Category cat = it.next() ;
-					List<Auction> auctions = auctionDAO.findByCategory(cat) ;
+					List<Auction> auctions = auctionDAO.findByCategoryAndStatus(cat, status) ;
 					
 					for (Auction a:auctions) {
 						if(!result.contains(a)) {
@@ -205,7 +206,7 @@ public class AuctionServiceImpl implements AuctionService {
 					it.remove(); 
 					
 					if (ServicesImpl.getCategoryService().findSubCategories(cat).size()>0)
-						findAuctions(ServicesImpl.getCategoryService().findSubCategories(cat), result) ;
+						findAuctions(ServicesImpl.getCategoryService().findSubCategories(cat), result, status) ;
 					
 				}
 			
@@ -214,6 +215,13 @@ public class AuctionServiceImpl implements AuctionService {
 			return result ;
 		
 	}
+
+
+
+		@Override
+		public List<Auction> findByObserver(User user) {
+			return auctionDAO.findByObserver(user) ;
+		}
 
 
 

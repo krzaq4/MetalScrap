@@ -32,7 +32,7 @@ public class CompanyOffer implements Serializable{
 	private Long id ;
 	
 	@OneToOne
-	@JoinColumn(name="company")
+	@JoinColumn(name="company_id")
 	private Company company ;
 	
 	@OneToOne

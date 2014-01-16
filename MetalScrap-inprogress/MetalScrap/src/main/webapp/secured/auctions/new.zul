@@ -38,16 +38,16 @@
 					</columns>
 					<rows>
 						<row>
-							<label value="Tytuł aukcji:" />	<textbox id="auction_name" value="@{auction.name}" constraint="no empty"/>
+							<label value="Tytuł aukcji:" />	<textbox id="auction_name" value="@{auction.name}" constraint="no empty" placeholder="Wpisz nazwę aukcji"/>
 						</row>
 						<row>
-							<label value="Numer:" />	<textbox id="auction_number" value="@{auction.number}" constraint="no empty"/>
+							<label value="Numer:" />	<textbox id="auction_number" value="@{auction.number}" constraint="no empty" placeholder="Wpisz numer aukcji"/>
 						</row>
 						<row>
-							<label value="Data rozpoczęcia:" />	<div><datebox id="auction_start_date" cols="12" width="230px" format="long+medium"  value="@{auction.startDate}" constraint="no empty"/> </div>
+							<label value="Data rozpoczęcia:" />	<div><datebox id="auction_start_date" cols="12" width="230px" format="long+medium"  value="@{auction.startDate}" constraint="no empty" placeholder="Naciśnij przycisk >>"/> </div>
 						</row>
 						<row>	
-							<label value="Data zakończenia:" /> <div><datebox id="auction_end_date" cols="12" width="230px"   format="long+medium"  value="@{auction.endDate}" constraint="no empty">
+							<label value="Data zakończenia:" /> <div><datebox id="auction_end_date" cols="12" width="230px"   format="long+medium"  value="@{auction.endDate}" constraint="no empty" placeholder="Naciśnij przycisk >>">
 							<attribute name="onChange">
 								<![CDATA[
 								
@@ -70,6 +70,14 @@
 								</listitem>
 							</listbox>
 						</row>
+						<row>
+							<label value="Cena minimalna włączona:" />
+							<checkbox id="min_price" onCheck="min_price_amount.setVisible(self.isChecked())"></checkbox>
+						</row>
+						<row id="min_price_amount" visible="@{min_price.checked}" >
+							<label value="Cena minimalna:" />
+							<hbox><decimalbox id="auction_min_price" format="###.##"  value="@{auction.minPrice}" width="180px" placeholder="Podaj cenę minimalną"></decimalbox><label value=" PLN"/></hbox>
+						</row>
 					</rows>
 				</grid>
 	</groupbox>
@@ -85,19 +93,19 @@
 						</row>
 						<row>
 							<label value="Sposób płatności:" />	
-							<combobox id="auction_payment"  model="@{paymentMethods}" selectedItem="@{auction.paymentMethod}"  value="@{auction.paymentMethod.name}" constraint="no empty"  >
+							<combobox id="auction_payment"  model="@{paymentMethods}" selectedItem="@{auction.paymentMethod}"  value="@{auction.paymentMethod.name}" placeholder="Wybierz sposób płatności" constraint="no empty"  >
 								<comboitem self="@{each=method}" label="@{method.name}" value="@{method}"></comboitem>
 							</combobox>
 															
 						</row>
 						<row>
 							<label value="Rodzaj dostawy:" />
-							<combobox id="auction_delivery" model="@{deliveryTypes}" selectedItem="@{auction.deliveryType}" value="@{auction.deliveryType.name}" constraint="no empty">
+							<combobox id="auction_delivery" model="@{deliveryTypes}" selectedItem="@{auction.deliveryType}" value="@{auction.deliveryType.name}" constraint="no empty" placeholder="Wybierz rodzaj dostawy">
 								<comboitem self="@{each=dtype}" label="@{dtype.name}" value="@{dtype}"></comboitem>
 							</combobox>
 						</row>
 						<row>
-							<label value="Czas dostawy:" /><textbox id="auction_delivery_time"  value="@{auction.deliveryTime}" constraint="no empty"/>
+							<label value="Czas dostawy:" /><textbox id="auction_delivery_time"  value="@{auction.deliveryTime}" constraint="no empty" placeholder="Wpisz ilość dni"/>
 						</row>
 					</rows>
 				</grid>
@@ -114,6 +122,7 @@
 							<label value="Opis aukcji:" />
 							
 							<ckeditor id="auction_description" value="@{auction.description}" height="300px">
+							
 							<attribute name="onCreate">
 							<![CDATA[
 								self.setValue(((pl.krzaq.metalscrap.model.Auction)page.getAttribute("auction")).getDescription());
@@ -140,8 +149,8 @@
 						
 							<listbox id="photos" width="65%" height="auto" checkmark="true" multiple="false" selectedIndex="@{selectedPhotoIndex}">
 								<listhead>
-									<listheader width="100%" label="Wybierz zdjęcie główne"></listheader>
-									
+									<listheader width="90%" label="Wybierz zdjęcie główne"></listheader>
+									<listheader width="10%" />
 								</listhead>
 								<listitem>
 									

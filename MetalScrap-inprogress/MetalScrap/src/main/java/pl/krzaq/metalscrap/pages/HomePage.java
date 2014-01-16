@@ -77,10 +77,12 @@ public class HomePage implements Initiator, InitiatorExt {
 
 				String roleName = iterator.next().getName();
 
-				isUser = roleName.equalsIgnoreCase(Constants.ROLE_USER);
-				isAdmin = roleName.equalsIgnoreCase(Constants.ROLE_ADMIN);
-				isSuperAdmin = roleName
-						.equalsIgnoreCase(Constants.ROLE_SUPERADMIN);
+				if (roleName.equalsIgnoreCase(Constants.ROLE_USER))
+					isUser = true ;
+				if(roleName.equalsIgnoreCase(Constants.ROLE_ADMIN))
+					isAdmin = true ;
+				if(roleName.equalsIgnoreCase(Constants.ROLE_SUPERADMIN))
+					isSuperAdmin = true ;
 
 			}
 

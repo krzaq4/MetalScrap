@@ -24,7 +24,8 @@
 
 <include id="men"  src="/common/menu.zul" ></include>
 		
-
+<div id="bread_crumb" use="pl.krzaq.metalscrap.components.Breadcrumb"></div>
+<div id="socialMedia"></div>
 <panel id="parameters" height="auto" border="normal" collapsible="true"  action="show:slideIn;hide:slideOut">
 <caption label="@{auction.name}"></caption>
 <panelchildren style="padding: 5px 5px 5px 5px">
@@ -66,7 +67,7 @@
 			<label value="" />		
 		</row>
 		<row spans="2">
-			<button label="Dodaj do obserwowanych" />		
+			<button label="Dodaj do obserwowanych" onClick="auctionEvents.addToObserved(auction, self)" disabled="@{auction, converter='pl.krzaq.metalscrap.converter.AuctionIsNotStartedConverter'}"/>		
 		</row>
 		<row spans="2">
 			<separator orient="horizontal" bar="true"></separator>

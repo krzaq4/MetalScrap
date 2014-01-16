@@ -54,7 +54,7 @@ public class Category implements Serializable, Comparable {
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<Category> children ;
 	
-	@OneToMany(cascade=CascadeType.ALL)
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="category")
 	private List<Auction> auctions ;
 
 	

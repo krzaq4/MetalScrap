@@ -37,7 +37,7 @@ public class Role implements Serializable{
 	@Column(name="name")
 	private String name ;
 	
-	@ManyToMany
+	@ManyToMany(mappedBy="roles")
 	private List<User> users ;
 
 	public Long getId() {
