@@ -1,5 +1,8 @@
 package pl.krzaq.metalscrap.events;
 
+import javax.servlet.http.HttpSession;
+
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
@@ -53,6 +56,16 @@ public class PageEvents {
 		
 		Executions.getCurrent().sendRedirect(url);
 		
+	}
+	
+	public void logout() {
+		
+		SecurityContextHolder.clearContext();
+		HttpSession session = (HttpSession)Executions.getCurrent().getSession().getNativeSession();
+		if (session != null) {
+		   session.invalidate();
+		}
+		Executions.getCurrent().sendRedirect("/app/home");
 	}
 	
 	

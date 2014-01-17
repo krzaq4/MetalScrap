@@ -6,7 +6,10 @@
 
 <zk>
 
-	
+	<language-config>
+	    <addon-uri>/WEB-INF/breadcrumb-addon.xml</addon-uri> 
+	    <addon-uri>/WEB-INF/categorytree-addon.xml</addon-uri>       
+	</language-config>
 
 	<desktop-config>
     	<theme-uri>/resources/style/style.css</theme-uri>

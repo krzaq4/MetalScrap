@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language-addon>
+    <!-- The name of this addon. It must be unique -->
+    <addon-name>categorytree</addon-name>
+    <!-- Which language this addon will be added to -->
+    <language-name>xul/html</language-name>
+ 
+    <component>
+        <component-name>categorytree</component-name>
+        <component-class>pl.krzaq.metalscrap.components.CategoryTree</component-class>
+        <extends>tree</extends>
+        
+        <annotation>
+        	<annotation-name>ZKBIND</annotation-name>
+        		<property-name>categoryModel</property-name>
+        			
+       				 <attribute>
+            			<attribute-name>ACCESS</attribute-name>
+           			    <attribute-value>both</attribute-value>
+       				 </attribute>
+       				 <attribute>
+            			<attribute-name>LOAD_TYPE</attribute-name>
+            			<attribute-value>java.util.List</attribute-value>
+        			</attribute>
+    		</annotation>
+    </component>
+    
+</language-addon>

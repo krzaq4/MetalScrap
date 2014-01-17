@@ -25,7 +25,9 @@
 <include id="men"  src="/common/menu.zul" ></include>
 		
 <div id="bread_crumb" use="pl.krzaq.metalscrap.components.Breadcrumb"></div>
-<div id="socialMedia"></div>
+<div id="socialMedia" sclass="socialMedia">
+	<button id="fb_share" sclass="fbshare" />
+</div>
 <panel id="parameters" height="auto" border="normal" collapsible="true"  action="show:slideIn;hide:slideOut">
 <caption label="@{auction.name}"></caption>
 <panelchildren style="padding: 5px 5px 5px 5px">

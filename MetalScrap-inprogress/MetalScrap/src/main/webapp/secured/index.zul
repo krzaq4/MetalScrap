@@ -29,63 +29,74 @@
 				
 			</div>
 			<div class="headerinfo">
-				<div class="userInfo"><a onClick="loginPopup.open(content,popPos)">
+				<div class="userInfo"><hbox><a onClick="loginPopup.open(content,popPos)" style="color: #eee">
 					Zaloguj się
 				</a>
-				<separator></separator>
-				<a onClick="registerPopup.open(content,popPos)">
+				
+				<a onClick="registerPopup.open(content,popPos)" style="color:#eee">
 					Rejestracja - to nic nie kosztuje!
 				</a>
+				
+				</hbox>
 				</div>
 			</div>
 		</div>
 
 
 		<include id="men"  src="/common/menu.zul" ></include>
-
-	
-
-		<!-- <div id="menu" class="menu">
-			<menubar id="main" orient="horizontal">
-			
-			<menuitem id="about" label="O platformie"></menuitem>
-			<menuseparator />
-			<menuitem id="auctions" label="Aukcje"></menuitem>
-			<menuitem id="companies" label="Firmy"></menuitem>
-			<menuseparator />
-			<menuitem id="regulations" label="Regulamin"></menuitem>
-			<menuitem id="help" label="Pomoc"></menuitem>
-			<menuseparator />
-			<menuitem id="contact" label="Kontakt"></menuitem>
-			
-			</menubar>
-			
-			<menubar id="submenu" visible="false">
-			<menuitem id="auctions_list" label="Lista aukcji"
-			visible="false" />
-			<menuitem id="new_auction" label="Nowa aukcja"
-			visible="false" />
-			<menuitem id="companies_list" label="Lista firm"
-			visible="false" />
-			
-			
-			</menubar>
-			
-			</div> -->
-
-		<panel id="content" height="500px" border="rounded">
+		
+		<breadcrumb id="breadcrumb" standalone="false" currentCategory="@{selectedCategory}"></breadcrumb>
+		
+		<panel id="content" height="500px" border="none">
 			<panelchildren>
 
-				<div id="categoriesMenu" class="categoriesMenu">
-				
-				<include mode="defer" src="/common/categories.zul"></include>
+<div class="otherContent">
+					<grid id="allAuctions" model="@{categoryAuctions}" sclass="auctionsList" height="100%" mold="paging">
+						<columns>
+							<column width="100px"></column>
+							<column width="300px" label="Nazwa"></column>
+							<column width="60px" label="Cena"></column>
+							<column width="85px" label="Ilość ofert"></column>
+							<column width="200px" label="Data zakończenia"></column>
+						</columns>
+						<rows>
+							<row self="@{each=auction}" value="@{auction}" onClick="auctionEvents.redirectToAuctionView(self.getValue())">
+								<image width="100px" height="auto" content="@{auction, converter='pl.krzaq.metalscrap.converter.AuctionMainImageConverter'}"/>
+								<label value="@{auction.name}" />
+								<label value="@{auction.bestUserOffer.price}" />
+								<label value="@{auction.userOffers.size}" />
+								<label value="@{auction.endDate}" />
+							</row>
+						</rows>
+					</grid>
+
 				</div>
+
+				<div id="categoriesMenu" class="categoriesMenu" visible="@{isCategoriesVisible}">
 				
-				<div class="otherContent">
-
-
+				<!-- <include mode="defer" src="/common/categories.zul" ></include> -->
+				
+				<categorytree id="cat_tree" caption="Kategorie" height="100%"
+							  showDescription="true" 
+							  showAuctionCount="true" 
+							  showCountInSelectedOnly="false" 
+							  showAllAuctions="false" 
+							  auctionList="${allAuctions}" breadcrumb="${breadcrumb}" 
+							  categoryModel="@{categoryModel}">
+				
+				</categorytree>
+				
+				<!-- <tree id="cat_tree" use="pl.krzaq.metalscrap.components.CategoryTree" width="100%" height="100%" selectedItem="@{selItem}">
+					<treecols>
+						<treecol label="Kategorie"></treecol>
+					</treecols>					
+				</tree> -->
+				
 				</div>
-
+				<space></space>
+				<div sclass="pageFooter">
+					<div sclass="inner"><label value="Kontakt"/> | <label value="Regulamin"/> | <label value="Polityka prywatności"/> | <label value="O platformie"/> </div>
+				</div>
 			</panelchildren>
 		</panel>
 

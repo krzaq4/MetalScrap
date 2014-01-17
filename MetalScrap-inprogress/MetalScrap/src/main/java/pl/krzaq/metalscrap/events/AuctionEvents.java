@@ -161,7 +161,7 @@ public void saveNewAuction(Auction auction, Page p) {
 		}
 		
 		List<AttachementFile> files = (ArrayList<AttachementFile>) ses.getAttribute("files") ;
-		if(files!=null) {
+		if(files!=null && files.size()>0) {
 		int i = 1 ;
 		for (AttachementFile af:files) {
 			if (selectedPhotoIndex>0 && selectedPhotoIndex==i){
@@ -176,6 +176,14 @@ public void saveNewAuction(Auction auction, Page p) {
 		
 				
 		ses.removeAttribute("files");
+		} else if (files.size()==0) {
+			
+			for (AttachementFile at:auction.getFiles()) {
+				at.setAuction(null);
+			}
+			auctionDAO.update(auction);
+			auction.getFiles().clear(); 
+			
 		}
 		
 		

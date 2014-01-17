@@ -12,9 +12,13 @@ import org.zkoss.zk.ui.util.Initiator;
 import org.zkoss.zk.ui.util.InitiatorExt;
 
 import pl.krzaq.metalscrap.model.Address;
+import pl.krzaq.metalscrap.model.Auction;
+import pl.krzaq.metalscrap.model.AuctionStatus;
+import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.model.Company;
 import pl.krzaq.metalscrap.model.Role;
 import pl.krzaq.metalscrap.model.User;
+import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 
 public class Login implements Initiator, InitiatorExt {
 
@@ -22,6 +26,10 @@ public class Login implements Initiator, InitiatorExt {
 	public void doInit(Page page, Map<String, Object> arg1) throws Exception {
 		// TODO Auto-generated method stub
 		//super.doInit(page, arg1);
+		// wyœwietlanie sub menu
+		Boolean isCategoriesVisible = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("auction_categories_visible").getValue()) ;
+		Boolean isCommoditiesVisible = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("auction_commodities_visible").getValue());
+		
 		
 		
 		Address main = new Address() ;
@@ -40,6 +48,19 @@ public class Login implements Initiator, InitiatorExt {
 		boolean isUser = false;
 		boolean isAdmin = false;
 		boolean isSuperAdmin = false;
+		
+		List<Category> categories = ServicesImpl.getCategoryService().findRootCategories() ;
+		List<Auction> auctions = ServicesImpl.getAuctionService().findByStatus(ServicesImpl.getAuctionService().findStatusByCode(AuctionStatus.STATUS_STARTED)) ;
+		
+		page.setAttribute("auctionsSubMenu", false);
+		page.setAttribute("companiesSubMenu", false);
+		
+		page.setAttribute("isCommoditiesVisible", isCommoditiesVisible) ;
+		page.setAttribute("isCategoriesVisible", isCategoriesVisible) ;
+		
+		page.setAttribute("categoryAuctions", auctions) ;
+		page.setAttribute("categoryModel", categories) ;
+		page.setAttribute("selectedCategory", null) ;
 		
 		page.setAttribute("isUser", isUser);
 		page.setAttribute("isAdmin", isAdmin);

@@ -55,6 +55,22 @@ body {
 border-radius: 8px;
 }
 
+.socialMedia {
+	width: 100% ;
+	text-align: right ;
+	padding: 0 10px 0 0;
+	
+}
+
+.fbshare.z-button-os{
+	
+	width: 33px ;
+	height: 32px ;
+	background-image: url(../images/fbshare.png) ;
+	background-repeat: no-repeat ;
+	cursor: pointer ;
+}
+
 .userInfo {
 	position:absolute;
 	top:40px;
@@ -169,6 +185,18 @@ h1{
 .z-panel-hl{
 	background:none ;	
 	background-color: #A5738C ;
+	-moz-border-top-left-radius: 5px;
+	-moz-border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+.z-panelchildren {
+	
+	-moz-border-bottom-left-radius: 5px;
+	-moz-border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	
 }
 
 .z-panel-hr{
@@ -214,7 +242,7 @@ h1{
 	
 	display: block ;
 	width: 25% ;
-	height: 100%;
+	height: 90%;
 	float: left ;
 	
 }
@@ -243,12 +271,14 @@ h1{
 	
 	display: block ;
 	width: 75% ;
-	height: 100%;
+	height: 90%;
 	float: right ;
 	
 }
 
-
+div .z-tree {
+	border: none ;
+}
 
 .z-button .z-button-cm{
 	background: none ;
@@ -265,13 +295,24 @@ div.z-tree-header tr.z-treecols, div.z-tree-header tr.z-auxhead {
 	background-image: url(../images/menubar.jpg) ;
 	background-repeat: repeat-x ;
 	
+	
 }
 
 div.z-treefooter-cnt, div.z-treecol-cnt {
-	color: #444444;
+	color: #dedede;
 	font-size: 1.0em;
+	text-shadow: 2px 2px #676767;
 	
 }
+
+.z-tree-header {
+	
+	-moz-border-top-left-radius: 5px;
+	-moz-border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+
 .z-button{
 	
 	height: 32px ;
@@ -286,6 +327,7 @@ div.z-treefooter-cnt, div.z-treecol-cnt {
 	
 	color: #7a6194 ;
 	text-decoration: underline ;
+	cursor: pointer ;
 }
 
 .footer.z-label{
@@ -293,6 +335,15 @@ div.z-treefooter-cnt, div.z-treecol-cnt {
 	font-size: 0.8em;
 	font-style: italic ;
 	
+}
+
+.auctionsList.z-grid {
+	border: none ;
+	padding: 0 0 0 5px ;
+}
+
+.auctionsList.z-grid .z-column{
+	border:none ;
 }
 
 .z-groupbox-cnt{
@@ -580,6 +631,10 @@ div.z-treecell-cnt {
 	background-color: #d4c3cb ;
 	width:100% ;
 	height:auto ;
+	-moz-border-top-left-radius: 5px;
+	-moz-border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
 	
 }
 
@@ -588,7 +643,27 @@ div.z-treecell-cnt {
 	width:100% ;
 	height:30px ;
 	background-color: #a5738c;
+	-moz-border-bottom-left-radius: 5px;
+	-moz-border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	
 }
+.pageFooter .inner {
+	width: 100% ;
+	color: #ededed;
+	text-align: center ;
+	padding: 3px 15px 3px 15px ;
+	
+}
+
+.inner .z-label {
+	color: #ededed;
+	padding: 0 15px 0 15px ;
+	cursor: pointer ;
+}
+
+
 
 .divCaption {
 	

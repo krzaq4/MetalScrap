@@ -12,10 +12,10 @@
 
 				<menuitem id="about" label="O platformie"></menuitem>
 				<menuseparator />
-				<menuitem id="auctions" label="Aukcje"
+				<menuitem id="auctions" label="Aukcje" visible="@{isAdmin}"
 					onClick="pageEvents.showSubMenu(self.getId(), menu, binder)">
 				</menuitem>
-				<menuitem id="companies" label="Firmy"
+				<menuitem id="companies" label="Firmy" visible="false"
 					onClick="pageEvents.showSubMenu(self.getId(), menu, binder)">
 				</menuitem>
 				<menuitem id="admin" label="Administracja" visible="@{isAdmin}"

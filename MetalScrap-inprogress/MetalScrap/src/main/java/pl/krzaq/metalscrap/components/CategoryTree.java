@@ -13,11 +13,17 @@ import org.zkoss.zkplus.databind.AnnotateDataBinder;
 import org.zkoss.zul.AbstractTreeModel;
 import org.zkoss.zul.DefaultTreeModel;
 import org.zkoss.zul.DefaultTreeNode;
+import org.zkoss.zul.Grid;
+import org.zkoss.zul.Hbox;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.TreeModel;
 import org.zkoss.zul.TreeNode;
 import org.zkoss.zul.Treecell;
+import org.zkoss.zul.Treecol;
+import org.zkoss.zul.Treecols;
 import org.zkoss.zul.Treeitem;
 import org.zkoss.zul.TreeitemRenderer;
 import org.zkoss.zul.Treerow;
@@ -31,17 +37,35 @@ import pl.krzaq.metalscrap.utils.ApplicationContextProvider;
 
 public class CategoryTree extends Tree {
 
-	private CategoryDAO categoryDAO ;
+	
 	private AnnotateDataBinder binder ;
 	
+	private boolean showDescription ;
+	private boolean showParent ;
+	private boolean showAllAuctions ;
+	private boolean showAuctionCount ;
+	private boolean showCountInSelectedOnly ;
+	
+	private String caption ;
+	private Grid auctionList ;
+	private Breadcrumb breadcrumb ;
+	private List<Category> categoryModel ;
+	
+	
 	public void onCreate() {
-		
-		System.out.println("onCreate") ;
 		
 		this.binder = (AnnotateDataBinder) this.getPage().getAttribute("binder") ;
 		this.setModel(this.getCategoryTreeModel());
 		
 		this.setItemRenderer(new CategoryInfoRenderer());
+		if (caption!=null) {
+			
+			Treecols cols = new Treecols() ;
+			Treecol tc = new Treecol() ;
+			tc.setLabel(caption);
+			cols.appendChild(tc) ;
+			this.appendChild(cols) ;
+		}
 		
 	}
 	
@@ -58,20 +82,20 @@ public class CategoryTree extends Tree {
 
 	private TreeModel getCategoryTreeModel() {
 		
-		categoryDAO = (CategoryDAO) ApplicationContextProvider.getApplicationContext().getBean("categoryDAO") ;
+		
 		
 		List<TreeNode<Category>> nodes = new ArrayList<TreeNode<Category>>() ;
 		
-				  List<Category> rootCategories = categoryDAO.findRootCategories() ;
-				  Collections.sort(rootCategories);
+				 
+				  Collections.sort(categoryModel);
 				  
-				  TreeNode<Category>[] nds = new DefaultTreeNode[rootCategories.size()] ;
+				  TreeNode<Category>[] nds = new DefaultTreeNode[categoryModel.size()] ;
 				  int j=0 ;
-				  for (Category root:rootCategories) {
+				  for (Category root:categoryModel) {
 					  
 					  TreeNode<Category> rootNode ;
 					  
-					  if (categoryDAO.findSubCategories(root).size()>0) {
+					  if (ServicesImpl.getCategoryService().findSubCategories(root).size()>0) {
 						  
 						  rootNode = new DefaultTreeNode<Category>(root, getSubCategories(root) ) ;
 						  nds[j] = rootNode ;
@@ -110,7 +134,7 @@ public class CategoryTree extends Tree {
 		Collections.sort(childCategories);
 		for (Category sub:childCategories) {
 			
-			if (categoryDAO.findSubCategories(sub).size()>0) {
+			if (ServicesImpl.getCategoryService().findSubCategories(sub).size()>0) {
 				result[i] = new DefaultTreeNode<Category>(sub, getSubCategories(sub)) ;
 			} else {
 				
@@ -132,8 +156,10 @@ public class CategoryTree extends Tree {
 	
 	private class CategoryInfoRenderer implements TreeitemRenderer<DefaultTreeNode<Category>> {
 	    public void render(Treeitem item, DefaultTreeNode<Category> data, int index) throws Exception {
+	    	
 	        Category fi = data.getData();
 	        AuctionStatus status = ServicesImpl.getAuctionService().findStatusByCode(AuctionStatus.STATUS_STARTED) ;
+	        
 	        Treerow tr = new Treerow();
 	        tr.setSclass("category");
 	        
@@ -145,15 +171,46 @@ public class CategoryTree extends Tree {
 	        Treecell tc = new Treecell() ;
 	        Div cellInside = new Div() ;
 	        cellInside.setSclass("categoryDiv");
-	        Label desc = new Label(fi.getDescription()) ;
 	        
 	        Label name = new Label(fi.getName()) ;
-	        
-	        desc.setSclass("categoryDesc") ;
 	        name.setSclass("categoryName") ;
 	        
-	        cellInside.appendChild(name) ;
-	        cellInside.appendChild(desc) ;
+	        if (showAuctionCount) {
+	        	if (showCountInSelectedOnly){
+	        		if(item.getTree().getSelectedItem().equals(item)) {
+	        			
+	        			String qty = "("+ServicesImpl.getAuctionService().findByCategoryDown(fi).size()+")" ;
+	    	        	Label qtyLabel = new Label(qty) ;
+	    	        	Hbox hbox = new Hbox() ;
+	    	        	hbox.appendChild(name) ;
+	    	        	hbox.appendChild(qtyLabel) ;
+	    	        	cellInside.appendChild(hbox) ;
+	        			
+	        		} else {
+	        			cellInside.appendChild(name) ;
+	        		}
+	        	} else {
+	        	
+	        		String qty = "("+ServicesImpl.getAuctionService().findByCategoryDown(fi).size()+")" ;
+	        		Label qtyLabel = new Label(qty) ;
+	        		Hbox hbox = new Hbox() ;
+	        		hbox.appendChild(name) ;
+	        		hbox.appendChild(qtyLabel) ;
+	        		cellInside.appendChild(hbox) ;
+	        	}
+	        	
+	        } else {
+	        	cellInside.appendChild(name) ;
+	        }
+	        
+	        
+	        
+	        if(showDescription){
+	        	Label desc = new Label(fi.getDescription()) ;
+	        	desc.setSclass("categoryDesc") ;
+	        
+	        	cellInside.appendChild(desc) ;
+	        }
 	        
 	        tc.appendChild(cellInside) ;
 	        tr.appendChild(tc);
@@ -187,9 +244,17 @@ public class CategoryTree extends Tree {
 				event.getTarget().getPage().setAttribute("selectedCategory", selectedCategory) ;
 				
 				List<Auction> auctions = ServicesImpl.getAuctionService().findByCategoryDown(selectedCategory, status) ;
-				event.getTarget().getPage().setAttribute("categoryAuctions", auctions) ;
-				binder.loadComponent(event.getTarget().getPage().getFellow("allAuctions"));
-				((Breadcrumb)event.getTarget().getPage().getFellow("bread_crumb")).refresh();
+				
+				if (showAllAuctions)
+					auctions = ServicesImpl.getAuctionService().findByCategoryDown(selectedCategory) ;
+				
+				((ListModelList) auctionList.getListModel()).clear();
+				((ListModelList) auctionList.getListModel()).addAll(auctions) ;
+				binder.loadComponent(auctionList);
+				
+				if (breadcrumb!=null)
+					binder.loadComponent(breadcrumb);
+				
 				
 			}
 			
@@ -208,6 +273,81 @@ public class CategoryTree extends Tree {
 
 	public void setBinder(AnnotateDataBinder binder) {
 		this.binder = binder;
+	}
+
+	public boolean isShowDescription() {
+		return showDescription;
+	}
+
+	public void setShowDescription(boolean showDescription) {
+		this.showDescription = showDescription;
+	}
+
+	public boolean isShowParent() {
+		return showParent;
+	}
+
+	public void setShowParent(boolean showParent) {
+		this.showParent = showParent;
+	}
+
+	
+
+	public Grid getAuctionList() {
+		return auctionList;
+	}
+
+	public void setAuctionList(Grid auctionList) {
+		this.auctionList = auctionList;
+	}
+
+	public Breadcrumb getBreadcrumb() {
+		return breadcrumb;
+	}
+
+	public void setBreadcrumb(Breadcrumb breadcrumb) {
+		this.breadcrumb = breadcrumb;
+	}
+
+	public List<Category> getCategoryModel() {
+		return categoryModel;
+	}
+
+	public void setCategoryModel(List<Category> categoryModel) {
+		this.categoryModel = categoryModel;
+	}
+
+	public boolean isShowAllAuctions() {
+		return showAllAuctions;
+	}
+
+	public void setShowAllAuctions(boolean showAllAuctions) {
+		this.showAllAuctions = showAllAuctions;
+	}
+
+	public boolean isShowAuctionCount() {
+		return showAuctionCount;
+	}
+
+	public void setShowAuctionCount(boolean showAuctionCount) {
+		this.showAuctionCount = showAuctionCount;
+	}
+
+	public boolean isShowCountInSelectedOnly() {
+		return showCountInSelectedOnly;
+	}
+
+	public void setShowCountInSelectedOnly(boolean showCountInSelectedOnly) {
+		this.showCountInSelectedOnly = showCountInSelectedOnly;
+	}
+
+	public String getCaption() {
+		return caption;
+	}
+
+	public void setCaption(String caption) {
+		this.caption = caption;
+		//this.getItems().iterator().next().setLabel(caption);
 	}
 	
 	

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language-addon>
+    <!-- The name of this addon. It must be unique -->
+    <addon-name>breadcrumb</addon-name>
+    <!-- Which language this addon will be added to -->
+    <language-name>xul/html</language-name>
+ 
+    <component>
+        <component-name>breadcrumb</component-name>
+        <component-class>pl.krzaq.metalscrap.components.Breadcrumb</component-class>
+        <extends>div</extends>
+        <annotation>
+        	<annotation-name>ZKBIND</annotation-name>
+        		<attribute>
+            		<attribute-name>RENDERER</attribute-name>
+            		<attribute-value>itemRenderer=org.zkoss.bind.impl.BindSelectboxRenderer</attribute-value>
+        		</attribute>
+    		</annotation>
+        <annotation>
+        	<annotation-name>ZKBIND</annotation-name>
+        		<property-name>currentCategory</property-name>
+        			
+       				 <attribute>
+            			<attribute-name>ACCESS</attribute-name>
+           			    <attribute-value>both</attribute-value>
+       				 </attribute>
+       				 <attribute>
+           				 <attribute-name>SAVE_EVENT</attribute-name>
+          			  	 <attribute-value>onClick</attribute-value>
+        			</attribute>
+       				<!-- <attribute>
+            			<attribute-name>LOAD_REPLACEMENT</attribute-name>
+           			 	<attribute-value>rawValue</attribute-value>
+        			</attribute> -->
+        			<attribute>
+            			<attribute-name>LOAD_TYPE</attribute-name>
+            			<attribute-value>pl.krzaq.metalscrap.model.Category</attribute-value>
+        			</attribute>
+    		</annotation>
+    </component>
+    
+</language-addon>

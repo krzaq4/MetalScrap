@@ -7,7 +7,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
+
+
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,11 +22,15 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 
 @Entity
@@ -78,7 +84,8 @@ public class Auction implements Serializable {
 	@Column(name="delivery_time")
 	private String deliveryTime ;
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="auction")
+	@OneToMany( mappedBy="auction")
+	@Cascade(value={CascadeType.ALL, CascadeType.DELETE_ORPHAN})
 	private List<AttachementFile> files = new ArrayList<AttachementFile>();
 	
 	@OneToOne
@@ -107,13 +114,16 @@ public class Auction implements Serializable {
 	@ManyToMany(mappedBy="observed")
 	private List<User> obeservers ;
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="auction")
+	@OneToMany(mappedBy="auction")
+	@Cascade(value={CascadeType.ALL})
 	private List<CompanyOffer> companyOffers = new ArrayList<CompanyOffer>() ;
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="auction", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="auction", fetch=FetchType.EAGER)
+	@Cascade(value={CascadeType.ALL})
 	private List<UserOffer> userOffers = new ArrayList<UserOffer>() ;
 
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="auction")
+	@OneToMany(mappedBy="auction")
+	@Cascade(value={CascadeType.ALL})
 	private List<Commodity> commodities = new ArrayList<Commodity>() ;
 	
 	@OneToOne

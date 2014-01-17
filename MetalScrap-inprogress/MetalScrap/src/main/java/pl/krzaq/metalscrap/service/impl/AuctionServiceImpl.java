@@ -195,7 +195,11 @@ public class AuctionServiceImpl implements AuctionService {
 				Iterator<Category> it = cats.iterator() ;
 				while (it.hasNext()) {
 					Category cat = it.next() ;
-					List<Auction> auctions = auctionDAO.findByCategoryAndStatus(cat, status) ;
+					List<Auction> auctions = new ArrayList<Auction>() ;
+					if (status!=null)
+							auctions = auctionDAO.findByCategoryAndStatus(cat, status) ;
+					else  
+							auctions = auctionDAO.findByCategory(cat) ;
 					
 					for (Auction a:auctions) {
 						if(!result.contains(a)) {
@@ -205,8 +209,9 @@ public class AuctionServiceImpl implements AuctionService {
 					
 					it.remove(); 
 					
-					if (ServicesImpl.getCategoryService().findSubCategories(cat).size()>0)
+					if (ServicesImpl.getCategoryService().findSubCategories(cat).size()>0) {
 						findAuctions(ServicesImpl.getCategoryService().findSubCategories(cat), result, status) ;
+					}
 					
 				}
 			
@@ -221,6 +226,17 @@ public class AuctionServiceImpl implements AuctionService {
 		@Override
 		public List<Auction> findByObserver(User user) {
 			return auctionDAO.findByObserver(user) ;
+		}
+
+
+
+		@Override
+		public List<Auction> findByCategoryDown(Category category) {
+			List<Auction> result = new ArrayList<Auction>() ;
+			List<Category> subCategories = new ArrayList<Category>() ;
+			subCategories.add(category) ;
+			
+			return findAuctions(subCategories, result, null) ;
 		}
 
 

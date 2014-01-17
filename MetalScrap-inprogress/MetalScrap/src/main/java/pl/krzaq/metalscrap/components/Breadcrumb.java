@@ -21,6 +21,10 @@ public class Breadcrumb extends Div {
 	private AnnotateDataBinder binder ;
 	private Page page ;
 	
+	private boolean standalone ;
+	
+	private Category currentCategory ;
+	
 	public void onCreate() {
 		
 		this.page = this.getPage() ;
@@ -37,22 +41,22 @@ public class Breadcrumb extends Div {
 	
 	public void refresh() {
 		
-		Category selectedCategory = (Category) page.getAttribute("selectedCategory") ;
+		//Category selectedCategory = (Category) page.getAttribute("selectedCategory") ;
 		
 		List<Label> crumbs = new ArrayList<Label>() ;
 		AuctionStatus status = ServicesImpl.getAuctionService().findStatusByCode(AuctionStatus.STATUS_STARTED) ;
 		
 		
-		if(selectedCategory!=null) {
+		if(currentCategory!=null) {
 			
 			
 			
-			Category selectedParent = selectedCategory.getParent() ;
+			Category selectedParent = currentCategory.getParent() ;
 			
-			Label nextCrumb = new Label(selectedCategory.getName()) ;
-			nextCrumb.setTooltiptext(selectedCategory.getDescription());
+			Label nextCrumb = new Label(currentCategory.getName()) ;
+			nextCrumb.setTooltiptext(currentCategory.getDescription());
 			nextCrumb.setSclass("breadCrumbItem") ;
-			nextCrumb.addEventListener("onClick", new BreadCrumbClickListener(selectedCategory, status)) ;
+			nextCrumb.addEventListener("onClick", new BreadCrumbClickListener(currentCategory, status)) ;
 			
 			crumbs.add(nextCrumb) ;
 			
@@ -109,6 +113,37 @@ public class Breadcrumb extends Div {
 		
 	}
 	
+	
+	
+	
+	
+	
+	
+	public boolean isStandalone() {
+		return standalone;
+	}
+
+	public void setStandalone(boolean standalone) {
+		this.standalone = standalone;
+	}
+
+
+
+	public Category getCurrentCategory() {
+		return currentCategory;
+	}
+
+	public void setCurrentCategory(Category currentCategory) {
+		this.currentCategory = currentCategory;
+		refresh() ;
+	}
+
+
+
+
+
+
+
 	private class BreadCrumbClickListener implements EventListener<Event>{
 
 		private Category category ;
@@ -125,11 +160,11 @@ public class Breadcrumb extends Div {
 		@Override
 		public void onEvent(Event event) throws Exception {
 			Page p = event.getTarget().getPage() ;
-			p.setAttribute("selectedCategory", this.category) ;
+			currentCategory = this.category ;
 			p.setAttribute("categoryAuctions", ServicesImpl.getAuctionService().findByCategoryDown(this.category, this.status)) ;
 			if (p.hasFellow("allAuctions"))
 				binder.loadComponent(p.getFellow("allAuctions"));
-			if (p.hasFellow("cat_tree")) {
+			if (!standalone) {
 				CategoryTree tree = (CategoryTree) p.getFellow("cat_tree") ;
 				Iterator<Treeitem> it = tree.getItems().iterator() ;
 				if(this.category!=null) {
@@ -151,7 +186,7 @@ public class Breadcrumb extends Div {
 				p.removeAttribute("selItem") ;
 			}
 		}
-			if(p.hasFellow("cat_tree"))
+			if(!standalone)
 				binder.loadComponent(p.getFellow("cat_tree"));
 			refresh() ;
 			

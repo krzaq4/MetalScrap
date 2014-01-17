@@ -8,40 +8,31 @@
 
 <div class="head"></div>
 <div class="log"></div>
-<div style="width:80%;height: 740px;margin: 0 auto ;">
+<div style="width:80%;height: auto;margin: 0 auto ;">
 
 <div id="header" class="header">
 <div class="logo">
 
 </div>
 <div class="headerinfo">
-<div class="userInfo">Zalogowany jako: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/></div>
+<div class="userInfo">Zalogowany jako: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/> ( <label id="logout" value="wyloguj" sclass="asLink" onClick="pageEvents.logout()" /> )</div>
 </div>
 </div>
 
 <include id="men"  src="/common/menu.zul" ></include>
-<div id="bread_crumb" use="pl.krzaq.metalscrap.components.Breadcrumb"></div>
-<panel id="content" border="rounded">
+
+<breadcrumb id="breadcrumb" standalone="false" currentCategory="@{selectedCategory}"></breadcrumb>
+<space/>
+<panel id="content" border="none" height="800px">
 <panelchildren >
-<div id="categoriesMenu" class="categoriesMenu" visible="@{isCategoriesVisible}">
-				
-				<!-- <include mode="defer" src="/common/categories.zul" ></include> -->
-				
-				<tree id="cat_tree" use="pl.krzaq.metalscrap.components.CategoryTree" width="100%" height="100%" selectedItem="@{selItem}">
-					<treecols>
-						<treecol label="Kategorie"></treecol>
-					</treecols>					
-				</tree>
-				
-				</div>
-				
-				<div class="otherContent">
-					<grid id="allAuctions" model="@{categoryAuctions}">
+
+<div class="otherContent" height="90%">
+					<grid id="allAuctions" model="@{categoryAuctions}" height="100%" style="border:none" sclass="auctionsList" mold="paging">
 						<columns>
 							<column width="100px"></column>
 							<column width="300px" label="Nazwa"></column>
 							<column width="60px" label="Cena"></column>
-							<column width="90px" label="Ilość ofert"></column>
+							<column width="85px" label="Ilość ofert"></column>
 							<column width="200px" label="Data zakończenia"></column>
 						</columns>
 						<rows>
@@ -56,16 +47,38 @@
 					</grid>
 
 				</div>
+
+<div id="categoriesMenu" class="categoriesMenu" visible="@{isCategoriesVisible}" height="90%">
+				
+				<!-- <include mode="defer" src="/common/categories.zul" ></include> -->
+				
+				<categorytree id="cat_tree" caption="Kategorie" height="100%" style="border: none"
+							  showDescription="true" 
+							  showAuctionCount="true" 
+							  showCountInSelectedOnly="false" 
+							  showAllAuctions="false" 
+							  auctionList="${allAuctions}" breadcrumb="${breadcrumb}" 
+							  categoryModel="@{categoryModel}">
+				
+				</categorytree>
+				
+				<!-- <tree id="cat_tree" use="pl.krzaq.metalscrap.components.CategoryTree" width="100%" height="100%" selectedItem="@{selItem}">
+					<treecols>
+						<treecol label="Kategorie"></treecol>
+					</treecols>					
+				</tree> -->
+				
+				</div>
+<space></space>
+<div sclass="pageFooter">
+	<div sclass="inner"><label value="Kontakt"/> | <label value="Regulamin"/> | <label value="Polityka prywatności"/> | <label value="O platformie"/> </div>
+</div>	
 </panelchildren>
 </panel>
 
 
 
 
-<div>
-<div id="additional" class="additional"></div>
 
-<div id="footer" class="footer"></div>
-</div>
 </div>
 </zk>

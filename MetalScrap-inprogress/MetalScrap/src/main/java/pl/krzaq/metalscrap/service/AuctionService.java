@@ -42,6 +42,8 @@ public interface AuctionService {
 	
 	public List<Auction> findByCategory(Category category) ;
 	
+	public List<Auction> findByCategoryDown(Category category) ;
+	
 	public List<Auction> findByCategoryDown(Category category, AuctionStatus status) ;
 	
 	public List<Auction> filter(String phrase, AuctionStatus status, PaymentMethod method, DeliveryType type, Date startDate, Date endDate) ;
