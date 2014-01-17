@@ -24,7 +24,7 @@
 
 <include id="men"  src="/common/menu.zul" ></include>
 		
-<div id="bread_crumb" use="pl.krzaq.metalscrap.components.Breadcrumb"></div>
+<breadcrumb id="breadcrumb" standalone="true" currentCategory="@{selectedCategory}"></breadcrumb>
 <div id="socialMedia" sclass="socialMedia">
 	<button id="fb_share" sclass="fbshare" />
 </div>

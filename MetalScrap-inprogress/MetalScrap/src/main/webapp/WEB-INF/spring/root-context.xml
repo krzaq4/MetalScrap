@@ -74,6 +74,9 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
 
+	<bean name="langLabelDAO" class="pl.krzaq.metalscrap.dao.LangLabelDAO">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
 	<bean name="userOfferDAO" class="pl.krzaq.metalscrap.dao.UserOfferDAO">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
@@ -120,6 +123,10 @@
 	
 	<bean name="categoryDAO" class="pl.krzaq.metalscrap.dao.CategoryDAO">
 		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean name="langLabelService" class="pl.krzaq.metalscrap.service.impl.LangLabelServiceImpl">
+		<property name="langLabelDAO" ref="langLabelDAO" />
 	</bean>
 	
 	<bean name="userOfferService" class="pl.krzaq.metalscrap.service.impl.UserOfferServiceImpl">
@@ -179,6 +186,7 @@
 		<property name="categoryService" ref="categoryService"/>
 		<property name="attachementFileService" ref="attachementFileService"/>
 		<property name="userOfferService" ref="userOfferService" />
+		<property name="langLabelService" ref="langLabelService" />
 	</bean>
 	
 	<bean id="formEvents" class="pl.krzaq.metalscrap.events.FormEvents"></bean>

@@ -32,6 +32,13 @@ public class ServicesImpl {
 	@Autowired
 	private static UserOfferServiceImpl userOfferService ;
 	
+	@Autowired
+	private static LangLabelServiceImpl langLabelService ;
+	
+	public static LangLabelServiceImpl getLangLabelService() {
+		return langLabelService ;
+	}
+	
 	public static AuctionServiceImpl getAuctionService() {
 		return auctionService ;
 	}
@@ -41,6 +48,10 @@ public class ServicesImpl {
 		return userService ;
 	}
 
+	public void setLangLabelService(LangLabelServiceImpl langLabelService) {
+		this.langLabelService = langLabelService ;
+	}
+	
 	public void setUserService(UserServiceImpl userService) {
 		this.userService = userService;
 	}

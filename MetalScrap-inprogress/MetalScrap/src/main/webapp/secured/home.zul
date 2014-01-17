@@ -22,7 +22,7 @@
 <include id="men"  src="/common/menu.zul" ></include>
 
 <breadcrumb id="breadcrumb" standalone="false" currentCategory="@{selectedCategory}"></breadcrumb>
-<space/>
+<separator bar="true" orient="horizontal"></separator>
 <panel id="content" border="none" height="800px">
 <panelchildren >
 

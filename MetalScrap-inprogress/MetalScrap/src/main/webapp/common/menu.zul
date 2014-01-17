@@ -11,7 +11,7 @@
 			<menubar class="mainMenu" id="main" orient="horizontal" >
 
 				<menuitem id="about" label="O platformie"></menuitem>
-				<menuseparator />
+				
 				<menuitem id="auctions" label="Aukcje" visible="@{isAdmin}"
 					onClick="pageEvents.showSubMenu(self.getId(), menu, binder)">
 				</menuitem>
@@ -20,13 +20,13 @@
 				</menuitem>
 				<menuitem id="admin" label="Administracja" visible="@{isAdmin}"
 					onClick="pageEvents.showSubMenu(self.getId(), menu, binder)"></menuitem>
-				<menuseparator />
+				
 				<menuitem id="cms" label="CMS"  visible="@{isAdmin}"
 					onClick="pageEvents.showSubMenu(self.getId(), menu, binder)"></menuitem>
-				<menuseparator />
+				
 				<menuitem id="regulations" label="Regulamin"></menuitem>
 				<menuitem id="help" label="Pomoc"></menuitem>
-				<menuseparator />
+				
 				<menuitem id="contact" label="Kontakt"></menuitem>
 
 			</menubar>
