@@ -13,16 +13,16 @@
 				<menuitem id="about" label="O platformie"></menuitem>
 				
 				<menuitem id="auctions" label="Aukcje" visible="@{isAdmin}"
-					onClick="pageEvents.showSubMenu(self.getId(), menu, binder)">
+					onClick="pageEvents.showSubMenu(self.getId(), self, binder)">
 				</menuitem>
 				<menuitem id="companies" label="Firmy" visible="false"
-					onClick="pageEvents.showSubMenu(self.getId(), menu, binder)">
+					onClick="pageEvents.showSubMenu(self.getId(), self, binder)">
 				</menuitem>
 				<menuitem id="admin" label="Administracja" visible="@{isAdmin}"
-					onClick="pageEvents.showSubMenu(self.getId(), menu, binder)"></menuitem>
+					onClick="pageEvents.showSubMenu(self.getId(), self, binder)"></menuitem>
 				
 				<menuitem id="cms" label="CMS"  visible="@{isAdmin}"
-					onClick="pageEvents.showSubMenu(self.getId(), menu, binder)"></menuitem>
+					onClick="pageEvents.showSubMenu(self.getId(), self, binder)"></menuitem>
 				
 				<menuitem id="regulations" label="Regulamin"></menuitem>
 				<menuitem id="help" label="Pomoc"></menuitem>
@@ -50,7 +50,7 @@
 				<!-- FIRMY -->
 				<menuitem id="companies_list" label="Lista firm" />
 			</menubar>
-			<menubar  class="subMenu" id="adminSubMenu"  orient="horizontal" visible="false" action="show:slideDown; hide:slideUp">
+			<menubar  class="subMenu" id="adminSubMenu"  orient="vertical" visible="false" action="show:slideDown; hide:slideUp">
 				<!-- ADMIN -->
 				<menuitem id="delivery_types" label="Sposoby dostawy"
 					value="/secured/admin/delivery_types.zul"
@@ -71,6 +71,10 @@
 				<menuitem id="config" label="Konfiguracja"
 					value="/secured/admin/config.zul"
 					onClick="pageEvents.open(config.getValue())"/>
+					
+					<menuitem id="translations" label="Tłumaczenia"
+					value="/secured/admin/translations.zul"
+					onClick="pageEvents.open(self.getValue())"/>
 					
 			</menubar>
 			<menubar  class="subMenu" id="cmsSubMenu"  orient="horizontal" visible="false" action="show:slideDown; hide:slideUp">

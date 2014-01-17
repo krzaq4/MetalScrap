@@ -1,5 +1,7 @@
 package pl.krzaq.metalscrap.events;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -8,6 +10,8 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zkplus.databind.AnnotateDataBinder;
 import org.zkoss.zul.Div;
+import org.zkoss.zul.Menubar;
+import org.zkoss.zul.Menuitem;
 
 public class PageEvents {
 
@@ -26,6 +30,12 @@ public class PageEvents {
 		
 		
 		Component toShow = page.getFellow("men").getFellow(dest+"SubMenu") ;
+		if (toShow instanceof Menubar) {
+			if(((Menubar)toShow).getOrient().equalsIgnoreCase("vertical")){
+			//	((Menubar)toShow).setLeft( ((Menuitem)c). );
+			}
+		}
+		
 		toShow.setVisible(true) ;
 		binder.loadComponent(toShow);
 		

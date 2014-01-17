@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import pl.krzaq.metalscrap.model.LangLabel;
-
+@Transactional
 public class LangLabelDAO {
 
 	@Autowired
@@ -28,6 +29,10 @@ public class LangLabelDAO {
 			result = res.get(0) ;
 		}
 		return result ;
+	}
+	
+	public List<LangLabel> findLikeKey(String key) {
+		return sessionFactory.getCurrentSession().getNamedQuery("LangLabel.findLikeKey").setParameter("lkey", key).list() ;
 	}
 	
 	public List<LangLabel> findByKey(String key) {

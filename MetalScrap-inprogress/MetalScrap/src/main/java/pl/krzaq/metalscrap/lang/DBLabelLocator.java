@@ -2,6 +2,7 @@ package pl.krzaq.metalscrap.lang;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Locale;
 
@@ -25,7 +26,7 @@ public class DBLabelLocator implements LabelLocator2 {
 
 	@Override
 	public InputStream locate(Locale locale) {
-		List<LangLabel> ll = ServicesImpl.getLangLabelService().findAllByLang(locale.getCountry()) ;
+		List<LangLabel> ll = ServicesImpl.getLangLabelService().findAllByLang("pl") ;
 		
 		StringBuffer sb = new StringBuffer();
 		int i=0;
@@ -37,8 +38,16 @@ public class DBLabelLocator implements LabelLocator2 {
 			
 			i++ ;
 		}
-		InputStream is = new ByteArrayInputStream(sb.toString().getBytes()) ;
-		return is;
+		InputStream is;
+		try {
+			is = new ByteArrayInputStream(sb.toString().getBytes(this.getCharset()));
+			return is;
+			
+		} catch (UnsupportedEncodingException e) {
+			is = new ByteArrayInputStream("".getBytes());
+		}
+		return is ;
+		
 	}
 
 	

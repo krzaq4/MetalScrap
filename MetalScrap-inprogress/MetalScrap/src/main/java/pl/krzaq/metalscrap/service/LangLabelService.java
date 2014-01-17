@@ -15,6 +15,8 @@ public interface LangLabelService {
 	
 	public List<LangLabel> findByKey(String key) ;
 	
+	public List<LangLabel> findLikeKey(String key) ;
+	
 	public void save(LangLabel label);
 	
 	public void update(LangLabel label);

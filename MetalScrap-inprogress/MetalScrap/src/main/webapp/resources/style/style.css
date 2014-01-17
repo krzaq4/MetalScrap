@@ -157,6 +157,17 @@ border-radius: 8px;
 	-moz-border-radius: 6px;
 }
 
+.z-menubar-ver.subMenu  {
+	background: none ;
+	background-image: url(../images/submenubar.jpg) ;
+	background-repeat: repeat ;
+	height: auto ;
+	border-bottom:none ;
+	width:180px;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+}
+
 h1{
 	
 	font-family:Verdana;

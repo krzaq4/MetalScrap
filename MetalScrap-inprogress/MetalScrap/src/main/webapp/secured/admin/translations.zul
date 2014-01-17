@@ -1,0 +1,76 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="pl.krzaq.metalscrap.pages.Translations" ?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<?page title="Tłumaczenia" contentType="text/html;charset=UTF-8" ?>
+
+
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+
+<div class="head"></div>
+<div class="log"></div>
+<div style="width:80%;height: auto;margin: 0 auto ;">
+
+<div id="header" class="header">
+<div class="logo">
+
+</div>
+<div class="headerinfo">
+<div class="userInfo">Zalogowany jako: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/> ( <label id="logout" value="wyloguj" sclass="asLink" onClick="pageEvents.logout()" /> )</div>
+</div>
+</div>
+
+<include id="men"  src="/common/menu.zul" ></include>
+
+<breadcrumb id="breadcrumb" standalone="false" currentCategory="@{selectedCategory}"></breadcrumb>
+<separator bar="true" orient="horizontal"></separator>
+<panel id="content" border="none" height="800px">
+<panelchildren >
+
+
+<tabbox>
+	<tabs>
+		<tab label="O platformie">
+			
+		</tab>
+		<tab label="Administracja">
+		
+		</tab>
+		<tab label="Aukcje">
+			<grid model="@{auctionLabels}">
+				<rows>
+					<row self="@{each=label}" forEach="@{label.lang}">
+						<label value="@{label.lkey}" />
+						<label value="@{each}" />
+					</row>
+				</rows>
+			</grid>
+		</tab>
+		<tab label="CMS">
+		
+		</tab>
+		<tab label="Regulamin">
+		
+		</tab>
+		<tab label="Pomoc">
+		
+		</tab>
+		<tab label="Kontakt">
+		
+		</tab>
+	</tabs>
+
+</tabbox>
+
+<space></space>
+<div sclass="pageFooter">
+	<div sclass="inner"><label value="Kontakt"/> | <label value="Regulamin"/> | <label value="Polityka prywatności"/> | <label value="O platformie"/> </div>
+</div>	
+</panelchildren>
+</panel>
+
+
+
+
+
+</div>
+</zk>

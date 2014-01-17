@@ -18,7 +18,8 @@ import javax.persistence.Table;
 	@NamedQuery(name="LangLabel.findAll", query="from LangLabel l" ),
 	@NamedQuery(name="LangLabel.findAllByLang", query="from LangLabel l where l.lang=:lang"),
 	@NamedQuery(name="LangLabel.findByKeyAndLang", query="from LangLabel l where l.lkey=:lkey and l.lang=:lang"),
-	@NamedQuery(name="LangLabel.findByKey", query="from LangLabel l where l.lkey=:lkey")
+	@NamedQuery(name="LangLabel.findByKey", query="from LangLabel l where l.lkey=:lkey"),
+	@NamedQuery(name="LangLabel.findLikeKey", query="from LangLabel l where l.lkey LIKE :lkey")
 	
 })
 public class LangLabel implements Serializable{
