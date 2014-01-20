@@ -8,6 +8,11 @@
 	<listener>
     	<listener-class>pl.krzaq.metalscrap.utils.ApplicationInit</listener-class>
 	</listener>
+	
+	<listener>
+    	<listener-class>pl.krzaq.metalscrap.utils.LocaleDetectorInterceptor</listener-class>
+	</listener>
+	
 	<language-config>
 	    <addon-uri>/WEB-INF/breadcrumb-addon.xml</addon-uri> 
 	    <addon-uri>/WEB-INF/categorytree-addon.xml</addon-uri>       

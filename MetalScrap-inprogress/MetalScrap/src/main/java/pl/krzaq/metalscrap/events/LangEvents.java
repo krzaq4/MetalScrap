@@ -29,7 +29,7 @@ public class LangEvents {
 			
 			for (Component child:rowChildren) {
 				if(child instanceof Textbox) {
-					Long id = Long.valueOf(((Textbox)child).getId()) ;
+					Long id = Long.valueOf(((Textbox)child).getName()) ;
 					LangLabel toUpdate = ServicesImpl.getLangLabelService().findById(id) ;
 					if (!toUpdate.getLvalue().equals(((Textbox)child).getValue())) {
 						toUpdate.setLvalue( ((Textbox)child).getValue() );
@@ -41,22 +41,10 @@ public class LangEvents {
 		
 		
 		
-		List<LangLabel> theLabels = ServicesImpl.getLangLabelService().findLikeKeyUnique("%"+grid.getId()+"%") ;
-		List<LangLabel> theLabelsAll = ServicesImpl.getLangLabelService().findLikeKey("%"+grid.getId()+"%") ;
-		List<String> langs = ServicesImpl.getLangLabelService().findAllLangs() ;
 		
-		
-		
-		Collections.sort(langs);
-		Collections.sort(theLabels);
-		Collections.sort(theLabelsAll);
-		
-		grid.getPage().setAttribute(grid.getId()+"Labels", theLabels) ;
-		grid.getPage().setAttribute(grid.getId()+"LabelsAll", theLabelsAll) ;
-		grid.getPage().setAttribute("langs", langs) ;
 		
 		Labels.reset();
-		binder.loadComponent(grid);
+		
 	}
 	
 }

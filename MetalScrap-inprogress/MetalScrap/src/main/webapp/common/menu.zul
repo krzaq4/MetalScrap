@@ -18,7 +18,7 @@
 				<menuitem id="companies" label="Firmy" visible="false"
 					onClick="pageEvents.showSubMenu(self.getId(), self, binder)">
 				</menuitem>
-				<menuitem id="admin" label="Administracja" visible="@{isAdmin}"
+				<menuitem id="admin" label="${labels.admin.menu.title}" visible="@{isAdmin}"
 					onClick="pageEvents.showSubMenu(self.getId(), self, binder)"></menuitem>
 				
 				<menuitem id="cms" label="CMS"  visible="@{isAdmin}"
@@ -52,27 +52,27 @@
 			</menubar>
 			<menubar  class="subMenu" id="adminSubMenu"  orient="vertical" visible="false" action="show:slideDown; hide:slideUp">
 				<!-- ADMIN -->
-				<menuitem id="delivery_types" label="Sposoby dostawy"
+				<menuitem id="delivery_types" label="${labels.admin.menu.deliverytypes}"
 					value="/secured/admin/delivery_types.zul"
 					onClick="pageEvents.open(delivery_types.getValue())"/>
 					
-				<menuitem id="payment_methods" label="Metody płatności"
+				<menuitem id="payment_methods" label="${labels.admin.menu.paymentmethods}"
 					value="/secured/admin/payment_methods.zul"
 					onClick="pageEvents.open(payment_methods.getValue())"/>
 					
-				<menuitem id="measure_units" label="Jednostki miary"
+				<menuitem id="measure_units" label="${labels.admin.menu.measureunits}"
 					value="/secured/admin/measure_units.zul"
 					onClick="pageEvents.open(measure_units.getValue())"/>
 					
-				<menuitem id="users" label="Użytkownicy"
+				<menuitem id="users" label="${labels.admin.menu.users}"
 					value="/secured/admin/users.zul"
 					onClick="pageEvents.open(users.getValue())"/>
 					
-				<menuitem id="config" label="Konfiguracja"
+				<menuitem id="config" label="${labels.admin.menu.configuration}"
 					value="/secured/admin/config.zul"
 					onClick="pageEvents.open(config.getValue())"/>
 					
-					<menuitem id="translations" label="Tłumaczenia"
+					<menuitem id="translations" label="${labels.admin.menu.translations}"
 					value="/secured/admin/translations.zul"
 					onClick="pageEvents.open(self.getValue())"/>
 					

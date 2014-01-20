@@ -63,12 +63,12 @@
 			<rows>
 				<row  self="@{each=llabel}">
 					
-					<textbox forEach="${adminLabelsAll}" id="${each.id}" value="${each.lvalue}" />
+					<textbox forEach="${adminLabelsAll}" name="${each.id}" value="${each.lvalue}" />
 				</row>	
 				
 			</rows>
 		</grid>
-		<button label="Aktualizuj" onClick="" />
+		<button label="Aktualizuj" onClick="langEvents.updateLabels(admin, binder)" />
 		</tabpanel>
 		<tabpanel>
 			<grid id="auctions" model="@{auctionLabels}">
