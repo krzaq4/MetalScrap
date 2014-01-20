@@ -68,7 +68,7 @@
 					value="/secured/admin/users.zul"
 					onClick="pageEvents.open(users.getValue())"/>
 					
-				<menuitem id="config" label="${labels.admin.menu.configuration}"
+				<menuitem id="config" label="${labels.admin.menu.configuration.$}"
 					value="/secured/admin/config.zul"
 					onClick="pageEvents.open(config.getValue())"/>
 					

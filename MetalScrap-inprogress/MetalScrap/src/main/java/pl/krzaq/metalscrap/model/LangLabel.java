@@ -88,7 +88,6 @@ public class LangLabel implements Serializable, Comparable<LangLabel>{
 	}
 
 	
-
 	
 	
 	

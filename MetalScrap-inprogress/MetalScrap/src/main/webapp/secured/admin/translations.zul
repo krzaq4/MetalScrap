@@ -54,19 +54,8 @@
 	<tabpanels>
 		<tabpanel></tabpanel>
 		<tabpanel>
-		<grid id="admin" model="@{adminLabels}"  >
-			<columns >
-				
-				<column forEach="${langs}" label="${each}"/>
-				
-			</columns>
-			<rows>
-				<row  self="@{each=llabel}">
-					
-					<textbox forEach="${adminLabelsAll}" name="${each.id}" value="${each.lvalue}" />
-				</row>	
-				
-			</rows>
+		<grid id="admin" use="pl.krzaq.metalscrap.components.TranslationsGrid" >
+			
 		</grid>
 		<button label="Aktualizuj" onClick="langEvents.updateLabels(admin, binder)" />
 		</tabpanel>

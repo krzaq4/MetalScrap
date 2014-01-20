@@ -26,7 +26,10 @@ public class DBLabelLocator implements LabelLocator2 {
 
 	@Override
 	public InputStream locate(Locale locale) {
-		List<LangLabel> ll = ServicesImpl.getLangLabelService().findAllByLang("pl") ;
+		
+	System.out.println("locale web: "+locale) ;
+		if (locale!=null) {
+		List<LangLabel> ll = ServicesImpl.getLangLabelService().findAllByLang(locale.toLanguageTag()) ;
 		
 		StringBuffer sb = new StringBuffer();
 		int i=0;
@@ -47,7 +50,9 @@ public class DBLabelLocator implements LabelLocator2 {
 			is = new ByteArrayInputStream("".getBytes());
 		}
 		return is ;
-		
+		} else {
+			return null ;
+		}
 	}
 
 	

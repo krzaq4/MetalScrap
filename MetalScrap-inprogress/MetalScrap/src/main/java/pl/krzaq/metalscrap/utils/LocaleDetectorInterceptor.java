@@ -15,19 +15,11 @@ public class LocaleDetectorInterceptor implements RequestInterceptor {
 	@Override
 	public void request(Session session, Object request, Object response) {
 		
-		final Cookie[] cookies = ((HttpServletRequest) request).getCookies();
-        if (cookies != null) {
-            for (int j = cookies.length; --j >= 0;) {
-               if (cookies[j].getName().equals("my.locale")) {
-                    //determine the locale
-                    String val = cookies[j].getValue();
-                    Locale locale = org.zkoss.util.Locales.getLocale(val);
-                    session.setAttribute(Attributes.PREFERRED_LOCALE, locale);
-                    System.out.println("Locale "+locale) ;
-                    return;
-                }
-            }
-        }
+		Locale locale = ((HttpServletRequest) request).getLocale();
+        
+        session.setAttribute(Attributes.PREFERRED_LOCALE, locale);
+        
+        
 
 	}
 
