@@ -1,5 +1,6 @@
 package pl.krzaq.metalscrap.pages;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -16,16 +17,23 @@ public class Translations extends HomePage {
 		// TODO Auto-generated method stub
 		super.doInit(page, arg1);
 		
-		List<LangLabel> aboutLabels = ServicesImpl.getLangLabelService().findLikeKey("about") ;
-		List<LangLabel> adminLabels = ServicesImpl.getLangLabelService().findLikeKey("admin") ;
-		List<LangLabel> auctionLabels = ServicesImpl.getLangLabelService().findLikeKey("auction") ;
-		List<LangLabel> cmsLabels = ServicesImpl.getLangLabelService().findLikeKey("cms") ;
-		List<LangLabel> regulationLabels = ServicesImpl.getLangLabelService().findLikeKey("regulation") ;
-		List<LangLabel> helpLabels = ServicesImpl.getLangLabelService().findLikeKey("help") ;
-		List<LangLabel> contactLabels = ServicesImpl.getLangLabelService().findLikeKey("contact") ;
+		List<LangLabel> aboutLabels = ServicesImpl.getLangLabelService().findLikeKey("%about%") ;
+		List<LangLabel> adminLabels = ServicesImpl.getLangLabelService().findLikeKeyUnique("%admin%") ;
+		List<LangLabel> adminLabelsAll = ServicesImpl.getLangLabelService().findLikeKey("%admin%") ;
+		List<LangLabel> auctionLabels = ServicesImpl.getLangLabelService().findLikeKey("%auction%") ;
+		List<LangLabel> cmsLabels = ServicesImpl.getLangLabelService().findLikeKey("%cms%") ;
+		List<LangLabel> regulationLabels = ServicesImpl.getLangLabelService().findLikeKey("%regulation%") ;
+		List<LangLabel> helpLabels = ServicesImpl.getLangLabelService().findLikeKey("%help%") ;
+		List<LangLabel> contactLabels = ServicesImpl.getLangLabelService().findLikeKey("%contact%") ;
+		List<String> langs = ServicesImpl.getLangLabelService().findAllLangs() ;
+		Collections.sort(langs);
+		Collections.sort(adminLabels);
+		Collections.sort(adminLabelsAll);
 		
+		page.setAttribute("langs", langs) ;
 		page.setAttribute("aboutLabels", aboutLabels) ;
 		page.setAttribute("adminLabels", adminLabels) ;
+		page.setAttribute("adminLabelsAll", adminLabelsAll) ;
 		page.setAttribute("auctionLabels", auctionLabels) ;
 		page.setAttribute("cmsLabels", cmsLabels) ;
 		page.setAttribute("regulationLabels", regulationLabels) ;

@@ -302,7 +302,7 @@ div .z-tree {
 
 
 div.z-tree-header tr.z-treecols, div.z-tree-header tr.z-auxhead {
-	
+	height:20px;
 	background-image: url(../images/menubar.jpg) ;
 	background-repeat: repeat-x ;
 	
@@ -311,12 +311,22 @@ div.z-tree-header tr.z-treecols, div.z-tree-header tr.z-auxhead {
 
 div.z-treefooter-cnt, div.z-treecol-cnt {
 	color: #dedede;
+
 	font-size: 1.0em;
 	text-shadow: 2px 2px #676767;
-	
+	height:20px;
+}
+
+.z-tree-header.z-treecol{
+
+}
+
+.z-tree-header.z-treecols{
+	;
 }
 
 .z-tree-header {
+	
 	
 	-moz-border-top-left-radius: 5px;
 	-moz-border-top-right-radius: 5px;

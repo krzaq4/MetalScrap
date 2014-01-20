@@ -36,14 +36,7 @@
 		
 		</tab>
 		<tab label="Aukcje">
-			<grid model="@{auctionLabels}">
-				<rows>
-					<row self="@{each=label}" forEach="@{label.lang}">
-						<label value="@{label.lkey}" />
-						<label value="@{each}" />
-					</row>
-				</rows>
-			</grid>
+			
 		</tab>
 		<tab label="CMS">
 		
@@ -58,7 +51,45 @@
 		
 		</tab>
 	</tabs>
-
+	<tabpanels>
+		<tabpanel></tabpanel>
+		<tabpanel>
+		<grid id="admin" model="@{adminLabels}"  >
+			<columns >
+				
+				<column forEach="${langs}" label="${each}"/>
+				
+			</columns>
+			<rows>
+				<row  self="@{each=llabel}">
+					
+					<textbox forEach="${adminLabelsAll}" id="${each.id}" value="${each.lvalue}" />
+				</row>	
+				
+			</rows>
+		</grid>
+		<button label="Aktualizuj" onClick="" />
+		</tabpanel>
+		<tabpanel>
+			<grid id="auctions" model="@{auctionLabels}">
+			<columns>
+				<column label="Klucz" />
+				<column label="" />
+				<column label="" />
+			</columns>
+				<rows>
+					<row self="@{each=label}" forEach="@{label.lang}">
+						
+						<label value="@{each}" />
+					</row>
+				</rows>
+			</grid>
+		</tabpanel>
+		<tabpanel></tabpanel>
+		<tabpanel></tabpanel>
+		<tabpanel></tabpanel>
+		<tabpanel></tabpanel>
+	</tabpanels>
 </tabbox>
 
 <space></space>

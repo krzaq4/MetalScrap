@@ -189,6 +189,7 @@
 		<property name="langLabelService" ref="langLabelService" />
 	</bean>
 	
+	<bean id="langEvents" class="pl.krzaq.metalscrap.events.LangEvents"></bean>
 	<bean id="formEvents" class="pl.krzaq.metalscrap.events.FormEvents"></bean>
 	<bean id="categoryEvents" class="pl.krzaq.metalscrap.events.CategoryEvents"></bean>
 	<bean id="configEvents" class="pl.krzaq.metalscrap.events.ConfigEvents"></bean>

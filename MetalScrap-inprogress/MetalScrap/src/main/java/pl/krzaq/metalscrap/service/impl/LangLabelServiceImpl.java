@@ -63,6 +63,21 @@ public class LangLabelServiceImpl implements LangLabelService {
 		return langLabelDAO.findLikeKey(key) ;
 	}
 
+	@Override
+	public List<String> findAllLangs() {
+		return langLabelDAO.findAllLangs() ;
+	}
+
+	@Override
+	public List<LangLabel> findLikeKeyUnique(String key) {
+		
+		return langLabelDAO.findLikeKeysUnique(key) ;
+	}
+
+	public LangLabel findById(Long id) {
+		return langLabelDAO.findById(id) ;
+	}
+
 	
 	
 }

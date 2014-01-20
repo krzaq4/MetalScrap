@@ -19,10 +19,13 @@ import javax.persistence.Table;
 	@NamedQuery(name="LangLabel.findAllByLang", query="from LangLabel l where l.lang=:lang"),
 	@NamedQuery(name="LangLabel.findByKeyAndLang", query="from LangLabel l where l.lkey=:lkey and l.lang=:lang"),
 	@NamedQuery(name="LangLabel.findByKey", query="from LangLabel l where l.lkey=:lkey"),
-	@NamedQuery(name="LangLabel.findLikeKey", query="from LangLabel l where l.lkey LIKE :lkey")
+	@NamedQuery(name="LangLabel.findLikeKey", query="from LangLabel l where l.lkey LIKE :lkey"),
+	@NamedQuery(name="LangLabel.findLikeKeyUnique", query="from LangLabel l where l.lkey LIKE :lkey group by l.lkey"),
+	@NamedQuery(name="LangLabel.findAllLangs", query="select l.lang from LangLabel l group by l.lang"),
+	@NamedQuery(name="LangLabel.findById", query="from LangLabel l where l.id=:id")
 	
 })
-public class LangLabel implements Serializable{
+public class LangLabel implements Serializable, Comparable<LangLabel>{
 	
 	
 	public static final String LANG_PL = "pl_PL" ;
@@ -77,6 +80,11 @@ public class LangLabel implements Serializable{
 
 	public void setLang(String lang) {
 		this.lang = lang;
+	}
+
+	@Override
+	public int compareTo(LangLabel o) {
+		return this.lang.compareTo(o.getLang()) ;
 	}
 
 	
