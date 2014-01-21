@@ -16,7 +16,8 @@ import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 public class TranslationsGrid extends Grid {
 
 	public void onCreate(){
-		
+		/*this.setMold("paging");
+		this.setPageSize(10);*/
 		String prefix = this.getId();
 		
 		List<String> langs = ServicesImpl.getLangLabelService().findAllLangs() ;
@@ -24,7 +25,9 @@ public class TranslationsGrid extends Grid {
 		Columns cols = new Columns() ;
 		
 		for(String lang:langs){
-			cols.appendChild(new Column(lang)) ;
+			Column lcol = new Column(lang) ;
+			lcol.setImage("/resources/images/flags_iso/16/"+lang+".png");
+			cols.appendChild(lcol) ;
 		}
 		
 		this.appendChild(cols) ;

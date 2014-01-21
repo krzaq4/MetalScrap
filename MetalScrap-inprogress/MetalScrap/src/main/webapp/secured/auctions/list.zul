@@ -2,7 +2,7 @@
 <?init class="pl.krzaq.metalscrap.pages.AuctionList"?>
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
 
-<?page id="auction_list" title="Lista aukcji" contentType="text/html;charset=UTF-8" ?>
+<?page id="auction_list" title="${labels.auction.auctionlist}" contentType="text/html;charset=UTF-8" ?>
 
 
 <zk xmlns:h="http://www.w3.org/1999/xhtml">
@@ -24,15 +24,15 @@
 <include id="men"  src="/common/menu.zul" ></include>
 
 		<panel id="content" border="rounded">
-		<caption label="Lista aukcji"></caption>
+		<caption label="${labels.auction.auctionlist}"></caption>
 			<panelchildren>
 			<div sclass="searchMenu">
 			<vbox sclass="search">
-				<label value="Fraza do wyszukania"/>
+				<label value="${labels.auction.auctionsearchphrase}"/>
 				<textbox id="phraseSearch" value="@{sphrase}" />
 			</vbox>
 			<vbox sclass="search">
-				<label value="Status aukcji" />
+				<label value="${labels.auction.auctionstatus}" />
 				<combobox id="statusSearch" model="@{statuses}" selectedItem="@{selectedStatus}">
 					
 					<comboitem self="@{each=status}" label="@{status.name}" value="@{status}"></comboitem>
@@ -40,31 +40,31 @@
 				</combobox>
 			</vbox>
 			<vbox sclass="search">
-				<label value="Sposób płatności" />
+				<label value="${labels.auction.paymentmethod}" />
 				<combobox id="paymentSearch" model="@{payments}" selectedItem="@{selectedPayment}">
 					<comboitem self="@{each=payment}" label="@{payment.name}" value="@{payment}"></comboitem>
 				</combobox>
 			</vbox>
 			<vbox sclass="search">
-				<label value="Rodzaj dostawy" />
+				<label value="${labels.auction.auctiondeliverytype}" />
 				<combobox id="deliverySearch" model="@{deliveries}" selectedItem="@{selectedDelivery}">
 					<comboitem self="@{each=delivery}" label="@{delivery.name}" value="@{delivery}"></comboitem>
 				</combobox>
 			</vbox>
 			<vbox sclass="search">
-				<label value="Data rozpoczęcia" />
+				<label value="${labels.auction.auctionstart.$}" />
 				<datebox id="startDateSearch" format="medium+long"/>
 			</vbox>
 			<vbox sclass="search">
-				<label value="Data zakończenia" />
+				<label value="${labels.auction.auctionend}" />
 				<datebox id="endDateSearch" format="medium+long" />
 			</vbox>
-			<button label="Szukaj" onClick="auctionEvents.filterAuctionList(auctionList, binder)"/>
+			<button label="${labels.auction.auctionsearch}" onClick="auctionEvents.filterAuctionList(auctionList, binder)"/>
 			</div>
 			<div sclass="listMenu">
-				<button id="del_auction" label="Usuń aukcję" onClick="auctionEvents.deleteSelectedAuctions(auctionList, binder)" disabled="@{auctionList, converter='pl.krzaq.metalscrap.converter.ListboxMultipleNotSelected'}" />
-				<button id="change_status" label="Zmień status" onClick="auctionEvents.changeSelectedAuctionsStatus(auctionList, binder)" disabled="@{auctionList, converter='pl.krzaq.metalscrap.converter.ListboxMultipleNotSelected'}"/>
-				<button id="end_auction" label="Zakończ aukcję" onClick="auctionEvents.endSelectedAuctions(auctionList, binder)" disabled="@{auctionList, converter='pl.krzaq.metalscrap.converter.ListboxMultipleNotSelected'}"/>
+				<button id="del_auction" label="${labels.auction.auctiondelete}" onClick="auctionEvents.deleteSelectedAuctions(auctionList, binder)" disabled="@{auctionList, converter='pl.krzaq.metalscrap.converter.ListboxMultipleNotSelected'}" />
+				<button id="change_status" label="${labels.auction.auctionchangestatus}" onClick="auctionEvents.changeSelectedAuctionsStatus(auctionList, binder)" disabled="@{auctionList, converter='pl.krzaq.metalscrap.converter.ListboxMultipleNotSelected'}"/>
+				<button id="end_auction" label="${labels.auction.auctionfinishauction}" onClick="auctionEvents.endSelectedAuctions(auctionList, binder)" disabled="@{auctionList, converter='pl.krzaq.metalscrap.converter.ListboxMultipleNotSelected'}"/>
 			</div>
 
 				<listbox id="auctionList" model="@{auctions}"
@@ -72,8 +72,8 @@
 					<listhead>
 						<listheader label="Nazwa" />
 						<listheader label="Status" />
-						<listheader label="Data rozpoczęcia" />
-						<listheader label="Data zakończenia" />
+						<listheader label="${labels.auction.auctionstart.$}" />
+						<listheader label="${labels.auction.auctionend}" />
 						<listheader label="Forma płatności" />
 						<listheader label="Sposób dostawy" />
 					</listhead>

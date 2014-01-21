@@ -15,7 +15,7 @@
 
 </div>
 <div class="headerinfo">
-<div class="userInfo">Zalogowany jako: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/> ( <label id="logout" value="wyloguj" sclass="asLink" onClick="pageEvents.logout()" /> )</div>
+<div class="userInfo">Zalogowany jako: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/> ( <label id="logout" value="${labels.common.logout}" sclass="asLink" onClick="pageEvents.logout()" /> )</div>
 </div>
 </div>
 
@@ -33,7 +33,7 @@
 							<column width="300px" label="Nazwa"></column>
 							<column width="60px" label="Cena"></column>
 							<column width="85px" label="Ilość ofert"></column>
-							<column width="200px" label="Data zakończenia"></column>
+							<column width="200px" label="${labels.auction.auctionend}"></column>
 						</columns>
 						<rows>
 							<row self="@{each=auction}" value="@{auction}" onClick="auctionEvents.redirectToAuctionView(self.getValue())">
@@ -71,7 +71,7 @@
 				</div>
 <space></space>
 <div sclass="pageFooter">
-	<div sclass="inner"><label value="Kontakt"/> | <label value="Regulamin"/> | <label value="Polityka prywatności"/> | <label value="O platformie"/> </div>
+	<div sclass="inner"><label value="${labels.contact.title}"/> | <label value="${labels.regulation.title}"/> | <label value="${labels.privacy.title}"/> | <label value="${labels.about.title}"/> </div>
 </div>	
 </panelchildren>
 </panel>

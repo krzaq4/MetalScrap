@@ -1,7 +1,10 @@
 package pl.krzaq.metalscrap.pages;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.zkoss.zk.ui.Component;
@@ -30,6 +33,13 @@ public class Translations extends HomePage {
 		Collections.sort(adminLabels);
 		Collections.sort(adminLabelsAll);
 		
+		
+		List<String> availableLanguages = ServicesImpl.getLangLabelService().findAllLangs() ;//Arrays.asList(Locale.getISOCountries()) ;
+		List<String> allLanguages = Arrays.asList(Locale.getISOCountries()) ;
+		allLanguages.removeAll(availableLanguages) ;
+		
+		page.setAttribute("availableLanguages", availableLanguages) ;
+		page.setAttribute("allLanguages", allLanguages) ;
 		page.setAttribute("langs", langs) ;
 		page.setAttribute("aboutLabels", aboutLabels) ;
 		page.setAttribute("adminLabels", adminLabels) ;

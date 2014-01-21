@@ -84,7 +84,7 @@ public class User implements Serializable {
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="ownerUser")
 	private List<Auction> auctions ;
 	
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
 	private List<UserOffer> userOffers ;
 	
 	

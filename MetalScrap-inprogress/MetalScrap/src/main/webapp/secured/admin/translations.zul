@@ -15,7 +15,7 @@
 
 </div>
 <div class="headerinfo">
-<div class="userInfo">Zalogowany jako: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/> ( <label id="logout" value="wyloguj" sclass="asLink" onClick="pageEvents.logout()" /> )</div>
+<div class="userInfo">Zalogowany jako: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/> ( <label id="logout" value="${labels.common.logout}" sclass="asLink" onClick="pageEvents.logout()" /> )</div>
 </div>
 </div>
 
@@ -23,67 +23,171 @@
 
 <breadcrumb id="breadcrumb" standalone="false" currentCategory="@{selectedCategory}"></breadcrumb>
 <separator bar="true" orient="horizontal"></separator>
-<panel id="content" border="none" height="800px">
+<panel id="content" border="none" height="auto">
+<caption label="${labels.admin.menu.translations}"></caption>
 <panelchildren >
 
+<vbox>
+<groupbox>
+<caption label="${labels.common.options}" />
+<label value="${labels.common.showinlanguages}" />
+<hbox>
+<vbox>
 
+	<combobox model="@{availableLanguages}" width="140px">
+	<comboitem self="@{each=lang1}" image="@{lang1, converter='pl.krzaq.metalscrap.converter.LanguageIcoConverter'}" label="@{lang1, converter='pl.krzaq.metalscrap.converter.LanguageISOConverter'}">
+		</comboitem>
+	</combobox>
+</vbox>
+<vbox>
+
+	<combobox model="@{availableLanguages}" width="140px">
+	<comboitem self="@{each=lang2}" image="@{lang2, converter='pl.krzaq.metalscrap.converter.LanguageIcoConverter'}" label="@{lang2, converter='pl.krzaq.metalscrap.converter.LanguageISOConverter'}">
+		</comboitem>
+	</combobox>
+</vbox>
+</hbox>
+</groupbox>
+
+<groupbox>
+<caption label="${labels.common.newlanguage}"></caption>
+<grid>
+<columns>
+<column width="120px"></column>
+<column width="220px"></column>
+</columns>
+<rows>
+	<row>
+	<label value="${labels.common.translation.selectlanguage}" />
+	<combobox model="@{allLanguages}" width="140px">
+	<comboitem self="@{each=newlang}" image="@{newlang, converter='pl.krzaq.metalscrap.converter.LanguageIcoConverter'}" label="@{newlang, converter='pl.krzaq.metalscrap.converter.LanguageISOConverter'}">
+		</comboitem>
+	</combobox>
+	<!-- 
+	<listbox mold="select" model="@{allLanguages}" width="80px">
+		<listitem self="@{each=newlang}">
+			<listcell>
+				<hbox><image src="@{newlang, converter='pl.krzaq.metalscrap.converter.LanguageIcoConverter'}"></image><label value="@{newlang, converter='pl.krzaq.metalscrap.converter.LanguageISOConverter'}" /> </hbox>
+			</listcell>
+		</listitem>
+	</listbox> -->
+	</row>
+</rows>
+</grid>
+
+</groupbox>
+
+</vbox>
 <tabbox>
 	<tabs>
-		<tab label="O platformie">
+		<tab label="${labels.about.title}">
 			
 		</tab>
-		<tab label="Administracja">
+		<tab label="${labels.admin.menu.title}">
 		
 		</tab>
-		<tab label="Aukcje">
+		<tab label="${labels.auction.title}">
 			
 		</tab>
 		<tab label="CMS">
 		
 		</tab>
-		<tab label="Regulamin">
+		<tab label="${labels.regulation.title}">
 		
 		</tab>
-		<tab label="Pomoc">
+		<tab label="${labels.help.title}">
 		
 		</tab>
-		<tab label="Kontakt">
+		<tab label="${labels.contact.title}">
+		
+		</tab>
+		<tab label="${labels.common.title}">
+		
+		</tab>
+		<tab label="${labels.privacy.title}">
 		
 		</tab>
 	</tabs>
 	<tabpanels>
-		<tabpanel></tabpanel>
 		<tabpanel>
-		<grid id="admin" use="pl.krzaq.metalscrap.components.TranslationsGrid" >
+		<grid id="about" use="pl.krzaq.metalscrap.components.TranslationsGrid" mold="paging" pageSize="10">
 			
 		</grid>
-		<button label="Aktualizuj" onClick="langEvents.updateLabels(admin, binder)" />
+		<button label="${labels.common.update}" onClick="langEvents.updateLabels(about, binder)" />
+		
 		</tabpanel>
 		<tabpanel>
-			<grid id="auctions" model="@{auctionLabels}">
-			<columns>
-				<column label="Klucz" />
-				<column label="" />
-				<column label="" />
-			</columns>
-				<rows>
-					<row self="@{each=label}" forEach="@{label.lang}">
-						
-						<label value="@{each}" />
-					</row>
-				</rows>
-			</grid>
+		<grid id="admin" use="pl.krzaq.metalscrap.components.TranslationsGrid">
+			
+		</grid>
+		<button label="${labels.common.update}" onClick="langEvents.updateLabels(admin, binder)" />
 		</tabpanel>
-		<tabpanel></tabpanel>
-		<tabpanel></tabpanel>
-		<tabpanel></tabpanel>
-		<tabpanel></tabpanel>
+		<tabpanel>
+			<grid id="auction" use="pl.krzaq.metalscrap.components.TranslationsGrid" height="auto">
+			
+		</grid>
+		<button label="${labels.common.update}" onClick="langEvents.updateLabels(auction, binder)" />
+		
+		</tabpanel>
+		<tabpanel>
+		
+		<grid id="cms" use="pl.krzaq.metalscrap.components.TranslationsGrid"  mold="paging" pageSize="10">
+			
+		</grid>
+		<button label="${labels.common.update}" onClick="langEvents.updateLabels(cms, binder)" />
+		
+		
+		</tabpanel>
+		<tabpanel>
+		
+		<grid id="regulation" use="pl.krzaq.metalscrap.components.TranslationsGrid"  mold="paging" pageSize="10">
+			
+		</grid>
+		<button label="${labels.common.update}" onClick="langEvents.updateLabels(regulation, binder)" />
+		
+		
+		</tabpanel>
+		<tabpanel>
+		
+		<grid id="help" use="pl.krzaq.metalscrap.components.TranslationsGrid"  mold="paging" pageSize="10">
+			
+		</grid>
+		<button label="${labels.common.update}" onClick="langEvents.updateLabels(help, binder)" />
+		
+		
+		</tabpanel>
+		<tabpanel>
+		<grid id="contact" use="pl.krzaq.metalscrap.components.TranslationsGrid"  mold="paging" pageSize="10">
+			
+		</grid>
+		<button label="${labels.common.update}" onClick="langEvents.updateLabels(contact, binder)" />
+		
+		
+		</tabpanel>
+		
+		<tabpanel>
+		<grid id="common" use="pl.krzaq.metalscrap.components.TranslationsGrid"  mold="paging" pageSize="10">
+			
+		</grid>
+		<button label="${labels.common.update}" onClick="langEvents.updateLabels(common, binder)" />
+		
+		
+		</tabpanel>
+		
+		<tabpanel>
+		<grid id="privacy" use="pl.krzaq.metalscrap.components.TranslationsGrid"  mold="paging" pageSize="10">
+			
+		</grid>
+		<button label="${labels.common.update}" onClick="langEvents.updateLabels(privacy, binder)" />
+		
+		
+		</tabpanel>
 	</tabpanels>
 </tabbox>
 
 <space></space>
 <div sclass="pageFooter">
-	<div sclass="inner"><label value="Kontakt"/> | <label value="Regulamin"/> | <label value="Polityka prywatności"/> | <label value="O platformie"/> </div>
+	<div sclass="inner"><label value="${labels.contact.title}"/> | <label value="${labels.regulation.title}"/> | <label value="${labels.privacy.title}"/> | <label value="${labels.about.title}"/> </div>
 </div>	
 </panelchildren>
 </panel>

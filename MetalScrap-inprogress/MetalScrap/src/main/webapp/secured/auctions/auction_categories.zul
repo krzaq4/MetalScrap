@@ -1,7 +1,7 @@
 <?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
 <?init class="pl.krzaq.metalscrap.pages.AuctionCategories" ?>
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
-<?page title="Kategorie aukcji" contentType="text/html;charset=UTF-8" ?>
+<?page title="${${labels.${labels.admin.menu.configuration.$}.auctioncategories}}" contentType="text/html;charset=UTF-8" ?>
 
 
 <zk xmlns:h="http://www.w3.org/1999/xhtml">

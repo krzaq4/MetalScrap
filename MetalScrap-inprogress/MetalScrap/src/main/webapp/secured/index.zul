@@ -30,11 +30,11 @@
 			</div>
 			<div class="headerinfo">
 				<div class="userInfo"><hbox><a onClick="loginPopup.open(content,popPos)" style="color: #eee">
-					Zaloguj się
+					${labels.common.login}
 				</a>
 				
 				<a onClick="registerPopup.open(content,popPos)" style="color:#eee">
-					Rejestracja - to nic nie kosztuje!
+					${labels.common.register}
 				</a>
 				
 				</hbox>
@@ -57,7 +57,7 @@
 							<column width="300px" label="Nazwa"></column>
 							<column width="60px" label="Cena"></column>
 							<column width="85px" label="Ilość ofert"></column>
-							<column width="200px" label="Data zakończenia"></column>
+							<column width="200px" label="${labels.auction.auctionend}"></column>
 						</columns>
 						<rows>
 							<row self="@{each=auction}" value="@{auction}" onClick="auctionEvents.redirectToAuctionView(self.getValue())">
@@ -95,7 +95,7 @@
 				</div>
 				<space></space>
 				<div sclass="pageFooter">
-					<div sclass="inner"><label value="Kontakt"/> | <label value="Regulamin"/> | <label value="Polityka prywatności"/> | <label value="O platformie"/> </div>
+					<div sclass="inner"><label value="${labels.contact.title}"/> | <label value="${labels.regulation.title}"/> | <label value="${labels.privacy.title}"/> | <label value="${labels.about.title}"/> </div>
 				</div>
 			</panelchildren>
 		</panel>
@@ -170,7 +170,7 @@
 								<row>
 									<label value="Regon:"></label>
 									<textbox id="company_regon"
-										value="@{company.regon}" constraint="/[0-9]*/: Numer REGON może składać się tylko z cyfr">
+										value="@{company.regon}" constraint="/[0-9]*/: ${labels.auction.auctionnumber.$} REGON może składać się tylko z cyfr">
 									</textbox>
 								</row>
 
@@ -185,13 +185,13 @@
 									</textbox>
 								</row>
 								<row>
-									<label value="Numer domu:"></label>
+									<label value="${labels.auction.auctionnumber.$} domu:"></label>
 									<textbox id="company_houseno"
 										value="@{company.addressMain.houseNo}" constraint="no empty: Pole nie może być puste">
 									</textbox>
 								</row>
 								<row>
-									<label value="Numer lokalu:">
+									<label value="${labels.auction.auctionnumber.$} lokalu:">
 									</label>
 									<textbox id="company_flatno"
 										value="@{company.addressMain.flatNo}">
@@ -247,13 +247,13 @@
 									</textbox>
 								</row>
 								<row>
-									<label value="Numer domu:"></label>
+									<label value="${labels.auction.auctionnumber.$} domu:"></label>
 									<textbox id="company_houseno2"
 										value="@{company.addressAdditional.houseNo}" width="300px">
 									</textbox>
 								</row>
 								<row>
-									<label value="Numer lokalu:">
+									<label value="${labels.auction.auctionnumber.$} lokalu:">
 									</label>
 									<textbox id="company_flatno2"
 										value="@{company.addressAdditional.flatNo}" width="300px">

@@ -126,7 +126,7 @@ public class AuctionNew extends HomePage{
 			List<AttachementFile> files = (ArrayList<AttachementFile>) ses.getAttribute("files") ;
 			final Listbox grid = (Listbox) arg0.getFellow("photos") ;
 			final AnnotateDataBinder binder = (AnnotateDataBinder) arg0.getAttribute("binder") ;
-			int i=1 ;
+			int i=0 ;
 			int selectedPhotoIndex = -1 ;
 			for (final AttachementFile af:files) {
 				if (af.getMain()) {
@@ -198,6 +198,8 @@ public class AuctionNew extends HomePage{
 			arg0.setAttribute("selectedPhotoIndex", selectedPhotoIndex) ;
 			
 			
+		} else {
+			arg0.setAttribute("selectedPhotoIndex", -1) ;
 		}
 		
 		
@@ -253,7 +255,7 @@ public class AuctionNew extends HomePage{
 			auction = ServicesImpl.getAuctionService().findWithCollection(id) ;
 			
 			List<Image> imgs = new ArrayList<Image>() ;
-			int i=1 ;
+			int i=0 ;
 			int selectedPhotoIndex = -1 ;
 			for (AttachementFile af:ServicesImpl.getAttachementFileService().findByAuction(auction)) {
 				if (af.getMain()) {

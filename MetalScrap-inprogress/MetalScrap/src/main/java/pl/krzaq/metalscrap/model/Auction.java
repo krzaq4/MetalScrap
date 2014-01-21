@@ -111,7 +111,7 @@ public class Auction implements Serializable {
 	@JoinColumn(name="best_useroffer")
 	private UserOffer bestUserOffer ;
 	
-	@ManyToMany(mappedBy="observed")
+	@ManyToMany(mappedBy="observed", cascade=javax.persistence.CascadeType.ALL)
 	private List<User> obeservers ;
 	
 	@OneToMany(mappedBy="auction")

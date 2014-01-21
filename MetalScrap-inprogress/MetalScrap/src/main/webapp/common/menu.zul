@@ -10,9 +10,9 @@
 		<div>
 			<menubar class="mainMenu" id="main" orient="horizontal" >
 
-				<menuitem id="about" label="O platformie"></menuitem>
+				<menuitem id="about" label="${labels.about.title}"></menuitem>
 				
-				<menuitem id="auctions" label="Aukcje" visible="@{isAdmin}"
+				<menuitem id="auctions" label="${labels.auction.title}" visible="@{isAdmin}"
 					onClick="pageEvents.showSubMenu(self.getId(), self, binder)">
 				</menuitem>
 				<menuitem id="companies" label="Firmy" visible="false"
@@ -24,10 +24,10 @@
 				<menuitem id="cms" label="CMS"  visible="@{isAdmin}"
 					onClick="pageEvents.showSubMenu(self.getId(), self, binder)"></menuitem>
 				
-				<menuitem id="regulations" label="Regulamin"></menuitem>
-				<menuitem id="help" label="Pomoc"></menuitem>
+				<menuitem id="regulations" label="${labels.regulation.title}"></menuitem>
+				<menuitem id="help" label="${labels.help.title}"></menuitem>
 				
-				<menuitem id="contact" label="Kontakt"></menuitem>
+				<menuitem id="contact" label="${labels.contact.title}"></menuitem>
 
 			</menubar>
 		</div>
@@ -35,13 +35,13 @@
 			<menubar class="subMenu" id="auctionsSubMenu"  orient="horizontal" visible="false" action="show:slideDown; hide:slideUp">
 				
 				<!-- AUKCJE -->
-				<menuitem id="auctions_list" label="Lista aukcji"
+				<menuitem id="auctions_list" label="${labels.auction.auctionlist}"
 					value="/secured/auctions/list.zul"
 					onClick="pageEvents.open(auctions_list.getValue())"/>
-				<menuitem id="new_auction" label="Nowa aukcja"
+				<menuitem id="new_auction" label="${labels.auction.newauction}"
 					value="/secured/auctions/new.zul"
 					onClick="pageEvents.open(new_auction.getValue())"/>
-				<menuitem id="auction_categories" label="Kategorie aukcji" visible="@{isCategoriesVisible}"
+				<menuitem id="auction_categories" label="${labels.admin.menu.configuration.auctioncategories}" visible="@{isCategoriesVisible}"
 					value="/secured/auctions/auction_categories.zul"
 					onClick="pageEvents.open(auction_categories.getValue())"/>
 					

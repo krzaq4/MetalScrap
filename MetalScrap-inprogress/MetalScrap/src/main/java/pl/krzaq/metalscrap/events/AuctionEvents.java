@@ -23,6 +23,7 @@ import org.joda.time.Period;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
@@ -135,7 +136,7 @@ public void saveNewAuction(Auction auction, Page p) {
 			
 		if (((Listbox)p.getFellow("photos")).getSelectedItem()==null && ((Listbox)p.getFellow("photos")).getItems().size()>0) {
 			
-			throw new WrongValueException((Listbox)p.getFellow("photos"), "Wybierz zdjêcie g³ówne") ;
+			throw new WrongValueException((Listbox)p.getFellow("photos"), Labels.getLabel("auction.auctionselectmainphoto")) ;
 		} else {
 			
 			selectedPhotoIndex = ((Listbox)p.getFellow("photos")).getSelectedIndex() ; 
@@ -444,7 +445,7 @@ public void onSelectAuctionCategory(Listitem item, AnnotateDataBinder binder) {
 		if (selectedCategory.getParent()!=null) {
 			
 			List<Category> subCategories = ServicesImpl.getCategoryService().findSubCategories(selectedCategory.getParent()) ;
-			Category previous = new Category(" << Powrót", "Powrót do nadrzêdnej kategorii", selectedCategory.getParent().getParent()) ;
+			Category previous = new Category(Labels.getLabel("auction.auctioncategory.back"), "Powrót do nadrzêdnej kategorii", selectedCategory.getParent().getParent()) ;
 			subCategories.add(0, previous) ;
 			
 			ListModelList lml = (ListModelList) ((Listbox)page.getFellow("auction_category")).getModel() ;
@@ -471,7 +472,7 @@ public void onSelectAuctionCategory(Listitem item, AnnotateDataBinder binder) {
 	if (selectedCategory.getChildren()!=null && selectedCategory.getChildren().size()>0) {
 		
 		List<Category> subCategories = ServicesImpl.getCategoryService().findSubCategories(selectedCategory);
-		Category previous = new Category(" << Powrót", "Powrót do nadrzêdnej kategorii", selectedCategory.getParent()) ;
+		Category previous = new Category(Labels.getLabel("auction.auctioncategory.back"), "Powrót do nadrzêdnej kategorii", selectedCategory.getParent()) ;
 		subCategories.add(0, previous) ;
 		
 		ListModelList lml = (ListModelList) ((Listbox)page.getFellow("auction_category")).getModel() ;
@@ -528,6 +529,11 @@ public void deleteSelectedAuctions(final Listbox lbx, final AnnotateDataBinder b
 				if(arg0.getName().equalsIgnoreCase("onYes")) {
 					
 				for (Auction toDel:selectedAuctions){
+					
+					/*for (User u:toDel.getObeservers()){
+						u.getObserved().remove(toDel) ;
+					}*/
+					
 					ServicesImpl.getAuctionService().delete(toDel);
 				}
 					
@@ -552,7 +558,7 @@ public void deleteSelectedAuctions(final Listbox lbx, final AnnotateDataBinder b
 	} else {
 		
 		for (Auction toDel:selectedAuctions){
-			ServicesImpl.getAuctionService().delete(toDel);
+			ServicesImpl.getAuctionService().delete(ServicesImpl.getAuctionService().findById(toDel.getId()));
 		}
 			
 		ListModelList lml = ( (ListModelList) lbx.getListModel()); 

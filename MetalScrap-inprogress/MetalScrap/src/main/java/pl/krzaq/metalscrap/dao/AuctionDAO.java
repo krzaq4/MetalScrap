@@ -95,8 +95,10 @@ public class AuctionDAO {
 	}
 
 	public Auction findById(Long id) {
-		
-		return (Auction) sessionFactory.getCurrentSession().getNamedQuery("Auction.findById").setParameter("id", id).list().get(0) ; 
+		List<Auction> list = sessionFactory.getCurrentSession().getNamedQuery("Auction.findById").setParameter("id", id).list() ;
+		if(list.size()>0)
+			return (Auction)list.get(0) ;
+		else return null ;
 	}
 	
 	public void save(Auction a){

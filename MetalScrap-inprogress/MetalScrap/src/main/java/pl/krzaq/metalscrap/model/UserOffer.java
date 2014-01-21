@@ -3,6 +3,7 @@ package pl.krzaq.metalscrap.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,7 +37,7 @@ public class UserOffer implements Serializable, Comparable<UserOffer>{
 	@JoinColumn(name="user_id")
 	private User user ;
 	
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="auction_id")
 	private Auction auction ;
 	

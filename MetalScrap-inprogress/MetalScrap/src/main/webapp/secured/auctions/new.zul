@@ -2,7 +2,7 @@
 <?init class="pl.krzaq.metalscrap.pages.AuctionNew"?>
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" name="binder" arg2="binder" ?>
 
-<?page id="new" title="Nowa aukcja" contentType="text/html;charset=UTF-8" ?>
+<?page id="new" title="${labels.auction.newauction}" contentType="text/html;charset=UTF-8" ?>
 
 
 <zk xmlns:h="http://www.w3.org/1999/xhtml">
@@ -38,21 +38,21 @@
 					</columns>
 					<rows>
 						<row>
-							<label value="Tytuł aukcji:" />	<textbox id="auction_name" value="@{auction.name}" constraint="no empty" placeholder="Wpisz nazwę aukcji"/>
+							<label value="${labels.auction.auctiontitle}:" />	<textbox id="auction_name" value="@{auction.name}" constraint="no empty" placeholder="${labels.auction.auctiontitle.placeholder}"/>
 						</row>
 						<row>
-							<label value="Numer:" />	<textbox id="auction_number" value="@{auction.number}" constraint="no empty" placeholder="Wpisz numer aukcji"/>
+							<label value="${labels.auction.auctionnumber.$}:" />	<textbox id="auction_number" value="@{auction.number}" constraint="no empty" placeholder="${labels.auction.auctionnumber.placeholder}"/>
 						</row>
 						<row>
-							<label value="Data rozpoczęcia:" />	<div><datebox id="auction_start_date" cols="12" width="230px" format="long+medium"  value="@{auction.startDate}" constraint="no empty" placeholder="Naciśnij przycisk >>"/> </div>
+							<label value="${labels.auction.auctionstart.$}:" />	<div><datebox id="auction_start_date" cols="12" width="230px" format="long+medium"  value="@{auction.startDate}" constraint="no empty" placeholder="${labels.auction.auctionstart.placeholder}"/> </div>
 						</row>
 						<row>	
-							<label value="Data zakończenia:" /> <div><datebox id="auction_end_date" cols="12" width="230px"   format="long+medium"  value="@{auction.endDate}" constraint="no empty" placeholder="Naciśnij przycisk >>">
+							<label value="${labels.auction.auctionend}:" /> <div><datebox id="auction_end_date" cols="12" width="230px"   format="long+medium"  value="@{auction.endDate}" constraint="no empty" placeholder="${labels.auction.auctionstart.placeholder}">
 							<attribute name="onChange">
 								<![CDATA[
 								
 								         if(auction_start_date.getValue().compareTo(auction_end_date.getValue())>0){
-								        	 throw new WrongValueException(auction_end_date, "Data zakończenia musi być późniejsza niż data początku") ;
+								        	 throw new WrongValueException(auction_end_date, "${labels.auction.auctionend} musi być późniejsza niż data początku") ;
 								         }
 								
 								]]>
@@ -61,7 +61,7 @@
 							</div>
 						</row>
 						<row visible="@{isCategoriesVisible}">
-							<label value="Kategoria aukcji:" />
+							<label value="${labels.auction.auctioncategory.$}:" />
 							<listbox id="auction_category" mold="select" rows="4" multiple="false" model="@{auctionCategories}" selectedItem="@{auction.category}" selectedIndex="@{selectedCategoryIndex}" width="230px">
 								<listitem self="@{each=cat}" value="@{cat}" onClick="auctionEvents.onSelectAuctionCategory(self, binder)" tooltiptext="@{cat.description}">
 									<listcell label="@{cat.name}"  >
@@ -71,7 +71,7 @@
 							</listbox>
 						</row>
 						<row>
-							<label value="Cena minimalna włączona:" />
+							<label value="${labels.auction.auctionminpriceenabled}:" />
 							<checkbox id="min_price" onCheck="min_price_amount.setVisible(self.isChecked())"></checkbox>
 						</row>
 						<row id="min_price_amount" visible="@{min_price.checked}" >
@@ -89,23 +89,23 @@
 					</columns>
 					<rows>
 						<row>
-							<label value="Czy wystawiasz fakturę VAT:" />	<checkbox id="auction_invoice"  checked="@{auction.invoice}"/>
+							<label value="${labels.auction.auctionissueinvoice}" />	<checkbox id="auction_invoice"  checked="@{auction.invoice}"/>
 						</row>
 						<row>
-							<label value="Sposób płatności:" />	
-							<combobox id="auction_payment"  model="@{paymentMethods}" selectedItem="@{auction.paymentMethod}"  value="@{auction.paymentMethod.name}" placeholder="Wybierz sposób płatności" constraint="no empty"  >
+							<label value="${labels.auction.paymentmethod}:" />	
+							<combobox id="auction_payment"  model="@{paymentMethods}" selectedItem="@{auction.paymentMethod}"  value="@{auction.paymentMethod.name}" placeholder="${labels.auction.paymentmethod.placeholder}" constraint="no empty"  >
 								<comboitem self="@{each=method}" label="@{method.name}" value="@{method}"></comboitem>
 							</combobox>
 															
 						</row>
 						<row>
-							<label value="Rodzaj dostawy:" />
-							<combobox id="auction_delivery" model="@{deliveryTypes}" selectedItem="@{auction.deliveryType}" value="@{auction.deliveryType.name}" constraint="no empty" placeholder="Wybierz rodzaj dostawy">
+							<label value="${labels.auction.auctiondeliverytype}:" />
+							<combobox id="auction_delivery" model="@{deliveryTypes}" selectedItem="@{auction.deliveryType}" value="@{auction.deliveryType.name}" constraint="no empty" placeholder="${labels.auction.auctiondeliverytype.placeholder}">
 								<comboitem self="@{each=dtype}" label="@{dtype.name}" value="@{dtype}"></comboitem>
 							</combobox>
 						</row>
 						<row>
-							<label value="Czas dostawy:" /><textbox id="auction_delivery_time"  value="@{auction.deliveryTime}" constraint="no empty" placeholder="Wpisz ilość dni"/>
+							<label value="${labels.auction.auctiondeliverytime.$}:" /><textbox id="auction_delivery_time"  value="@{auction.deliveryTime}" constraint="no empty" placeholder="${labels.auction.auctiondeliverytime.placeholder}"/>
 						</row>
 					</rows>
 				</grid>
@@ -119,7 +119,7 @@
 					<rows>
 						<row>
 						
-							<label value="Opis aukcji:" />
+							<label value="${labels.auction.auctiondescription}:" />
 							
 							<ckeditor id="auction_description" value="@{auction.description}" height="300px">
 							
@@ -159,7 +159,7 @@
 						<row>
 						
 						<button label="Dodaj pozycje do aukcji >>" mold="trendy" onClick="formEvents.showAuctionPositions(parameters, positions)" visible="@{isCommoditiesVisible}"></button>
-						<button onClick="auctionEvents.saveNewAuction(auction, self.getPage())" mold="trendy" visible="@{isCommoditiesVisible, converter='pl.krzaq.metalscrap.converter.NegativeConverter'}" label="Zapisz aukcję"></button>
+						<button onClick="auctionEvents.saveNewAuction(auction, self.getPage())" mold="trendy" visible="@{isCommoditiesVisible, converter='pl.krzaq.metalscrap.converter.NegativeConverter'}" label="${labels.auction.saveauction}"></button>
 						</row>
 					</rows>
 				</grid>
@@ -205,7 +205,7 @@
 					</columns>
 					<rows>
 						<row>
-							<button onClick="formEvents.showAuctionParameters(parameters, positions)" mold="trendy">Powrót</button><button onClick="auctionEvents.saveNewAuction(auction)" mold="trendy">Zapisz aukcję</button>						
+							<button onClick="formEvents.showAuctionParameters(parameters, positions)" mold="trendy">Powrót</button><button onClick="auctionEvents.saveNewAuction(auction)" mold="trendy">${labels.auction.saveauction}</button>						
 						</row>
 					</rows>
 	</grid>

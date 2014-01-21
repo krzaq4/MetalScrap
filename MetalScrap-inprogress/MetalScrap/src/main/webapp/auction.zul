@@ -121,11 +121,11 @@
             				<label value="@{auction.paymentMethod.name}" />
             			</row>
             			<row>
-            				<label value="Data rozpoczęcia:" />
+            				<label value="${labels.auction.auctionstart.$}:" />
             				<label value="@{auction.startDate, converter='pl.krzaq.metalscrap.converter.DateConverter'}" />
             			</row>
             			<row>
-            				<label value="Data zakończenia:" />
+            				<label value="${labels.auction.auctionend}:" />
             				<label value="@{auction.endDate, converter='pl.krzaq.metalscrap.converter.DateConverter'}" />
             			</row>
             		</rows>
@@ -159,7 +159,7 @@
 <space></space>
 <div id="auction_description" width="100%" height="auto">
 
-<div sclass="divCaptionOuter"><div sclass="divCaption">Opis aukcji</div></div>
+<div sclass="divCaptionOuter"><div sclass="divCaption">${labels.auction.auctiondescription}</div></div>
 <html content="@{auction.description}">
 
 
