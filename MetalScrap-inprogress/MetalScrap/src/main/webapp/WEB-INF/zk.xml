@@ -15,7 +15,9 @@
 	
 	<language-config>
 	    <addon-uri>/WEB-INF/breadcrumb-addon.xml</addon-uri> 
-	    <addon-uri>/WEB-INF/categorytree-addon.xml</addon-uri>       
+	    <addon-uri>/WEB-INF/categorytree-addon.xml</addon-uri>
+	    <addon-uri>/WEB-INF/translationsgrid-addon.xml</addon-uri>
+	    <addon-uri>/WEB-INF/langbox-addon.xml</addon-uri>       
 	</language-config>
 
 	<desktop-config>

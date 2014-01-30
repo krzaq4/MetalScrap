@@ -47,6 +47,11 @@ public class LangLabelDAO {
 		return sessionFactory.getCurrentSession().getNamedQuery("LangLabel.findLikeKeyUnique").setParameter("lkey", key).list() ;
 	}
 	
+	public List<String> findAllKeysUnique() {
+		
+		return sessionFactory.getCurrentSession().getNamedQuery("LangLabel.findAllKeysUnique").list() ;
+	}
+	
 	public LangLabel findById(Long id) {
 		
 		List<LangLabel> labels = sessionFactory.getCurrentSession().getNamedQuery("LangLabel.findById").setParameter("id", id).list() ;

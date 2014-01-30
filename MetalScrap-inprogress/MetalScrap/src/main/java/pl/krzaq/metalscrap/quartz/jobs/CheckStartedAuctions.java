@@ -24,11 +24,6 @@ public class CheckStartedAuctions {
 	
 	Logger logger = LoggerFactory.getLogger(CheckStartedAuctions.class) ;
 	
-	private List<Auction> startedAuctions ;
-	private List<Auction> allAuctions ;
-	
-	private AuctionStatus[] allStatuses;
-	
 	private AuctionDAO auctionDAO ; 
 	
 	
@@ -45,58 +40,34 @@ public class CheckStartedAuctions {
 		
 		
 		
+		// nowy sposob
+		
 		DateFormat df = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss:SS") ;
 		
-		// lista stanów aukcji
+		List<Auction> started = auctionDAO.findByStartTime(currentTime) ;
+		List<Auction> ending = auctionDAO.findByEndTime(currentTime) ;
 		
-		if (allStatuses==null) {
-			List<AuctionStatus> tl = auctionDAO.findAllStatuses() ;
-			allStatuses = new AuctionStatus[tl.size()+1] ;
-			
-			for (AuctionStatus as:tl) {
-				allStatuses[as.getCode()] = as ;
+		for (Auction a:started){
+			if(!a.getStatus().getCode().equals(AuctionStatus.STATUS_STARTED)) {
+				a.setStatus(auctionDAO.findStatusByCode(AuctionStatus.STATUS_STARTED));
+				auctionDAO.update(a);
+				logger.info("StartedAuction id "+a.getId()+" @ "+df.format(currentTime));
 			}
 		}
 		
-		
-		// pobranie listy rozpoczêtych aukcji
-		
-		if (startedAuctions==null) {
-		
-			startedAuctions = auctionDAO.findByStartTime(currentTime);
+		for(Auction a:ending){
+			if(!a.getStatus().getCode().equals(AuctionStatus.STATUS_FINISHED)) {
+				a.setStatus(auctionDAO.findStatusByCode(AuctionStatus.STATUS_FINISHED));
+				auctionDAO.update(a);
+				logger.info("FinishedAuction id "+a.getId()+" @ "+df.format(currentTime));
+			}
 		}
 		
+		// ---------------
 		
-		// w³aœciwe sprawdzenie rozpoczêtych i zakoñczonych aukcji
 		
-		if (startedAuctions != null ) {
-			
-			for (Auction a:auctionDAO.findByStartTime(currentTime)) {
+		
 				
-				if (!startedAuctions.contains(a)) {
-					startedAuctions.add(a) ;
-					a.setStatus(allStatuses[AuctionStatus.STATUS_STARTED]);
-					auctionDAO.update(a);
-					logger.info("StartedAuction id "+a.getId()+" @ "+df.format(currentTime));
-				}
-			}
-			
-			for (Iterator<Auction>it = startedAuctions.iterator();it.hasNext();) {
-				
-				Auction a = it.next() ;
-				if (a.getEndDate().compareTo(currentTime)==0) {
-					a.setStatus(allStatuses[AuctionStatus.STATUS_FINISHED]);
-					auctionDAO.update(a);
-					it.remove();
-					logger.info("FinishedAuction id "+a.getId()+" @ "+df.format(currentTime));
-			}
-				
-			}
-			
-			
-		}
-		
-		
 		
 	}
 

@@ -55,7 +55,7 @@ public class AuctionDAO {
 		
 		Date to = c.getTime() ;
 		
-		return sessionFactory.getCurrentSession().createCriteria(Auction.class).add(Restrictions.eq("endDate", to)).list() ;
+		return sessionFactory.getCurrentSession().createCriteria(Auction.class).add(Restrictions.le("endDate", to)).list() ;
 		
 	}
 	

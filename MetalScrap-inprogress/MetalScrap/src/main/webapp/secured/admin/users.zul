@@ -6,7 +6,7 @@
 
 <zk xmlns:h="http://www.w3.org/1999/xhtml">
 
-<div class="head"><div class="userInfo">Zalogowany jako: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/></div>
+<div class="head"><div class="userInfo">${labels.common.loggedinas}: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/> ( <label id="logout" value="${labels.common.logout}" sclass="asLink" onClick="pageEvents.logout()" /> )</div>
 </div>
 <div class="log"></div>
 <div style="width:970px;height: 740px;margin: 0 auto ; border: 1px solid #333333;">
@@ -57,10 +57,15 @@
 
 	 -->
 	 
-	 <html><h1>Uzytkownicy</h1></html>
-	 <panel id="content" border="none" collapsible="true"  action="show:slideIn;hide:slideOut">
-	 <caption label="Lista uzytkowników"></caption>
-<panelchildren >
+<div>
+	<hbox>
+		<label value="${labels.common.preferredlanguage} : " />	<langbox />
+	</hbox>
+</div>
+	 
+<panel id="content" border="none" collapsible="true"  action="show:slideIn;hide:slideOut">
+ <caption label="Lista uzytkowników"></caption>
+	<panelchildren >
 
 <div id="listMenu" class="listMenu"></div>
 <listbox id="usersList" model="@{users}"

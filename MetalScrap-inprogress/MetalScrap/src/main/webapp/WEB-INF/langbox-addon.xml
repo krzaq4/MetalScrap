@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language-addon>
+    <!-- The name of this addon. It must be unique -->
+    <addon-name>breadcrumb</addon-name>
+    <!-- Which language this addon will be added to -->
+    <language-name>xul/html</language-name>
+ 
+    <component>
+        <component-name>langbox</component-name>
+        <component-class>pl.krzaq.metalscrap.components.LanguageSelector</component-class>
+        <extends>div</extends>
+        
+        	
+    </component>
+    
+</language-addon>

@@ -179,7 +179,7 @@ public class CategoryTree extends Tree {
 	        	if (showCountInSelectedOnly){
 	        		if(item.getTree().getSelectedItem().equals(item)) {
 	        			
-	        			String qty = "("+ServicesImpl.getAuctionService().findByCategoryDown(fi).size()+")" ;
+	        			String qty = "("+ServicesImpl.getAuctionService().findByCategoryDown(fi, ServicesImpl.getAuctionService().findStatusByCode(AuctionStatus.STATUS_STARTED)).size()+")" ;
 	    	        	Label qtyLabel = new Label(qty) ;
 	    	        	Hbox hbox = new Hbox() ;
 	    	        	hbox.appendChild(name) ;
@@ -191,7 +191,7 @@ public class CategoryTree extends Tree {
 	        		}
 	        	} else {
 	        	
-	        		String qty = "("+ServicesImpl.getAuctionService().findByCategoryDown(fi).size()+")" ;
+	        		String qty = "("+ServicesImpl.getAuctionService().findByCategoryDown(fi, ServicesImpl.getAuctionService().findStatusByCode(AuctionStatus.STATUS_STARTED)).size()+")" ;
 	        		Label qtyLabel = new Label(qty) ;
 	        		Hbox hbox = new Hbox() ;
 	        		hbox.appendChild(name) ;

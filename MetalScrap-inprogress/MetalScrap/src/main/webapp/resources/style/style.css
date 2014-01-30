@@ -11,6 +11,17 @@ body {
 	color: #444444;
 }
 
+
+.toRight{
+	display: block ;	
+	float:right ;
+}
+
+.toLeft {
+	display:block ;
+	float: left ;
+}
+
 .header {
 	
 	display: block ;
@@ -74,6 +85,21 @@ border-radius: 8px;
 	cursor: pointer ;
 }
 
+.deleteButton.z-button-os {
+	border: none ;
+	width: 32px ;
+	height: 32px ;
+	background-image: url(../images/minus32.png) ;
+}
+
+.addButton.z-button-os {
+	border: none ;
+	float: right ;
+	width: 32px ;
+	height: 32px ;
+	background-image: url(../images/plus32.png) ;
+}
+
 .userInfo {
 	position:absolute;
 	top:40px;
@@ -94,6 +120,48 @@ border-radius: 8px;
 	
 }
 
+.tiles{
+	
+	display: block;
+	width: 100% ;
+	height: 100% ;
+}
+
+.tilesRow{
+	display: block ;
+	width: 100% ;
+}
+
+
+.tilesInside {
+	
+	display: block ;
+	width: 100%;
+	height: 100% ;
+	padding: 10px 10px 10px 10px ;
+	
+}
+
+.tileButton{
+	display: inline ;
+	position: relative ;
+	
+	margin: 15px 15px 15px 15px ;
+	width: 150px ;
+	height: 120px ;
+	
+	background: none ;
+	
+	-webkit-box-shadow: 2px 3px 8px 0px rgba(50, 50, 50, 0.68);
+	-moz-box-shadow:    2px 3px 8px 0px rgba(50, 50, 50, 0.68);
+	box-shadow:         2px 3px 8px 0px rgba(50, 50, 50, 0.68);
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+
+}
+
 .listMenu {
 	
 	width: 100%;
@@ -111,6 +179,7 @@ border-radius: 8px;
 	height: 75px ;
 	background-image: url(../images/searchpanel.jpg) ;
 	background-repeat: repeat-x ;
+	
 }
 
 .z-vbox.search {
@@ -252,12 +321,71 @@ h1{
 	
 }
 
+
+.wizardSteps {
+	
+	display: block ;
+	width: 100% ;
+	marging: 0 auto ;
+	height: 100px ;
+	display: table ;
+	
+}
+
+.wizardSteps .wizardStep {
+	display:table-cell ;
+	width: 100px;
+	height: 95px ;
+	margin: 0 auto ;
+	text-align: center ;
+	vertical-align: middle ;
+}
+
+.wizardSteps .active {
+	width: 50px ;
+	height: 50px ;
+	background-image: url(../images/active.png) ;
+	margin: 0 auto ;
+}
+
+.wizardSteps .inactive {
+
+	width: 50px ;
+	height: 50px ;
+	background-image: url(../images/inactive.png) ;
+	margin: 0 auto ;
+}
+
 .categoriesMenu {
 	
 	display: block ;
 	width: 25% ;
 	height: 90%;
 	float: left ;
+	
+}
+
+.leftMenu{
+	display: block ;
+	width: 15% ;
+	height: 90%;
+	float: left ;
+	
+}
+
+.leftContent{
+	display: block ;
+	width: 35% ;
+	height: 90%;
+	float: left ;
+	
+}
+
+.rightContent{
+	display: block ;
+	width: 65% ;
+	height: 90%;
+	float: right ;
 	
 }
 
@@ -284,7 +412,7 @@ h1{
 .otherContent{
 	
 	display: block ;
-	width: 75% ;
+	width: 80% ;
 	height: 90%;
 	float: right ;
 	
@@ -648,7 +776,7 @@ div.z-treecell-cnt {
 
 .auctionDetails {
 	
-	border: 1px solid #cacaca;
+	
 }
 
 .divCaptionOuter{
@@ -718,7 +846,8 @@ div.z-treecell-cnt {
 }
 
 .normalLabel.z-label{
-	
+	font-size: 0.8em;
+	font-weight: bold ;
 }
 
 .breadCrumbItem.z-label {
@@ -728,6 +857,8 @@ div.z-treecell-cnt {
 	padding:0px 4px 0px 4px ;
 	
 	}
+	
+
 	
 .breadCrumbItemActive.z-label {
 	

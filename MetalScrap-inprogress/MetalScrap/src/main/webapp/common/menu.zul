@@ -32,7 +32,7 @@
 			</menubar>
 		</div>
 		<div id="sub">
-			<menubar class="subMenu" id="auctionsSubMenu"  orient="horizontal" visible="false" action="show:slideDown; hide:slideUp">
+			<menubar class="subMenu" id="auctionsSubMenu"  orient="horizontal" visible="@{subMenu}" action="show:slideDown; hide:slideUp">
 				
 				<!-- AUKCJE -->
 				<menuitem id="auctions_list" label="${labels.auction.auctionlist}"
@@ -46,11 +46,11 @@
 					onClick="pageEvents.open(auction_categories.getValue())"/>
 					
 			</menubar>
-			<menubar  class="subMenu" id="companiesSubMenu"  orient="horizontal" visible="false" action="show:slideDown; hide:slideUp">
+			<menubar  class="subMenu" id="companiesSubMenu"  orient="horizontal" visible="@{subMenu}" action="show:slideDown; hide:slideUp">
 				<!-- FIRMY -->
 				<menuitem id="companies_list" label="Lista firm" />
 			</menubar>
-			<menubar  class="subMenu" id="adminSubMenu"  orient="vertical" visible="false" action="show:slideDown; hide:slideUp">
+			<menubar  class="subMenu" id="adminSubMenu"  orient="vertical" visible="@{subMenu}" action="show:slideDown; hide:slideUp">
 				<!-- ADMIN -->
 				<menuitem id="delivery_types" label="${labels.admin.menu.deliverytypes}"
 					value="/secured/admin/delivery_types.zul"
@@ -77,7 +77,7 @@
 					onClick="pageEvents.open(self.getValue())"/>
 					
 			</menubar>
-			<menubar  class="subMenu" id="cmsSubMenu"  orient="horizontal" visible="false" action="show:slideDown; hide:slideUp">
+			<menubar  class="subMenu" id="cmsSubMenu"  orient="horizontal" visible="@{subMenu}" action="show:slideDown; hide:slideUp">
 				<!-- CMS -->
 
 				<menuitem id="cms_edit" label="Edytuj treści"

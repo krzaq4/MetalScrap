@@ -21,6 +21,8 @@ public interface LangLabelService {
 	
 	public LangLabel findById(Long id) ;
 	
+	public List<String> findAllKeysUnique() ;
+	
 	public List<String> findAllLangs() ;
 		
 	public void save(LangLabel label);

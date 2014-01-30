@@ -17,15 +17,20 @@
 				
 			</div>
 			<div class="headerinfo">
-<div class="userInfo">Zalogowany jako: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/></div>
+<div class="userInfo">${labels.common.loggedinas}: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/> ( <label id="logout" value="${labels.common.logout}" sclass="asLink" onClick="pageEvents.logout()" /> )</div>
 			</div>
 		</div>
 
 <include id="men"  src="/common/menu.zul" ></include>
 		
+<div>
+	<hbox>
+		<label value="${labels.common.preferredlanguage} : " />	<langbox />
+	</hbox>
+</div>
 
 <panel id="parameters" height="auto" border="none" collapsible="true"  action="show:slideIn;hide:slideOut">
-<caption label="Parametry aukcji"></caption>
+<caption label="${labels.auction.auctionparameters}"></caption>
 <panelchildren>
 <div>
 	<groupbox>
@@ -38,7 +43,7 @@
 					</columns>
 					<rows>
 						<row>
-							<label value="${labels.auction.auctiontitle}:" />	<textbox id="auction_name" value="@{auction.name}" constraint="no empty" placeholder="${labels.auction.auctiontitle.placeholder}"/>
+							<label value="${labels.auction.auctiontitle.$}:" />	<textbox id="auction_name" value="@{auction.name}" constraint="no empty" placeholder="${labels.auction.auctiontitle.placeholder}"/>
 						</row>
 						<row>
 							<label value="${labels.auction.auctionnumber.$}:" />	<textbox id="auction_number" value="@{auction.number}" constraint="no empty" placeholder="${labels.auction.auctionnumber.placeholder}"/>
@@ -52,7 +57,7 @@
 								<![CDATA[
 								
 								         if(auction_start_date.getValue().compareTo(auction_end_date.getValue())>0){
-								        	 throw new WrongValueException(auction_end_date, "${labels.auction.auctionend} musi być późniejsza niż data początku") ;
+								        	 throw new WrongValueException(auction_end_date, Labels.getLabel("auction.error.auctionenddateafter") ;
 								         }
 								
 								]]>
@@ -76,7 +81,7 @@
 						</row>
 						<row id="min_price_amount" visible="@{min_price.checked}" >
 							<label value="Cena minimalna:" />
-							<hbox><decimalbox id="auction_min_price" format="###.##"  value="@{auction.minPrice}" width="180px" placeholder="Podaj cenę minimalną"></decimalbox><label value=" PLN"/></hbox>
+							<hbox><decimalbox id="auction_min_price" format="###.##"  value="@{auction.minPrice}" width="180px" placeholder="${labels.auction.auctionsetminprice}"></decimalbox><label value=" PLN"/></hbox>
 						</row>
 					</rows>
 				</grid>
@@ -92,14 +97,14 @@
 							<label value="${labels.auction.auctionissueinvoice}" />	<checkbox id="auction_invoice"  checked="@{auction.invoice}"/>
 						</row>
 						<row>
-							<label value="${labels.auction.paymentmethod}:" />	
+							<label value="${labels.auction.paymentmethod.$}:" />	
 							<combobox id="auction_payment"  model="@{paymentMethods}" selectedItem="@{auction.paymentMethod}"  value="@{auction.paymentMethod.name}" placeholder="${labels.auction.paymentmethod.placeholder}" constraint="no empty"  >
 								<comboitem self="@{each=method}" label="@{method.name}" value="@{method}"></comboitem>
 							</combobox>
 															
 						</row>
 						<row>
-							<label value="${labels.auction.auctiondeliverytype}:" />
+							<label value="${labels.auction.auctiondeliverytype.$}:" />
 							<combobox id="auction_delivery" model="@{deliveryTypes}" selectedItem="@{auction.deliveryType}" value="@{auction.deliveryType.name}" constraint="no empty" placeholder="${labels.auction.auctiondeliverytype.placeholder}">
 								<comboitem self="@{each=dtype}" label="@{dtype.name}" value="@{dtype}"></comboitem>
 							</combobox>
@@ -142,14 +147,14 @@
 						</row>
 						<row visible="@{isCategoriesVisible}">
 							<label value="Dołącz zdjęcie:"/>
-							<fileupload id="img_upload" label="Wybierz z dysku..." onUpload="formEvents.uploadPhoto(event.getMedia(), photos, binder )" maxsize="100000"/>
+							<fileupload id="img_upload" label="${labels.auction.selectfile}" onUpload="formEvents.uploadPhoto(event.getMedia(), photos, binder )" maxsize="100000"/>
 							
 						</row>
 						<row spans="2">
 						
 							<listbox id="photos" width="65%" height="auto" checkmark="true" multiple="false" selectedIndex="@{selectedPhotoIndex}">
 								<listhead>
-									<listheader width="90%" label="Wybierz zdjęcie główne"></listheader>
+									<listheader width="90%" label="${labels.auction.auctionselectmainphoto}"></listheader>
 									<listheader width="10%" />
 								</listhead>
 								

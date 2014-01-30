@@ -11,51 +11,89 @@ import org.springframework.transaction.annotation.Transactional;
 
 import pl.krzaq.metalscrap.model.Category;
 
-
+@Transactional
 public class CategoryDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory ;
 
-	@Transactional
+	
 	public List<Category> findAll() {
 		
 		return sessionFactory.getCurrentSession().getNamedQuery("Category.findAll").list() ;
 		
 	}
-	@Transactional
+	
+	public List<Category> findAllByLang(String lang) {
+		
+		return sessionFactory.getCurrentSession().getNamedQuery("Category.findAllByLang").setParameter("lang", lang).list() ;
+		
+	}
+	
 	public List<Category> findSubCategories(Category parent) {
 		
 		return sessionFactory.getCurrentSession().getNamedQuery("Category.findSubCategories").setParameter("parent", parent).list() ;
 		
 	}
-	@Transactional
+	
+	public List<Category> findSubCategoriesByLang(Category parent, String lang) {
+		
+		return sessionFactory.getCurrentSession().getNamedQuery("Category.findSubCategoriesByLang").setParameter("parent", parent).setParameter("lang", lang).list() ;
+		
+	}
+
+	
 	public Category findParentCategory(Category child) {
 		
 		return (Category) sessionFactory.getCurrentSession().createCriteria(Category.class).createAlias("Category", "cat").add(Restrictions.eq("cat", child)).list().get(0) ;
 	}
-	@Transactional
+	
+	public Category findParentCategoryByLang(Category child, String lang) {
+		
+		return (Category) sessionFactory.getCurrentSession().createCriteria(Category.class).createAlias("Category", "cat").add(Restrictions.eq("cat", child)).add(Restrictions.eq("cat.lang", lang)).list().get(0) ;
+	}
+	
 	public Category findByName(String name, Category parent) {
 		
 		return (Category) sessionFactory.getCurrentSession().createCriteria(Category.class).add(Restrictions.eq("Category.name", name)).add(Restrictions.eq("Category.parent", parent)).list().get(0) ;
 		
 	}
-	@Transactional
+	
+	public Category findByNameAndLang(String name, Category parent, String lang) {
+		
+		return (Category) sessionFactory.getCurrentSession().createCriteria(Category.class).add(Restrictions.eq("Category.name", name)).add(Restrictions.eq("Category.parent", parent)).add(Restrictions.eq("Category.lang", lang)).list().get(0) ;
+		
+	}
+	
+	
 	public List<Category> findByName(String name) {
 		
 		return sessionFactory.getCurrentSession().getNamedQuery("Category.findByName").setParameter("name",name).list() ;
 		
 	}
-	@Transactional
+	
+	public List<Category> findByNameAndLang(String name, String lang) {
+		
+		return sessionFactory.getCurrentSession().getNamedQuery("Category.findByNameAndLang").setParameter("name",name).setParameter("lang", lang).list() ;
+		
+	}
+	
 	public List<Category> findRootCategories() {
 		
 		return sessionFactory.getCurrentSession().createCriteria(Category.class).add(Restrictions.isNull("parent")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list() ;
 		
 	}
-	@Transactional
+	
+	public List<Category> findRootCategoriesByLang(String lang) {
+		
+		return sessionFactory.getCurrentSession().createCriteria(Category.class).add(Restrictions.isNull("parent")).add(Restrictions.eq("lang", lang)).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list() ;
+		
+	}
+	
+	
 	public void save(Category category) {
 		
-		category.setPosition(this.getNextPosition(category.getParent())) ;
+		category.setPosition(this.getNextPosition(category.getParent(), category.getLang())) ;
 		sessionFactory.getCurrentSession().save(category) ;
 	}
 	@Transactional
@@ -67,12 +105,12 @@ public class CategoryDAO {
 	public void delete(Category category) {
 		
 		sessionFactory.getCurrentSession().delete(category);
-		this.getInOrder(category.getParent());
+		this.getInOrder(category.getParent(), category.getLang());
 	}
 	@Transactional
 	public void merge(Category category) {
 		
-		category.setPosition(this.getNextPosition(category.getParent())) ;
+		category.setPosition(this.getNextPosition(category.getParent(), category.getLang())) ;
 		sessionFactory.getCurrentSession().merge(category) ;
 		
 	}
@@ -90,10 +128,10 @@ public class CategoryDAO {
 		
 	}
 	
-	private void getInOrder(Category parent) {
+	private void getInOrder(Category parent, String lang) {
 		
 		if (parent!=null) {
-			List<Category> cats = this.findSubCategories(parent) ;
+			List<Category> cats = this.findSubCategoriesByLang(parent, lang) ;
 			Collections.sort(cats);
 			int i=1 ;
 			for(Category c:cats) {
@@ -105,7 +143,7 @@ public class CategoryDAO {
 			}
 			
 		} else {
-			List<Category> cats = this.findRootCategories() ;
+			List<Category> cats = this.findRootCategoriesByLang(lang) ;
 			Collections.sort(cats);
 			int i=1 ;
 			for(Category c:cats) {
@@ -119,11 +157,11 @@ public class CategoryDAO {
 		
 	}
 	
-	private int getNextPosition(Category parent) {
+	private int getNextPosition(Category parent, String lang) {
 		
 		int position = -1 ;
 		if (parent!=null) {
-			List<Category> cats = this.findSubCategories(parent) ;
+			List<Category> cats = this.findSubCategoriesByLang(parent, lang) ;
 			
 			if (cats!=null && cats.size()>0) {
 				Collections.sort(cats);
@@ -134,7 +172,7 @@ public class CategoryDAO {
 			
 		} else {
 			
-			List<Category> cats = this.findRootCategories() ;
+			List<Category> cats = this.findRootCategoriesByLang(lang) ;
 			
 			if(cats != null && cats.size()>0) {
 				Collections.sort(cats);

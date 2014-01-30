@@ -1,17 +1,28 @@
 package pl.krzaq.metalscrap.events;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.zkoss.util.resource.Labels;
+import org.zkoss.web.Attributes;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zkplus.databind.AnnotateDataBinder;
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Menubar;
 import org.zkoss.zul.Menuitem;
+
+import pl.krzaq.metalscrap.model.Category;
+import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 
 public class PageEvents {
 
@@ -21,25 +32,58 @@ public class PageEvents {
 		
 		//Page page = c.getPage() ;
 		
-		if (page.getAttribute("prevSubMenu")!=null) {
-			
-			Component prev = (Component) page.getAttribute("prevSubMenu") ;
-			prev.setVisible(false) ;
-			binder.loadComponent(prev);
-		}
+		
 		
 		
 		Component toShow = page.getFellow("men").getFellow(dest+"SubMenu") ;
+		
+		
+		
+		
+		if(page.getAttribute("subMenu")!=null) {
+			Boolean subMenu = (Boolean) page.getAttribute("subMenu") ;
+			
+			if (page.getAttribute("prevSubMenu")!=null) {
+				
+				Component prev = (Component) page.getAttribute("prevSubMenu") ;
+				if (prev!=toShow) {
+					page.setAttribute("subMenu", false) ;
+					binder.loadComponent(prev);
+					page.setAttribute("subMenu", true) ;
+					binder.loadComponent(toShow);
+					page.setAttribute("subMenu", true) ;
+				} else {
+					
+					page.setAttribute("subMenu", !subMenu) ;
+					binder.loadComponent(toShow);
+					//binder.loadComponent(prev);
+					//page.setAttribute("subMenu", subMenu) ;
+				}
+				
+			} else {
+				
+				
+				page.setAttribute("subMenu", true) ;
+				binder.loadComponent(toShow);
+				page.setAttribute("subMenu", true) ;
+			}
+			
+			
+		}
+		
+		
 		if (toShow instanceof Menubar) {
 			if(((Menubar)toShow).getOrient().equalsIgnoreCase("vertical")){
 			//	((Menubar)toShow).setLeft( ((Menuitem)c). );
 			}
+			
+			
+			
+			page.setAttribute("prevSubMenu", toShow) ;
+			
 		}
 		
-		toShow.setVisible(true) ;
-		binder.loadComponent(toShow);
 		
-		page.setAttribute("prevSubMenu", toShow) ;
 		
 	}
 	
@@ -77,6 +121,9 @@ public class PageEvents {
 		}
 		Executions.getCurrent().sendRedirect("/app/home");
 	}
+	
+	
+	
 	
 	
 }

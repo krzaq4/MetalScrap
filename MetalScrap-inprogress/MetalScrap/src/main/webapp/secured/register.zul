@@ -1,0 +1,292 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="pl.krzaq.metalscrap.pages.Login"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+<?page title="${labels.common.register}" contentType="text/html;charset=UTF-8" ?>
+
+
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript>
+<![CDATA[
+	String popPos = "overlap";
+	
+	Constraint matchPass = new Constraint() {
+        public void validate(Component comp, Object value) throws WrongValueException {
+            if (!((String)value).equals(user_pass.getValue()) )
+                throw new WrongValueException(comp, "Hasła różnią się");
+            }
+        }
+	
+	
+]]>
+</zscript>
+<div class="head"></div>
+<div class="log"></div>
+	<div
+		style="width:80%;height: 740px;margin: 0 auto ;">
+
+		<div id="header" class="header">
+			<div class="logo">
+				
+			</div>
+			<div class="headerinfo">
+				<div class="userInfo"><hbox><a onClick="loginPopup.open(content,popPos)" style="color: #eee">
+					${labels.common.login}
+				</a>
+				
+				<!-- <a onClick="registerPopup.open(content,popPos)" style="color:#eee">
+					${labels.common.register}
+				</a> -->
+				
+				</hbox>
+				</div>
+			</div>
+		</div>
+
+
+		<include id="men"  src="/common/menu.zul" ></include>
+		
+		<breadcrumb id="breadcrumb" standalone="false" currentCategory="@{selectedCategory}"></breadcrumb>
+		<separator bar="true" orient="horizontal"></separator>
+
+<div>
+	<hbox>
+		<label value="${labels.common.preferredlanguage} : " />	<langbox />
+	</hbox>
+</div>
+		
+
+		<panel id="content" height="500px" border="none">
+			<panelchildren>
+					
+<div class="leftContent">
+
+
+<div style=""></div>
+
+
+</div>
+
+			
+<div class="rightContent">
+
+		
+
+					<div id="step2" visible="true" width="100%" action="show: slideDown;hide: slideUp">
+						<div id="wizardSteps" class="wizardSteps" >
+		
+						
+							<div sclass="wizardStep"><div sclass="active"></div>${labels.common.personalData}</div>
+							<div sclass="wizardStep"><div sclass="inactive"></div>${labels.common.addressData}</div>
+							<div sclass="wizardStep"><div sclass="inactive"></div>${labels.common.registrationConfirmation}</div>
+						
+		
+						</div>
+						<space/>
+						<grid width="460px">
+							<columns>
+								<column width="150px"></column>
+								<column width="300px"></column>
+							</columns>
+							<rows>
+								<row>
+									<label value="Imię:"></label>
+									<textbox id="user_first"
+										value="@{user.firstName}" width="300px" constraint="/[a-zA-Z]+/: Imię może składać się tylko z liter" />
+								</row>
+								<row>
+									<label value="Drugie imię:"></label>
+									<textbox id="user_second"
+										value="@{user.secondName}" width="300px"  constraint="/[a-zA-Z]*/: Drugie imię może składać się tylko z liter"/>
+								</row>
+								<row>
+									<label value="Nazwisko:"></label>
+									<textbox id="user_name"
+										value="@{user.lastName}" width="300px"  constraint="/[a-zA-Z-]+/: Nazwisko może składać się z liter i znaku '-'"/>
+								</row>
+								<row>
+									<label value="Adres e-mail:"></label>
+									<textbox id="user_email"
+										value="@{user.email}" width="300px"  constraint="/.+@.+\.[a-z]+/: Niepoprawny adres e-mail" />
+								</row>
+								<row>
+									<label value="Login:"></label>
+									<textbox id="user_login"
+										value="@{user.login}" width="300px" constraint="/[a-zA-Z0-9-_]{6,16}/: Login może zawierać tylko litery, cyfry i znaki '-','_','@' i nie może być krótszy niż 6 znaków" />
+								</row>
+								<row>
+									<label value="Hasło:"></label>
+									<textbox type="password"
+										id="user_pass" value="@{user.password}" width="300px"  constraint="/[a-zA-Z+0-9+!@#*]{6,16}/: Hasło może składać się z liter, cyfr i znaków '!@#%', przy czym musi zawierać przynajmniej jedną cyfrę i jedną literę i składać się w sumie z conajmniej 6 znaków"  />
+								</row>
+								<row>
+									<label value="Powtórz hasło:"></label>
+									<textbox type="password"
+										id="user_repass" width="300px" constraint="${matchPass}" />
+								</row>
+
+
+
+							</rows>
+						</grid>
+						<div style="width:50%;float:left;" visible="false">
+							<button
+								onClick="formEvents.showAuctionParameters(step2, step3)"
+								label="&lt;&lt; Wstecz" />
+						</div>
+						<div style="width:50%;float:right;" visible="true">
+							<button
+								onClick="formEvents.showAuctionPositions(step2, step3)">
+								Dalej >>
+							</button>
+
+						</div>
+					</div>
+					<div id="step3" visible="false" width="100%" action="show: slideDown;hide: slideUp">
+		
+					<div id="wizardSteps2" class="wizardSteps" >
+		
+						
+							<div sclass="wizardStep"><div sclass="inactive"></div>${labels.common.personalData}</div>
+							<div sclass="wizardStep"><div sclass="active"></div>${labels.common.addressData}</div>
+							<div sclass="wizardStep"><div sclass="inactive"></div>${labels.common.registrationConfirmation}</div>
+						
+		
+						</div>
+		
+					<space/>
+					
+						<grid width="460px">
+							<columns>
+								<column width="150px"></column>
+								<column width="300px"></column>
+							</columns>
+							<rows>
+								<row>
+									<label
+										value="Adres do korespondencji" />
+									<label />
+								</row>
+								<row>
+									<label value="Ulica:"></label>
+									<textbox id="company_street2"
+										value="@{company.addressAdditional.street}" width="300px">
+									</textbox>
+								</row>
+								<row>
+									<label value="${labels.auction.auctionnumber.$} domu:"></label>
+									<textbox id="company_houseno2"
+										value="@{company.addressAdditional.houseNo}" width="300px">
+									</textbox>
+								</row>
+								<row>
+									<label value="${labels.auction.auctionnumber.$} lokalu:">
+									</label>
+									<textbox id="company_flatno2"
+										value="@{company.addressAdditional.flatNo}" width="300px">
+									</textbox>
+								</row>
+								<row>
+									<label value="Kod pocztowy:">
+									</label>
+									<textbox id="company_postal2"
+										value="@{company.addressAdditional.postal}" width="300px" constraint="/([0-9]{2}\-*[0-9]{3})||\b\b/: Wpisz kod pocztowy w formacie xx-xxx lub xxxxx, gdzie x - cyfra">
+									</textbox>
+								</row>
+								<row>
+									<label value="Miasto:"></label>
+									<textbox id="company_city2"
+										value="@{company.addressAdditional.city}" width="300px">
+									</textbox>
+								</row>
+								<row>
+									<label value="Kraj:"></label>
+									<textbox id="company_country2"
+										value="@{company.addressAdditional.country}" width="300px">
+									</textbox>
+								</row>
+
+							</rows>
+						</grid>
+
+
+
+						<div style="width:50%;float:left;">
+							<button
+								onClick="formEvents.showAuctionParameters(step2, step3)"
+								label="&lt;&lt; Wstecz" />
+						</div>
+						
+						<div style="width:50%;float:right;">
+							<button
+								onClick="auctionEvents.registerCompanyUser(company,user)">
+								Zarejestruj
+							</button>
+						</div>
+						
+					</div>
+					
+					</div>
+				<space></space>
+				<div sclass="pageFooter">
+					<div sclass="inner"><label value="${labels.contact.title}"/> | <label value="${labels.regulation.title}"/> | <label value="${labels.privacy.title}"/> | <label value="${labels.about.title}"/> </div>
+				</div>
+			</panelchildren>
+		</panel>
+
+		<popup id="loginPopup" action="show: slideDown;hide: slideUp"
+			width="350px" height="120px">
+
+
+			<panel id="login" width="100%">
+				<panelchildren>
+					<h:form method="post" id="j_spring_security_check"
+						action="../j_spring_security_check"
+						style="width:100%;height:120px">
+						<grid>
+							<columns>
+								<column width="120px"></column>
+								<column width="140px"></column>
+							</columns>
+							<rows>
+								<row>
+									<label>Nazwa uzytkownika</label>
+									<textbox id="j_username"
+										name="j_username" constraint="no empty">
+									</textbox>
+
+								</row>
+								<row>
+									<label>Haslo</label>
+									<textbox id="j_password"
+										name="j_password" type="password" constraint="no empty">
+									</textbox>
+								</row>
+							</rows>
+						</grid>
+						<h:input type="submit" value="Login" />
+					</h:form>
+				</panelchildren>
+			</panel>
+
+
+		</popup>
+
+
+		<popup id="registerPopup" action="show: slideDown;hide: slideUp"  style="background-color:#9975ff"
+			width="480px" height="auto">
+
+
+			
+
+		</popup>
+
+		<div>
+			<div id="additional" class="additional"></div>
+
+			<div id="footer" class="footer"></div>
+		</div>
+	</div>
+	
+	
+	
+</zk>

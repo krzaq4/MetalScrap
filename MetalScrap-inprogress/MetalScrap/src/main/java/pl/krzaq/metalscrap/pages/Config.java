@@ -25,7 +25,7 @@ public class Config extends HomePage{
 	
 	@Override
 	public void doAfterCompose(Page arg0, Component[] arg1) throws Exception {
-		// TODO Auto-generated method stub
+		super.doAfterCompose(arg0, arg1);
 		
 	}
 
@@ -46,6 +46,7 @@ public class Config extends HomePage{
 	@Override
 	public void doInit(Page page, Map<String, Object> arg1) throws Exception {
 	
+		super.doInit(page, arg1);
 		pl.krzaq.metalscrap.model.Config commoditiesVisible = ServicesImpl.getConfigService().findByKey("auction_commodities_visible") ;
 		pl.krzaq.metalscrap.model.Config categoriesVisible = ServicesImpl.getConfigService().findByKey("auction_categories_visible") ;
 		

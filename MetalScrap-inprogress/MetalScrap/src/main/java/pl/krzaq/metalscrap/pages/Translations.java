@@ -35,9 +35,17 @@ public class Translations extends HomePage {
 		
 		
 		List<String> availableLanguages = ServicesImpl.getLangLabelService().findAllLangs() ;//Arrays.asList(Locale.getISOCountries()) ;
-		List<String> allLanguages = Arrays.asList(Locale.getISOCountries()) ;
+		List<String> allLanguages = new ArrayList<String>(Arrays.asList(Locale.getISOLanguages())) ;
 		allLanguages.removeAll(availableLanguages) ;
 		
+		List<String> languages = new ArrayList<String>() ;
+		languages.add(availableLanguages.get(0)) ;
+		languages.add(availableLanguages.get(1)) ;
+		
+		page.setAttribute("languages", languages) ;
+		
+		page.setAttribute("lang1", availableLanguages.get(0)) ;
+		page.setAttribute("lang2", availableLanguages.get(1)) ;
 		page.setAttribute("availableLanguages", availableLanguages) ;
 		page.setAttribute("allLanguages", allLanguages) ;
 		page.setAttribute("langs", langs) ;

@@ -3,6 +3,8 @@ package pl.krzaq.metalscrap.converter;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zkplus.databind.TypeConverter;
 
+import pl.krzaq.metalscrap.model.Category;
+
 public class CategoryNotSelectedConverter implements TypeConverter {
 
 	@Override
@@ -13,8 +15,8 @@ public class CategoryNotSelectedConverter implements TypeConverter {
 
 	@Override
 	public Object coerceToUi(Object arg0, Component arg1) {
-		
-		return arg0==null ;
+		Category c = (Category) arg0 ;
+		return (c==null || c.getId()==null) ;
 	}
 
 }

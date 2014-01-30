@@ -2,11 +2,14 @@ package pl.krzaq.metalscrap.pages;
 
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.zkoss.web.Attributes;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
@@ -46,47 +49,56 @@ public class HomePage implements Initiator, InitiatorExt {
 		
 		
 		Executions.getCurrent().getDesktop().addListener(new ComponentEventInterceptor());
+		
+		
 		// wyœwietlanie sub menu
 		page.setAttribute("auctionsSubMenu", false);
 		page.setAttribute("companiesSubMenu", false);
 
 		Executions.getCurrent().getSession().setAttribute("page", page);
-
+		
 		userService = (UserServiceImpl) ApplicationContextProvider.getApplicationContext().getBean("userService") ;
 		
 		boolean isUser = false;
 		boolean isAdmin = false;
 		boolean isSuperAdmin = false;
+		boolean isLoggedIn = ((UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal())!=null ;
+		
 		
 		Boolean isCategoriesVisible = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("auction_categories_visible").getValue()) ;
 		Boolean isCommoditiesVisible = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("auction_commodities_visible").getValue());
 		
 		
-		String login = ((UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername() ;
-		System.out.println("Logged in user: "+login) ;
 		
-		
-		// Aktualnie zalogowany u¿ytkownik
-		User currentUser =userService.getUserByLogin(login); //ServicesImpl.getUserService().getUserByLogin(((UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()) ;
-		if (currentUser != null) {
-		page.setAttribute("currentUser", currentUser);
+		if ( isLoggedIn ) {
+			String login = ((UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername() ;
+			System.out.println("Logged in user: "+login) ;
+			
+			// Aktualnie zalogowany u¿ytkownik
+			User currentUser =userService.getUserByLogin(login); 
+			if (currentUser != null) {
+			page.setAttribute("currentUser", currentUser);
 
-		Iterator<Role> iterator = currentUser.getRoles().iterator() ; 
-		
-			while (iterator.hasNext()) {
+			Iterator<Role> iterator = currentUser.getRoles().iterator() ; 
+			
+				while (iterator.hasNext()) {
 
-				String roleName = iterator.next().getName();
+					String roleName = iterator.next().getName();
 
-				if (roleName.equalsIgnoreCase(Constants.ROLE_USER))
-					isUser = true ;
-				if(roleName.equalsIgnoreCase(Constants.ROLE_ADMIN))
-					isAdmin = true ;
-				if(roleName.equalsIgnoreCase(Constants.ROLE_SUPERADMIN))
-					isSuperAdmin = true ;
+					if (roleName.equalsIgnoreCase(Constants.ROLE_USER))
+						isUser = true ;
+					if(roleName.equalsIgnoreCase(Constants.ROLE_ADMIN))
+						isAdmin = true ;
+					if(roleName.equalsIgnoreCase(Constants.ROLE_SUPERADMIN))
+						isSuperAdmin = true ;
+
+				}
 
 			}
-
+			
 		}
+		
+		
 
 		// Uprawnienia u¿ytkownika
 
@@ -96,7 +108,7 @@ public class HomePage implements Initiator, InitiatorExt {
 		
 		page.setAttribute("isCommoditiesVisible", isCommoditiesVisible) ;
 		page.setAttribute("isCategoriesVisible", isCategoriesVisible) ;
-		
+		page.setAttribute("subMenu", false) ;
 
 	}
 

@@ -1,0 +1,8 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+
+
+<window id="paramsWindow" title="${labels.common.categoryparameters}" mode="embedded" width="800px" height="auto">
+
+
+</window>

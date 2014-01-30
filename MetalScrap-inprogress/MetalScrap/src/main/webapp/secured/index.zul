@@ -33,7 +33,7 @@
 					${labels.common.login}
 				</a>
 				
-				<a onClick="registerPopup.open(content,popPos)" style="color:#eee">
+				<a href="/app/register" style="color:#eee">
 					${labels.common.register}
 				</a>
 				
@@ -47,6 +47,14 @@
 		
 		<breadcrumb id="breadcrumb" standalone="false" currentCategory="@{selectedCategory}"></breadcrumb>
 		<separator bar="true" orient="horizontal"></separator>
+		
+<div>
+	<hbox>
+		<label value="${labels.common.preferredlanguage} : " />	<langbox />
+	</hbox>
+</div>
+		
+		
 		<panel id="content" height="500px" border="none">
 			<panelchildren>
 

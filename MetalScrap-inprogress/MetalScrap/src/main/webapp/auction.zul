@@ -18,7 +18,7 @@
 				
 			</div>
 			<div class="headerinfo">
-<div class="userInfo">Zalogowany jako: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/></div>
+<div class="userInfo">${labels.common.loggedinas}: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/> ( <label id="logout" value="${labels.common.logout}" sclass="asLink" onClick="pageEvents.logout()" /> )</div>
 			</div>
 		</div>
 
@@ -26,9 +26,15 @@
 		
 <breadcrumb id="breadcrumb" standalone="true" currentCategory="@{selectedCategory}"></breadcrumb>
 <div id="socialMedia" sclass="socialMedia">
+	<div>
+		<hbox>
+			<label value="${labels.common.preferredlanguage} : " />	<langbox />
+		</hbox>
+	</div>
+	
 	<button id="fb_share" sclass="fbshare" />
 </div>
-<panel id="parameters" height="auto" border="normal" collapsible="true"  action="show:slideIn;hide:slideOut">
+<panel id="parameters" height="auto" border="none" collapsible="true"  action="show:slideIn;hide:slideOut">
 <caption label="@{auction.name}"></caption>
 <panelchildren style="padding: 5px 5px 5px 5px">
 

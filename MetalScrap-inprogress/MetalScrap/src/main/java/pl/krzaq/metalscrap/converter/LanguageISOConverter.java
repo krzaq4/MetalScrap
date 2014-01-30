@@ -20,11 +20,11 @@ public class LanguageISOConverter implements TypeConverter {
 	@Override
 	public Object coerceToUi(Object arg0, Component arg1) {
 		String localeCode = (String) arg0 ;
-		Locale loc = new Locale("",localeCode) ;
+		Locale loc = new Locale(localeCode,localeCode) ;
 		HttpSession session = (HttpSession) Executions.getCurrent().getSession().getNativeSession() ;
 		Locale currentLocale = (Locale) session.getAttribute(Attributes.PREFERRED_LOCALE) ;
 		
-		String country = loc.getDisplayCountry(currentLocale) ;
+		String country = loc.getDisplayLanguage(currentLocale) ;
 		return country ;
 	}
 

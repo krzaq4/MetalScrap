@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language-addon>
+    <!-- The name of this addon. It must be unique -->
+    <addon-name>breadcrumb</addon-name>
+    <!-- Which language this addon will be added to -->
+    <language-name>xul/html</language-name>
+ 
+    <component>
+        <component-name>translationgrid</component-name>
+        <component-class>pl.krzaq.metalscrap.components.TranslationsGrid</component-class>
+        <extends>grid</extends>
+        
+        <annotation>
+        	<annotation-name>ZKBIND</annotation-name>
+        		<property-name>languages</property-name>
+        			
+       				 <attribute>
+            			<attribute-name>ACCESS</attribute-name>
+           			    <attribute-value>both</attribute-value>
+       				 </attribute>
+       				 <attribute>
+           				 <attribute-name>SAVE_EVENT</attribute-name>
+          			  	 <attribute-value>onSelect</attribute-value>
+        			</attribute>
+       				<!-- <attribute>
+            			<attribute-name>LOAD_REPLACEMENT</attribute-name>
+           			 	<attribute-value>rawValue</attribute-value>
+        			</attribute> -->
+        			<attribute>
+            			<attribute-name>LOAD_TYPE</attribute-name>
+            			<attribute-value>java.util.List</attribute-value>
+        			</attribute>
+    	</annotation>
+    	
+    </component>
+    
+</language-addon>

@@ -13,6 +13,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -24,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.zkoss.util.resource.Labels;
+import org.zkoss.web.Attributes;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
@@ -177,7 +179,7 @@ public void saveNewAuction(Auction auction, Page p) {
 		
 				
 		ses.removeAttribute("files");
-		} else if (files.size()==0) {
+		} else if (files!= null && files.size()==0) {
 			
 			for (AttachementFile at:auction.getFiles()) {
 				at.setAuction(null);
@@ -404,16 +406,16 @@ private boolean validateChildren(List<Component> parents) throws WrongValueExcep
 
 public void registerCompanyUser(Company company, User user) {
 	try {
-	user.setCompany(company);
+	//user.setCompany(company);
 	user.getRoles().add(roleDAO.findRoleByName(Constants.ROLE_USER)) ;
-	company.getUsers().add(user) ;
+	//company.getUsers().add(user) ;
 	
 	
 		
 	
 	user.setPassword(Utilities.md5(user.getPassword()));
-	
-	companyDAO.saveCompany(company);
+	userDAO.saveUser(user);
+	//companyDAO.saveCompany(company);
 	
 	
 	} catch (NoSuchAlgorithmException e) {
@@ -438,13 +440,14 @@ public void redirectToAuctionView(Auction auction) {
 public void onSelectAuctionCategory(Listitem item, AnnotateDataBinder binder) {
 	
 	Page page = item.getPage() ;
+	Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 	Category selectedCategory = item.getValue() ;
 	
 	if (selectedCategory.getId()==null) {  // powrót do kategorii nadrzêdnej
 		
 		if (selectedCategory.getParent()!=null) {
 			
-			List<Category> subCategories = ServicesImpl.getCategoryService().findSubCategories(selectedCategory.getParent()) ;
+			List<Category> subCategories = ServicesImpl.getCategoryService().findSubCategoriesByLang(selectedCategory.getParent(), locale.getLanguage()) ;
 			Category previous = new Category(Labels.getLabel("auction.auctioncategory.back"), "Powrót do nadrzêdnej kategorii", selectedCategory.getParent().getParent()) ;
 			subCategories.add(0, previous) ;
 			
@@ -456,7 +459,7 @@ public void onSelectAuctionCategory(Listitem item, AnnotateDataBinder binder) {
 			
 		} else {
 			
-			List<Category> subCategories = ServicesImpl.getCategoryService().findRootCategories() ;
+			List<Category> subCategories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
 			
 			
 			
@@ -471,7 +474,7 @@ public void onSelectAuctionCategory(Listitem item, AnnotateDataBinder binder) {
 	else
 	if (selectedCategory.getChildren()!=null && selectedCategory.getChildren().size()>0) {
 		
-		List<Category> subCategories = ServicesImpl.getCategoryService().findSubCategories(selectedCategory);
+		List<Category> subCategories = ServicesImpl.getCategoryService().findSubCategoriesByLang(selectedCategory, locale.getLanguage());
 		Category previous = new Category(Labels.getLabel("auction.auctioncategory.back"), "Powrót do nadrzêdnej kategorii", selectedCategory.getParent()) ;
 		subCategories.add(0, previous) ;
 		

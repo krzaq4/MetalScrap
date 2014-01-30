@@ -24,8 +24,11 @@ import javax.persistence.Table;
 @Table(name="category")
 @NamedQueries({
 	@NamedQuery(name="Category.findAll", query="from Category c" ),
+	@NamedQuery(name="Category.findAllByLang", query="from Category c where c.lang=:lang" ),
 	@NamedQuery(name="Category.findSubCategories", query="from Category c where c.parent=:parent" ),
-	@NamedQuery(name="Category.findByName", query="from Category c where c.name=:name" )
+	@NamedQuery(name="Category.findSubCategoriesByLang", query="from Category c where c.parent=:parent and c.lang=:lang" ),
+	@NamedQuery(name="Category.findByName", query="from Category c where c.name=:name" ),
+	@NamedQuery(name="Category.findByNameAndLang", query="from Category c where c.name=:name and c.lang=:lang" )
 	
 	
 	
@@ -47,6 +50,9 @@ public class Category implements Serializable, Comparable {
 	@Column(name="position")
 	private int position ;
 	
+	@Column(name="lang")
+	private String lang ;
+	
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="parent")
 	private Category parent ;
@@ -65,6 +71,15 @@ public class Category implements Serializable, Comparable {
 		
 	}
 	
+public Category(String name, String description, Category parent, String lang) {
+		
+		this.name = name ;
+		this.description = description ;
+		this.parent = parent ;
+		this.auctions = new ArrayList<Auction>() ;
+		this.children = new ArrayList<Category>() ;
+		this.lang = lang ;
+	}
 	
 	
 	public Category(String name, String description, Category parent) {
@@ -98,35 +113,39 @@ public class Category implements Serializable, Comparable {
 	
 	@Override
 	public int hashCode() {
-		return (this.getName().length()+1)*(this.getDescription().length()+1)+this.getPosition()*12 ;
-		
-		
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + position;
+		return result;
 	}
 
 
 
 	@Override
 	public boolean equals(Object obj) {
-		
-		boolean eq = true ;
-		if (obj!=null) {
-		Category toCompare = (Category) obj ;
-			if (this.getId()!=null) {
-			
-				if (this.getId()!=toCompare.getId())
-					eq = false ;
-			
-			}
-			
-			if (!this.getName().equals(toCompare.getName()))
-				eq = false ;
-			
-			if (this.getPosition()!=toCompare.getPosition())
-				eq = false ;
-		
-		} else eq=false ;
-		
-		return eq ;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Category other = (Category) obj;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (position != other.position)
+			return false;
+		return true;
 	}
 
 
@@ -191,6 +210,18 @@ public class Category implements Serializable, Comparable {
 
 	public void setPosition(int position) {
 		this.position = position;
+	}
+
+	
+
+	public String getLang() {
+		return lang;
+	}
+
+
+
+	public void setLang(String lang) {
+		this.lang = lang;
 	}
 
 

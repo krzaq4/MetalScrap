@@ -17,30 +17,60 @@ public class CategoryServiceImpl implements CategoryService {
 	public List<Category> findAll() {
 		return categoryDAO.findAll() ;
 	}
+	
+	@Override
+	public List<Category> findAllByLang(String lang) {
+		return categoryDAO.findAllByLang(lang) ;
+	}
 
 	@Override
 	public List<Category> findSubCategories(Category parent) {
 		return categoryDAO.findSubCategories(parent) ;
+	}
+	
+	@Override
+	public List<Category> findSubCategoriesByLang(Category parent, String lang) {
+		return categoryDAO.findSubCategoriesByLang(parent, lang) ;
 	}
 
 	@Override
 	public Category findParentCategory(Category child) {
 		return categoryDAO.findParentCategory(child) ;
 	}
+	
+	@Override
+	public Category findParentCategoryByLang(Category child, String lang) {
+		return categoryDAO.findParentCategoryByLang(child, lang) ;
+	}
 
 	@Override
 	public Category findByName(String name, Category parent) {
 		return categoryDAO.findByName(name, parent) ;
+	}
+	
+	@Override
+	public Category findByNameAndLang(String name, Category parent, String lang) {
+		return categoryDAO.findByNameAndLang(name, parent, lang) ;
 	}
 
 	@Override
 	public List<Category> findByName(String name) {
 		return categoryDAO.findByName(name) ;
 	}
+	
+	@Override
+	public List<Category> findByNameAndLang(String name, String lang) {
+		return categoryDAO.findByNameAndLang(name, lang) ;
+	}
 
 	@Override
 	public List<Category> findRootCategories() {
 		return categoryDAO.findRootCategories() ;
+	}
+	
+	@Override
+	public List<Category> findRootCategoriesByLang(String lang) {
+		return categoryDAO.findRootCategoriesByLang(lang) ;
 	}
 
 	@Override

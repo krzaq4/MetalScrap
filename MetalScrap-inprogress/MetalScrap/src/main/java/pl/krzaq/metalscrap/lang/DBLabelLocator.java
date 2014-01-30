@@ -29,7 +29,7 @@ public class DBLabelLocator implements LabelLocator2 {
 		
 	System.out.println("locale web: "+locale) ;
 		if (locale!=null) {
-		List<LangLabel> ll = ServicesImpl.getLangLabelService().findAllByLang(locale.toLanguageTag()) ;
+		List<LangLabel> ll = ServicesImpl.getLangLabelService().findAllByLang(locale.toString()) ;
 		
 		StringBuffer sb = new StringBuffer();
 		int i=0;

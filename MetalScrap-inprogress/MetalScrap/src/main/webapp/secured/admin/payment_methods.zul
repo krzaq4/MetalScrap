@@ -15,11 +15,17 @@
 
 </div>
 <div class="headerinfo">
-<div class="userInfo">Zalogowany jako: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/></div>
+<div class="userInfo">${labels.common.loggedinas}: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/> ( <label id="logout" value="${labels.common.logout}" sclass="asLink" onClick="pageEvents.logout()" /> )</div>
 </div>
 </div>
 
 <include id="men"  src="/common/menu.zul" ></include>
+
+<div>
+	<hbox>
+		<label value="${labels.common.preferredlanguage} : " />	<langbox />
+	</hbox>
+</div>
 
 <panel id="content" border="rounded">
 <panelchildren >

@@ -78,6 +78,11 @@ public class LangLabelServiceImpl implements LangLabelService {
 		return langLabelDAO.findById(id) ;
 	}
 
+	@Override
+	public List<String> findAllKeysUnique() {
+		return langLabelDAO.findAllKeysUnique() ;
+	}
+
 	
 	
 }

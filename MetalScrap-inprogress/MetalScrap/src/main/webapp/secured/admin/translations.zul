@@ -15,7 +15,7 @@
 
 </div>
 <div class="headerinfo">
-<div class="userInfo">Zalogowany jako: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/> ( <label id="logout" value="${labels.common.logout}" sclass="asLink" onClick="pageEvents.logout()" /> )</div>
+<div class="userInfo">${labels.common.loggedinas}: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/> ( <label id="logout" value="${labels.common.logout}" sclass="asLink" onClick="pageEvents.logout()" /> )</div>
 </div>
 </div>
 
@@ -23,6 +23,12 @@
 
 <breadcrumb id="breadcrumb" standalone="false" currentCategory="@{selectedCategory}"></breadcrumb>
 <separator bar="true" orient="horizontal"></separator>
+<div>
+	<hbox>
+		<label value="${labels.common.preferredlanguage} : " />	<langbox />
+	</hbox>
+</div>
+
 <panel id="content" border="none" height="auto">
 <caption label="${labels.admin.menu.translations}"></caption>
 <panelchildren >
@@ -31,21 +37,25 @@
 <groupbox>
 <caption label="${labels.common.options}" />
 <label value="${labels.common.showinlanguages}" />
+
 <hbox>
+
 <vbox>
 
-	<combobox model="@{availableLanguages}" width="140px">
-	<comboitem self="@{each=lang1}" image="@{lang1, converter='pl.krzaq.metalscrap.converter.LanguageIcoConverter'}" label="@{lang1, converter='pl.krzaq.metalscrap.converter.LanguageISOConverter'}">
+	<combobox id="firstLang" model="@{availableLanguages}" width="140px" selectedItem="@{lang1}">
+	<comboitem self="@{each=lang1}"  label="@{lang1, converter='pl.krzaq.metalscrap.converter.LanguageISOConverter'}">
 		</comboitem>
 	</combobox>
 </vbox>
+<label value=" &#9668; &#9658; " />
 <vbox>
 
-	<combobox model="@{availableLanguages}" width="140px">
-	<comboitem self="@{each=lang2}" image="@{lang2, converter='pl.krzaq.metalscrap.converter.LanguageIcoConverter'}" label="@{lang2, converter='pl.krzaq.metalscrap.converter.LanguageISOConverter'}">
+	<combobox id="secondLang" model="@{availableLanguages}" width="140px" selectedItem="@{lang2}">
+	<comboitem self="@{each=lang2}"  label="@{lang2, converter='pl.krzaq.metalscrap.converter.LanguageISOConverter'}">
 		</comboitem>
 	</combobox>
 </vbox>
+<button label="${labels.common.show}" onClick="langEvents.showInLanguages(lang1, lang2, panels, binder)"/>
 </hbox>
 </groupbox>
 
@@ -53,24 +63,29 @@
 <caption label="${labels.common.newlanguage}"></caption>
 <grid>
 <columns>
-<column width="120px"></column>
-<column width="220px"></column>
+<column width="130px"></column>
+<column width="230px"></column>
+<column width="140px"></column>
 </columns>
 <rows>
 	<row>
 	<label value="${labels.common.translation.selectlanguage}" />
-	<combobox model="@{allLanguages}" width="140px">
-	<comboitem self="@{each=newlang}" image="@{newlang, converter='pl.krzaq.metalscrap.converter.LanguageIcoConverter'}" label="@{newlang, converter='pl.krzaq.metalscrap.converter.LanguageISOConverter'}">
+	
+	<combobox id="allLangsAvailable" model="@{allLanguages}" width="220px" selectedItem="@{newLang}">
+	<comboitem self="@{each=newlang}"  label="@{newlang, converter='pl.krzaq.metalscrap.converter.LanguageISOConverter'}">
 		</comboitem>
 	</combobox>
-	<!-- 
-	<listbox mold="select" model="@{allLanguages}" width="80px">
-		<listitem self="@{each=newlang}">
-			<listcell>
-				<hbox><image src="@{newlang, converter='pl.krzaq.metalscrap.converter.LanguageIcoConverter'}"></image><label value="@{newlang, converter='pl.krzaq.metalscrap.converter.LanguageISOConverter'}" /> </hbox>
-			</listcell>
-		</listitem>
-	</listbox> -->
+	<button label="${labels.common.addlanguage}" width="auto" onClick="langEvents.addNewLanguage(newLang, firstLang, secondLang, allLangsAvailable, toDeleteLangs, binder)"/>
+	
+	
+	</row>
+	<row>
+	<label value="${labels.common.dellanguage}" />
+	<combobox id="toDeleteLangs" model="@{availableLanguages}" width="220px" selectedItem="@{toDelLang}">
+	<comboitem self="@{each=toDellang}"  label="@{toDellang, converter='pl.krzaq.metalscrap.converter.LanguageISOConverter'}">
+		</comboitem>
+	</combobox>
+	<button label="${labels.common.dellanguage}" width="auto" onClick="langEvents.delLanguage(toDelLang, firstLang, secondLang, allLangsAvailable, toDeleteLangs, binder)"/>
 	</row>
 </rows>
 </grid>
@@ -78,6 +93,8 @@
 </groupbox>
 
 </vbox>
+<groupbox>
+<caption label="${labels.common.sitesections}" />
 <tabbox>
 	<tabs>
 		<tab label="${labels.about.title}">
@@ -108,83 +125,68 @@
 		
 		</tab>
 	</tabs>
-	<tabpanels>
+	<tabpanels id="panels">
 		<tabpanel>
-		<grid id="about" use="pl.krzaq.metalscrap.components.TranslationsGrid" mold="paging" pageSize="10">
+		<translationgrid id="about" languages="@{languages}" />
+		<!-- <grid id="about" use="pl.krzaq.metalscrap.components.TranslationsGrid" mold="paging" pageSize="10">
 			
-		</grid>
+		</grid> -->
 		<button label="${labels.common.update}" onClick="langEvents.updateLabels(about, binder)" />
 		
 		</tabpanel>
 		<tabpanel>
-		<grid id="admin" use="pl.krzaq.metalscrap.components.TranslationsGrid">
-			
-		</grid>
+		<translationgrid id="admin" languages="@{languages}" />
 		<button label="${labels.common.update}" onClick="langEvents.updateLabels(admin, binder)" />
 		</tabpanel>
 		<tabpanel>
-			<grid id="auction" use="pl.krzaq.metalscrap.components.TranslationsGrid" height="auto">
-			
-		</grid>
+			<translationgrid id="auction" languages="@{languages}" />
 		<button label="${labels.common.update}" onClick="langEvents.updateLabels(auction, binder)" />
 		
 		</tabpanel>
 		<tabpanel>
 		
-		<grid id="cms" use="pl.krzaq.metalscrap.components.TranslationsGrid"  mold="paging" pageSize="10">
-			
-		</grid>
+		<translationgrid id="cms" languages="@{languages}" />
 		<button label="${labels.common.update}" onClick="langEvents.updateLabels(cms, binder)" />
 		
 		
 		</tabpanel>
 		<tabpanel>
 		
-		<grid id="regulation" use="pl.krzaq.metalscrap.components.TranslationsGrid"  mold="paging" pageSize="10">
-			
-		</grid>
+		<translationgrid id="regulation" languages="@{languages}" />
 		<button label="${labels.common.update}" onClick="langEvents.updateLabels(regulation, binder)" />
 		
 		
 		</tabpanel>
 		<tabpanel>
 		
-		<grid id="help" use="pl.krzaq.metalscrap.components.TranslationsGrid"  mold="paging" pageSize="10">
-			
-		</grid>
+		<translationgrid id="help" languages="@{languages}" />
 		<button label="${labels.common.update}" onClick="langEvents.updateLabels(help, binder)" />
 		
 		
 		</tabpanel>
 		<tabpanel>
-		<grid id="contact" use="pl.krzaq.metalscrap.components.TranslationsGrid"  mold="paging" pageSize="10">
-			
-		</grid>
+		<translationgrid id="contact" languages="@{languages}" />
 		<button label="${labels.common.update}" onClick="langEvents.updateLabels(contact, binder)" />
 		
 		
 		</tabpanel>
 		
 		<tabpanel>
-		<grid id="common" use="pl.krzaq.metalscrap.components.TranslationsGrid"  mold="paging" pageSize="10">
-			
-		</grid>
+		<translationgrid id="common" languages="@{languages}" />
 		<button label="${labels.common.update}" onClick="langEvents.updateLabels(common, binder)" />
 		
 		
 		</tabpanel>
 		
 		<tabpanel>
-		<grid id="privacy" use="pl.krzaq.metalscrap.components.TranslationsGrid"  mold="paging" pageSize="10">
-			
-		</grid>
+		<translationgrid id="privacy" languages="@{languages}" />
 		<button label="${labels.common.update}" onClick="langEvents.updateLabels(privacy, binder)" />
 		
 		
 		</tabpanel>
 	</tabpanels>
 </tabbox>
-
+</groupbox>
 <space></space>
 <div sclass="pageFooter">
 	<div sclass="inner"><label value="${labels.contact.title}"/> | <label value="${labels.regulation.title}"/> | <label value="${labels.privacy.title}"/> | <label value="${labels.about.title}"/> </div>
