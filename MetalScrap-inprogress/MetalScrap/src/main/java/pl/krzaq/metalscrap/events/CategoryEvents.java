@@ -20,11 +20,14 @@ import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Groupbox;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Row;
+import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treeitem;
 import org.zkoss.zul.Window;
@@ -45,9 +48,10 @@ public class CategoryEvents {
 		
 		List<CategoryParameter> params = new ArrayList<CategoryParameter>() ;
 		
-		if (category.getId()!=null)
+		if (category.getId()!=null){
 			params = ServicesImpl.getCategoryParameterService().findAllParams(category, category.getLang()) ;
-		
+			category.setParameters(params);
+		}
 		page.setAttribute("categoryParameters", params) ;
 		page.setAttribute("category", category) ;
 		
@@ -137,7 +141,7 @@ public class CategoryEvents {
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 		Category blank = new Category(Labels.getLabel("common.nocategory"), Labels.getLabel("common.nocategory.description"), null, locale.getLanguage()) ;
 		Category newCat = new Category("", "", null, locale.getLanguage()) ;
-		List<Category> root = ServicesImpl.getCategoryService().findAllByLang(locale.toString()) ;
+		List<Category> root = ServicesImpl.getCategoryService().findAllByLang(locale.getLanguage()) ;
 		root.add(0, blank) ;
 		BindingListModel<Category> lml = new BindingListModelList<Category>(root, true) ;
 		
@@ -241,7 +245,7 @@ public void moveCategoryDown(Category category, Grid grid, AnnotateDataBinder bi
 		
 		if(parent!=null) {
 			
-			List<Category> categories = ServicesImpl.getCategoryService().findSubCategoriesByLang(parent, locale.toString()) ;
+			List<Category> categories = ServicesImpl.getCategoryService().findSubCategoriesByLang(parent, locale.getLanguage()) ;
 			Collections.sort(categories);
 			int currentPosition = category.getPosition() ;
 			
@@ -267,7 +271,7 @@ public void moveCategoryDown(Category category, Grid grid, AnnotateDataBinder bi
 			
 		} else {
 			
-			List<Category> categories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.toString()) ;
+			List<Category> categories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
 			Collections.sort(categories);
 			int currentPosition = category.getPosition() ;
 			
@@ -319,7 +323,7 @@ public void moveCategoryDown(Category category, Grid grid, AnnotateDataBinder bi
 		
 		for (String lang:langs) {
 			category.setLang(lang);
-			ServicesImpl.getCategoryService().save(category);
+			//ServicesImpl.getCategoryService().save(category);
 		}
 		
 		page.setAttribute("categories", ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage())) ;
@@ -365,16 +369,16 @@ public void moveCategoryDown(Category category, Grid grid, AnnotateDataBinder bi
 			
 		}) ;
 		
-		page.setAttribute("categories", ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.toString())) ;	
+		page.setAttribute("categories", ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage())) ;	
 		binder.loadComponent(grid);
 		
 	}
 	
-	public void admin_onSelectCategoryParameter(CategoryParameter parameter, Window win, Grid paramValues, AnnotateDataBinder binder) {
+	public void admin_onSelectCategoryParameter(CategoryParameter parameter, Grid paramValues, AnnotateDataBinder binder) {
 		
 		Page page = paramValues.getPage() ;
 		
-		if (parameter.getType()==CategoryParameter.PARAM_TYPE_CHOICE || parameter.getType()==CategoryParameter.PARAM_TYPE_COMBO) {
+		if (parameter.getType().equals(CategoryParameter.PARAM_TYPE_CHOICE) || parameter.getType().equals(CategoryParameter.PARAM_TYPE_COMBO)) {
 			
 			List<CategoryParameterValue> paramValuesList = new ArrayList<CategoryParameterValue>() ;
 			page.setAttribute("paramValues", paramValuesList) ;
@@ -382,6 +386,27 @@ public void moveCategoryDown(Category category, Grid grid, AnnotateDataBinder bi
 			binder.loadComponent(paramValues);
 		} else {
 			paramValues.setVisible(false) ;
+			
+		}
+		
+	}
+	
+	
+	public void admin_onClickExistingCategoryParameter(CategoryParameter param,Grid grid, Groupbox gbox, AnnotateDataBinder binder) {
+		Page page = gbox.getPage();
+		
+		page.setAttribute("newParameter", param) ;
+		gbox.setVisible(true) ;
+		for(Object o:grid.getRows().getChildren()) {
+			Row r = (Row) o ;
+			for (Component c:r.getChildren()) {
+				if (c instanceof Textbox || c instanceof Listbox || c instanceof Label) {
+					
+					if (binder.existsBindings(c)) {
+						binder.loadComponent(c);
+					}
+				}
+			}
 			
 		}
 		
@@ -399,6 +424,55 @@ public void moveCategoryDown(Category category, Grid grid, AnnotateDataBinder bi
 		newParam.setValues(new ArrayList<CategoryParameterValue>()) ;
 		page.setAttribute("newParameter", newParam) ;
 		gbox.setVisible(true) ;
+	}
+	
+	
+	public void admin_onClickAddValue(CategoryParameter categoryParam, Grid grid, AnnotateDataBinder binder) {
+		Page page = grid.getPage() ;
+		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
+		ListModelList lm = (ListModelList) grid.getListModel() ;
+		
+		CategoryParameterValue pv = new CategoryParameterValue() ;
+		pv.setCategoryParameter(categoryParam);
+		pv.setLang(locale.getLanguage());
+		lm.add(pv) ;
+		
+		binder.loadComponent(grid);
+		
+	}
+	
+	public void admin_onClickDeleteParamValue(CategoryParameterValue paramVal, Grid grid, AnnotateDataBinder binder) {
+		Page page = grid.getPage() ;
+		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
+		
+		ListModelList lm = (ListModelList) grid.getListModel() ;
+		
+		lm.remove(paramVal) ;
+		
+		binder.loadComponent(grid);
+		
+	}
+	
+	
+	public void admin_onClickSaveCategoryParameter(CategoryParameter catParam, Grid catParamsGrid, AnnotateDataBinder binder) {
+		Page page = catParamsGrid.getPage() ;
+		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
+		
+		//catParam.setValues(paramValues);
+		List<String> langs = ServicesImpl.getLangLabelService().findAllLangs();
+		if (catParam.getId()==null) {
+		for (String lang:langs){
+			catParam.setLang(lang);
+			ServicesImpl.getCategoryParameterService().save(catParam);
+		}
+		} else {
+			
+			ServicesImpl.getCategoryParameterService().save(catParam);
+		}
+		
+		Messagebox.show(Labels.getLabel("common.categoryparametersaved")) ;
+		
+		
 	}
 	
 }

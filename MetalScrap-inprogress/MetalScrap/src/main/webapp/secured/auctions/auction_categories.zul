@@ -56,15 +56,15 @@
 						<label sclass="normalLabel" value="${labels.common.categoryparameters}" />
 						
 					
-					<grid id="catParamsGrid" model="@{categoryParameters}">
+					<grid id="catParamsGrid" model="@{category.parameters}">
 					
 						<columns>
 							<column width="90%"></column>
 							<column width="10%"></column>
 						</columns>
 						<rows>
-							<row self="@{each=param}">
-								<label sclass="normalLabel" value="@{param.name}" />
+							<row self="@{each=parametr}" value="@{parametr}">
+								<label sclass="normalLabel" value="@{parametr.name}" onClick="categoryEvents.admin_onClickExistingCategoryParameter(parametr, paramsAndValues, catPar, binder)"/>
 								<button sclass="deleteButton" />
 							</row>						
 						</rows>
@@ -76,7 +76,7 @@
 			
 			<space/>
 			
-			<groupbox id="catPar" visible="false">
+			<groupbox id="catPar" visible="false" height="auto" >
 			<caption label="${labels.common.categoryparameters}"></caption>
 			<zscript>
 <![CDATA[
@@ -86,15 +86,15 @@
          typesl.add(2);
          typesl.add(3);
          typesl.add(4);
-         ListModel types=new ListModelList(typesl);
+         ListModel types=new BindingListModelList(typesl,true);
 
 ]]>
 </zscript>
 
-<grid >
+<grid id="paramsAndValues" height="auto" >
 <columns>
-	<column width="50%" />
-	<column width="50%" />
+	<column width="20%" />
+	<column width="80%" />
 </columns>
 <rows>
 	<row>
@@ -103,11 +103,11 @@
 	</row>
 	<row>
 		<label value="${labels.common.type.label}" />
-		<listbox model="${types}" mold="select" selectedItem="@{newParameter.type}"  onSelect="categoryEvents.admin_onSelectCategoryParameter(newParameter, paramsWindow,paramValues, binder)">
+		<listbox model="${types}" mold="select" selectedItem="@{newParameter.type}"  onSelect="categoryEvents.admin_onSelectCategoryParameter(newParameter, paramVals, binder)">
 		
 			<listitem self="@{each=type}" value="@{newParameter.type}">
-			<listcell>
-				<label value="@{type, converter='pl.krzaq.metalscrap.converter.CategoryParameterTypeConverter'}"> </label>			
+			<listcell label="@{type, converter='pl.krzaq.metalscrap.converter.CategoryParameterTypeConverter'}">
+						
 			</listcell>
 			
 			</listitem>
@@ -129,16 +129,29 @@
 
 
 
-<grid id="paramValues" model="@{paramValues}" visible="false" width="100%" height="200px">
-<columns>
-	<column width="100%" />
-</columns>
+<div sclass="listMenu">
+	<button label="${labels.common.addparametervalue}" onClick="categoryEvents.admin_onClickAddValue(newParameter,paramVals, binder)" />
+</div>
+<label value="${labels.common.parametervalues}" />
+<grid id="paramVals" model="@{newParameter.values}" visible="true" width="100%" height="200px">
 
+<columns>
+	<column width="20%" />
+	<column width="70%" />
+	<column width="10%" />
+</columns>
+<rows>
+	<row self="@{each=val}" value="@{val}">
+		<label value="${labels.common.value}" />
+		<textbox value="@{val.value}" />
+		<button sclass="deleteButton" onClick="categoryEvents.admin_onClickDeleteParamValue(val, paramVals, binder)"/>
+	</row>
+</rows>
 
 
 </grid>
 
-<button label="${labels.common.save}" />
+<button label="${labels.common.save}" onClick="categoryEvents.admin_onClickSaveCategoryParameter(newParameter,catParamsGrid, binder)" />
 
 			
 			

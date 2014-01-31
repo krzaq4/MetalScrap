@@ -87,17 +87,17 @@ border-radius: 8px;
 
 .deleteButton.z-button-os {
 	border: none ;
-	width: 32px ;
-	height: 32px ;
-	background-image: url(../images/minus32.png) ;
+	width: 20px ;
+	height: 20px ;
+	background-image: url(../images/minus20.png) ;
 }
 
 .addButton.z-button-os {
 	border: none ;
 	float: right ;
-	width: 32px ;
-	height: 32px ;
-	background-image: url(../images/plus32.png) ;
+	width: 20px ;
+	height: 20px ;
+	background-image: url(../images/plus20.png) ;
 }
 
 .userInfo {
