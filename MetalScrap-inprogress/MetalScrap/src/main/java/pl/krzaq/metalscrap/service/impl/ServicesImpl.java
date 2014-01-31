@@ -38,6 +38,12 @@ public class ServicesImpl {
 	@Autowired
 	private static CategoryParameterServiceImpl categoryParameterService ;
 	
+	@Autowired static MailServiceImpl mailService ;
+	
+	public static MailServiceImpl getMailService(){
+		return mailService ;
+	}
+	
 	public static CategoryParameterServiceImpl getCategoryParameterService() {
 		return categoryParameterService ;
 	}
@@ -55,7 +61,9 @@ public class ServicesImpl {
 		return userService ;
 	}
 
-	
+	public void setMailService(MailServiceImpl mailService){
+		this.mailService = mailService ;
+	}
 	public void setCategoryParameterService(CategoryParameterServiceImpl categoryParameterService) {
 		this.categoryParameterService = categoryParameterService ;
 	}

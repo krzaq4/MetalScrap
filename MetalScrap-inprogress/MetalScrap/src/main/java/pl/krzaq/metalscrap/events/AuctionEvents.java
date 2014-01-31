@@ -415,6 +415,21 @@ public void registerCompanyUser(Company company, User user) {
 	
 	user.setPassword(Utilities.md5(user.getPassword()));
 	userDAO.saveUser(user);
+	Map<String, Object> model = new HashMap<String, Object>() ;
+	model.put("title", "Potwierdzenie rejestracji") ;
+	model.put("registrationconfirmationlabel", "Rejestracja na platformie licytuj.to!") ;
+	model.put("welcometoplatformlabel", "Witamy na platformie!") ;
+	model.put("loginlabel", "Login:") ;
+	model.put("login", user.getLogin()) ;
+	model.put("name", user.getFirstName()+" "+user.getLastName()) ;
+	model.put("nameLabel", "Imiê i nazwisko:") ;
+	model.put("confirmationlinkcaption", "Potwierdzenie rejestracji") ;
+	model.put("confirmationlink", "http://google.pl") ;
+	model.put("confirmationlinklabel", "Link do potwierdzenia") ;
+	model.put("platformnamelabel", "Licytuj.to - platforma aukcyjna") ;
+	model.put("platforminfo", "Witamy na platformie") ;
+	model.put("platforminfo2", "Dziêkujemy za rejestracjê") ;
+	ServicesImpl.getMailService().sendUserMail("", model, "Rejestracja", user);
 	//companyDAO.saveCompany(company);
 	
 	
