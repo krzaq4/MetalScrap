@@ -49,7 +49,7 @@ public class User implements Serializable {
 	private Company company ;
 	
 	@NotNull
-	@Column(name="login")
+	@Column(name="login",unique=true)
 	private String login ;
 	
 	@NotNull
@@ -68,7 +68,7 @@ public class User implements Serializable {
 	private String lastName ;
 	
 	@NotNull
-	@Column(name="email")
+	@Column(name="email", unique=true)
 	private String email ;
 	
 	@ManyToMany(cascade=CascadeType.ALL)

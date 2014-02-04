@@ -18,6 +18,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Period;
@@ -422,21 +423,24 @@ public void registerCompanyUser(Company company, User user) {
 	model.put("loginlabel", "Login:") ;
 	model.put("login", user.getLogin()) ;
 	model.put("name", user.getFirstName()+" "+user.getLastName()) ;
-	model.put("nameLabel", "Imiê i nazwisko:") ;
+	model.put("namelabel", "Imiê i nazwisko:") ;
 	model.put("confirmationlinkcaption", "Potwierdzenie rejestracji") ;
 	model.put("confirmationlink", "http://google.pl") ;
 	model.put("confirmationlinklabel", "Link do potwierdzenia") ;
 	model.put("platformnamelabel", "Licytuj.to - platforma aukcyjna") ;
 	model.put("platforminfo", "Witamy na platformie") ;
 	model.put("platforminfo2", "Dziêkujemy za rejestracjê") ;
-	ServicesImpl.getMailService().sendUserMail("", model, "Rejestracja", user);
+	ServicesImpl.getMailService().sendUserMail("mail_registration_confirmation.ftl", model, "Rejestracja", user);
 	//companyDAO.saveCompany(company);
 	
 	
 	} catch (NoSuchAlgorithmException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
-	} 
+	} catch(ConstraintViolationException cve){
+		
+		
+	}
 	
 }
 

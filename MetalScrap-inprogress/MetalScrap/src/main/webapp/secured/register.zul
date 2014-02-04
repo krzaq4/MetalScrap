@@ -82,7 +82,7 @@
 		
 						</div>
 						<space/>
-						<grid width="460px">
+						<grid id="personalGrid" width="460px">
 							<columns>
 								<column width="150px"></column>
 								<column width="300px"></column>

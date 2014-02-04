@@ -7,8 +7,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +38,27 @@ public class AuctionDAO {
 	public List<Auction> findByStatus(AuctionStatus status) {
 		
 		return sessionFactory.getCurrentSession().getNamedQuery("Auction.findByStatus").setParameter("status", status).list() ;
+		
+	}
+	
+	public List<Integer> findIds(AuctionStatus status, Date from, Date to) {
+		
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Auction.class) ;
+		if (status!=null)
+			criteria.add(Restrictions.eq("status", status)) ;
+		
+		if (from!=null) 
+			criteria.add(Restrictions.Ge("startDate", from)) ;
+		
+		if (to!=null)
+			criteria.add(Restrictions.le("endDate", to)) ;
+		
+		ProjectionList projList = Projections.projectionList();
+	    projList.add(Projections.property("id"));
+	    
+		criteria.setProjection(projList) ;
+		
+		return criteria.list() ;
 		
 	}
 	

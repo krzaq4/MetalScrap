@@ -29,7 +29,10 @@ public class AuctionServiceImpl implements AuctionService {
 		return auctionDAO.findAll() ;
 	}
 
-	
+	@Override
+	public List<Integer> findIds(AuctionStatus status, Date from, Date to) {
+		return auctionDAO.findIds(status, from, to) ;
+	}
 
 	@Override
 	public List<Auction> findByStatus(AuctionStatus status) {

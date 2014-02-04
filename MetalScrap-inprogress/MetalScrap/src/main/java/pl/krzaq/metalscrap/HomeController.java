@@ -2,7 +2,12 @@ package pl.krzaq.metalscrap;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import pl.krzaq.metalscrap.dao.UserDAO;
 import pl.krzaq.metalscrap.model.User;
 import pl.krzaq.metalscrap.service.impl.RESTLoginServiceImpl;
+import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 
 
 
@@ -82,6 +88,19 @@ public class HomeController {
 		
 		
 	}*/
+	
+	
+	@Path("/auctionList")
+	@Produces("application/json")
+	@GET
+	public List<Integer> getAuctionsIds(Integer status, Date from, Date to) {
+		
+		return ServicesImpl.getAuctionService().findIds(ServicesImpl.getAuctionService().findStatusByCode(status), from, to) ;
+		
+	}
+	
+	
+
 	
 	
 }
