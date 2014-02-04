@@ -261,13 +261,18 @@
 		</dependency>
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey</artifactId>
-			<version>0.8-ea</version>
+			<artifactId>jersey-servlet</artifactId>
+			<version>1.18</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-servlet</artifactId>
-			<version>1.18</version>
+			<artifactId>jersey-spring</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey</artifactId>
+			<version>0.8-ea</version>
 		</dependency>
 	</dependencies>
     <build>
