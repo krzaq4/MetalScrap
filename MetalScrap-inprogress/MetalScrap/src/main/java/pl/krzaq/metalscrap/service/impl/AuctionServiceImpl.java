@@ -30,7 +30,7 @@ public class AuctionServiceImpl implements AuctionService {
 	}
 
 	@Override
-	public List<Integer> findIds(AuctionStatus status, Date from, Date to) {
+	public List<Long> findIds(AuctionStatus status, Date from, Date to) {
 		return auctionDAO.findIds(status, from, to) ;
 	}
 

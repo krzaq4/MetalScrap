@@ -1,10 +1,27 @@
 <html>
 
 <head>
-<script src="resources/js/jquery-1.10.2.min.js"></script> 
+<script src="resources/js/jquery-1.11.0.js"></script> 
 </head>
 <body>
+<style>
 
+.label{
+font-style: Italic;
+color: #444444;
+}
+
+.timeLeftLabel{
+color: #444444 ;
+}
+
+.name .dateFrom .dateTo .currentOffer .timeLeft{
+
+color: #222222;
+font-weight: bold ;s
+}
+
+</style>
 <div id="page" style="display:block;width:100%;height:700px;margin: 0 auto ;">
 <div id="header" style="display: block; width: 100%; height: 120px; background-image: url('resources/images/header.jpg')">
 <div id="innerheader" style="padding: 10px 10px 10px 10px; color: #545454; font-family: Verdana; font-style: Italic; font-size: 1.6em;text-shadow: 1px 1px #5c5c5c; color: #cdcdcd">
@@ -12,84 +29,39 @@ Ajax RESTful services test
 </div>
 </div>
 	<div id="content" style="display: block ; width:70%; height: 60%;box-shadow: 10px 10px 5px #888888; background-color: #eee; margin: 0 auto;">
-		<div id="innercontent" style="padding:10px 10px 10px 10px">
-		<div id="loginform" style="display: block ; width:39%; height: 90%; float: left; background-color: #dedede; font-family: Verdana; color:#444" >
-		<div id="innerloginform" style="padding: 10px 10px 10px">
-			<form id="loginForm">
-				<table border=0>
-					<tr>
-						<td>
-							<label for="user">Login:</label>
-						</td>
-						<td>
-							<input type="text" name="user" id="user" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label for="pass">Password:</label>
-						</td>
-						<td>
-							<input type="password" name="pass" id="pass" />
-						</td>
-					</tr>
-				</table>
-			</form>
-			<button name="submit" class="button" value="Zaloguj">Zaloguj</button>
+	<div style="display: block ;width: 60%; height: 300px;float: left ;">
+	<table border="0">
+	<tr>
+	<td><span class="label">Tytuł: </span></td><td><span class="name"></span></td>
+	</tr>
+	<tr>
+	<td><span class="label">Data rozpoczęcia: </span></td><td><span class="dateFrom"></span></td>	
+	</tr>
+	<tr>
+	<td><span class="label">Data zakończenia: </span></td><td><span class="dateTo"></span></td>
+	</tr>
+	<tr>
+	<td><span class="label">Najlepsza oferta: </span></td><td><span class="currentOffer"></span></td>
+	</tr>
+	<tr>
+	<td><span class="timeLeftLabel"></span></td><td><span class="timeLeft"></span></td>
+	</tr>
+	</table>
+		
+		
+		
+		
+		
+</div>
+<div style="display: block;width:40%;height: 300px ;float: right;">
 
-		</div>
-		</div>
-		<div id="info" style="display: block; width: 59%; height:90%;float: right;background-color: #353535; color: #ededed; font-family: Verdana; font-size: 0.8em;">
-			<div id="innerinfo" style="padding: 15px 15px 15px 15px">
-			<span>Witamy!</span></br>
-			<span>Zaloguj się przy użyciu formularza.</span><br/><br/>
-			<span><small>(C) 2013 Krq</small></span>
-			</div>
-		</div>
-		
-		<!--    Po zalogowaniu   -->
-		
-		<div id="loggedin" style="display: none ; width:39%; height: 90%; float: left; background-color: #efefef; font-family: Verdana; color: #333; " >
-		<div id="loggedininner" style="padding 10px 10px 10px 10px">
-		<h2>${labels.common.loggedinas}: </h2>
-		<table>
-			<tr>
-				<td>
-					Login: 
-				</td>
-				<td>
-					<div id="userlogin"></div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					Imię: 
-				</td>
-				<td>
-					<div id="userfirst">dd</div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					Nazwisko: 
-				</td>
-				<td>
-					<div id="userlast"></div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					E-mail: 
-				</td>
-				<td>
-					<div id="useremail"></div>
-				</td>
-			</tr>
-		</table>
-		
-		</div>
-		</div>
+<form id="offerForm" >
+<input id="val" class="val" name="val" type="text" />
+<input id="id" name="id" type="hidden" value="1" /> 
+<input  id="bid" class="bid" type="button" value="licytuj" onclick="javascript:submitF(this.form)"></input>
+</form>
 
+</div>
 		</div>
 	</div>
 
@@ -100,117 +72,63 @@ Ajax RESTful services test
 
 
 
- $(document).ready(function () {
- 
- 
- 
- if (getCookie(loggedin)){
- 
- if(getCookie(loggedin)==1){
- 
- parseLogin(getCookie(loginform) ) ;
- 
- } else {
- 
- 
- 
- }
- 
- 
- }
- 
+$(document).ready(function() {
+	
+    
+update(); 
+	
+    
+});
 
-function setCookie(key, value) {
-            var expires = new Date();
-            expires.setTime(expires.getTime() + (1 * 24 * 60 * 60 * 1000));
-            document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
-        }
+function update(){
 
-        function getCookie(key) {
-            var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
-            return keyValue ? keyValue[2] : null;
-        }
+	$.ajax({
+        url: "http://localhost:8081/MetalScrap/app/auction",
+        data: {"id": 1},
+        processData: true
+    }).then(function(data) {
+     $(".name").text(data.name) ;
+     $(".dateFrom").text(data.dateFrom) ;
+     $(".dateTo").text(data.dateTo) ;
+     $(".currentOffer").text(data.currentOffer) ;
+     $(".timeLeft").text(data.timeLeft) ;
+     
+          $(".bid").prop("disabled", !data.started) ;
+          $(".val").prop("disabled", !data.started) ;
+      
+          if(data.stat==1) {
+              $(".timeLeftLabel").text("Do rozpoczęcia: ") ;
+          } else {
+         	 $(".timeLeftLabel").text("Do zakończenia: ") ;
 
-        $(document).ready(function () {
-    $(function() {  
-      $('.button').click(function() {  
-        
-		
-		login() ;
-		
-		
-		
-      });  
-    });  
+                  }
+     
+	setTimeout(update, 1000) ;	
+     
+       
+    });
 
 
-        });
-    function login() {
+    function addOffer(offer) {
 
     	
-    	$.ajax({
-    	url: "http://acer-3.edoffice.e-direct.pl:8081/MetalScrap/app/loginservice/krzaq4/krzaq666/",
-    		type: "GET",
-    		dataType: "xml",
-    		
-    	    
-    		success: function(xml){
-    					
-    			var serializer = new XMLSerializer();
-						if (getCookie(loggedin)) {
-							if(getCookie(loggedin)==1){
-									
-							} else {
-									parseLogin(serializer.serializeToString(xml));
-							}
-						}
-    					
-    					
-    					},
-    		error: function() {
-    					setCookie(loggedin,0) ;
-    							}
-    	});
-    		
 
-    	}
+        }
+
+	}
 
 
-function parseLogin(xml){
-
-	xmlDoc = $.parseXML( xml ),
-    $xml = $( xmlDoc ),
-    $email = $xml.find( "email" ),
-	$firstName = $xml.find("firstName"),
-	$lastName = $xml.find("lastName"),
-	$login = $xml.find("login");
-
+function submitF(form) {
+Id = form.id.value;
+Value = form.val.value ;
 	
-		$('div#loginform').fadeOut(700, function(){
+	$.post( "http://localhost:8081/MetalScrap/app/offer",{ id: Id, value: Value }, function( data ){
 		
-		
-		
-		
-		$('div#userfirst').html( $firstName.text() ) ;
-		$('div#userlast').html( $lastName.text() ) ;
-		$('div#useremail').html( $email.text() ) ;
-		$('div#userlogin').html( $login.text() ) ;
-		
-		$('div#loggedin').fadeIn(700) ;
+		});
 	
-		setCookie(loggedin,1) ;
-		setCookie(loginform, xml) ;
-		}) ;
-		
- 
-       
- 
-    
-
+	
+	
 }
-
-
-});
 
 </script>
 

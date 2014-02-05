@@ -25,7 +25,6 @@
 	
 	
 	
-	
 	<!-- Processes application requests -->
 	<servlet>
 		<servlet-name>appServlet</servlet-name>
@@ -55,14 +54,7 @@
 	</servlet>
 
 
-	<servlet>
-    	<servlet-name>Jersey REST Service</servlet-name>
-    	<servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-    	<servlet-name>Jersey REST Service</servlet-name>
-    	<url-pattern>/rest/*</url-pattern>
-	</servlet-mapping>
+	
 
 	<servlet-mapping>
 		<servlet-name>appServlet</servlet-name>

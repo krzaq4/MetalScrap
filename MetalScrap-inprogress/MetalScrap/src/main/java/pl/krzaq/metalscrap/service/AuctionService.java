@@ -46,7 +46,7 @@ public interface AuctionService {
 	
 	public List<Auction> findByCategoryDown(Category category, AuctionStatus status) ;
 	
-	public List<Integer> findIds(AuctionStatus status, Date from, Date to) ;
+	public List<Long> findIds(AuctionStatus status, Date from, Date to) ;
 	
 	public List<Auction> filter(String phrase, AuctionStatus status, PaymentMethod method, DeliveryType type, Date startDate, Date endDate) ;
 	

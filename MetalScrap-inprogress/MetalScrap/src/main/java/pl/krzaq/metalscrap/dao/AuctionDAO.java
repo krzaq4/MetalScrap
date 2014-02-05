@@ -41,14 +41,14 @@ public class AuctionDAO {
 		
 	}
 	
-	public List<Integer> findIds(AuctionStatus status, Date from, Date to) {
+	public List<Long> findIds(AuctionStatus status, Date from, Date to) {
 		
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Auction.class) ;
 		if (status!=null)
 			criteria.add(Restrictions.eq("status", status)) ;
 		
 		if (from!=null) 
-			criteria.add(Restrictions.Ge("startDate", from)) ;
+			criteria.add(Restrictions.ge("startDate", from)) ;
 		
 		if (to!=null)
 			criteria.add(Restrictions.le("endDate", to)) ;
@@ -117,8 +117,8 @@ public class AuctionDAO {
 		
 		return (AuctionStatus) sessionFactory.getCurrentSession().createCriteria(AuctionStatus.class).add(Restrictions.eq("code", code)).list().get(0) ;
 	}
-
 	public Auction findById(Long id) {
+
 		List<Auction> list = sessionFactory.getCurrentSession().getNamedQuery("Auction.findById").setParameter("id", id).list() ;
 		if(list.size()>0)
 			return (Auction)list.get(0) ;

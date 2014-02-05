@@ -28,17 +28,33 @@ public class AuctionTimeLeftConverter implements TypeConverter {
 		Timestamp current = new Timestamp(new Date().getTime()) ;
 		if (a!=null && current.before(a.getEndDate())) {
 			
-			DateTime now = new DateTime(new Date()) ;
-			DateTime end = new DateTime(a.getEndDate()) ;
-			Duration d = new Duration(now, end);
+			if(current.before(a.getStartDate())) {
+				
+				DateTime now = new DateTime(new Date()) ;
+				DateTime end = new DateTime(a.getStartDate()) ;
+				Duration d = new Duration(now, end);
 			
-			StringBuffer toGo = new StringBuffer() ;
-			Long daysToGo = d.getStandardDays() ;
-			toGo.append(daysToGo+" dni, ") ;
+				StringBuffer toGo = new StringBuffer() ;
+				Long daysToGo = d.getStandardDays() ;
+				toGo.append(daysToGo+" dni, ") ;
 			
-			Period p = d.toPeriod().minusDays(daysToGo.intValue()) ;
-			toGo.append(p.getHours()+" godz., "+p.getMinutes()+" min., "+p.getSeconds()+" sek.") ; 
-			result = toGo.toString() ;
+				Period p = d.toPeriod().minusDays(daysToGo.intValue()) ;
+				toGo.append(p.getHours()+" godz., "+p.getMinutes()+" min., "+p.getSeconds()+" sek.") ; 
+				result = toGo.toString() ;
+				
+			} else {
+				DateTime now = new DateTime(new Date()) ;
+				DateTime end = new DateTime(a.getEndDate()) ;
+				Duration d = new Duration(now, end);
+			
+				StringBuffer toGo = new StringBuffer() ;
+				Long daysToGo = d.getStandardDays() ;
+				toGo.append(daysToGo+" dni, ") ;
+			
+				Period p = d.toPeriod().minusDays(daysToGo.intValue()) ;
+				toGo.append(p.getHours()+" godz., "+p.getMinutes()+" min., "+p.getSeconds()+" sek.") ; 
+				result = toGo.toString() ;
+			}
 		} else {
 			DateFormat df = new SimpleDateFormat("hh:mm:ss dd-MM-yyyy") ;
 			result = "Aukcja zakoñczona" ;
