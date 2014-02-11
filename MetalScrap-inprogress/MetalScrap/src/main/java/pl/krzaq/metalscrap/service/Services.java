@@ -2,7 +2,6 @@ package pl.krzaq.metalscrap.service;
 
 import pl.krzaq.metalscrap.service.impl.AttachementFileServiceImpl;
 import pl.krzaq.metalscrap.service.impl.AuctionServiceImpl;
-import pl.krzaq.metalscrap.service.impl.CategoryParameterServiceImpl;
 import pl.krzaq.metalscrap.service.impl.CategoryServiceImpl;
 import pl.krzaq.metalscrap.service.impl.ConfigServiceImpl;
 import pl.krzaq.metalscrap.service.impl.DeliveryTypeServiceImpl;
@@ -22,6 +21,5 @@ public interface Services {
 	public CategoryServiceImpl getCategoryService() ;
 	public AttachementFileServiceImpl getAttachementFileService() ;
 	public LangLabelServiceImpl getLangLabelService() ;
-	public CategoryParameterServiceImpl getCategoryParameterService() ;
 	public MailServiceImpl getMailService();
 }

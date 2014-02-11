@@ -23,6 +23,13 @@ import javax.persistence.Table;
 })
 public class PropertyAttribute implements Serializable{
 
+	public static Integer TYPE_TEXT = 1 ;
+	public static Integer TYPE_DECIMAL = 2 ;
+	public static Integer TYPE_DATE = 3 ;
+	public static Integer TYPE_SELECT = 4 ;
+	public static Integer TYPE_MULTISELECT = 5 ;
+	
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="id")
@@ -34,6 +41,9 @@ public class PropertyAttribute implements Serializable{
 	
 	@Column(name="description")
 	private String description ;
+	
+	@Column(name="type")
+	private Integer type ;
 	
 	@ManyToOne
 	private Property property ;
@@ -79,6 +89,14 @@ public class PropertyAttribute implements Serializable{
 
 	public void setValues(List<PropertyAttributeValue> values) {
 		this.values = values;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 	
 	

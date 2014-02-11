@@ -64,8 +64,8 @@ public class Category implements Serializable, Comparable {
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="category")
 	private List<Auction> auctions ;
 
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="category")
-	private List<CategoryParameter> parameters ;
+	@OneToMany(cascade=CascadeType.ALL)
+	private List<Property> properties ;
 	
 	public Category() {
 		
@@ -227,13 +227,12 @@ public Category(String name, String description, Category parent, String lang) {
 	}
 
 	
-
-	public List<CategoryParameter> getParameters() {
-		return parameters;
+	public List<Property> getProperties() {
+		return properties;
 	}
 
-	public void setParameters(List<CategoryParameter> parameters) {
-		this.parameters = parameters;
+	public void setProperties(List<Property> properties) {
+		this.properties = properties;
 	}
 
 	@Override

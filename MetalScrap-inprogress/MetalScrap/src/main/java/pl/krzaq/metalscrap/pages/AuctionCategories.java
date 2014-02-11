@@ -14,8 +14,7 @@ import org.zkoss.zul.Treeitem;
 
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.Category;
-import pl.krzaq.metalscrap.model.CategoryParameter;
-import pl.krzaq.metalscrap.model.CategoryParameterValue;
+import pl.krzaq.metalscrap.model.Property;
 import pl.krzaq.metalscrap.service.impl.AuctionServiceImpl;
 import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 
@@ -49,10 +48,10 @@ public class AuctionCategories extends HomePage{
 		
 		List<Category> categories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
 		Collections.sort(categories);
-		List<CategoryParameterValue> paramValues = new ArrayList<CategoryParameterValue>() ;
 		
-		page.setAttribute("parametr", new CategoryParameter()) ;
-		page.setAttribute("paramValues", paramValues) ;
+		
+		page.setAttribute("parametr", new Property()) ;
+		
 		page.setAttribute("category", null) ;
 		page.setAttribute("categories", categories) ;
 

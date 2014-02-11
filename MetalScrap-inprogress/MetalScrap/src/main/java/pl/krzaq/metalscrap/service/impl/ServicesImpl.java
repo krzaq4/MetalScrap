@@ -35,19 +35,12 @@ public class ServicesImpl {
 	@Autowired
 	private static LangLabelServiceImpl langLabelService ;
 	
-	@Autowired
-	private static CategoryParameterServiceImpl categoryParameterService ;
-	
 	@Autowired static MailServiceImpl mailService ;
 	
 	public static MailServiceImpl getMailService(){
 		return mailService ;
 	}
-	
-	public static CategoryParameterServiceImpl getCategoryParameterService() {
-		return categoryParameterService ;
-	}
-	
+
 	public static LangLabelServiceImpl getLangLabelService() {
 		return langLabelService ;
 	}
@@ -63,9 +56,6 @@ public class ServicesImpl {
 
 	public void setMailService(MailServiceImpl mailService){
 		this.mailService = mailService ;
-	}
-	public void setCategoryParameterService(CategoryParameterServiceImpl categoryParameterService) {
-		this.categoryParameterService = categoryParameterService ;
 	}
 	
 	public void setLangLabelService(LangLabelServiceImpl langLabelService) {

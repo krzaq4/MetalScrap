@@ -35,8 +35,8 @@ import org.zkoss.zul.Window;
 import pl.krzaq.metalscrap.components.CategoryTree;
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.Category;
-import pl.krzaq.metalscrap.model.CategoryParameter;
-import pl.krzaq.metalscrap.model.CategoryParameterValue;
+import pl.krzaq.metalscrap.model.Property;
+import pl.krzaq.metalscrap.model.PropertyAttribute;
 import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 
 public class CategoryEvents {
@@ -46,11 +46,11 @@ public class CategoryEvents {
 		
 		Page page = grid.getPage() ;
 		
-		List<CategoryParameter> params = new ArrayList<CategoryParameter>() ;
+		List<Property> params = new ArrayList<Property>() ;
 		
 		if (category.getId()!=null){
-			params = ServicesImpl.getCategoryParameterService().findAllParams(category, category.getLang()) ;
-			category.setParameters(params);
+			params = category.getProperties() ;
+			
 		}
 		page.setAttribute("categoryParameters", params) ;
 		page.setAttribute("category", category) ;
@@ -316,14 +316,14 @@ public void moveCategoryDown(Category category, Grid grid, AnnotateDataBinder bi
 		
 		if(parent!=null) {
 			parent.getChildren().add(category) ;
-			ServicesImpl.getCategoryService().update(parent) ;
+		//	ServicesImpl.getCategoryService().update(parent) ;
 		}
 		
 		List<String> langs = ServicesImpl.getLangLabelService().findAllLangs() ;
 		
 		for (String lang:langs) {
 			category.setLang(lang);
-			//ServicesImpl.getCategoryService().save(category);
+			ServicesImpl.getCategoryService().save(category);
 		}
 		
 		page.setAttribute("categories", ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage())) ;
@@ -374,11 +374,11 @@ public void moveCategoryDown(Category category, Grid grid, AnnotateDataBinder bi
 		
 	}
 	
-	public void admin_onSelectCategoryParameter(CategoryParameter parameter, Grid paramValues, AnnotateDataBinder binder) {
+	public void admin_onSelectCategoryParameter(Property parameter, Grid paramValues, AnnotateDataBinder binder) {
 		
 		Page page = paramValues.getPage() ;
-		
-		if (parameter.getType().equals(CategoryParameter.PARAM_TYPE_CHOICE) || parameter.getType().equals(CategoryParameter.PARAM_TYPE_COMBO)) {
+		/*
+		if (parameter.get.getType().equals(CategoryParameter.PARAM_TYPE_CHOICE) || parameter.getType().equals(CategoryParameter.PARAM_TYPE_COMBO)) {
 			
 			List<CategoryParameterValue> paramValuesList = new ArrayList<CategoryParameterValue>() ;
 			page.setAttribute("paramValues", paramValuesList) ;
@@ -387,12 +387,12 @@ public void moveCategoryDown(Category category, Grid grid, AnnotateDataBinder bi
 		} else {
 			paramValues.setVisible(false) ;
 			
-		}
+		}*/
 		
 	}
 	
 	
-	public void admin_onClickExistingCategoryParameter(CategoryParameter param,Grid grid, Groupbox gbox, AnnotateDataBinder binder) {
+	public void admin_onClickExistingCategoryParameter(Property param,Grid grid, Groupbox gbox, AnnotateDataBinder binder) {
 		Page page = gbox.getPage();
 		
 		page.setAttribute("newParameter", param) ;
@@ -416,18 +416,15 @@ public void moveCategoryDown(Category category, Grid grid, AnnotateDataBinder bi
 		Page page = gbox.getPage();
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 		
+		Property property = new Property() ;
 		
-		CategoryParameter newParam = new CategoryParameter() ;
-		
-		newParam.setCategory(category);
-		
-		newParam.setValues(new ArrayList<CategoryParameterValue>()) ;
-		page.setAttribute("newParameter", newParam) ;
+		property.setAttributes(new ArrayList<PropertyAttribute>()) ;
+		page.setAttribute("newParameter", property) ;
 		gbox.setVisible(true) ;
 	}
 	
 	
-	public void admin_onClickAddValue(CategoryParameter categoryParam, Grid grid, AnnotateDataBinder binder) {
+	/*public void admin_onClickAddValue(Property categoryParam, Grid grid, AnnotateDataBinder binder) {
 		Page page = grid.getPage() ;
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 		ListModelList lm = (ListModelList) grid.getListModel() ;
@@ -439,9 +436,9 @@ public void moveCategoryDown(Category category, Grid grid, AnnotateDataBinder bi
 		
 		binder.loadComponent(grid);
 		
-	}
+	}*/
 	
-	public void admin_onClickDeleteParamValue(CategoryParameterValue paramVal, Grid grid, AnnotateDataBinder binder) {
+	/*public void admin_onClickDeleteParamValue(CategoryParameterValue paramVal, Grid grid, AnnotateDataBinder binder) {
 		Page page = grid.getPage() ;
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 		
@@ -451,10 +448,10 @@ public void moveCategoryDown(Category category, Grid grid, AnnotateDataBinder bi
 		
 		binder.loadComponent(grid);
 		
-	}
+	}*/
 	
 	
-	public void admin_onClickSaveCategoryParameter(CategoryParameter catParam, Grid catParamsGrid, AnnotateDataBinder binder) {
+	/*public void admin_onClickSaveCategoryParameter(CategoryParameter catParam, Grid catParamsGrid, AnnotateDataBinder binder) {
 		Page page = catParamsGrid.getPage() ;
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 		
@@ -473,6 +470,6 @@ public void moveCategoryDown(Category category, Grid grid, AnnotateDataBinder bi
 		Messagebox.show(Labels.getLabel("common.categoryparametersaved")) ;
 		
 		
-	}
+	}*/
 	
 }

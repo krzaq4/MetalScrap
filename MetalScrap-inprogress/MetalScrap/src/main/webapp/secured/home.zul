@@ -32,15 +32,15 @@
 
 <panel id="content" border="none" height="800px">
 <panelchildren >
-
-<div class="otherContent" height="90%">
+<div class="content">
+<div class="rightContent" height="90%">
 					<grid id="allAuctions" model="@{categoryAuctions}" height="100%" style="border:none" sclass="auctionsList" mold="paging">
 						<columns>
 							<column width="100px"></column>
-							<column width="300px" label="Nazwa"></column>
-							<column width="60px" label="Cena"></column>
-							<column width="85px" label="Ilość ofert"></column>
-							<column width="200px" label="${labels.auction.auctionend}"></column>
+							<column width="300px" label="Nazwa" sort="auto"></column>
+							<column width="60px" label="Cena" sort="auto"></column>
+							<column width="85px" label="Ilość ofert" sort="auto"></column>
+							<column width="200px" label="${labels.auction.auctionend}" sort="auto"></column>
 						</columns>
 						<rows>
 							<row self="@{each=auction}" value="@{auction}" onClick="auctionEvents.redirectToAuctionView(self.getValue())">
@@ -76,6 +76,7 @@
 				</tree> -->
 				
 				</div>
+</div>
 <space></space>
 <div sclass="pageFooter">
 	<div sclass="inner"><label value="${labels.contact.title}"/> | <label value="${labels.regulation.title}"/> | <label value="${labels.privacy.title}"/> | <label value="${labels.about.title}"/> </div>

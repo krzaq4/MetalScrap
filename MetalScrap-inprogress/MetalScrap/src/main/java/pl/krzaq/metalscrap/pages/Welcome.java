@@ -2,9 +2,12 @@
 package pl.krzaq.metalscrap.pages;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import org.zkoss.web.Attributes;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 
 import pl.krzaq.metalscrap.model.Auction;
@@ -18,7 +21,8 @@ public class Welcome extends HomePage {
 	public void doInit(Page page, Map<String, Object> arg1) throws Exception {
 		// TODO Auto-generated method stub
 		super.doInit(page, arg1);
-		List<Category> categories = ServicesImpl.getCategoryService().findRootCategories() ;
+		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
+		List<Category> categories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
 		List<Auction> auctions = ServicesImpl.getAuctionService().findByStatus(ServicesImpl.getAuctionService().findStatusByCode(AuctionStatus.STATUS_STARTED)) ;
 		page.setAttribute("categoryAuctions", auctions) ;
 		page.setAttribute("categoryModel", categories) ;
