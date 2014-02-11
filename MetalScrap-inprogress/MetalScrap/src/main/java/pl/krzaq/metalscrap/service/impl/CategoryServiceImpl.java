@@ -122,6 +122,11 @@ public class CategoryServiceImpl implements CategoryService {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public Category findById(Long id) {
+		return categoryDAO.findById(id) ;
+	}
 	
 	
 

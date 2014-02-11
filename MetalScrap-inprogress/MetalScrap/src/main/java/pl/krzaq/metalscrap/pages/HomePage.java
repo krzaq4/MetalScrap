@@ -55,7 +55,7 @@ public class HomePage implements Initiator, InitiatorExt {
 		page.setAttribute("auctionsSubMenu", false);
 		page.setAttribute("companiesSubMenu", false);
 
-		Executions.getCurrent().getSession().setAttribute("page", page);
+		
 		
 		userService = (UserServiceImpl) ApplicationContextProvider.getApplicationContext().getBean("userService") ;
 		

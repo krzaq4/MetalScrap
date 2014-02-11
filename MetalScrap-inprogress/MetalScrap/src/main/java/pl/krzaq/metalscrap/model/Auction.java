@@ -143,6 +143,10 @@ public class Auction implements Serializable {
 	@JoinColumn(name="category_id")
 	private Category category ;
 	
+	
+	@OneToMany
+	private List<Property> properties; 
+	
 	// -------------------------------------------------------------------------------
 	
 	
@@ -396,6 +400,14 @@ public class Auction implements Serializable {
 		} else if (!startDate.equals(other.startDate))
 			return false;
 		return true;
+	}
+
+	public List<Property> getProperties() {
+		return properties;
+	}
+
+	public void setProperties(List<Property> properties) {
+		this.properties = properties;
 	}
 
 	

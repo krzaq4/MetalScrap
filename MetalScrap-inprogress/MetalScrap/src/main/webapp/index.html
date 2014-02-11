@@ -2,71 +2,85 @@
 
 <head>
 <script src="resources/js/jquery-1.11.0.js"></script> 
+
+<script src="resources/js/angular.js"></script>
+<script src="resources/js/angular-animate.js"></script>
+<script src="resources/js/ng-grid.js"></script>
+
+<script src="resources/js/bootstrap.js"></script>
+<script src="resources/js/ui-bootstrap-tpls-0.10.0.js"></script>
+
+<script src="resources/js/controllers.js"></script>
+
+<link rel="stylesheet" href="resources/style/css.css" />
+<link rel="stylesheet" href="resources/style/bootstrap.css" />
+<link rel="stylesheet" href="resources/style/bootstrap-theme.css" />
+<link rel="stylesheet" href="resources/style/ng-grid.css" />
+
 </head>
-<body>
-<style>
+<body ng-app="app" >
 
-.label{
-font-style: Italic;
-color: #444444;
-}
-
-.timeLeftLabel{
-color: #444444 ;
-}
-
-.name .dateFrom .dateTo .currentOffer .timeLeft{
-
-color: #222222;
-font-weight: bold ;s
-}
-
-</style>
 <div id="page" style="display:block;width:100%;height:700px;margin: 0 auto ;">
-<div id="header" style="display: block; width: 100%; height: 120px; background-image: url('resources/images/header.jpg')">
-<div id="innerheader" style="padding: 10px 10px 10px 10px; color: #545454; font-family: Verdana; font-style: Italic; font-size: 1.6em;text-shadow: 1px 1px #5c5c5c; color: #cdcdcd">
-Ajax RESTful services test
-</div>
-</div>
-	<div id="content" style="display: block ; width:70%; height: 60%;box-shadow: 10px 10px 5px #888888; background-color: #eee; margin: 0 auto;">
-	<div style="display: block ;width: 60%; height: 300px;float: left ;">
-	<table border="0">
-	<tr>
-	<td><span class="label">Tytuł: </span></td><td><span class="name"></span></td>
-	</tr>
-	<tr>
-	<td><span class="label">Data rozpoczęcia: </span></td><td><span class="dateFrom"></span></td>	
-	</tr>
-	<tr>
-	<td><span class="label">Data zakończenia: </span></td><td><span class="dateTo"></span></td>
-	</tr>
-	<tr>
-	<td><span class="label">Najlepsza oferta: </span></td><td><span class="currentOffer"></span></td>
-	</tr>
-	<tr>
-	<td><span class="timeLeftLabel"></span></td><td><span class="timeLeft"></span></td>
-	</tr>
-	</table>
-		
-		
-		
-		
-		
-</div>
-<div style="display: block;width:40%;height: 300px ;float: right;">
+<div ng-include="'http://localhost:8081/MetalScrap/includes/header.html'"></div>
+<div ng-include="'http://localhost:8081/MetalScrap/includes/uppermenu.html'"></div>	
 
-<form id="offerForm" >
-<input id="val" class="val" name="val" type="text" />
-<input id="id" name="id" type="hidden" value="1" /> 
-<input  id="bid" class="bid" type="button" value="licytuj" onclick="javascript:submitF(this.form)"></input>
-</form>
+	<div ng-controller="Categories">
+		
+	  <div class="gridStyle" ng-grid="gridOptions">
+	  
+	  
+	  </div>
+	
+	</div>
+		
+		<!-- <div class="content" ng-controller="AuctionDetails">
+		
+		<span>{{auction.name}}</span><br/>
+		<span>{{auction.dateFrom}}</span><br/>
+		<span>{{auction.dateTo}}</span><br/>
+		<span>{{auction.currentOffer}}</span><br/>
+		<span>{{auction.timeLeft}}</span><br/>
+		
+		<input ng-model="val" type="text"/><br/>
+		<button ng-click="placeBid(val)">Licytuj</button><br/><br/>
+		
+		
+		<button ng-click="toggle()">Details</button> 
+		
+		<div class="check-element popup" ng-show="isVisible" ng-include="'http://localhost:8081/MetalScrap/user/details.html'" >
 
-</div>
-		</div>
+		</div>	
+		
+		</div> -->
+	
+	
+		
+		
+		
 	</div>
 
+
+
+<div ng-controller="UserDetailsModal">
+    <script type="text/ng-template" id="userDetails.html">
+        <div class="modal-header">
+            <h3>Panel u�ytkownika</h3>
+        </div>
+        <div class="modal-body">
+            {{user.login}}
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+
+    <button class="btn btn-default" ng-click="open()">Open me!</button>
+    <div ng-show="selected">Selection from a modal: {{ selected }}</div>
 </div>
 
+
+<button onClick="javascript:submitF()">ddddd</button>
 
 <script type="text/javascript">
 
@@ -86,6 +100,7 @@ function update(){
         url: "http://localhost:8081/MetalScrap/app/auction",
         data: {"id": 1},
         processData: true
+        
     }).then(function(data) {
      $(".name").text(data.name) ;
      $(".dateFrom").text(data.dateFrom) ;
@@ -103,7 +118,7 @@ function update(){
 
                   }
      
-	setTimeout(update, 1000) ;	
+	//setTimeout(update, 1000) ;	
      
        
     });
@@ -118,15 +133,23 @@ function update(){
 	}
 
 
-function submitF(form) {
-Id = form.id.value;
-Value = form.val.value ;
+function submitF() {
+
 	
-	$.post( "http://localhost:8081/MetalScrap/app/offer",{ id: Id, value: Value }, function( data ){
+	/* $.post( "http://localhost:8081/MetalScrap/app/offer",{ auction_id: Id, value: Value }, function( data ){
 		
-		});
+		},"application/json"); */
 	
-	
+	$.ajax({
+		url : "http://localhost:8081/MetalScrap/app/categories/1",
+		
+		
+		
+	   
+		type: "GET"
+
+			});
+		
 	
 }
 

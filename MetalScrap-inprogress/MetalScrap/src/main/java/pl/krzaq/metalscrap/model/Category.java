@@ -28,7 +28,8 @@ import javax.persistence.Table;
 	@NamedQuery(name="Category.findSubCategories", query="from Category c where c.parent=:parent" ),
 	@NamedQuery(name="Category.findSubCategoriesByLang", query="from Category c where c.parent=:parent and c.lang=:lang" ),
 	@NamedQuery(name="Category.findByName", query="from Category c where c.name=:name" ),
-	@NamedQuery(name="Category.findByNameAndLang", query="from Category c where c.name=:name and c.lang=:lang" )
+	@NamedQuery(name="Category.findByNameAndLang", query="from Category c where c.name=:name and c.lang=:lang" ),
+	@NamedQuery(name="Category.findById", query="from Category c where c.id=:id")
 	
 	
 	

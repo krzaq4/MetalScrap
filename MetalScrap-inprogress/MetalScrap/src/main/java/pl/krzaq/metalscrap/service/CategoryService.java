@@ -11,6 +11,8 @@ public interface CategoryService {
 
 	public List<Category> findAll() ;
 	
+	public Category findById(Long id) ;
+	
 	public List<Category> findAllByLang(String lang) ;
 	
 	public List<Category> findSubCategories(Category parent) ;

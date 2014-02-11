@@ -23,12 +23,29 @@ public class UserDAO {
 	public User getUserByLogin(String login) {
 		
 		User u =  (User)sessionFactory.getCurrentSession().getNamedQuery("User.findByLogin").setParameter("login", login).list().get(0) ;
-		Hibernate.initialize(u.getRoles());
+		if (u!=null)
+			Hibernate.initialize(u.getRoles());
 		return u ;
 		
 		
 	}
 	
+	public User getUserByEmail(String email) {
+		
+		User u =  (User)sessionFactory.getCurrentSession().getNamedQuery("User.findByEmail").setParameter("email", email).list().get(0) ;
+		if (u!=null)
+			Hibernate.initialize(u.getRoles());
+		return u ;
+	}
+	
+	public User getUserById(Long id) {
+		
+		User u =  (User)sessionFactory.getCurrentSession().getNamedQuery("User.findById").setParameter("id", id).list().get(0) ;
+		if (u!=null)
+			Hibernate.initialize(u.getRoles());
+		return u ;
+		
+	}
 	
 	public void saveUser(User user) {
 		

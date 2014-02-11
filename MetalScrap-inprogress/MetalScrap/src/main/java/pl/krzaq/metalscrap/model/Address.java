@@ -56,6 +56,10 @@ public class Address implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="company")
 	private Company company ;
+	
+	@ManyToOne
+	@JoinColumn(name="user")
+	private User user ;
 
 	public Long getId() {
 		return id;

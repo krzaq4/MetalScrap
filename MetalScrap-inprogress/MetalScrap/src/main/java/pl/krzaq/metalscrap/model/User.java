@@ -31,6 +31,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
 	@NamedQuery(name="User.findAll", query="from User" ),
 	@NamedQuery(name="User.findByLogin", query="from User u where u.login=:login"),
+	@NamedQuery(name="User.findByEmail", query="from User u where u.email=:email"),
+	@NamedQuery(name="User.findById", query="from User u where u.id=:id"),
 	@NamedQuery(name="User.findByLoginAndPass", query="from User u where u.login=:login and u.password=:password")
 	
 	
@@ -70,6 +72,14 @@ public class User implements Serializable {
 	@NotNull
 	@Column(name="email", unique=true)
 	private String email ;
+	
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="address_main")
+	private Address mainAddress ;
+	
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="address_contact")
+	private Address contactAddress ;
 	
 	@ManyToMany(cascade=CascadeType.ALL)
 	@JoinTable(name="user_roles", joinColumns=@JoinColumn(name="user_id", referencedColumnName="id"),
@@ -183,6 +193,22 @@ public class User implements Serializable {
 
 	public void setUserOffers(List<UserOffer> userOffers) {
 		this.userOffers = userOffers;
+	}
+
+	public Address getMainAddress() {
+		return mainAddress;
+	}
+
+	public void setMainAddress(Address mainAddress) {
+		this.mainAddress = mainAddress;
+	}
+
+	public Address getContactAddress() {
+		return contactAddress;
+	}
+
+	public void setContactAddress(Address contactAddress) {
+		this.contactAddress = contactAddress;
 	}
 
 	

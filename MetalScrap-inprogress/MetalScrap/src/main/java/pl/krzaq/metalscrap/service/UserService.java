@@ -8,7 +8,11 @@ public interface UserService {
 public User getUserByLogin(String login) ;
 
 public User getUserByLoginAndPass(String login, String pass) ;
-	
+
+public User getUserByEmail(String email) ;
+
+public User getUserById(Long id) ;
+
 public User getLoggedinUser();	
 
 public void save(User user) ;

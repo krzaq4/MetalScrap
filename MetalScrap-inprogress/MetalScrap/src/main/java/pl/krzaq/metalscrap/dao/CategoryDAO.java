@@ -24,6 +24,14 @@ public class CategoryDAO {
 		
 	}
 	
+	public Category findById(Long id){
+		Category result = null ;
+		if(sessionFactory.getCurrentSession().getNamedQuery("Category.findById").setParameter("id", id).list()!=null 
+				&& sessionFactory.getCurrentSession().getNamedQuery("Category.findById").setParameter("id", id).list().size()>0)
+		result = (Category) sessionFactory.getCurrentSession().getNamedQuery("Category.findById").setParameter("id", id).list().get(0);
+		return result ;
+	}
+	
 	public List<Category> findAllByLang(String lang) {
 		
 		return sessionFactory.getCurrentSession().getNamedQuery("Category.findAllByLang").setParameter("lang", lang).list() ;
