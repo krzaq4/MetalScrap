@@ -35,7 +35,15 @@ public class ServicesImpl {
 	@Autowired
 	private static LangLabelServiceImpl langLabelService ;
 	
-	@Autowired static MailServiceImpl mailService ;
+	@Autowired 
+	private static MailServiceImpl mailService ;
+	
+	@Autowired 
+	private static PropertyServiceImpl propertyService ;
+	
+	public static PropertyServiceImpl getPropertyService() {
+		return propertyService ;
+	}
 	
 	public static MailServiceImpl getMailService(){
 		return mailService ;
@@ -135,7 +143,9 @@ public class ServicesImpl {
 	}
 
 	
-	
+	public void setPropertyService(PropertyServiceImpl propertyService){
+		this.propertyService = propertyService ;
+	}
 	
 	
 	

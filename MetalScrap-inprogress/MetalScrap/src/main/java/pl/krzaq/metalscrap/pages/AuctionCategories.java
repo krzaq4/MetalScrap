@@ -15,6 +15,7 @@ import org.zkoss.zul.Treeitem;
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.model.Property;
+import pl.krzaq.metalscrap.model.PropertyAttribute;
 import pl.krzaq.metalscrap.service.impl.AuctionServiceImpl;
 import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 
@@ -51,7 +52,8 @@ public class AuctionCategories extends HomePage{
 		
 		
 		page.setAttribute("parametr", new Property()) ;
-		
+		page.setAttribute("attr", new PropertyAttribute()) ;
+		page.setAttribute("attrValuesVisible", false) ;
 		page.setAttribute("category", null) ;
 		page.setAttribute("categories", categories) ;
 

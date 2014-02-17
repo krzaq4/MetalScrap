@@ -15,7 +15,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
-import org.apache.commons.collections.MultiHashMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -348,7 +348,7 @@ public class HomeController {
 	@RequestMapping( value="/auctionStatusList", method=RequestMethod.GET)
 	public @ResponseBody Map<String, Object> auctionStatusList() {
 		Map<String, Object> map = new LinkedHashMap<String, Object>() ;
-		MultiHashMap mmap = new MultiHashMap() ;
+		Map<String, Object> mmap = new HashMap<String, Object>() ;
 		boolean operationStatus = false ;
 		String operationMessage = "ERROR" ;
 		try {

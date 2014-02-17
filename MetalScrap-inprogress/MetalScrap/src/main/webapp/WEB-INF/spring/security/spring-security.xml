@@ -28,7 +28,7 @@
   <security:intercept-url pattern="/app/auction" access="permitAll"/>
   
   <security:intercept-url pattern="/app/home" access="permitAll"/>
-  
+   <security:intercept-url pattern="/auction" access="permitAll"/>
   <security:intercept-url pattern="/app/admin/config" access="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')"/>
   <security:intercept-url pattern="/app/admin/delivery_types" access="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')"/>
   <security:intercept-url pattern="/app/admin/measure_units" access="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')"/>
@@ -36,6 +36,7 @@
   <security:intercept-url pattern="/app/admin/delivery_types" access="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')"/>
   <security:intercept-url pattern="/app/admin/translations" access="hasAnyRole('ROLE_SUPERADMIN')"/>
   <security:intercept-url pattern="/app/admin/users" access="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')"/>
+  <security:intercept-url pattern="/app/auctions/*" access="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')"/>
   <security:intercept-url pattern="/app/cms/*" access="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')"/>
   
  

@@ -4,8 +4,13 @@ import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
+import org.hibernate.transform.ResultTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,19 +39,21 @@ public class CategoryDAO {
 	
 	public List<Category> findAllByLang(String lang) {
 		
+		
 		return sessionFactory.getCurrentSession().getNamedQuery("Category.findAllByLang").setParameter("lang", lang).list() ;
 		
 	}
 	
 	public List<Category> findSubCategories(Category parent) {
 		
-		return sessionFactory.getCurrentSession().getNamedQuery("Category.findSubCategories").setParameter("parent", parent).list() ;
+		return sessionFactory.getCurrentSession().createCriteria(Category.class).add(Restrictions.eq("parent", parent)).list() ;
+//		return sessionFactory.getCurrentSession().getNamedQuery("Category.findSubCategories").setParameter("parent", parent).list() ;
 		
 	}
 	
 	public List<Category> findSubCategoriesByLang(Category parent, String lang) {
-		
-		return sessionFactory.getCurrentSession().getNamedQuery("Category.findSubCategoriesByLang").setParameter("parent", parent).setParameter("lang", lang).list() ;
+		return sessionFactory.getCurrentSession().createCriteria(Category.class).add(Restrictions.eq("parent", parent)).add(Restrictions.eq("lang", lang)).list() ;
+		//return sessionFactory.getCurrentSession().getNamedQuery("Category.findSubCategoriesByLang").setParameter("parent", parent).setParameter("lang", lang).list() ;
 		
 	}
 
@@ -88,13 +95,18 @@ public class CategoryDAO {
 	
 	public List<Category> findRootCategories() {
 		
-		return sessionFactory.getCurrentSession().createCriteria(Category.class).add(Restrictions.isNull("parent")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list() ;
+		return sessionFactory.getCurrentSession().createCriteria(Category.class).add(Restrictions.isNull("parent")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).setFetchMode("properties", FetchMode.JOIN).list() ;
 		
 	}
 	
 	public List<Category> findRootCategoriesByLang(String lang) {
+		Criteria c1 = sessionFactory.getCurrentSession().createCriteria(Category.class, "cat").add(Restrictions.isNull("cat.parent")).setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY).add(Restrictions.eq("cat.lang", lang)).createCriteria("cat.properties", "props", JoinType.LEFT_OUTER_JOIN).createCriteria("props.attributes", "attrs", JoinType.LEFT_OUTER_JOIN).createCriteria("attrs.values", JoinType.LEFT_OUTER_JOIN) ; //.createCriteria("properties", JoinType.LEFT_OUTER_JOIN);
 		
-		return sessionFactory.getCurrentSession().createCriteria(Category.class).add(Restrictions.isNull("parent")).add(Restrictions.eq("lang", lang)).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list() ;
+		//Criteria c2 =  c1.createCriteria("properties", CriteriaSpecification.LEFT_JOIN) ;
+		//Criteria c3 = c2.createCriteria("properties.values", CriteriaSpecification.LEFT_JOIN) ;
+		return  c1.list() ;
+		//Criteria crit2 = sessionFactory.getCurrentSession().cre
+		//return sessionFactory.getCurrentSession().createCriteria(Category.class).add(Restrictions.isNull("parent")).add(Restrictions.eq("lang", lang)).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).setFetchMode("properties", FetchMode.JOIN).createAlias("properties.values", "values").list() ;
 		
 	}
 	

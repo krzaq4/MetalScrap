@@ -5,12 +5,24 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
 
+
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.IdSpace;
+import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zkplus.databind.AnnotateDataBinder;
+import org.zkoss.zul.impl.XulElement;
+
 import pl.krzaq.metalscrap.model.User;
 
 public class Utilities {
 
 	public static String HASH_METHOD_MD5 = "md5" ;
 	public static String HASH_METHOD_SHA512 = "sha" ;
+	static Logger log = LoggerFactory.getLogger(Utilities.class) ;
 	
 	
 	public static String hash(String hashMethod, String input) throws NoSuchAlgorithmException {
@@ -69,6 +81,33 @@ public class Utilities {
 		String tok = String.valueOf(val).concat(pass) ;
 		String token = md5(tok) ;
 		return token ;
+	}
+	
+	public static void bind(IdSpace cmp, AnnotateDataBinder binder) {
+		Clients.showBusy(null);
+		log.info("Bindings for : ["+cmp.getClass().getCanonicalName()+"]");
+		if (cmp instanceof Component){			
+			bindComponents(((Component) cmp).getChildren(), binder) ;
+		}
+		Clients.clearBusy();
+	}
+	
+	private static void bindComponents(List<Component> list, AnnotateDataBinder binder) {
+		
+		for(Component c:list) {
+			
+			
+				binder.loadComponent(c);
+				log.info("Found binding : ["+c.getClass().getCanonicalName()+"] ["+c.getId()+"]") ;
+			
+			
+			if (c.getChildren()!=null && c.getChildren().size()>0) {
+				bindComponents(c.getChildren(), binder) ;
+			}
+			
+			
+		}
+		
 	}
 	
 }

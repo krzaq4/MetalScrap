@@ -22,7 +22,7 @@ public class CategoryParameterTypeConverter implements TypeConverter {
 				typeName = Labels.getLabel("common.type.text") ;
 				break ;
 		case 2 :
-				typeName = Labels.getLabel("common.type.combo") ;
+				typeName = "decimal" ;//Labels.getLabel("common.type.combo") ;
 				break ;
 		case 3 : 
 				typeName = Labels.getLabel("common.type.date") ;
@@ -30,6 +30,8 @@ public class CategoryParameterTypeConverter implements TypeConverter {
 		case 4 : 
 				typeName = Labels.getLabel("common.type.choice") ;
 				break ;
+		case 5:
+				typeName = "multichoice" ;
 		}
 		
 		return typeName ;

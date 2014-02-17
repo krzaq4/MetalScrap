@@ -128,9 +128,9 @@ public class CategoryTree extends Tree {
 	
 	private TreeNode<Category>[] getSubCategories(Category category) {
 		
-		DefaultTreeNode<Category>[] result  = new DefaultTreeNode[category.getChildren().size()] ;
+		DefaultTreeNode<Category>[] result  = new DefaultTreeNode[ServicesImpl.getCategoryService().findSubCategories(category).size()] ;
 		int i=0;
-		List<Category> childCategories = category.getChildren() ;
+		List<Category> childCategories = ServicesImpl.getCategoryService().findSubCategories(category) ;
 		Collections.sort(childCategories);
 		for (Category sub:childCategories) {
 			

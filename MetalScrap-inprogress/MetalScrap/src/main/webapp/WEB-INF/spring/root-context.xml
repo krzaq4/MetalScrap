@@ -47,13 +47,13 @@
 	</bean>
  
     <bean id="sessionFactory"
-        class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+        class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
         <property name="configLocation">
             <value>classpath:hibernate.cfg.xml</value>
         </property>
-        <property name="configurationClass">
-            <value>org.hibernate.cfg.AnnotationConfiguration</value>
+        <property name="annotatedPackages">
+            <value>pl.krzaq.metalscrap.model</value>
         </property>
         
         <property name="hibernateProperties">
@@ -66,16 +66,19 @@
             </props>
         </property>
     </bean>
-
+	
 	<bean id="savedRequestAwareHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
 	</bean>
 
     <bean id="transactionManager"
-        class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory" />
         <property name="dataSource" ref="dataSource" />
     </bean>
 
+	<bean name="propertyDAO" class="pl.krzaq.metalscrap.dao.PropertyDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
 
 	<bean name="langLabelDAO" class="pl.krzaq.metalscrap.dao.LangLabelDAO">
 		<property name="sessionFactory" ref="sessionFactory"/>
@@ -133,21 +136,24 @@
 	</bean>
 	
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-  		<property name="host" value="smtp.gmail.com"/>
-	        <property name="port" value="25"/>
-	        <property name="username" value="michal.krzaczynski@reseller.e-direct.pl"/>
-	        <property name="password" value="Vcei1cvM"/>
+  		<property name="host" value="${mail.smtp.server}"/>
+	        <property name="port" value="${mail.smtp.port}"/>
+	        <property name="username" value="${mail.smtp.account}"/>
+	        <property name="password" value="${mail.smtp.password}"/>
 	        <property name="javaMailProperties">
         <!-- additional properties specific to JavaMail -->
         <props>
-            <prop key="mail.transport.protocol">smtp</prop>
-            <prop key="mail.smtp.auth">true</prop>
-            <prop key="mail.smtp.starttls.enable">true</prop>
+            <prop key="mail.transport.protocol">${mail.transport.protocol}</prop>
+            <prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
+            <prop key="mail.smtp.starttls.enable">${mail.smtp.starttls.enable}</prop>
         </props>
     </property>
 	</bean>
 	
 
+	<bean name="propertyService" class="pl.krzaq.metalscrap.service.impl.PropertyServiceImpl">
+		<property name="propertyDAO" ref="propertyDAO" />
+	</bean>
 	
 	<bean name="langLabelService" class="pl.krzaq.metalscrap.service.impl.LangLabelServiceImpl">
 		<property name="langLabelDAO" ref="langLabelDAO" />
@@ -212,6 +218,7 @@
 		<property name="userOfferService" ref="userOfferService" />
 		<property name="langLabelService" ref="langLabelService" />
 		<property name="mailService" ref="mailService"></property>
+		<property name="propertyService" ref="propertyService" />
 	</bean>
 	
 	<bean id="langEvents" class="pl.krzaq.metalscrap.events.LangEvents"></bean>

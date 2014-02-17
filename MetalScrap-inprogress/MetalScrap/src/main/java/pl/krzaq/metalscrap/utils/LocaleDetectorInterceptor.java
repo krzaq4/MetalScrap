@@ -28,7 +28,7 @@ public class LocaleDetectorInterceptor implements RequestInterceptor {
 		Cookie[] cookies = req.getCookies() ;
 		
 		boolean found = false ;
-		
+		if(cookies!=null)
 		for (Cookie cook:cookies){
 			if (cook.getName().equalsIgnoreCase(Attributes.PREFERRED_LOCALE)) {
 				lang = cook.getValue() ;

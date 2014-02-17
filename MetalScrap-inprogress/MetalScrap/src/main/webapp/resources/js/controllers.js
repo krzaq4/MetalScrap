@@ -42,7 +42,7 @@ function AuctionDetails($scope, $http) {
 	
 		$scope.getAuction = function(){
 			
-			$http.get('http://localhost:8081/MetalScrap/app/auction?id=1').success(function(data, status, headers, config){
+			$http.get('http://localhost:8081/MetalScrap/app/auction?id=2').success(function(data, status, headers, config){
 				
 				$scope.auction = data ;
 				if(!$scope.val) {
@@ -111,9 +111,59 @@ function UserDetails($scope, $modalInstance, $http) {
 	
 }
 
-var UserDetailsModal = function ($scope, $modal, $log) {
+var UserDetailsModal = function ($scope, $modal, $log, $http) {
 
+	$scope.getAuction = function(){
+		
+		$http.get('http://localhost:8081/MetalScrap/app/auction?id=2').success(function(data, status, headers, config){
+			
+			$scope.auction = data ;
+			if(!$scope.val) {
+				$scope.val = data.currentOffer ;
+			}
+			//$scope.getAuction() ;
+			
+		}) ;
+	};
 	
+	$scope.getAuction() ;
+	
+	$scope.placeBid = function(val) {
+		
+		
+		$http({
+	        url: 'http://localhost:8081/MetalScrap/app/offer',
+	        method: "POST",
+	        data: JSON.stringify({auction_id:1, value: val}),
+	        headers: {'Content-Type': 'application/json'}
+	      }).success(function(data, status, headers, config){
+			
+		}) ;
+		
+	} ;
+	
+	$scope.showUserDetails = function() {
+		
+		
+		
+	} ;
+	
+	$scope.toggle = function() {
+		 
+		 $scope.isVisible = ! $scope.isVisible;
+		  
+		 };
+		  
+		
+		 $scope.isVisible = false;
+	 
+	
+	
+		 
+	$http.get('http://localhost:8081/MetalScrap/user/details.html').success(function(data, status, headers, config){
+		$scope.userDetailsWindow = data ;
+		
+	}) ;
 
 	  $scope.open = function () {
 

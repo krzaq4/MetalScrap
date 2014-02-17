@@ -3,6 +3,7 @@ package pl.krzaq.metalscrap.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +13,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.IndexColumn;
 
 
 @Entity
@@ -24,6 +27,8 @@ import javax.persistence.Table;
 public class Property implements Serializable {
 
 	
+	
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="id")
@@ -38,7 +43,8 @@ public class Property implements Serializable {
 	@Column(name="lang")
 	private String lang ;
 	
-	@OneToMany(mappedBy="property")
+	@OneToMany(mappedBy="property", cascade=CascadeType.ALL)
+	@IndexColumn(name="INDEX_COL3")
 	private List<PropertyAttribute> attributes ;
 
 	public Long getId() {
@@ -80,6 +86,46 @@ public class Property implements Serializable {
 	public void setAttributes(List<PropertyAttribute> attributes) {
 		this.attributes = attributes;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((lang == null) ? 0 : lang.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Property other = (Property) obj;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
+		if (lang == null) {
+			if (other.lang != null)
+				return false;
+		} else if (!lang.equals(other.lang))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
+
+	
 	
 	
 	

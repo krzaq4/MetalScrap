@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import org.hibernate.Hibernate;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.web.Attributes;
 import org.zkoss.zk.ui.Component;
@@ -13,23 +14,31 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.databind.AnnotateDataBinder;
 import org.zkoss.zkplus.databind.BindingListModel;
 import org.zkoss.zkplus.databind.BindingListModelList;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
+import org.zkoss.zul.Div;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Groupbox;
+import org.zkoss.zul.Hbox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listcell;
+import org.zkoss.zul.Listhead;
+import org.zkoss.zul.Listheader;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treeitem;
+import org.zkoss.zul.Vbox;
 import org.zkoss.zul.Window;
 
 import pl.krzaq.metalscrap.components.CategoryTree;
@@ -37,21 +46,29 @@ import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.model.Property;
 import pl.krzaq.metalscrap.model.PropertyAttribute;
+import pl.krzaq.metalscrap.model.PropertyAttributeValue;
 import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class CategoryEvents {
 
 	
-	public void admin_onSelectCategory(Grid grid, Category category, AnnotateDataBinder binder) {
+	public void admin_onSelectCategory(Listbox grid, Category category, AnnotateDataBinder binder) {
 		
 		Page page = grid.getPage() ;
 		
 		List<Property> params = new ArrayList<Property>() ;
 		
+		
 		if (category.getId()!=null){
-			params = category.getProperties() ;
-			
+		
+			if(category.getProperties()!=null)
+				params = category.getProperties() ;
+			else
+				category.setProperties(params);
 		}
+		
+		
 		page.setAttribute("categoryParameters", params) ;
 		page.setAttribute("category", category) ;
 		
@@ -61,36 +78,116 @@ public class CategoryEvents {
 		binder.loadComponent(page.getFellow("delete_category_button"));
 		binder.loadComponent(page.getFellow("pos_up"));
 		binder.loadComponent(page.getFellow("pos_down"));
-		binder.loadComponent(page.getFellow("selectedGroupbox"));
-		binder.loadComponent(page.getFellow("catParamsGrid"));
+		binder.loadComponent(page.getFellow("selected_cat_label"));
+		binder.loadComponent(page.getFellow("selected_cat_lab"));
+		binder.loadComponent(page.getFellow("selected_cat_dummy"));
+		
+		
 		
 	}
 	
 	
-	public void admin_onDoubleClickCategory(Grid grid, Category category, AnnotateDataBinder binder ) {
+	public void admin_onDoubleClickCategory(Vbox vbox, Category category, final AnnotateDataBinder binder ) {
 		
-		Page page = grid.getPage() ;
+		Page page = vbox.getPage() ;
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 		
-		if (category.getId()!=null) {
 		
+		
+		//if (category.getId()!=null) {
+		
+			
+			
+			
 		List<Category> subs = ServicesImpl.getCategoryService().findSubCategoriesByLang(category, locale.getLanguage()) ;
 		
-		if(subs != null && subs.size()>0) {
+		//if(subs != null && subs.size()>0) {
 			
+		if(vbox.hasFellow(String.valueOf(category.getId()))){
+			
+			vbox.removeChild(vbox.getFellow(String.valueOf(category.getId()))) ;
+			
+		} else {
 			Collections.sort(subs);
+			final Listbox subList = new Listbox() ;
+			subList.addEventListener("onSelect", new EventListener<Event>(){
+
+				@Override
+				public void onEvent(Event arg0) throws Exception {
+					admin_onSelectCategory(subList, (Category) subList.getSelectedItem().getValue(), binder) ;
+					
+				}
+				
+				
+			}) ;
+			Listhead lhead = new Listhead() ;
 			
+			Listheader lh1 = new Listheader() ;
+			lh1.setWidth("5%");
+			Listheader lh2 = new Listheader() ;
+			lh2.setWidth("95%");
+			
+			lhead.appendChild(lh1) ;
+			lhead.appendChild(lh2) ;
+			
+			Listitem litem = new Listitem() ;
+			
+			for (Category sub:subs){
+				Button add = new Button();
+				add.setSclass("addButton");
+				final Category subFinal = sub ;
+				Listcell lcell1 = new Listcell() ;
+				Listcell lcell2 = new Listcell() ;
+				final Vbox vb = new Vbox() ;
+				
+				Label l1 = new Label() ;
+				Label l2 = new Label() ;
+				l2.setSclass("smallLabel");
+				
+				l1.setValue(sub.getName());
+				l2.setValue(sub.getDescription());
+				
+				l1.addEventListener("onDoubleClick", new EventListener<Event>(){
+
+					@Override
+					public void onEvent(Event arg0) throws Exception {
+						
+						admin_onDoubleClickCategory(vb, subFinal, binder) ;
+					}
+					
+				}) ;
+				
+				vb.appendChild(l1) ;
+				vb.appendChild(l2) ;
+				litem.setValue(sub);
+				
+				lcell1.appendChild(add) ;
+				lcell2.appendChild(vb) ;
+				litem.appendChild(lcell1) ;
+				litem.appendChild(lcell2) ;
+			}
+			
+			subList.appendChild(lhead) ;
+			subList.appendChild(litem) ;
+			
+			//subList.setModel(new ListModelList<Category>(subs));
+			subList.setId(String.valueOf(category.getId()) );
+			
+			vbox.appendChild(subList);
+			
+			/*
 			if (category.getId()!=null) {
 				Category back = new Category(Labels.getLabel("auction.auctioncategory.back"), Labels.getLabel("auction.auctioncategory.back"), category.getParent()) ;
 				subs.add(0, back) ;
-			}
+			}*/
 			
-			page.setAttribute("categories", subs) ;
-			binder.loadComponent(grid);
+			//page.setAttribute("categories", subs) ;
+			//binder.loadComponent(grid);
+			//binder.loadComponent(page.getFellow("backlink"));
 			
 		}
 		
-		}else {
+		/*}else {
 			
 			List<Category> subs = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
 			Collections.sort(subs);
@@ -111,7 +208,7 @@ public class CategoryEvents {
 				binder.loadComponent(grid);
 			}
 			
-		}
+		}*/
 		
 	}
 	
@@ -125,6 +222,7 @@ public class CategoryEvents {
 		
 		Category category = (Category)win.getPage().getAttribute("category") ;
 		win.setAttribute("category", category) ;
+		win.setAttribute("existingAttribute", false) ;
 		win.setAttribute("parent", category.getParent()) ;
 		binder.loadComponent(win);
 		win.setVisible(true) ;
@@ -173,7 +271,7 @@ public class CategoryEvents {
 		
 	}
 	
-	public void moveCategoryUp(Category category, Grid grid, AnnotateDataBinder binder) {
+	public void moveCategoryUp(Category category, Listbox grid, AnnotateDataBinder binder) {
 		
 		Category parent = category.getParent() ;
 		Page page = grid.getPage() ;
@@ -237,7 +335,7 @@ public class CategoryEvents {
 	}
 	
 	
-public void moveCategoryDown(Category category, Grid grid, AnnotateDataBinder binder) {
+public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder binder) {
 		
 		Category parent = category.getParent() ;
 		Page page = grid.getPage() ;
@@ -346,7 +444,7 @@ public void moveCategoryDown(Category category, Grid grid, AnnotateDataBinder bi
 		binder.loadComponent(grid);
 	}
 
-	public void deleteCategory(final Category category,  Grid grid, final AnnotateDataBinder binder) {
+	public void deleteCategory(final Category category,  Listbox grid, final AnnotateDataBinder binder) {
 	
 		Page page = grid.getPage() ;
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
@@ -392,10 +490,52 @@ public void moveCategoryDown(Category category, Grid grid, AnnotateDataBinder bi
 	}
 	
 	
-	public void admin_onClickExistingCategoryParameter(Property param,Grid grid, Groupbox gbox, AnnotateDataBinder binder) {
-		Page page = gbox.getPage();
+	public void admin_onClickDeleteCategoryParameter(Category category, Row row,  Window window, AnnotateDataBinder binder) {
 		
-		page.setAttribute("newParameter", param) ;
+		Property property = row.getValue() ;
+		
+		category.getProperties().remove(property) ;
+		window.setAttribute("newParameter", new Property()) ;
+		window.getFellow("attributes_div").setVisible(false) ;
+		
+		window.setAttribute("category", category) ;
+		Clients.showBusy(null);
+		Utilities.bind(window, binder);
+		Clients.clearBusy();
+	}
+	
+	public void admin_onClickDeletePropertyAttribute(Property property, Row row, Window window, AnnotateDataBinder binder) {
+		
+		PropertyAttribute attribute = row.getValue();
+		property.getAttributes().remove(attribute) ;
+		window.setAttribute("newParameter", property) ;
+		Clients.showBusy(null);
+		Utilities.bind(window, binder);
+		Clients.clearBusy();
+	}
+	
+	public void admin_onClickDeleteAttributeValue(Property property, PropertyAttribute attribute, Row row, Window window, AnnotateDataBinder binder) {
+		PropertyAttributeValue value = row.getValue() ;
+		
+		int indexOfAttr = property.getAttributes().indexOf(attribute) ;
+		property.getAttributes().remove(attribute);
+		
+		attribute.getValues().remove(value) ;
+		property.getAttributes().add(indexOfAttr, attribute);
+		
+		window.setAttribute("newParameter", property) ;
+		
+		Clients.showBusy(null);
+		Utilities.bind(window, binder);
+		Clients.clearBusy();
+		
+	}
+	
+	public void admin_onClickExistingCategoryParameter(Row rr,Grid grid, Grid g, Div gbox, Window win,  AnnotateDataBinder binder) {
+		Page page = gbox.getPage();
+		Property param = (Property) rr.getValue() ;
+		win.setAttribute("newParameter", param) ;
+		win.setAttribute("existingAttribute", true) ;
 		gbox.setVisible(true) ;
 		for(Object o:grid.getRows().getChildren()) {
 			Row r = (Row) o ;
@@ -409,18 +549,85 @@ public void moveCategoryDown(Category category, Grid grid, AnnotateDataBinder bi
 			}
 			
 		}
+		Utilities.bind(win, binder);
 		
 	}
 	
-	public void admin_onClickAddCategoryParameter(Groupbox gbox, Category category) {
-		Page page = gbox.getPage();
+	public void admin_onClickAddCategoryParameterAttribute(Property property, Grid grid, Window window, AnnotateDataBinder binder) {
+		PropertyAttribute attr = new PropertyAttribute();
+		attr.setProperty(property);
+		attr.setType(1);
+		//category.getProperties().add(property)
+		property.getAttributes().add(attr) ;
+		window.setAttribute("newParameter", property) ;
+		window.setAttribute("attr", attr) ;
+		binder.loadComponent(grid);
+		
+		
+	}
+	
+	public void admin_onClickAddPropertyToCategory(Category category, Property property, Grid grid, Window win, AnnotateDataBinder binder) {
+		Page page = grid.getPage() ;
+		category.getProperties().add(property) ;
+		property = new Property() ;
+		property.setAttributes(new ArrayList<PropertyAttribute>());
+		
+		win.setAttribute("newParameter", property) ;
+		win.setAttribute("attr", new PropertyAttribute()) ;
+		
+		page.setAttribute("category", category) ;
+		
+		binder.loadComponent(grid);
+		binder.loadComponent(win.getFellow("props"));
+		binder.loadComponent(win.getFellow("attributes"));
+		win.getFellow("attributes_div").setVisible(false) ;
+		
+	}
+	
+	public void admin_onClickUpdateCategoryProperty(Category category, Property property, Grid grid, Window win, AnnotateDataBinder binder) {
+		Page page = grid.getPage() ;
+		int indexOf = category.getProperties().indexOf(property) ;
+		category.getProperties().remove(indexOf) ;
+		
+		category.getProperties().add(indexOf, property) ;
+		property = new Property() ;
+		property.setAttributes(new ArrayList<PropertyAttribute>());
+		
+		win.setAttribute("newParameter", property) ;
+		win.setAttribute("attr", new PropertyAttribute()) ;
+		win.setAttribute("existingAttribute", false) ;
+		page.setAttribute("category", category) ;
+		
+		Utilities.bind(win, binder);
+		
+		/*binder.loadComponent(grid);
+		binder.loadComponent(win.getFellow("props"));
+		binder.loadComponent(win.getFellow("attributes"));*/
+		win.getFellow("attributes_div").setVisible(false) ;
+		
+	}
+	
+	public void admin_onClickAddCategoryParameter(Window window, Div div, Category category, AnnotateDataBinder binder) {
+		
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
+		List<Integer> types = new ArrayList<Integer>() ;
+		types.add(1);
+		types.add(2);
+		types.add(3);
+		types.add(4);
+		types.add(5);
 		
 		Property property = new Property() ;
 		
 		property.setAttributes(new ArrayList<PropertyAttribute>()) ;
-		page.setAttribute("newParameter", property) ;
-		gbox.setVisible(true) ;
+		window.setAttribute("newParameter", property) ;
+		window.setAttribute("existingAttribute", false) ;
+		window.setAttribute("types", types) ;
+		div.setVisible(true) ;
+		
+		
+		Utilities.bind(window, binder) ;
+		
 	}
 	
 	
@@ -471,5 +678,66 @@ public void moveCategoryDown(Category category, Grid grid, AnnotateDataBinder bi
 		
 		
 	}*/
+	
+	
+	public void admin_onClickBackToParentCategory(Component c, Category category, AnnotateDataBinder binder) {
+		
+		Page page = c.getPage() ;
+		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
+		List<Category> cats = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
+		if(category.getParent()!=null)
+			cats = ServicesImpl.getCategoryService().findSubCategoriesByLang(category.getParent(), locale.getLanguage()) ;
+		page.setAttribute("categories", cats) ;
+		page.setAttribute("category", null) ;
+		binder.loadAll();
+		
+	}
+	
+	public void admin_onSelectAttributeType(Component c, Window win, AnnotateDataBinder binder) {
+		Row r = (Row) c.getParent() ;
+		for(Component cc:r.getChildren()){
+			if(cc instanceof Vbox) {
+				Vbox vv = (Vbox) cc ;
+				for (Component ccc:cc.getChildren()) {
+					if(ccc instanceof Grid ) {
+						Grid gr = (Grid) ccc;
+						PropertyAttribute attribute = (PropertyAttribute) r.getValue() ;
+						if(attribute.getType().equals(PropertyAttribute.TYPE_MULTISELECT) || attribute.getType().equals(PropertyAttribute.TYPE_SELECT)) {
+							attribute.setValues(new ArrayList<PropertyAttributeValue>());
+							gr.setVisible(true) ;
+							binder.loadComponent(gr);
+							break;					
+						} else {
+							gr.setVisible(false) ;
+						}
+					} 
+				}
+			}					
+		}		
+	}
+	
+	public void admin_onAddPropertyAttrValue(Component c, Window win, AnnotateDataBinder binder) {
+		
+		Row r = (Row) c.getParent() ;
+		for(Component cc:r.getChildren()){
+			if(cc instanceof Vbox) {
+				Vbox vv = (Vbox) cc ;
+				for (Component ccc:cc.getChildren()) {
+					if(ccc instanceof Grid) {
+				Grid gr = (Grid) ccc;
+				PropertyAttribute attribute = (PropertyAttribute) r.getValue() ;
+				PropertyAttributeValue v = new PropertyAttributeValue() ;
+				v.setAttribute(attribute);
+				attribute.getValues().add(v) ;
+				win.setAttribute("val", v) ;
+				
+				binder.loadComponent(gr);
+					}
+				}
+			}
+					
+		}
+		
+	}
 	
 }

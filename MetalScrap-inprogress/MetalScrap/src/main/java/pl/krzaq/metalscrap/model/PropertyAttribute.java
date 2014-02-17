@@ -3,6 +3,7 @@ package pl.krzaq.metalscrap.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +14,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.IndexColumn;
 
 @Entity
 @Table(name="property_attribute")
@@ -35,12 +38,9 @@ public class PropertyAttribute implements Serializable{
 	@Column(name="id")
 	private Long id ;
 	
-	
 	@Column(name="name")
 	private String name ;
 	
-	@Column(name="description")
-	private String description ;
 	
 	@Column(name="type")
 	private Integer type ;
@@ -48,8 +48,11 @@ public class PropertyAttribute implements Serializable{
 	@ManyToOne
 	private Property property ;
 	
-	@OneToMany(mappedBy="attribute")
+	@OneToMany(mappedBy="attribute", cascade=CascadeType.ALL)
+	@IndexColumn(name="INDEX_COL4")
 	private List<PropertyAttributeValue> values ;
+
+	
 
 	public Long getId() {
 		return id;
@@ -59,21 +62,7 @@ public class PropertyAttribute implements Serializable{
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
+	
 
 	public Property getProperty() {
 		return property;
@@ -98,6 +87,53 @@ public class PropertyAttribute implements Serializable{
 	public void setType(Integer type) {
 		this.type = type;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((property == null) ? 0 : property.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PropertyAttribute other = (PropertyAttribute) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (property == null) {
+			if (other.property != null)
+				return false;
+		} else if (!property.equals(other.property))
+			return false;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
+			return false;
+		return true;
+	}
+
 	
 	
 	

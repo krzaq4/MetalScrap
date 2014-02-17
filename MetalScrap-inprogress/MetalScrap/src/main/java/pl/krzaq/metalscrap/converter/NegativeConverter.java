@@ -14,8 +14,10 @@ public class NegativeConverter implements TypeConverter {
 	@Override
 	public Object coerceToUi(Object arg0, Component arg1) {
 		Boolean o = (Boolean) arg0 ;
+		Boolean b = false ;
+		if(o!=null) b = o ;
 		
-		 return new Boolean(!o.booleanValue()) ;
+		 return new Boolean(!b.booleanValue()) ;
 	}
 
 }

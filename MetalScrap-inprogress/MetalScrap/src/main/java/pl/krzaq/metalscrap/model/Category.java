@@ -19,6 +19,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.IndexColumn;
+
 
 @Entity
 @Table(name="category")
@@ -58,14 +60,16 @@ public class Category implements Serializable, Comparable {
 	@JoinColumn(name="parent")
 	private Category parent ;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(cascade=CascadeType.ALL)
+	@IndexColumn(name="INDEX_COL2")
 	private List<Category> children ;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="category")
 	private List<Auction> auctions ;
 
 	@OneToMany(cascade=CascadeType.ALL)
-	private List<Property> properties ;
+	@IndexColumn(name="INDEX_COL")
+	private List<Property> properties = new ArrayList<Property>();
 	
 	public Category() {
 		

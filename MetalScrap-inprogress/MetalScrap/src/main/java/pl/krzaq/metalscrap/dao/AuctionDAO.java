@@ -29,6 +29,11 @@ public class AuctionDAO {
 	private SessionFactory sessionFactory ;
 	
 	
+	private Session session ;
+	
+	
+	
+	
 	public List<Auction> findAll() {
 		
 		return (List<Auction>) sessionFactory.getCurrentSession().getNamedQuery("Auction.findAll").list() ;

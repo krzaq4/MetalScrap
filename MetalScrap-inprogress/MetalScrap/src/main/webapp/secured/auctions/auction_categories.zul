@@ -29,8 +29,10 @@
 		<panel id="content" border="none">
 		<caption label="${labels.admin.menu.configuration.auctioncategories}" />
 			<panelchildren>
-			
+			<div sclass="content" style="background:none ;">
 			<div sclass="listMenu">
+				
+				<separator orient="vertical"></separator>
 				<button id="add_category_button" label="${labels.common.addcategory}" onClick="categoryEvents.openNewCategoryWindow(new_category_popup, binder)"/>
 				<button id="edit_category_button" label="${labels.common.editcategory}" onClick="categoryEvents.openEditCategoryWindow(edit_category_popup, binder)"  disabled="@{category, converter='pl.krzaq.metalscrap.converter.CategoryNotSelectedConverter'}"/>
 				<button id="delete_category_button" label="${labels.common.delcategory}" onClick="categoryEvents.deleteCategory(category, cat_tree, binder)" disabled="@{category, converter='pl.krzaq.metalscrap.converter.CategoryNotSelectedConverter'}"/>
@@ -38,75 +40,58 @@
 				<button id="pos_down" label="&#x25BC;" onClick="categoryEvents.moveCategoryDown(category, categoryGrid, binder)" disabled="@{category, converter='pl.krzaq.metalscrap.converter.CategoryDownNotPossibleConverter'}"/>
 			</div>
 			
-			<groupbox id="selectedGroupbox" visible="@{category, converter='pl.krzaq.metalscrap.converter.CategorySelectedConverter'}">
-			<caption label="${labels.common.selectedCategory}"></caption>
 			
-				<div width="50%" style="display: table-cell;">
-						<vbox>
-							<label sclass="normalLabel" value="${labels.common.name}"  width="120px" /><label value="@{category.name}" width="70%" />
-						</vbox>
-						<vbox>
-							<label sclass="normalLabel" value="${labels.common.description}" width="30%" /><label value="@{category.description}" width="70%"  />
-						</vbox>
-								
-				</div>
-				<div width="50%" style="display: table-cell;">
-					<vbox>
-						<button sclass="addButton" onClick="categoryEvents.admin_onClickAddCategoryParameter(catPar,category)" />
-						<label sclass="normalLabel" value="${labels.common.categoryparameters}" />
-						
+			
+			
+			<div sclass="rightContent">
+			<label id="selected_cat_dummy" value="  " visible="@{category, converter='pl.krzaq.metalscrap.converter.CategoryNotSelectedConverter'}" />
+			<label id="selected_cat_lab" visible="@{category, converter='pl.krzaq.metalscrap.converter.CategorySelectedConverter'}" value="Wybrana kategoria: " /><label sclass="normalLabel" id="selected_cat_label" value="@{category.name}" />
+			<a id="backlink" hoverImage="/resources/images/backhover20.png" image="/resources/images/back20.png" onClick="categoryEvents.admin_onClickBackToParentCategory(categoryGrid,category, binder)" visible="@{category, converter='pl.krzaq.metalscrap.converter.CategorySelectedConverter'}" sclass="smallLabel" label="  ${labels.common.backtoparentcategory}"></a>
+			
+			
+			<listbox id="categoryGrid" model="@{categories}" style="border:none;border-image:none;" >
+				<!-- <columns>
+					<column width="4%" style="border:none;border-image:none;" />
+					<column width="96%" label="${labels.common.name}" style="border:none;border-image:none;"/>
 					
-					<grid id="catParamsGrid" model="@{category.properties}">
-					
-						<columns>
-							<column width="90%"></column>
-							<column width="10%"></column>
-						</columns>
-						<rows>
-							<row self="@{each=parametr}" value="@{parametr}">
-								<label sclass="normalLabel" value="@{parametr.name}" onClick="categoryEvents.admin_onClickExistingCategoryParameter(parametr, paramsAndValues, catPar, binder)"/>
-								<button sclass="deleteButton" />
-							</row>						
-						</rows>
-					</grid>
-					</vbox>
-				</div>
-				
-			</groupbox>
-			
-			<space/>
-			
-			
-			
-			<space/>
-			<grid id="categoryGrid" model="@{categories}">
-				<columns>
-					<column width="5%"  />
-					<column width="39%" label="${labels.common.name}"/>
-					<column width="48%" label="${labels.common.description}"/>
-					<column width="8%" label="${labels.common.position}"/>
-				</columns>
-				<rows>
+				</columns> -->
+				<listhead>
+					<listheader width="5%" style="border:none;border-image:none;" ></listheader>
+					<listheader width="95%" label="${labels.common.name}" style="border:none;border-image:none;"></listheader>
+				</listhead>
+				<listitem  self="@{each=cat}" onClick="categoryEvents.admin_onSelectCategory(categoryGrid, self.getValue(), binder)" value="@{cat}">
+					<listcell>
+						<button sclass="addButton"></button>
+					</listcell>
+					<listcell>
+						<vbox>
+						<label value="@{cat.name}" onDoubleClick="categoryEvents.admin_onDoubleClickCategory(self.getParent(), category, binder)" />
+						<label sclass="smallLabel" value="@{cat.description}" />
+						</vbox>
+					</listcell>
+				</listitem>
+				<!-- <rows>
 					
 					<row self="@{each=cat}" onClick="categoryEvents.admin_onSelectCategory(categoryGrid, self.getValue(), binder)" value="@{cat}">
 						<button sclass="addButton"></button>
+						<vbox>
 						<label value="@{cat.name}" onDoubleClick="categoryEvents.admin_onDoubleClickCategory(categoryGrid, category, binder)" />
-						<label value="@{cat.description}" />
-						<label value="@{cat.position}" />
+						<label sclass="smallLabel" value="@{cat.description}" />
+						</vbox>
 					</row>
-				</rows>
-				<foot>
-					<footer>
+				</rows> -->
+				<listfoot>
+					<listfooter span="4">
 						<vbox>
 							<label sclass="footer" value="* - ${labels.common.categorygrid.hint1}" />
 							<label sclass="footer" value="** - ${labels.common.categorygrid.hint2}" />
 						</vbox>
-					</footer>
-				</foot>
-			</grid>
-			
+					</listfooter>
+				</listfoot>
+			</listbox>
+			</div>
 		
-
+</div>
 <space></space>
 <div sclass="pageFooter"></div>
 
@@ -126,33 +111,172 @@
 	
 	
 	
-	<window id="edit_category_popup" mode="modal" closable="false" visible="false" width="395px" title="Edytuj kategorię">
+	<window id="edit_category_popup" mode="modal" closable="false" visible="false" width="auto" height="auto" title="Edytuj kategorię" sizable="true" >
+	<zscript>
+	<![CDATA[
 	
+	List types=new ArrayList() ;
+	types.add(1);
+	types.add(2);
+	types.add(3);
+	types.add(4);
+	types.add(5);
+	
+	]]>
+	</zscript>
+	<vbox style="margin:0 auto;">
+	<hbox style="display: block;width:100%; height: 100%">
+	<div style="diaplay: block; width: 400px; height: 100%; float: left ;">
 	<grid>
 		<columns>
-			<column width="120px"/>
-			<column width="260px" />
+			<column width="40%"/>
+			<column width="60%" />
 		</columns>
 		<rows>
 			<row visible="@{parent, converter='pl.krzaq.metalscrap.converter.CategorySelectedConverter'}">
 				<label value="${labels.common.parentcategory}" />
-				<textbox disabled="true" value="@{parent.name}" width="260px" />
+				<textbox disabled="true" value="@{parent.name}" width="100%" />
 			</row>
 			<row>
 				<label value="${labels.common.name}" />
-				<textbox value="@{category.name}" width="260px"/>
+				<textbox value="@{category.name}" width="100%"/>
 			</row>
 			<row>
 				<label value="${labels.common.description}" />
-				<textbox value="@{category.description}" width="260px"></textbox>
+				<textbox multiline="true" rows="2"  value="@{category.description}" width="100%"></textbox>
 			</row>
 		</rows>
 	</grid>
-	<div>
-		<button label="${labels.common.save}"  onClick="categoryEvents.updateCategory(category, edit_category_popup, categoryGrid, binder )" />
-		<button label="${labels.common.cancel}" onClick="edit_category_popup.setVisible(false)"/>
+	<div style="width:100%;height:auto; min-height: 200px;">
+			
+			
+			<grid style="border:none;border-image:none;" id="selectedGroupbox">
+				<columns>
+					<column width="100%" label="Atrybuty"></column>
+				</columns>
+				<rows>
+					<row>
+				
+				<div width="100%" style="display: block;">
+					<vbox>
+						<hbox style="float: right;">
+							<label sclass="smallLabel" value="${labels.common.add} atrybut" />
+							<button sclass="addButton" onClick="categoryEvents.admin_onClickAddCategoryParameter(edit_category_popup,attributes_div,category, binder)" />
+						</hbox>
+						<label sclass="normalLabel" value="${labels.common.categoryparameters}" />
+						
+					
+					<grid id="catParamsGrid" model="@{category.properties}" >
+					
+						<columns>
+							<column width="90%"></column>
+							<column width="10%"></column>
+						</columns>
+						<rows>
+							<row self="@{each=parametr}" value="@{parametr}">
+								<label sclass="normalLabel" value="@{parametr.name}" onClick="categoryEvents.admin_onClickExistingCategoryParameter(self.getParent(), props, attributes, attributes_div,edit_category_popup, binder)"/>
+								<button sclass="deleteButton" onClick="categoryEvents.admin_onClickDeleteCategoryParameter(category, self.getParent(), edit_category_popup, binder)"/>
+							</row>						
+						</rows>
+					</grid>
+					</vbox>
+				</div>
+				
+					</row>
+				</rows>
+			</grid>
+			
+				
+				
+			
+			</div>
+	
 	</div>
 	
+	<div visible="false" style="width:500px; height: 100%;  float: right ;" id="attributes_div" action="show: slideDown({duration:800}); hide:slideUp({duration:800})" >
+		<grid id="props" >
+			<columns>
+				<column width="40%"></column>
+				<column width="60%"></column>
+				
+			</columns>
+			<rows>
+				<row>
+					<label value="Nazwa atrybutu:"></label>
+					<textbox value="@{newParameter.name}" width="100%"></textbox>
+				</row>
+				<row>
+					<label value="Opis:"></label>
+					<textbox multiline="true" rows="2" value="@{newParameter.description}" width="100%"></textbox>
+				</row>
+			</rows>
+		</grid>
+		<hbox style="float: right;">
+			<label sclass="smallLabel" value="${labels.common.add} atrybut" />
+			<button sclass="addButton" onClick="categoryEvents.admin_onClickAddCategoryParameterAttribute(newParameter, attributes,edit_category_popup, binder)"></button>
+		</hbox>
+		<space></space>
+		<grid id="attributes"  model="@{newParameter.attributes}" width="100%">
+			<columns>		
+				<column width="35%" label="Nazwa (opcjonalnie)" valign="top"></column>
+				<column width="57%" label="Typ"></column>
+				<column width="8%" valign="top"></column>
+			</columns>
+			<rows>
+				<row self="@{each=attr}"  value="@{attr}">	
+					<textbox value="@{attr.name}" width="100%"/>			
+					<vbox id="vb" width="100%">	
+					<listbox id="ats" mold="select" model="@{types}"  selectedItem="@{attr.type}" onSelect="categoryEvents.admin_onSelectAttributeType(self.getParent(), edit_category_popup, binder)" width="100%">
+						<listitem self="@{each=type}"  value="@{type}">
+							<listcell label="@{type, converter='pl.krzaq.metalscrap.converter.CategoryParameterTypeConverter'}">
+							</listcell>
+						</listitem>
+					</listbox>
+					
+					<hbox id="add_value_button" style="float: right;">
+							<label sclass="smallLabel" value="${labels.common.add} wartość" />
+							<button sclass="addButton"  onClick="categoryEvents.admin_onAddPropertyAttrValue(self.getParent().getParent(), edit_category_popup, binder)" />
+					</hbox>
+					
+					<grid id="valsGrid"  model="@{attr.values}">
+						<columns>
+							<column width="35%"></column>
+							<column width="55%"></column>
+							<column width="15%"></column>
+						</columns>
+						<rows  >
+							<row self="@{each=val}" value="@{val}">
+								<label value="Wartość:" />
+								<textbox value="@{val.value}" />
+								<button sclass="deleteButton-S" onClick="categoryEvents.admin_onClickDeleteAttributeValue(newParameter, attr, self.getParent(), edit_category_popup, binder)"/>
+							</row>
+						</rows>
+					</grid>		
+					
+					</vbox>
+					<button sclass="deleteButton" onClick="categoryEvents.admin_onClickDeletePropertyAttribute(newParameter, self.getParent(), edit_category_popup, binder)"/>
+				</row>
+			</rows>
+		
+		</grid>
+		<button sclass="blue" visible="@{existingAttribute}" onClick="categoryEvents.admin_onClickUpdateCategoryProperty(category, newParameter, catParamsGrid, edit_category_popup, binder)" label="Aktualizuj"></button>
+		<button sclass="blue" visible="@{existingAttribute, converter='pl.krzaq.metalscrap.converter.NegativeConverter'}" onClick="categoryEvents.admin_onClickAddPropertyToCategory(category, newParameter,catParamsGrid, edit_category_popup, binder)" label="Dodaj do kategorii"></button>
+	</div>
+	</hbox>
+	
+	<div style="display: block ; padding 10px 0 0 0 ;width:100%; height: auto ; background-color: #ededed;">
+		<button label="${labels.common.save}" sclass="green"  onClick="categoryEvents.updateCategory(category, edit_category_popup, categoryGrid, binder )" />
+		<button label="${labels.common.cancel}">
+			<attribute name="onClick">
+			<![CDATA[
+			         edit_category_popup.setVisible(false) ;
+			         attributes_div.setVisible(false);
+			
+			]]>
+			</attribute>
+		</button>
+	</div>
+	</vbox>
 	</window>
 	
 	<window id="new_category_popup" mode="modal" closable="false" visible="false" width="395px" title="Dodaj kategorię" >
@@ -199,5 +323,6 @@
 	</div>
 	
 	</window>
+	
 	
 </zk>
