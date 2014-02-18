@@ -33,11 +33,11 @@
 			<div sclass="listMenu">
 				
 				<separator orient="vertical"></separator>
-				<button id="add_category_button" label="${labels.common.addcategory}" onClick="categoryEvents.openNewCategoryWindow(new_category_popup, binder)"/>
-				<button id="edit_category_button" label="${labels.common.editcategory}" onClick="categoryEvents.openEditCategoryWindow(edit_category_popup, binder)"  disabled="@{category, converter='pl.krzaq.metalscrap.converter.CategoryNotSelectedConverter'}"/>
-				<button id="delete_category_button" label="${labels.common.delcategory}" onClick="categoryEvents.deleteCategory(category, cat_tree, binder)" disabled="@{category, converter='pl.krzaq.metalscrap.converter.CategoryNotSelectedConverter'}"/>
-				<button id="pos_up" label="&#x25B2;" onClick="categoryEvents.moveCategoryUp(category, categoryGrid, binder)" disabled="@{category, converter='pl.krzaq.metalscrap.converter.CategoryUpNotPossibleConverter'}"/>
-				<button id="pos_down" label="&#x25BC;" onClick="categoryEvents.moveCategoryDown(category, categoryGrid, binder)" disabled="@{category, converter='pl.krzaq.metalscrap.converter.CategoryDownNotPossibleConverter'}"/>
+				<button id="add_category_button" sclass="green" label="${labels.common.addcategory}" onClick="categoryEvents.openNewCategoryWindow(new_category_popup, binder)"/>
+				<button id="edit_category_button" sclass="blue" label="${labels.common.editcategory}" onClick="categoryEvents.openEditCategoryWindow(edit_category_popup, binder)"  disabled="@{category, converter='pl.krzaq.metalscrap.converter.CategoryNotSelectedConverter'}"/>
+				<button id="delete_category_button" label="${labels.common.delcategory}" onClick="categoryEvents.deleteCategory(category, categoryGrid, binder)" disabled="@{category, converter='pl.krzaq.metalscrap.converter.CategoryNotSelectedConverter'}"/>
+				<button id="pos_up" label="&#x25B2;" sclass="green" onClick="categoryEvents.moveCategoryUp(category, categoryGrid, binder)" disabled="@{category, converter='pl.krzaq.metalscrap.converter.CategoryUpNotPossibleConverter'}"/>
+				<button id="pos_down" label="&#x25BC;" sclass="green" onClick="categoryEvents.moveCategoryDown(category, categoryGrid, binder)" disabled="@{category, converter='pl.krzaq.metalscrap.converter.CategoryDownNotPossibleConverter'}"/>
 			</div>
 			
 			
@@ -51,22 +51,22 @@
 			
 			<listbox id="categoryGrid" model="@{categories}" style="border:none;border-image:none;" >
 				<!-- <columns>
-					<column width="4%" style="border:none;border-image:none;" />
+					
 					<column width="96%" label="${labels.common.name}" style="border:none;border-image:none;"/>
 					
 				</columns> -->
 				<listhead>
-					<listheader width="5%" style="border:none;border-image:none;" ></listheader>
-					<listheader width="95%" label="${labels.common.name}" style="border:none;border-image:none;"></listheader>
+					<!-- <listheader width="5%" style="border:none;border-image:none;" ></listheader> -->
+					<listheader width="100%" label="${labels.common.name}" style="border:none;border-image:none;"></listheader>
 				</listhead>
 				<listitem  self="@{each=cat}"  value="@{cat}">
-					<listcell>
+					<!-- <listcell>
 						<button sclass="addButton"></button>
-					</listcell>
+					</listcell> -->
 					<listcell>
 						<vbox>
 						<label value="@{cat.name}" onClick="categoryEvents.admin_onSelectCategory(categoryGrid, self.getParent().getParent().getParent(), binder)" onDoubleClick="categoryEvents.admin_onDoubleClickCategory(self.getParent(), category, binder)" />
-						<label sclass="smallLabel" value="@{cat.description}" />
+						<label sclass="smallLabel" value="@{cat.description}" onClick="categoryEvents.admin_onSelectCategory(categoryGrid, self.getParent().getParent().getParent(), binder)" onDoubleClick="categoryEvents.admin_onDoubleClickCategory(self.getParent(), category, binder)" />
 						</vbox>
 					</listcell>
 				</listitem>

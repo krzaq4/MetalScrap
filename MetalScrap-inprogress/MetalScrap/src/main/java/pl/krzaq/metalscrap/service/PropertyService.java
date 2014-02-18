@@ -29,7 +29,7 @@ public interface PropertyService {
 	
 	public PropertyAttributeValue findValueById(Long id) ;
 	
-	public void save(Object object) ;
+	public void save(Property property) ;
 	
 	public void delete(Object object) ;
 	

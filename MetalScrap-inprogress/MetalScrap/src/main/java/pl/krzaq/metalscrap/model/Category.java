@@ -58,6 +58,9 @@ public class Category implements Serializable, Comparable {
 	@Column(name="lang")
 	private String lang ;
 	
+	@Column(name="eq_ident")
+	private String equalIdentifier ;
+	
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="parent")
 	private Category parent ;
@@ -254,6 +257,16 @@ public Category(String name, String description, Category parent, String lang) {
 	
 	public void setProperties(List<Property> properties) {
 		this.properties = properties;
+	}
+	
+	
+
+	public String getEqualIdentifier() {
+		return equalIdentifier;
+	}
+
+	public void setEqualIdentifier(String equalIdentifier) {
+		this.equalIdentifier = equalIdentifier;
 	}
 
 	@Override

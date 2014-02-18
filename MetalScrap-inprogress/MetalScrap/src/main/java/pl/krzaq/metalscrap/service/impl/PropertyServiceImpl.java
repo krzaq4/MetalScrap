@@ -61,11 +61,6 @@ public class PropertyServiceImpl implements PropertyService {
 		return propertyDAO.findValueById(id) ;
 	}
 
-	@Override
-	public void save(Object object) {
-		propertyDAO.save(object);
-
-	}
 
 	@Override
 	public void delete(Object object) {
@@ -79,6 +74,12 @@ public class PropertyServiceImpl implements PropertyService {
 
 	public void setPropertyDAO(PropertyDAO propertyDAO) {
 		this.propertyDAO = propertyDAO;
+	}
+
+	@Override
+	public void save(Property property) {
+		propertyDAO.save(property);
+		
 	}
 	
 	

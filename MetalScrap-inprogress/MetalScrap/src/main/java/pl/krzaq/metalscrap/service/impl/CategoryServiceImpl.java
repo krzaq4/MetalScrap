@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import pl.krzaq.metalscrap.dao.CategoryDAO;
 import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.service.CategoryService;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class CategoryServiceImpl implements CategoryService {
 
@@ -73,12 +74,21 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryDAO.findRootCategoriesByLang(lang) ;
 	}
 
+	@Override 
+	public Category getEqual(String equalIdent, String lang) {
+		return categoryDAO.findEqual(equalIdent, lang) ;
+	}
+	
+	@Override
+	public List<Category> getEquals(String equalIdent) {
+		return categoryDAO.findEquals(equalIdent) ;
+	}
+	
 	@Override
 	public void save(Category category) {
-		for (String lang:ServicesImpl.getLangLabelService().findAllLangs()){
-			category.setLang(lang);
-			categoryDAO.save(category) ;
-		}
+		
+			categoryDAO.merge(category) ;
+	
 
 	}
 
@@ -90,8 +100,9 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public void delete(Category category) {
+			
 		categoryDAO.delete(category);
-
+			
 	}
 
 	public CategoryDAO getCategoryDAO() {

@@ -132,6 +132,16 @@ public class CategoryDAO {
 		
 	}
 	
+	public Category findEqual(String equalIdent, String lang) {
+		Criteria c1 = sessionFactory.getCurrentSession().createCriteria(Category.class, "cat").add(Restrictions.eq("cat.equalIdentifier", equalIdent)).setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY).add(Restrictions.eq("cat.lang", lang)).createCriteria("cat.children", "childs", JoinType.LEFT_OUTER_JOIN).createCriteria("cat.properties", "props", JoinType.LEFT_OUTER_JOIN).createCriteria("props.attributes", "attrs", JoinType.LEFT_OUTER_JOIN).createCriteria("attrs.values", JoinType.LEFT_OUTER_JOIN) ; //.createCriteria("properties", JoinType.LEFT_OUTER_JOIN);
+		return (Category) c1.uniqueResult() ;
+	}
+	
+	
+	public List<Category> findEquals(String equalIdent) {
+		Criteria c1 = sessionFactory.getCurrentSession().createCriteria(Category.class, "cat").add(Restrictions.eq("cat.equalIdentifier", equalIdent)).setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY).createCriteria("cat.children", "childs", JoinType.LEFT_OUTER_JOIN).createCriteria("cat.properties", "props", JoinType.LEFT_OUTER_JOIN).createCriteria("props.attributes", "attrs", JoinType.LEFT_OUTER_JOIN).createCriteria("attrs.values", JoinType.LEFT_OUTER_JOIN) ; //.createCriteria("properties", JoinType.LEFT_OUTER_JOIN);
+		return c1.list() ;
+	}
 	
 	public void save(Category category) {
 		

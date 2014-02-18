@@ -35,6 +35,10 @@ public interface CategoryService {
 	
 	public List<Category> findRootCategoriesByLang(String lang) ;
 	
+	public Category getEqual(String equalIdent, String lang) ;
+	
+	public List<Category> getEquals(String equalIdent) ;
+	
 	public void save(Category category) ;
 	
 	public void update(Category category) ;
