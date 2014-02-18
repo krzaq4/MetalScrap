@@ -88,7 +88,7 @@ public class HomeController {
 	
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
-		model.addAttribute("user", ( (User) userDAO.getUserByLogin(((UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername())).getFirstName());
+		model.addAttribute("user", ( (User) userDAO.getUserByLogin(((UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername())).getLogin());
 		return "home" ;
 	}
 	

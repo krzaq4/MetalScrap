@@ -1,7 +1,7 @@
 <?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
 <?init class="pl.krzaq.metalscrap.pages.AuctionCategories" ?>
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
-<?page title="${labels.admin.menu.configuration.auctioncategories}" contentType="text/html;charset=UTF-8" ?>
+<?page id="a_cats" title="${labels.admin.menu.configuration.auctioncategories}" contentType="text/html;charset=UTF-8" ?>
 
 
 <zk xmlns:h="http://www.w3.org/1999/xhtml">
@@ -59,13 +59,13 @@
 					<listheader width="5%" style="border:none;border-image:none;" ></listheader>
 					<listheader width="95%" label="${labels.common.name}" style="border:none;border-image:none;"></listheader>
 				</listhead>
-				<listitem  self="@{each=cat}" onClick="categoryEvents.admin_onSelectCategory(categoryGrid, self.getValue(), binder)" value="@{cat}">
+				<listitem  self="@{each=cat}"  value="@{cat}">
 					<listcell>
 						<button sclass="addButton"></button>
 					</listcell>
 					<listcell>
 						<vbox>
-						<label value="@{cat.name}" onDoubleClick="categoryEvents.admin_onDoubleClickCategory(self.getParent(), category, binder)" />
+						<label value="@{cat.name}" onClick="categoryEvents.admin_onSelectCategory(categoryGrid, self.getParent().getParent().getParent(), binder)" onDoubleClick="categoryEvents.admin_onDoubleClickCategory(self.getParent(), category, binder)" />
 						<label sclass="smallLabel" value="@{cat.description}" />
 						</vbox>
 					</listcell>
@@ -166,7 +166,7 @@
 						<label sclass="normalLabel" value="${labels.common.categoryparameters}" />
 						
 					
-					<grid id="catParamsGrid" model="@{category.properties}" >
+					<grid id="catParamsGrid" model="@{category.props}" >
 					
 						<columns>
 							<column width="90%"></column>
@@ -208,6 +208,10 @@
 				<row>
 					<label value="Opis:"></label>
 					<textbox multiline="true" rows="2" value="@{newParameter.description}" width="100%"></textbox>
+				</row>
+				<row>
+					<label value="Widoczny na liście aukcji:" />
+					<checkbox checked="@{newParameter.exposed}" />
 				</row>
 			</rows>
 		</grid>
@@ -318,7 +322,7 @@
 		</foot>
 	</grid>
 	<div>
-		<button label="${labels.common.save}" onClick="categoryEvents.saveCategory(category, new_category_popup, categoryGrid, binder )" />
+		<button label="${labels.common.save}" sclass="green" onClick="categoryEvents.saveCategory(category, new_category_popup, categoryGrid, binder )" />
 		<button label="${labels.common.cancel}" onClick="new_category_popup.setVisible(false)"/>
 	</div>
 	

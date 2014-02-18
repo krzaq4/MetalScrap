@@ -75,7 +75,10 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public void save(Category category) {
-		categoryDAO.save(category) ;
+		for (String lang:ServicesImpl.getLangLabelService().findAllLangs()){
+			category.setLang(lang);
+			categoryDAO.save(category) ;
+		}
 
 	}
 

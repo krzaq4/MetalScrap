@@ -38,7 +38,7 @@
 				
 				<grid>
 					<columns>
-						<column width="20%"></column>
+						<column width="20%" valign="top"></column>
 						<column width="80%"></column>
 					</columns>
 					<rows>
@@ -74,6 +74,10 @@
 									</listcell>
 								</listitem>
 							</listbox>
+						</row>
+						<row>
+							<label value="Atrybuty kategorii:" />
+							<groupbox id="auction_category_attributes"></groupbox>
 						</row>
 						<row>
 							<label value="${labels.auction.auctionminpriceenabled}:" />

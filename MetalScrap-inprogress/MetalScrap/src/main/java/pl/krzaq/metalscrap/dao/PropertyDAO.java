@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.krzaq.metalscrap.model.Property;
 import pl.krzaq.metalscrap.model.PropertyAttribute;
 import pl.krzaq.metalscrap.model.PropertyAttributeValue;
+import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 
 @Transactional
 public class PropertyDAO {
@@ -54,8 +55,22 @@ public class PropertyDAO {
 		return (PropertyAttributeValue) sessionFactory.getCurrentSession().createCriteria(PropertyAttributeValue.class).add(Restrictions.idEq(id)).uniqueResult() ;
 	}
 	
-	public void save(Object object) {
-		sessionFactory.getCurrentSession().saveOrUpdate(object);
+	public void save(Property property) {
+		if (property.getId()!=null) {
+			update(property) ;
+		}
+		else {
+			for (String lang: ServicesImpl.getLangLabelService().findAllLangs()){
+				property.setLang(lang);
+				sessionFactory.getCurrentSession().save(property);
+			}
+			
+		}
+		
+	}
+	
+	public void update(Property property) {
+		sessionFactory.getCurrentSession().update(property);
 	}
 	
 	public void delete(Object object) {

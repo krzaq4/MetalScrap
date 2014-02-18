@@ -43,6 +43,9 @@ public class Property implements Serializable {
 	@Column(name="lang")
 	private String lang ;
 	
+	@Column(name="exposed")
+	private Boolean exposed ;
+	
 	@OneToMany(mappedBy="property", cascade=CascadeType.ALL)
 	@IndexColumn(name="INDEX_COL3")
 	private List<PropertyAttribute> attributes ;
@@ -85,6 +88,14 @@ public class Property implements Serializable {
 
 	public void setAttributes(List<PropertyAttribute> attributes) {
 		this.attributes = attributes;
+	}
+	
+	public Boolean getExposed() {
+		return exposed;
+	}
+
+	public void setExposed(Boolean exposed) {
+		this.exposed = exposed;
 	}
 
 	@Override

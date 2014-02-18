@@ -35,6 +35,8 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zkplus.databind.AnnotateDataBinder;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Caption;
+import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.ComboitemRenderer;
@@ -42,18 +44,23 @@ import org.zkoss.zul.Constraint;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Decimalbox;
 import org.zkoss.zul.Grid;
+import org.zkoss.zul.Groupbox;
+import org.zkoss.zul.Hbox;
 import org.zkoss.zul.Image;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
+import org.zkoss.zul.Listhead;
+import org.zkoss.zul.Listheader;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Messagebox.ClickEvent;
 import org.zkoss.zul.Popup;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Textbox;
+import org.zkoss.zul.Vbox;
 import org.zkoss.zul.Window;
 
 import pl.krzaq.metalscrap.dao.AddressDAO;
@@ -72,6 +79,9 @@ import pl.krzaq.metalscrap.model.CommodityType;
 import pl.krzaq.metalscrap.model.Company;
 import pl.krzaq.metalscrap.model.DeliveryType;
 import pl.krzaq.metalscrap.model.PaymentMethod;
+import pl.krzaq.metalscrap.model.Property;
+import pl.krzaq.metalscrap.model.PropertyAttribute;
+import pl.krzaq.metalscrap.model.PropertyAttributeValue;
 import pl.krzaq.metalscrap.model.User;
 import pl.krzaq.metalscrap.model.UserOffer;
 import pl.krzaq.metalscrap.service.impl.ServicesImpl;
@@ -503,6 +513,92 @@ public void onSelectAuctionCategory(Listitem item, AnnotateDataBinder binder) {
 		
 		binder.loadComponent(((Listbox)page.getFellow("auction_category")));
 	} 
+	
+	Groupbox vbox = (Groupbox) page.getFellow("auction_category_attributes") ;
+	vbox.getChildren().clear(); 
+	
+	
+	List<Property> props = selectedCategory.getProperties() ;
+	
+	for (Property prop:props){
+		
+		String name = prop.getName() ;
+		Label lab = new Label() ;
+		lab.setSclass("normalLabel");
+		lab.setValue(name);
+		vbox.appendChild(lab) ;
+		if(prop.getAttributes()!=null && prop.getAttributes().size()>0) {
+			
+			List<PropertyAttribute> attrs = prop.getAttributes() ;
+			for (PropertyAttribute attr:attrs){
+				Hbox hbox = new Hbox() ;
+				Label lab2 = new Label(attr.getName()) ;
+				hbox.appendChild(lab2) ;
+				if (attr.getType().equals(PropertyAttribute.TYPE_TEXT)) {
+					Textbox txt = new Textbox() ;
+					hbox.appendChild(txt) ;
+				}
+				else
+				if (attr.getType().equals(PropertyAttribute.TYPE_DATE)) {
+					Datebox dat = new Datebox() ;
+					hbox.appendChild(dat) ;
+				}
+				else
+				if (attr.getType().equals(PropertyAttribute.TYPE_DECIMAL)) {
+					Decimalbox dec = new Decimalbox() ;
+					hbox.appendChild(dec) ;
+				}
+				else
+				if (attr.getType().equals(PropertyAttribute.TYPE_SELECT)) {
+					Listbox list = new Listbox() ;
+					list.setMold("select");
+					
+					if(attr.getValues()!=null && attr.getValues().size()>0) {
+					
+						List<PropertyAttributeValue> vals = attr.getValues() ;
+						
+						for (PropertyAttributeValue val:vals) {
+							
+							Listitem li = new Listitem() ;
+							li.setValue(val);
+							li.setLabel(val.getValue());
+							list.appendChild(li) ;
+							
+						}
+						
+					}
+					
+					hbox.appendChild(list) ;
+				}
+				else
+				if (attr.getType().equals(PropertyAttribute.TYPE_MULTISELECT)) {
+					
+					Vbox vb = new Vbox() ;
+					
+					if(attr.getValues()!=null && attr.getValues().size()>0) {
+						
+						List<PropertyAttributeValue> vals = attr.getValues() ;
+						
+						for (PropertyAttributeValue val:vals) {
+							
+							Checkbox cb = new Checkbox() ;
+							cb.setLabel(val.getValue());
+							vb.appendChild(cb) ;
+							
+						}
+						
+					}
+					hbox.appendChild(vb) ;
+					
+				}
+				
+				vbox.appendChild(hbox) ;
+			}
+			
+			
+		}
+		
+	}
 	
 }
 

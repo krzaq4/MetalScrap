@@ -53,8 +53,8 @@ import pl.krzaq.metalscrap.utils.Utilities;
 public class CategoryEvents {
 
 	
-	public void admin_onSelectCategory(Listbox grid, Category category, AnnotateDataBinder binder) {
-		
+	public void admin_onSelectCategory(Listbox grid, Listitem item, AnnotateDataBinder binder) {
+		Category category = item.getValue() ;
 		Page page = grid.getPage() ;
 		
 		List<Property> params = new ArrayList<Property>() ;
@@ -110,16 +110,8 @@ public class CategoryEvents {
 		} else {
 			Collections.sort(subs);
 			final Listbox subList = new Listbox() ;
-			subList.addEventListener("onSelect", new EventListener<Event>(){
-
-				@Override
-				public void onEvent(Event arg0) throws Exception {
-					admin_onSelectCategory(subList, (Category) subList.getSelectedItem().getValue(), binder) ;
-					
-				}
-				
-				
-			}) ;
+			subList.setPage(page);
+			
 			Listhead lhead = new Listhead() ;
 			
 			Listheader lh1 = new Listheader() ;
@@ -130,9 +122,11 @@ public class CategoryEvents {
 			lhead.appendChild(lh1) ;
 			lhead.appendChild(lh2) ;
 			
-			Listitem litem = new Listitem() ;
+			
+			subList.appendChild(lhead) ;
 			
 			for (Category sub:subs){
+				final Listitem litem = new Listitem() ;
 				Button add = new Button();
 				add.setSclass("addButton");
 				final Category subFinal = sub ;
@@ -146,6 +140,15 @@ public class CategoryEvents {
 				
 				l1.setValue(sub.getName());
 				l2.setValue(sub.getDescription());
+				
+				l1.addEventListener("onClick", new EventListener<Event>(){
+
+					@Override
+					public void onEvent(Event arg0) throws Exception {
+						admin_onSelectCategory(subList, litem, binder) ;
+					}
+					
+				}) ;
 				
 				l1.addEventListener("onDoubleClick", new EventListener<Event>(){
 
@@ -165,10 +168,11 @@ public class CategoryEvents {
 				lcell2.appendChild(vb) ;
 				litem.appendChild(lcell1) ;
 				litem.appendChild(lcell2) ;
+				subList.appendChild(litem) ;
 			}
 			
-			subList.appendChild(lhead) ;
-			subList.appendChild(litem) ;
+			
+			
 			
 			//subList.setModel(new ListModelList<Category>(subs));
 			subList.setId(String.valueOf(category.getId()) );
@@ -396,7 +400,7 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 		
 	}
 
-	public void saveCategory(Category category, Window win, Grid grid, AnnotateDataBinder binder) {
+	public void saveCategory(Category category, Window win, Listbox grid, AnnotateDataBinder binder) {
 	
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 		Listbox cmbx = (Listbox) win.getFellow("selectedCategory") ;
@@ -405,7 +409,7 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 		
 		if (cmbx.getSelectedIndex()>-1){
 			if (((Category) cmbx.getItemAtIndex(cmbx.getSelectedIndex()).getValue()).getId()!=null)
-				parent = (Category) cmbx.getItemAtIndex(cmbx.getSelectedIndex()).getValue() ;	
+				parent = ServicesImpl.getCategoryService().findById(((Category) cmbx.getItemAtIndex(cmbx.getSelectedIndex()).getValue()).getId()) ; //(Category) cmbx.getItemAtIndex(cmbx.getSelectedIndex()).getValue() ;	
 		}
 		
 		category.setParent(parent);
@@ -417,20 +421,22 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 		//	ServicesImpl.getCategoryService().update(parent) ;
 		}
 		
-		List<String> langs = ServicesImpl.getLangLabelService().findAllLangs() ;
+		/*List<String> langs = ServicesImpl.getLangLabelService().findAllLangs() ;
 		
-		for (String lang:langs) {
-			category.setLang(lang);
+		for (String lang:langs) {*/
+			
 			ServicesImpl.getCategoryService().save(category);
-		}
+		//}
 		
-		page.setAttribute("categories", ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage())) ;
+			List<Category> categories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
+			Collections.sort(categories);
+		page.setAttribute("categories", categories ) ;
 		
 		win.setVisible(false) ;
 		binder.loadComponent(grid);
 	}
 
-	public void updateCategory(Category category, Window win, Grid grid, AnnotateDataBinder binder) {
+	public void updateCategory(Category category, Window win, Listbox grid, AnnotateDataBinder binder) {
 
 		Page page = grid.getPage() ;
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
@@ -568,7 +574,7 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 	
 	public void admin_onClickAddPropertyToCategory(Category category, Property property, Grid grid, Window win, AnnotateDataBinder binder) {
 		Page page = grid.getPage() ;
-		category.getProperties().add(property) ;
+		category.getProps().add(property) ;
 		property = new Property() ;
 		property.setAttributes(new ArrayList<PropertyAttribute>());
 		

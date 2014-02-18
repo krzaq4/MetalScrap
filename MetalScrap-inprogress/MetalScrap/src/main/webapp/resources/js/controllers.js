@@ -48,7 +48,7 @@ function AuctionDetails($scope, $http) {
 				if(!$scope.val) {
 					$scope.val = data.currentOffer ;
 				}
-				//$scope.getAuction() ;
+				$scope.getAuction() ;
 				
 			}) ;
 		};

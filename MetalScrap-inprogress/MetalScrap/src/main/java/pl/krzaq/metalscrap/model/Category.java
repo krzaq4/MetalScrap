@@ -21,6 +21,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.IndexColumn;
 
+import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+
 
 @Entity
 @Table(name="category")
@@ -103,13 +105,14 @@ public Category(String name, String description, Category parent, String lang) {
 		
 		
 		if (category.getChildren()!=null) Collections.sort(category.getChildren()) ;
-		this.children = category.getChildren()==null ? null : new ArrayList<Category>(category.getChildren()) ;
+		this.children = category.getChildren()==null ? new ArrayList<Category>() : new ArrayList<Category>(category.getChildren()) ;
 		this.description = new String(category.getDescription()) ;
 		this.id = category.getId()==null ? null : new Long(category.getId()) ;
 		this.name = new String(category.getName()) ;
-		this.parent = category.getParent() ==null ? null :new Category(category.getParent()) ;
+		this.parent = category.getParent() ==null ? null : category.getParent() ;
 		this.position = new Integer(category.getPosition()).intValue() ;
-		
+		this.properties = category.getProperties()==null ? new ArrayList<Property>() : new ArrayList<Property>(category.getProperties()) ;
+		this.lang = category.getLang() ;
 	}
 	
 	
@@ -232,9 +235,23 @@ public Category(String name, String description, Category parent, String lang) {
 
 	
 	public List<Property> getProperties() {
-		return properties;
+		Category par = this.getParent() ;
+		List<Property> props = new ArrayList<Property>() ;
+		while(par!=null) {
+			List<Property> newProps = ServicesImpl.getCategoryService().findById(par.getId()).getProperties() ;
+			if(newProps!=null && newProps.size()>0) {
+				props.addAll(newProps) ;
+			}
+			par = par.getParent() ;
+		}
+		props.addAll(properties) ;
+		return props;
 	}
 
+	public List<Property> getProps() {
+		return properties ;
+	}
+	
 	public void setProperties(List<Property> properties) {
 		this.properties = properties;
 	}

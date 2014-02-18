@@ -98,7 +98,7 @@ public class Utilities {
 			
 			
 				binder.loadComponent(c);
-				log.info("Found binding : ["+c.getClass().getCanonicalName()+"] ["+c.getId()+"]") ;
+				//log.info("Found binding : ["+c.getClass().getCanonicalName()+"] ["+c.getId()+"]") ;
 			
 			
 			if (c.getChildren()!=null && c.getChildren().size()>0) {

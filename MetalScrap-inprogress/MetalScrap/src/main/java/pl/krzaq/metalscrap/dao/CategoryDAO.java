@@ -1,7 +1,10 @@
 package pl.krzaq.metalscrap.dao;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
 
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
@@ -15,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import pl.krzaq.metalscrap.model.Category;
+import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 
 @Transactional
 public class CategoryDAO {
@@ -31,9 +35,15 @@ public class CategoryDAO {
 	
 	public Category findById(Long id){
 		Category result = null ;
+		
+		Criteria c1 = sessionFactory.getCurrentSession().createCriteria(Category.class, "cat").add(Restrictions.idEq(id)).setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY).createCriteria("cat.children", "childs", JoinType.LEFT_OUTER_JOIN).createCriteria("cat.properties", "props", JoinType.LEFT_OUTER_JOIN).createCriteria("props.attributes", "attrs", JoinType.LEFT_OUTER_JOIN).createCriteria("attrs.values", JoinType.LEFT_OUTER_JOIN) ; //.createCriteria("properties", JoinType.LEFT_OUTER_JOIN);
+		if(c1.list()!=null && c1.list().size()>0) {
+			result = (Category) c1.list().get(0) ;
+		}
+		/*
 		if(sessionFactory.getCurrentSession().getNamedQuery("Category.findById").setParameter("id", id).list()!=null 
 				&& sessionFactory.getCurrentSession().getNamedQuery("Category.findById").setParameter("id", id).list().size()>0)
-		result = (Category) sessionFactory.getCurrentSession().getNamedQuery("Category.findById").setParameter("id", id).list().get(0);
+		result = (Category) sessionFactory.getCurrentSession().getNamedQuery("Category.findById").setParameter("id", id).list().get(0);*/
 		return result ;
 	}
 	
@@ -52,7 +62,9 @@ public class CategoryDAO {
 	}
 	
 	public List<Category> findSubCategoriesByLang(Category parent, String lang) {
-		return sessionFactory.getCurrentSession().createCriteria(Category.class).add(Restrictions.eq("parent", parent)).add(Restrictions.eq("lang", lang)).list() ;
+		Criteria c1 = sessionFactory.getCurrentSession().createCriteria(Category.class, "cat").add(Restrictions.eq("cat.parent", parent)).setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY).add(Restrictions.eq("cat.lang", lang)).createCriteria("cat.children", "childs", JoinType.LEFT_OUTER_JOIN).createCriteria("cat.properties", "props", JoinType.LEFT_OUTER_JOIN).createCriteria("props.attributes", "attrs", JoinType.LEFT_OUTER_JOIN).createCriteria("attrs.values", JoinType.LEFT_OUTER_JOIN) ; //.createCriteria("properties", JoinType.LEFT_OUTER_JOIN);
+		
+		return c1.list() ;
 		//return sessionFactory.getCurrentSession().getNamedQuery("Category.findSubCategoriesByLang").setParameter("parent", parent).setParameter("lang", lang).list() ;
 		
 	}
@@ -64,8 +76,18 @@ public class CategoryDAO {
 	}
 	
 	public Category findParentCategoryByLang(Category child, String lang) {
+		List<Category> cc = new ArrayList<Category>();
+		cc.add(child);
+		Criteria c1 = sessionFactory.getCurrentSession().createCriteria(Category.class, "cat").setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY).add(Restrictions.eq("cat.lang", lang)).createCriteria("cat.children", "childs", JoinType.LEFT_OUTER_JOIN).add(Restrictions.like("children", cc)).createCriteria("cat.properties", "props", JoinType.LEFT_OUTER_JOIN).createCriteria("props.attributes", "attrs", JoinType.LEFT_OUTER_JOIN).createCriteria("attrs.values", JoinType.LEFT_OUTER_JOIN) ; //.createCriteria("properties", JoinType.LEFT_OUTER_JOIN);
 		
-		return (Category) sessionFactory.getCurrentSession().createCriteria(Category.class).createAlias("Category", "cat").add(Restrictions.eq("cat", child)).add(Restrictions.eq("cat.lang", lang)).list().get(0) ;
+		
+		//return (Category) sessionFactory.getCurrentSession().createCriteria(Category.class).createAlias("Category", "cat").add(Restrictions.eq("cat", child)).add(Restrictions.eq("cat.lang", lang)).list().get(0) ;
+		Category result = null ;
+		if (c1.list()!=null && c1.list().size()>0) {
+			result = (Category) c1.list().get(0) ;
+		}
+		
+		return result ;
 	}
 	
 	public Category findByName(String name, Category parent) {
@@ -100,7 +122,7 @@ public class CategoryDAO {
 	}
 	
 	public List<Category> findRootCategoriesByLang(String lang) {
-		Criteria c1 = sessionFactory.getCurrentSession().createCriteria(Category.class, "cat").add(Restrictions.isNull("cat.parent")).setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY).add(Restrictions.eq("cat.lang", lang)).createCriteria("cat.properties", "props", JoinType.LEFT_OUTER_JOIN).createCriteria("props.attributes", "attrs", JoinType.LEFT_OUTER_JOIN).createCriteria("attrs.values", JoinType.LEFT_OUTER_JOIN) ; //.createCriteria("properties", JoinType.LEFT_OUTER_JOIN);
+		Criteria c1 = sessionFactory.getCurrentSession().createCriteria(Category.class, "cat").add(Restrictions.isNull("cat.parent")).setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY).add(Restrictions.eq("cat.lang", lang)).createCriteria("cat.children", "childs", JoinType.LEFT_OUTER_JOIN).createCriteria("cat.properties", "props", JoinType.LEFT_OUTER_JOIN).createCriteria("props.attributes", "attrs", JoinType.LEFT_OUTER_JOIN).createCriteria("attrs.values", JoinType.LEFT_OUTER_JOIN) ; //.createCriteria("properties", JoinType.LEFT_OUTER_JOIN);
 		
 		//Criteria c2 =  c1.createCriteria("properties", CriteriaSpecification.LEFT_JOIN) ;
 		//Criteria c3 = c2.createCriteria("properties.values", CriteriaSpecification.LEFT_JOIN) ;
@@ -113,9 +135,10 @@ public class CategoryDAO {
 	
 	public void save(Category category) {
 		
-		category.setPosition(this.getNextPosition(category.getParent(), category.getLang())) ;
-		sessionFactory.getCurrentSession().save(category) ;
+			category.setPosition(this.getNextPosition(category.getParent(), category.getLang())) ;
+			sessionFactory.getCurrentSession().save(category) ;		
 	}
+	
 	@Transactional
 	public void update(Category category) {
 		
