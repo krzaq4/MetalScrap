@@ -12,23 +12,34 @@ import javax.servlet.http.HttpServletRequest;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Period;
+import org.zkoss.bind.BindUtils;
+import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.bind.annotation.SelectorParam;
 import org.zkoss.image.AImage;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Image;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
 
+import pl.krzaq.metalscrap.converter.AuctionTimeLeftConverter;
 import pl.krzaq.metalscrap.model.AttachementFile;
 import pl.krzaq.metalscrap.model.Auction;
+import pl.krzaq.metalscrap.model.AuctionStatus;
 import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.model.UserOffer;
 import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 
-public class AuctionView extends HomePage {
+public class AuctionView extends HomePage{
 
+	private Auction auction ;
+	private String timeLeft ;
+	
 	@Override
 	public void doInit(Page page, Map<String, Object> arg1) throws Exception {
 		
@@ -39,7 +50,7 @@ public class AuctionView extends HomePage {
 		if (request.getParameter("id")!=null) {
 			
 			Long id = Long.valueOf( (String) request.getParameter("id")) ;
-			Auction auction = ServicesImpl.getAuctionService().findWithCollection(id) ;
+			Auction auction = ServicesImpl.getAuctionService().findById(id) ;
 			
 			List<AttachementFile> attachements = ServicesImpl.getAttachementFileService().findByAuction(auction) ;
 			
@@ -90,6 +101,7 @@ public class AuctionView extends HomePage {
 			page.setAttribute("offers", offers) ;
 			
 			page.setAttribute("auction", auction) ;
+			this.auction = auction ;
 			page.setAttribute("images", images) ;
 			
 		} else {
@@ -131,6 +143,57 @@ public class AuctionView extends HomePage {
 
 	
 	
+	@Command("doit")
+	public void doit() {
+		
+		System.out.println("do") ;
+	}
+	
+	
+	
+	  //@NotifyChange("clicks")
+	  public void update() {
+	  
+	    
+	    Runnable r = new Runnable() {
+	            @Override
+	            public void run(){
+	            	try {
+	            	AuctionTimeLeftConverter atc = new AuctionTimeLeftConverter() ;
+	            	while(!auction.getStatus().getCode().equals(AuctionStatus.STATUS_FINISHED)) {
+	            		
+	            		timeLeft = (String) atc.coerceToUi(auction, null) ;
+	            		Thread.sleep(1000);
+	            		BindUtils.postNotifyChange(null, null, this, "timeLeft");
+	            	}
+	            	
+	            	} catch(InterruptedException ie) {
+	            		
+	            	}
+	            }
+	            
+	            
+	    	} ;
+	    	
+	    	Thread thread = new Thread(r);
+	        thread.start();
+	    }
+
+	public Auction getAuction() {
+		return auction;
+	}
+
+	public void setAuction(Auction auction) {
+		this.auction = auction;
+	}
+
+	public String getTimeLeft() {
+		return timeLeft;
+	}
+
+	public void setTimeLeft(String timeLeft) {
+		this.timeLeft = timeLeft;
+	}        
 	
 	
 }

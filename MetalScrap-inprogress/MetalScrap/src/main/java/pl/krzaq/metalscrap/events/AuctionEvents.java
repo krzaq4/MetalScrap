@@ -130,6 +130,7 @@ public void saveNewAuction(Auction auction, Page p) {
 		}*/
 		
 		User currentUser = userDAO.getUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName()) ;
+		currentUser = ServicesImpl.getUserService().getUserById(currentUser.getId()) ;
 		Company currentCompany = currentUser.getCompany() ;
 		
 		if (auction.getId()==null && ServicesImpl.getAuctionService().findByNumber(auction.getNumber())!=null) {
@@ -204,7 +205,16 @@ public void saveNewAuction(Auction auction, Page p) {
 		auction.setStatus(ServicesImpl.getAuctionService().findStatusByCode(AuctionStatus.STATUS_NEW));
 		
 		auction.setOwnerUser(currentUser);
+		currentUser.getAuctions().add(auction) ;
+		ServicesImpl.getUserService().update(currentUser);
 		// zapis aukcji
+		
+		//Utilities.validate(p.getFellow("auction_category_attributes"), true)  ;
+		
+		List<Property> props = Utilities.populateProperties(p.getFellow("auction_category_attributes"), ServicesImpl.getCategoryService().findById(auction.getCategory().getId())) ;
+		
+		auction.setProperties(props);
+		
 		
 		if (auction.getId()!=null) {
 			auctionDAO.update(auction);
@@ -240,16 +250,26 @@ public void addToObserved(Auction auction, Button btn) {
 	Page p = btn.getPage();
 	//auction.getObeservers().add(e)
 	User currentUser = 	(User) p.getAttribute("currentUser") ; //ServicesImpl.getUserService().getLoggedinUser();
+	auction.getObeservers().add(currentUser) ;
+	
 	List<Auction> observed = ServicesImpl.getAuctionService().findByObserver(currentUser) ;
 	String message = "Dodano aukcjê "+auction.getName()+" do obserwowanych" ;
+	
+	
+	//ServicesImpl.getAuctionService().update(auction);
+	
 	if (observed==null || observed.size()==0) {
 		observed = new ArrayList<Auction>() ;
 		
 	} 
+	
 	if (!observed.contains(auction)) {
 		observed.add(auction) ;
-		currentUser.setObserved(observed);
+		currentUser.getObserved().clear();
+		
 		ServicesImpl.getUserService().update(currentUser);
+		
+		
 	} else {
 		message="Aukcja znajduje siê ju¿ na liœcie aukcji obserwowanych" ; 
 	}
@@ -328,12 +348,13 @@ public void onClickPlaceBid(Decimalbox dbox, Auction auction, AnnotateDataBinder
 		newOffer.setDateIssued(new Date());
 		newOffer.setPrice(price.doubleValue());
 		newOffer.setUser(ServicesImpl.getUserService().getLoggedinUser());
-	
-		ServicesImpl.getUserOfferService().save(newOffer);
-		List<UserOffer> offers = ServicesImpl.getUserOfferService().findByAuction(auction) ;
+		auction.getUserOffers().add(newOffer) ;
+		ServicesImpl.getAuctionService().update(auction);
+		//ServicesImpl.getUserOfferService().save(newOffer);
+		List<UserOffer> offers = auction.getUserOffers() ; //ServicesImpl.getUserOfferService().findByAuction(auction) ;
 		Collections.sort(offers, Collections.reverseOrder());
 		auction.setBestUserOffer(newOffer);
-		ServicesImpl.getAuctionService().update(auction);
+		
 		dbox.getPage().setAttribute("offersHistory", offers) ;
 	
 		dbox.getPage().setAttribute("currentOffer", newOffer) ;
@@ -526,21 +547,26 @@ public void onSelectAuctionCategory(Listitem item, AnnotateDataBinder binder) {
 		Label lab = new Label() ;
 		lab.setSclass("normalLabel");
 		lab.setValue(name);
-		vbox.appendChild(lab) ;
+		Vbox propBox = new Vbox() ;
+		propBox.appendChild(lab) ;
 		if(prop.getAttributes()!=null && prop.getAttributes().size()>0) {
 			
 			List<PropertyAttribute> attrs = prop.getAttributes() ;
 			for (PropertyAttribute attr:attrs){
+				
+				
 				Hbox hbox = new Hbox() ;
 				Label lab2 = new Label(attr.getName()) ;
 				hbox.appendChild(lab2) ;
 				if (attr.getType().equals(PropertyAttribute.TYPE_TEXT)) {
 					Textbox txt = new Textbox() ;
+					txt.setConstraint("no empty");
 					hbox.appendChild(txt) ;
 				}
 				else
 				if (attr.getType().equals(PropertyAttribute.TYPE_DATE)) {
 					Datebox dat = new Datebox() ;
+					
 					hbox.appendChild(dat) ;
 				}
 				else
@@ -592,12 +618,12 @@ public void onSelectAuctionCategory(Listitem item, AnnotateDataBinder binder) {
 					
 				}
 				
-				vbox.appendChild(hbox) ;
+				propBox.appendChild(hbox) ;
 			}
 			
 			
 		}
-		
+		vbox.appendChild(propBox) ;
 	}
 	
 }

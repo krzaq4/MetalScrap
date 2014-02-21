@@ -1,7 +1,11 @@
 package pl.krzaq.metalscrap.pages;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -26,21 +30,32 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.util.Initiator;
 import org.zkoss.zkplus.databind.AnnotateDataBinder;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.Datebox;
+import org.zkoss.zul.Decimalbox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Grid;
+import org.zkoss.zul.Groupbox;
+import org.zkoss.zul.Hbox;
 import org.zkoss.zul.Image;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Row;
+import org.zkoss.zul.Textbox;
+import org.zkoss.zul.Vbox;
 
 import pl.krzaq.metalscrap.model.AttachementFile;
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.model.Commodity;
 import pl.krzaq.metalscrap.model.CommodityType;
+import pl.krzaq.metalscrap.model.Property;
+import pl.krzaq.metalscrap.model.PropertyAttribute;
+import pl.krzaq.metalscrap.model.PropertyAttributeValue;
 import pl.krzaq.metalscrap.service.Services;
 import pl.krzaq.metalscrap.service.impl.AuctionServiceImpl;
 import pl.krzaq.metalscrap.service.impl.ServicesImpl;
@@ -290,7 +305,8 @@ public class AuctionNew extends HomePage{
 		
 		
 		// parametry aukcji
-		
+		if(currentAuction.getId()!=null)
+			buildProperties(currentAuction, arg0) ;
 		
 	}
 
@@ -395,7 +411,148 @@ public class AuctionNew extends HomePage{
 
 
 
-	
+	private void buildProperties(Auction auction, Page page) {
+		
+		Category category = ServicesImpl.getCategoryService().findById(auction.getCategory().getId()) ;
+		Groupbox vbox = (Groupbox) page.getFellow("auction_category_attributes") ;
+		vbox.getChildren().clear(); 
+		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
+		List<Property> auctionProps = auction.getProperties() ;
+		List<Property> props =  category.getProperties();
+		
+		int propNo = 0 ;
+		
+		for (Property prop:props){
+			
+			String name = prop.getName() ;
+			Label lab = new Label() ;
+			lab.setSclass("normalLabel");
+			lab.setValue(name);
+			Vbox propBox = new Vbox() ;
+			propBox.appendChild(lab) ;
+			if(prop.getAttributes()!=null && prop.getAttributes().size()>0) {
+				
+				List<PropertyAttribute> auctionAttrs = auctionProps.get(propNo).getAttributes() ;
+				List<PropertyAttribute> attrs = prop.getAttributes() ;
+				int attrNo = 0 ;
+				
+				for (PropertyAttribute attr:attrs){
+					
+					
+					Hbox hbox = new Hbox() ;
+					Label lab2 = new Label(attr.getName()) ;
+					hbox.appendChild(lab2) ;
+					if (attr.getType().equals(PropertyAttribute.TYPE_TEXT)) {
+						
+						Textbox txt = new Textbox() ;
+						txt.setValue(auctionAttrs.get(attrNo).getValues().get(0).getValue());
+						txt.setConstraint("no empty");
+						hbox.appendChild(txt) ;
+					}
+					else
+					if (attr.getType().equals(PropertyAttribute.TYPE_DATE)) {
+						
+						Date date;
+						try {
+							date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(auctionAttrs.get(attrNo).getValues().get(0).getValue());
+						
+						 
+						Datebox dat = new Datebox() ;
+						dat.setValue(date);
+						hbox.appendChild(dat) ;
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					else
+					if (attr.getType().equals(PropertyAttribute.TYPE_DECIMAL)) {
+						BigDecimal bd = new BigDecimal(auctionAttrs.get(attrNo).getValues().get(0).getValue()) ;
+						Decimalbox dec = new Decimalbox() ;
+						dec.setValue(bd);
+						hbox.appendChild(dec) ;
+					}
+					else
+					if (attr.getType().equals(PropertyAttribute.TYPE_SELECT)) {
+						Listbox lbx = new Listbox() ;
+						lbx.setMold("select");
+						
+						
+						
+						if(attr.getValues()!=null && attr.getValues().size()>0) {
+							List<PropertyAttributeValue> auctionVals = auctionAttrs.get(attrNo).getValues() ;
+							List<PropertyAttributeValue> vals = attr.getValues() ;
+							int valNo=0 ;
+							
+							
+							
+							
+							for (PropertyAttributeValue val:vals) {
+								
+								Listitem li = new Listitem() ;
+								li.setValue(val);
+								li.setLabel(val.getValue());
+								lbx.appendChild(li) ;
+								
+									if (auctionVals.get(0).getValue().equals(val.getValue())) {
+										lbx.setSelectedItem(li);
+									}
+								
+								
+								
+								
+								
+							}
+							
+						}
+						
+						hbox.appendChild(lbx) ;
+					}
+					else
+					if (attr.getType().equals(PropertyAttribute.TYPE_MULTISELECT)) {
+						
+						Vbox vb = new Vbox() ;
+						
+						if(attr.getValues()!=null && attr.getValues().size()>0) {
+							
+							List<PropertyAttributeValue> vals = attr.getValues() ;
+							int valNo=0;
+							
+							for (PropertyAttributeValue val:vals) {
+								List<PropertyAttributeValue> auctionVals = auctionAttrs.get(attrNo).getValues() ;
+								
+								Checkbox cb = new Checkbox() ;
+								
+								cb.setLabel(val.getValue());
+								
+								for (PropertyAttributeValue v:auctionVals){
+									if (val.getValue().equals(v.getValue())) {
+										cb.setChecked(true);
+									}
+								}
+							
+								
+								
+								vb.appendChild(cb) ;
+								valNo++ ;
+							}
+							
+						}
+						hbox.appendChild(vb) ;
+						
+					}
+					
+					propBox.appendChild(hbox) ;
+					attrNo++ ;
+				}
+				
+				
+			}
+			vbox.appendChild(propBox) ;
+			propNo++ ;
+		}
+		
+	}
 
 	
 	

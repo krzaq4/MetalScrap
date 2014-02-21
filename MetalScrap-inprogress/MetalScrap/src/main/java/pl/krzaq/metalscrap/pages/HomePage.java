@@ -77,7 +77,9 @@ public class HomePage implements Initiator, InitiatorExt {
 			// Aktualnie zalogowany u¿ytkownik
 			User currentUser =userService.getUserByLogin(login); 
 			if (currentUser != null) {
-			page.setAttribute("currentUser", currentUser);
+				
+				currentUser = ServicesImpl.getUserService().getUserById(currentUser.getId()) ;
+				page.setAttribute("currentUser", currentUser);
 
 			Iterator<Role> iterator = currentUser.getRoles().iterator() ; 
 			

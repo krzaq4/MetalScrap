@@ -8,7 +8,7 @@
 
 	<div class="head"></div>
 	<div class="log"></div>
-	<div style="width:80%;height: 740px;margin: 0 auto ;">
+	<div style="width:80%;height: 800px;margin: 0 auto ;">
 
 		<div id="header" class="header">
 			<div class="logo">
@@ -26,7 +26,7 @@
 			<label value="${labels.common.preferredlanguage} : " />	<langbox />
 		</hbox>
 		</div>
-		<panel id="content" border="none">
+		<panel id="content" border="none" height="100%">
 		<caption label="${labels.admin.menu.configuration.auctioncategories}" />
 			<panelchildren>
 			<div sclass="content" style="background:none ;">
@@ -41,12 +41,82 @@
 			</div>
 			
 			
+			<div sclass="leftInfo">
+			<div style="padding :10px 5px 10px 5px">
+			<label sclass="normalLabel" value="Zarządzaj kategoriami aukcji"></label>
+			<panel collapsible="true" open="true" sclass="infoPanel">
+			<caption label="Dodawaj nowe kategorie" />
+			<panelchildren>
+			<html>
+			<ul>
+				<li>Wybierz nazwę dla kategorii</li>
+				<li>Dodaj opis kategorii</li>
+				
+			</ul>
+			</html>
+			</panelchildren>
+			</panel>
 			
+			<panel collapsible="true" open="false" sclass="infoPanel">
+			<caption label="Edytuj kategorię" />
+			<panelchildren>
+			
+			<html>
+			<ul>
+				<li>Zmieniaj nazwę i opis</li>
+				<li>Dodawaj atrybuty kategorii</li>
+				<li>Edytuj atrybuty kategorii</li>
+				<li>Usuwaj atrybuty kategorii</li>
+				
+			</ul>
+			</html>
+			
+			</panelchildren>
+			</panel>
+			
+			<panel collapsible="false" open="false" sclass="infoPanel">
+			<caption label="Usuwaj kategorie"></caption>
+			</panel>
+			
+			<panel collapsible="true" open="false" sclass="infoPanel">
+			<caption label="Zarządzaj kolejnością wyświetlania"/>
+			<panelchildren>
+			
+			<html>
+			<ul>
+				<li>Wybierz kategorię</li>
+				<li>Przesuń ją góra/ dół na liście</li>				
+			</ul>
+			</html>
+			
+			</panelchildren>
+			</panel>
+			
+			<panel collapsible="true" open="false" sclass="infoPanel">
+			<caption label="Ważne!" />
+			<panelchildren>
+			
+			<html>
+			<ul>
+				<li>Tworząc kategorię, automatycznie powstają jej "klony" w innych, zdefiniowanych językach</li>
+				<li>Dostosuj nazwy kategorii w innych językach, przełączając preferowany język i edytując daną kategorię</li>
+				<li>Nie zapomnij o edycji nazw atrybutów w innych językach</li>				
+			</ul>
+			</html>
+			
+			</panelchildren>
+			</panel>
+			
+			
+			
+			
+			</div>
+			</div>
 			
 			<div sclass="rightContent">
 			<label id="selected_cat_dummy" value="  " visible="@{category, converter='pl.krzaq.metalscrap.converter.CategoryNotSelectedConverter'}" />
 			<label id="selected_cat_lab" visible="@{category, converter='pl.krzaq.metalscrap.converter.CategorySelectedConverter'}" value="Wybrana kategoria: " /><label sclass="normalLabel" id="selected_cat_label" value="@{category.name}" />
-			<a id="backlink" hoverImage="/resources/images/backhover20.png" image="/resources/images/back20.png" onClick="categoryEvents.admin_onClickBackToParentCategory(categoryGrid,category, binder)" visible="@{category, converter='pl.krzaq.metalscrap.converter.CategorySelectedConverter'}" sclass="smallLabel" label="  ${labels.common.backtoparentcategory}"></a>
+			<!-- <a id="backlink" hoverImage="/resources/images/backhover20.png" image="/resources/images/back20.png" onClick="categoryEvents.admin_onClickBackToParentCategory(categoryGrid,category, binder)" visible="@{category, converter='pl.krzaq.metalscrap.converter.CategorySelectedConverter'}" sclass="smallLabel" label="  ${labels.common.backtoparentcategory}"></a> -->
 			
 			
 			<listbox id="categoryGrid" model="@{categories}" style="border:none;border-image:none;" >
@@ -102,11 +172,7 @@
 
 
 
-		<div>
-			<div id="additional" class="additional"></div>
-
-			<div id="footer" class="footer"></div>
-		</div>
+	
 	</div>
 	
 	
@@ -135,15 +201,15 @@
 		<rows>
 			<row visible="@{parent, converter='pl.krzaq.metalscrap.converter.CategorySelectedConverter'}">
 				<label value="${labels.common.parentcategory}" />
-				<textbox disabled="true" value="@{parent.name}" width="100%" />
+				<textbox disabled="true" value="@{parent.name}" width="100%"/>
 			</row>
 			<row>
 				<label value="${labels.common.name}" />
-				<textbox value="@{category.name}" width="100%"/>
+				<textbox value="@{category.name}" width="100%" maxlength="128" constraint="no empty"/>
 			</row>
 			<row>
 				<label value="${labels.common.description}" />
-				<textbox multiline="true" rows="2"  value="@{category.description}" width="100%"></textbox>
+				<textbox multiline="true" rows="2"  value="@{category.description}" width="100%" maxlength="255"></textbox>
 			</row>
 		</rows>
 	</grid>
@@ -203,11 +269,11 @@
 			<rows>
 				<row>
 					<label value="Nazwa atrybutu:"></label>
-					<textbox value="@{newParameter.name}" width="100%"></textbox>
+					<textbox value="@{newParameter.name}" width="100%" maxlength="128" constraint="no empty"></textbox>
 				</row>
 				<row>
 					<label value="Opis:"></label>
-					<textbox multiline="true" rows="2" value="@{newParameter.description}" width="100%"></textbox>
+					<textbox multiline="true" rows="2" value="@{newParameter.description}" width="100%" maxlength="255"></textbox>
 				</row>
 				<row>
 					<label value="Widoczny na liście aukcji:" />
@@ -228,7 +294,7 @@
 			</columns>
 			<rows>
 				<row self="@{each=attr}"  value="@{attr}">	
-					<textbox value="@{attr.name}" width="100%"/>			
+					<textbox value="@{attr.name}" width="100%" maxlength="128"/>			
 					<vbox id="vb" width="100%">	
 					<listbox id="ats" mold="select" model="@{types}"  selectedItem="@{attr.type}" onSelect="categoryEvents.admin_onSelectAttributeType(self.getParent(), edit_category_popup, binder)" width="100%">
 						<listitem self="@{each=type}"  value="@{type}">
@@ -251,7 +317,7 @@
 						<rows  >
 							<row self="@{each=val}" value="@{val}">
 								<label value="Wartość:" />
-								<textbox value="@{val.value}" />
+								<textbox value="@{val.value}" maxlength="128" constraint="no empty"/>
 								<button sclass="deleteButton-S" onClick="categoryEvents.admin_onClickDeleteAttributeValue(newParameter, attr, self.getParent(), edit_category_popup, binder)"/>
 							</row>
 						</rows>
@@ -304,15 +370,15 @@
 					</comboitem>
 				</combobox>
 				 -->
-				<textbox value="@{parent.name}" width="260px" />
+				<textbox value="@{parent.name}" width="260px" maxlength="128"/>
 			</row>
 			<row>
 				<label value="${labels.common.name}" />
-				<textbox value="@{category.name}" width="260px" constraint="no empty"/>
+				<textbox value="@{category.name}" width="260px" maxlength="128" constraint="no empty"/>
 			</row>
 			<row>
 				<label value="${labels.common.description}" />
-				<textbox value="@{category.description}" width="260px" constraint="no empty"></textbox>
+				<textbox value="@{category.description}" width="260px" maxlength="255" constraint="no empty"></textbox>
 			</row>
 		</rows>
 		<foot width="100%">

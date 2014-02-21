@@ -10,9 +10,11 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -123,11 +125,11 @@ public class AuctionDAO {
 		return (AuctionStatus) sessionFactory.getCurrentSession().createCriteria(AuctionStatus.class).add(Restrictions.eq("code", code)).list().get(0) ;
 	}
 	public Auction findById(Long id) {
-
-		List<Auction> list = sessionFactory.getCurrentSession().getNamedQuery("Auction.findById").setParameter("id", id).list() ;
-		if(list.size()>0)
-			return (Auction)list.get(0) ;
-		else return null ;
+		
+		Criteria c1 = sessionFactory.getCurrentSession().createCriteria(Auction.class, "auction").setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY).add(Restrictions.idEq(id)).createCriteria("auction.userOffers", "offers", JoinType.LEFT_OUTER_JOIN).createCriteria("auction.obeservers", "observers", JoinType.LEFT_OUTER_JOIN).createCriteria("auction.files", "files", JoinType.LEFT_OUTER_JOIN).createCriteria("auction.properties", "props", JoinType.LEFT_OUTER_JOIN).createCriteria("props.attributes", "attrs", JoinType.LEFT_OUTER_JOIN).createCriteria("attrs.values", JoinType.LEFT_OUTER_JOIN) ; //.createCriteria("properties", JoinType.LEFT_OUTER_JOIN);
+		
+		
+		return (Auction) c1.uniqueResult() ;
 	}
 	
 	public void save(Auction a){
@@ -144,7 +146,7 @@ public class AuctionDAO {
 	
 	public void update(Auction a) {
 	
-		sessionFactory.getCurrentSession().update(a);
+		sessionFactory.getCurrentSession().merge(a);
 	}
 	
 	public void delete(Auction a) {

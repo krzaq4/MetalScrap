@@ -34,11 +34,9 @@ public class UserOffer implements Serializable, Comparable<UserOffer>{
 	private Long id ;
 	
 	@ManyToOne
-	@JoinColumn(name="user_id")
 	private User user ;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="auction_id")
+	@ManyToOne
 	private Auction auction ;
 	
 	@Column(name="price")

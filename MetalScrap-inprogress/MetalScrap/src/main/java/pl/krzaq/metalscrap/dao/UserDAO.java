@@ -3,10 +3,13 @@ package pl.krzaq.metalscrap.dao;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,11 +42,13 @@ public class UserDAO {
 	}
 	
 	public User getUserById(Long id) {
-		
-		User u =  (User)sessionFactory.getCurrentSession().getNamedQuery("User.findById").setParameter("id", id).list().get(0) ;
-		if (u!=null)
+		Criteria crit = sessionFactory.getCurrentSession().createCriteria(User.class, "user").add(Restrictions.idEq(id)).setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY).createCriteria("user.observed","observed", JoinType.LEFT_OUTER_JOIN).createCriteria("user.auctions", "auctions", JoinType.LEFT_OUTER_JOIN).createCriteria("user.userOffers", "offers", JoinType.LEFT_OUTER_JOIN).createCriteria("user.roles", "roles", JoinType.LEFT_OUTER_JOIN) ;
+		//User u =  (User)sessionFactory.getCurrentSession().getNamedQuery("User.findById").setParameter("id", id).list().get(0) ;
+		/*if (u!=null)
 			Hibernate.initialize(u.getRoles());
-		return u ;
+		return u ;*/
+		
+		return (User)crit.uniqueResult() ;
 		
 	}
 	

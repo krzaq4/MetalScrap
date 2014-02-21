@@ -10,6 +10,7 @@ import java.util.Set;
 
 
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,13 +25,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.IndexColumn;
 
 
 @Entity
@@ -86,6 +87,7 @@ public class Auction implements Serializable {
 	
 	@OneToMany( mappedBy="auction")
 	@Cascade(value={CascadeType.ALL, CascadeType.DELETE_ORPHAN})
+	@IndexColumn(name="FILES")
 	private List<AttachementFile> files = new ArrayList<AttachementFile>();
 	
 	@OneToOne
@@ -111,19 +113,24 @@ public class Auction implements Serializable {
 	@JoinColumn(name="best_useroffer")
 	private UserOffer bestUserOffer ;
 	
-	@ManyToMany(mappedBy="observed", cascade=javax.persistence.CascadeType.ALL)
+	@ManyToMany(mappedBy="observed")
+	@Cascade(value={CascadeType.MERGE})
+	@IndexColumn(name="OBSERVERS")
 	private List<User> obeservers ;
 	
 	@OneToMany(mappedBy="auction")
 	@Cascade(value={CascadeType.ALL})
+	@IndexColumn(name="COMPANYOFFERS")
 	private List<CompanyOffer> companyOffers = new ArrayList<CompanyOffer>() ;
 	
 	@OneToMany(mappedBy="auction", fetch=FetchType.EAGER)
 	@Cascade(value={CascadeType.ALL})
+	@IndexColumn(name="USEROFFERS")
 	private List<UserOffer> userOffers = new ArrayList<UserOffer>() ;
 
 	@OneToMany(mappedBy="auction")
 	@Cascade(value={CascadeType.ALL})
+	@IndexColumn(name="COMMODITIES")
 	private List<Commodity> commodities = new ArrayList<Commodity>() ;
 	
 	@OneToOne
@@ -145,6 +152,8 @@ public class Auction implements Serializable {
 	
 	
 	@OneToMany
+	@Cascade(value={CascadeType.ALL})
+	@IndexColumn(name="props")
 	private List<Property> properties; 
 	
 	// -------------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 package pl.krzaq.metalscrap.events;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -114,23 +115,20 @@ public class CategoryEvents {
 			
 			Listhead lhead = new Listhead() ;
 			
-			Listheader lh1 = new Listheader() ;
-			lh1.setWidth("5%");
-			Listheader lh2 = new Listheader() ;
-			lh2.setWidth("95%");
 			
-			lhead.appendChild(lh1) ;
-			lhead.appendChild(lh2) ;
+			Listheader lh = new Listheader() ;
+			lh.setWidth("100%");
+			
+			lhead.appendChild(lh) ;
 			
 			
 			subList.appendChild(lhead) ;
 			
 			for (Category sub:subs){
 				final Listitem litem = new Listitem() ;
-				Button add = new Button();
-				add.setSclass("addButton");
+				
 				final Category subFinal = sub ;
-				Listcell lcell1 = new Listcell() ;
+				
 				Listcell lcell2 = new Listcell() ;
 				final Vbox vb = new Vbox() ;
 				
@@ -160,13 +158,23 @@ public class CategoryEvents {
 					
 				}) ;
 				
+				l2.addEventListener("onDoubleClick", new EventListener<Event>(){
+
+					@Override
+					public void onEvent(Event arg0) throws Exception {
+						
+						admin_onDoubleClickCategory(vb, subFinal, binder) ;
+					}
+					
+				}) ;
+				
 				vb.appendChild(l1) ;
 				vb.appendChild(l2) ;
 				litem.setValue(sub);
 				
-				lcell1.appendChild(add) ;
+				
 				lcell2.appendChild(vb) ;
-				litem.appendChild(lcell1) ;
+				
 				litem.appendChild(lcell2) ;
 				subList.appendChild(litem) ;
 			}
@@ -402,50 +410,56 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 
 	public void saveCategory(Category category, Window win, Listbox grid, AnnotateDataBinder binder) {
 	
-		try {
-			String equalIdent = Utilities.hash(Utilities.HASH_METHOD_MD5, category.getName().concat(category.getDescription())) ;
-			
-			Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
-			Listbox cmbx = (Listbox) win.getFellow("selectedCategory") ;
-			Page page = grid.getPage() ;
-			Category parent = null ;
 		
-			if (cmbx.getSelectedIndex()>-1){
-				if (((Category) cmbx.getItemAtIndex(cmbx.getSelectedIndex()).getValue()).getId()!=null)
-					parent = ServicesImpl.getCategoryService().findById(((Category) cmbx.getItemAtIndex(cmbx.getSelectedIndex()).getValue()).getId()) ; //(Category) cmbx.getItemAtIndex(cmbx.getSelectedIndex()).getValue() ;	
-			} 
-		
-			List<String> langs = ServicesImpl.getLangLabelService().findAllLangs() ;
-		
-		
-			for (String lang:langs) {
+			try {
 				
-				if (parent!=null) {
-					parent = ServicesImpl.getCategoryService().getEqual( Utilities.hash(Utilities.HASH_METHOD_MD5, parent.getName().concat(parent.getDescription())) , lang) ;
+				if (Utilities.validate(win, true)) {
+				
+				String equalIdent = Utilities.hash(Utilities.HASH_METHOD_MD5, category.getName().concat(category.getDescription()));
+				Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
+				Listbox cmbx = (Listbox) win.getFellow("selectedCategory") ;
+				Page page = grid.getPage() ;
+				Category parent = null ;
+		
+				if (cmbx.getSelectedIndex()>-1){
+					if (((Category) cmbx.getItemAtIndex(cmbx.getSelectedIndex()).getValue()).getId()!=null)
+						parent = ServicesImpl.getCategoryService().findById(((Category) cmbx.getItemAtIndex(cmbx.getSelectedIndex()).getValue()).getId()) ; //(Category) cmbx.getItemAtIndex(cmbx.getSelectedIndex()).getValue() ;	
+				} 
+		
+				List<String> langs = ServicesImpl.getLangLabelService().findAllLangs() ;
+		
+		
+				for (String lang:langs) {
+				
+					if (parent!=null) {
+						parent = ServicesImpl.getCategoryService().getEqual( Utilities.hash(Utilities.HASH_METHOD_MD5, parent.getName().concat(parent.getDescription())) , lang) ;
+					}
+			
+					category.setParent(parent);
+			
+					if(parent!=null) {
+						parent.getChildren().add(category) ;					
+					}
+				
+					category.setEqualIdentifier(equalIdent);
+					category.setLang(lang);
+					ServicesImpl.getCategoryService().save(category);
+				
 				}
-			
-				category.setParent(parent);
-			
-				if(parent!=null) {
-					parent.getChildren().add(category) ;					
+		
+				List<Category> categories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
+				Collections.sort(categories);
+				page.setAttribute("categories", categories ) ;
+		
+				win.setVisible(false) ;
+				binder.loadComponent(grid);
+				
 				}
 				
-				category.setEqualIdentifier(equalIdent);
-				category.setLang(lang);
-				ServicesImpl.getCategoryService().save(category);
+			} catch (NoSuchAlgorithmException e) {
 				
 			}
 		
-			List<Category> categories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
-			Collections.sort(categories);
-			page.setAttribute("categories", categories ) ;
-		
-			win.setVisible(false) ;
-			binder.loadComponent(grid);
-		
-		}catch(Exception ex) {
-			
-		}
 	}
 
 	public void updateCategory(Category category, Window win, Listbox grid, AnnotateDataBinder binder) {
@@ -453,7 +467,75 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 		Page page = grid.getPage() ;
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 		
-		ServicesImpl.getCategoryService().update(category);
+		String equalIdent = category.getEqualIdentifier();
+		
+		Category cat ;
+		
+			for (String lang:ServicesImpl.getLangLabelService().findAllLangs()) {
+				cat = ServicesImpl.getCategoryService().getEqual(equalIdent, lang) ;
+				
+				if(lang.equals(locale.getLanguage())) {
+					cat.getProps().clear();
+				}
+				
+				Iterator<Property> itProp = category.getProps().iterator() ;
+				
+				int propNo = 0 ;
+				while(itProp.hasNext()) {
+					Property property = itProp.next() ;
+					
+				Property newProp = new Property() ;
+				List<PropertyAttribute> newAttrs = new ArrayList<PropertyAttribute>() ;
+				List<PropertyAttributeValue> newVals = new ArrayList<PropertyAttributeValue>() ;
+				if(property.getAttributes()!=null)
+					for (PropertyAttribute pa:property.getAttributes()) {
+						PropertyAttribute newPa = new PropertyAttribute() ;
+						newPa.setName(pa.getName());
+						newPa.setProperty(newProp);
+						newPa.setType(pa.getType());
+				
+						if(pa.getValues()!=null)
+							for (PropertyAttributeValue pva:pa.getValues()) {
+								PropertyAttributeValue newPva = new PropertyAttributeValue() ;
+								newPva.setAttribute(newPa);
+								newPva.setValue(pva.getValue());
+								newVals.add(newPva) ;
+							}
+						newPa.setValues(newVals);
+						newAttrs.add(newPa) ;
+				
+					}
+				newProp.setAttributes(newAttrs);
+				newProp.setLang(lang);
+			
+			
+				newProp.setDescription(property.getDescription());
+				newProp.setExposed(property.getExposed());
+				newProp.setName(property.getName());
+				
+				if(lang.equals(locale.getLanguage())) {
+					cat.getProps().add(newProp) ;
+				} 
+				else
+				if(propNo>=cat.getProps().size()){
+					cat.getProps().add(newProp) ;
+				}
+				
+				
+				
+			}
+				
+			if(lang.equals(locale.getLanguage())) {
+				cat.setName(category.getName());
+				cat.setDescription(category.getDescription());
+			}
+				
+			ServicesImpl.getCategoryService().update(cat);
+			
+		}
+		
+		
+		
 		
 		win.setVisible(false) ;
 		List<Category> categories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
@@ -473,10 +555,13 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 			public void onEvent(Event event) throws Exception {
 
 					if (event.getName().equalsIgnoreCase("onOK")){
+						String equalIdent = category.getEqualIdentifier();
+						for (String lang:ServicesImpl.getLangLabelService().findAllLangs()) {
 						
-						ServicesImpl.getCategoryService().delete(category);
+							Category cat = ServicesImpl.getCategoryService().getEqual(equalIdent, lang) ;
+							ServicesImpl.getCategoryService().delete(cat);
 						
-						
+						}
 						
 					}
 				
@@ -590,20 +675,21 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 		//List<Category> equals = ServicesImpl.getCategoryService().getEquals(equalIdent) ;
 		
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
-		
+		Category cat ;
 		for (String lang:ServicesImpl.getLangLabelService().findAllLangs()) {
-			category = ServicesImpl.getCategoryService().getEqual(equalIdent, lang) ;
+			cat = ServicesImpl.getCategoryService().getEqual(equalIdent, lang) ;
 			
 			Property newProp = new Property() ;
 			List<PropertyAttribute> newAttrs = new ArrayList<PropertyAttribute>() ;
 			List<PropertyAttributeValue> newVals = new ArrayList<PropertyAttributeValue>() ;
-			
+			if(property.getAttributes()!=null)
 			for (PropertyAttribute pa:property.getAttributes()) {
 				PropertyAttribute newPa = new PropertyAttribute() ;
 				newPa.setName(pa.getName());
 				newPa.setProperty(newProp);
 				newPa.setType(pa.getType());
 				
+				if(pa.getValues()!=null)
 				for (PropertyAttributeValue pva:pa.getValues()) {
 					PropertyAttributeValue newPva = new PropertyAttributeValue() ;
 					newPva.setAttribute(newPa);
@@ -622,11 +708,13 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 			newProp.setExposed(property.getExposed());
 			newProp.setName(property.getName());
 			property.setLang(lang);
-			category.getProps().add(newProp) ;
-			
+			cat.getProps().add(newProp) ;
+			if (lang.equals(locale.getLanguage())) {
+				category.getProps().add(newProp) ;
+			}
 		}
 		
-		category = ServicesImpl.getCategoryService().getEqual(equalIdent, locale.getLanguage()) ;
+		
 		property = new Property() ;
 		property.setAttributes(new ArrayList<PropertyAttribute>());
 		

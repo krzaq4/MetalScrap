@@ -3,11 +3,11 @@
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" name="binder" arg2="binder" ?>
 
 <?page title="" contentType="text/html;charset=UTF-8"?>
-
+<?script src="/resources/js/jquery-1.11.0.js"?>
 
 
 <zk xmlns:h="http://www.w3.org/1999/xhtml">
-
+<script src="/resources/js/jquery-1.11.0.js"/>
 <div class="head"></div>
 <div class="log"></div>
 	<div
@@ -50,7 +50,7 @@
 	</columns>
 	<rows>
 		<row spans="2" align="right">
-			<button label="Odśwież" onClick="auctionEvents.onClickRefreshAuctionForm(auction, self, binder)"/>
+			<button label="Odśwież" /> <!-- onClick="auctionEvents.onClickRefreshAuctionForm(auction, self, binder)"/> -->
 		</row>
 		<row>
 			<label value="Aktualna cena: " /><label id="current_price" value="@{currentOffer, converter='pl.krzaq.metalscrap.converter.UserOfferValueConverter'}" />		
@@ -66,9 +66,11 @@
 		</row>
 		<row >
 			<label value="Do końca aukcji: " /> 
-			<vbox>
-				<label id="till_end" sclass="normalLabel" value="@{auction, converter='pl.krzaq.metalscrap.converter.AuctionTimeLeftConverter'}" />
-				<label id="end_date" sclass="smallLabel" value="@{auction.endDate, converter='pl.krzaq.metalscrap.converter.DateConverter'}" />	
+			
+			
+			<vbox apply="org.zkoss.bind.BindComposer">
+				<label id="till_end" sclass="normalLabel" value="dddddd" onClick="@command('doit')" />
+				<label id="end_date" sclass="smallLabel"  />	
 			</vbox>
 		</row>
 		<row spans="2">

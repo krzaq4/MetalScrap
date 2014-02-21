@@ -45,7 +45,12 @@
 						<rows>
 							<row self="@{each=auction}" value="@{auction}" onClick="auctionEvents.redirectToAuctionView(self.getValue())">
 								<image width="100px" height="auto" content="@{auction, converter='pl.krzaq.metalscrap.converter.AuctionMainImageConverter'}"/>
-								<label value="@{auction.name}" />
+								<vbox>
+									<label value="@{auction.name}" />
+								<hbox forEach="${auction.properties}" >
+									<hbox><label value=" 1 " /></hbox>
+								</hbox>
+								</vbox>
 								<label value="@{auction.bestUserOffer.price}" />
 								<label value="@{auction.userOffers.size}" />
 								<label value="@{auction.endDate}" />

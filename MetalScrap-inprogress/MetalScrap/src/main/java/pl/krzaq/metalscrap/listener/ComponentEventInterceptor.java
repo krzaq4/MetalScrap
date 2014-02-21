@@ -28,7 +28,7 @@ public class ComponentEventInterceptor implements EventInterceptor {
 
 	@Override
 	public void afterProcessEvent(Event arg0) {
-		
+		try {
 		
 		if (arg0.getName().equalsIgnoreCase("onLoadOnSave") || (arg0.getTarget() instanceof CKeditor && arg0.getName().equalsIgnoreCase("onChange"))) {
 			AnnotateDataBinder binder = (AnnotateDataBinder) arg0.getTarget().getPage().getAttribute("binder") ;
@@ -58,6 +58,8 @@ public class ComponentEventInterceptor implements EventInterceptor {
 			System.out.println("onBlur  "+arg0.getPage().getTitle()+" | "+arg0.getTarget().getClass().getCanonicalName());
 			
 		}
+		
+		} catch(Exception ex) {}
 
 	}
 

@@ -25,6 +25,8 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.hibernate.annotations.IndexColumn;
+
 @SuppressWarnings("serial")
 @Entity
 @Table(name="user")
@@ -86,15 +88,22 @@ public class User implements Serializable {
 								inverseJoinColumns=@JoinColumn(name="role_id", referencedColumnName="id"))
 	private List<Role> roles ;
 	
-	@ManyToMany(cascade=CascadeType.ALL)
-	@JoinTable(name="user_observed_auctions", joinColumns=@JoinColumn(name="user_id", referencedColumnName="id"),
-											  inverseJoinColumns=@JoinColumn(name="auction_id", referencedColumnName="id"))
+	@ManyToMany(cascade=CascadeType.MERGE)
+	@JoinTable(name="user_observed_auctions", joinColumns={
+			@JoinColumn(name="auction_id")
+	},
+	inverseJoinColumns={
+			@JoinColumn(name="user_id")
+	})
+	@IndexColumn(name="OBSERVED")
 	private List<Auction> observed = new ArrayList<Auction>();
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="ownerUser")
+	@IndexColumn(name="AUCTIONS")
 	private List<Auction> auctions ;
 	
 	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
+	@IndexColumn(name="OFFERS")
 	private List<UserOffer> userOffers ;
 	
 	

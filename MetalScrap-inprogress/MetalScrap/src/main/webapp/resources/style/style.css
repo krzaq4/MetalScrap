@@ -300,6 +300,37 @@ h1{
 	background:none ;
 }
 
+
+
+.infoPanel .z-panel-hl{
+	background:none ;	
+	background-color: #ECECEA ;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	
+}
+.infoPanel .z-panelchildren {
+	
+	
+	
+}
+
+
+.infoPanel .z-caption {
+	
+	font-family: Verdana;
+	
+	color: #666666;
+	
+}
+
+.infoPanel .z-caption .z-caption-l{
+	
+	font-size: 11px;
+	
+}
+
 .z-caption {
 
 	
@@ -372,6 +403,18 @@ h1{
 	height: 90%;
 	float: left ;
 	
+}
+
+.leftInfo {
+	
+	display: block ;
+	width: 24% ;
+	height: auto;
+	float: left ;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	border: 1px solid #787878;
 }
 
 .leftMenu{
@@ -1125,4 +1168,11 @@ div.z-grid-header tr.z-columns, div.z-grid-header tr.z-auxhead {
 	background: none ;
 	background-color: #558C89 ;
 	
+}
+
+ul li {
+	padding: 2px 0px 1px 0px ;
+	font-family: verdana; 
+	color: #454545;
+	font-size: 11px ;
 }

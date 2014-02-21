@@ -91,7 +91,7 @@ function update(){
 
 	$.ajax({
         url: "http://localhost:8081/MetalScrap/app/auction",
-        data: {"id": 1},
+        data: {"id": 5},
         processData: true
         
     }).then(function(data) {
@@ -111,7 +111,7 @@ function update(){
 
                   }
      
-	//setTimeout(update, 1000) ;	
+	setTimeout(update, 1000) ;	
      
        
     });
