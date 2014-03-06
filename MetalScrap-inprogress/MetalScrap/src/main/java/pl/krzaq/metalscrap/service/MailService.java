@@ -13,6 +13,7 @@ public interface MailService {
 	public void sendUserMails(Template template, List<User> users) ;
 	public void sendCompanyMail(Template template, Company company) ;
 	public void sendCompanyMail(Template template, List<Company> companies) ;
+	public void sendMail(String template, Map<String, Object> model, String title, String mailTo);
 	
 	
 }

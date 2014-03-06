@@ -2,8 +2,10 @@ package pl.krzaq.metalscrap.dao;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,11 @@ public class PropertyDAO {
 	
 	public List<Property> findAll() {
 		return sessionFactory.getCurrentSession().createCriteria(Property.class).list() ;
+	}
+	
+	public Property findEqual(String equalIdentifier, String lang) {
+		Criteria c1 = sessionFactory.getCurrentSession().createCriteria(Property.class, "prop").add(Restrictions.eq("prop.equalIdentifier", equalIdentifier)).add(Restrictions.eq("prop.lang", lang)).createCriteria("prop.attributes", "attrs", JoinType.LEFT_OUTER_JOIN);
+		return (Property)c1.uniqueResult() ;
 	}
 	
 	public List<Property> findAll(String lang) {

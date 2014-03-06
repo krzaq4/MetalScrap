@@ -34,6 +34,7 @@
 	
 	<button id="fb_share" sclass="fbshare" />
 </div>
+<button onClick="auctionEvents.populateEqual()" label="populate" />
 <panel id="parameters" height="auto" border="none" collapsible="true"  action="show:slideIn;hide:slideOut">
 <caption label="@{auction.name}"></caption>
 <panelchildren style="padding: 5px 5px 5px 5px">
@@ -53,7 +54,7 @@
 			<button label="Odśwież" /> <!-- onClick="auctionEvents.onClickRefreshAuctionForm(auction, self, binder)"/> -->
 		</row>
 		<row>
-			<label value="Aktualna cena: " /><label id="current_price" value="@{currentOffer, converter='pl.krzaq.metalscrap.converter.UserOfferValueConverter'}" />		
+			<label value="Aktualna cena: " /><label id="current_price" value="@{auction.bestUserOffer, converter='pl.krzaq.metalscrap.converter.UserOfferValueConverter'}" />		
 		</row>
 		<row spans="2">
 			<hbox><label value="Twoja cena: "/><decimalbox id="new_price" format="#########.##" width="140px" /><button id="place_bid" disabled="@{auction, converter='pl.krzaq.metalscrap.converter.AuctionIsNotStartedConverter'}" label="Licytuj!" mold="trendy" onClick="auctionEvents.onClickPlaceBid(new_price, auction, binder)" /></hbox>		
@@ -68,8 +69,11 @@
 			<label value="Do końca aukcji: " /> 
 			
 			
-			<vbox apply="org.zkoss.bind.BindComposer">
-				<label id="till_end" sclass="normalLabel" value="dddddd" onClick="@command('doit')" />
+			<vbox apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('pl.krzaq.metalscrap.pages.AuctionView')">
+				<label id="label" sclass="normalLabel" value="@load(vm.timeLeft)" />
+				<timer id="timer" repeats="true" delay="1000" onTimer="@command('update')">
+				
+				</timer>
 				<label id="end_date" sclass="smallLabel"  />	
 			</vbox>
 		</row>
@@ -108,33 +112,21 @@
 
 <tabbox width="100%" height="100%">
         <tabs>
-            <tab label="Parametry przedmiotu" />
+            <tab label="Parametry aukcji" />
             <tab label="Lokalizacja" />
-            <tab label="Inne" />
+            <tab label="Dostawa i płatność" />
         </tabs>
         <tabpanels>
             <tabpanel>
-            	<grid>
+            	<grid model="@{auction.properties}">
             		<columns>
-            			<column width="120px"></column>
+            			<column width="120px" label="Parametr"></column>
             			<column width="240px"></column>
             		</columns>
             		<rows>
-            			<row>
-            				<label value="Sposób dostawy:" />
-            				<label value="@{auction.deliveryType.name}" />
-            			</row>
-            			<row>
-            				<label value="Rodzaj płatności:" />
-            				<label value="@{auction.paymentMethod.name}" />
-            			</row>
-            			<row>
-            				<label value="${labels.auction.auctionstart.$}:" />
-            				<label value="@{auction.startDate, converter='pl.krzaq.metalscrap.converter.DateConverter'}" />
-            			</row>
-            			<row>
-            				<label value="${labels.auction.auctionend}:" />
-            				<label value="@{auction.endDate, converter='pl.krzaq.metalscrap.converter.DateConverter'}" />
+            			<row self="@{each=propp}">
+            				<label value="@{propp.name}" sclass="normalLabel"/>
+            				<label />
             			</row>
             		</rows>
             	</grid>
@@ -158,6 +150,31 @@
             	</grid>
             </tabpanel>
             <tabpanel>
+            <grid>
+            		<columns>
+            			<column width="120px"></column>
+            			<column width="240px"></column>
+            		</columns>
+            		<rows>
+            			<row>
+            				<label value="Sposób dostawy:" />
+            				<label value="@{auction.deliveryType.name}" />
+            			</row>
+            			<row>
+            				<label value="Rodzaj płatności:" />
+            				<label value="@{auction.paymentMethod.name}" />
+            			</row>
+            			<row>
+            				<label value="${labels.auction.auctionstart.$}:" />
+            				<label value="@{auction.startDate, converter='pl.krzaq.metalscrap.converter.DateConverter'}" />
+            			</row>
+            			<row>
+            				<label value="${labels.auction.auctionend}:" />
+            				<label value="@{auction.endDate, converter='pl.krzaq.metalscrap.converter.DateConverter'}" />
+            			</row>
+            		</rows>
+            	</grid>
+            
             </tabpanel>
         </tabpanels>
 </tabbox>

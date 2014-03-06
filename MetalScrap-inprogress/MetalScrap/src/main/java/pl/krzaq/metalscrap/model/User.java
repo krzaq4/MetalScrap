@@ -90,10 +90,10 @@ public class User implements Serializable {
 	
 	@ManyToMany(cascade=CascadeType.MERGE)
 	@JoinTable(name="user_observed_auctions", joinColumns={
-			@JoinColumn(name="auction_id")
+			@JoinColumn(name="user_id")
 	},
 	inverseJoinColumns={
-			@JoinColumn(name="user_id")
+			@JoinColumn(name="auction_id")
 	})
 	@IndexColumn(name="OBSERVED")
 	private List<Auction> observed = new ArrayList<Auction>();

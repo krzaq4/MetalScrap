@@ -46,6 +46,9 @@ public class Property implements Serializable {
 	@Column(name="exposed")
 	private Boolean exposed ;
 	
+	@Column(name="equal_ident")
+	private String equalIdentifier ;
+	
 	@OneToMany(mappedBy="property", cascade=CascadeType.ALL)
 	@IndexColumn(name="INDEX_COL3")
 	private List<PropertyAttribute> attributes ;
@@ -134,6 +137,16 @@ public class Property implements Serializable {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	public String getEqualIdentifier() {
+		
+		
+		return equalIdentifier;
+	}
+
+	public void setEqualIdentifier(String equalIdentifier) {
+		this.equalIdentifier = equalIdentifier;
 	}
 
 	

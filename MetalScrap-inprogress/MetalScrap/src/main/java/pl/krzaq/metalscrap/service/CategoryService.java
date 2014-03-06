@@ -52,4 +52,9 @@ public interface CategoryService {
 	public void bulkSave(Category[] categories) ;
 	
 	public void bulkDelete(Category[] categories) ;
+	
+	public Category cloneCategory(Category category, String lang) ;
+	
+	private List<Category> getChildrenDown(Category cat);
+	
 }

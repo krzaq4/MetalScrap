@@ -745,4 +745,61 @@ public class HomeController {
 	}
 	
 	
+	
+	/**
+	 * Rest WS method to use for get user info. 
+	 * 
+	 * Path: /sendMail
+	 * Method: POST
+	 * 
+	 * Consumes JSON Object, i.e.:
+	 * 
+	 * { sender:'', title:'', mailTo:'', firstName:'', lastName:'', email:'', subject:'', message:'' }
+	 *    
+	 * 
+	 * @param  json Object of type Map<String, Object> representing json, sent in post request
+	 * @return      json, representing status of operation and user info: 
+	 *              [ { 'category_id':<i>category_id</i>, 
+	 *               'name':<i>name</i>, 'description':<i>description</i>, 'parent_id':<i>parent_id</i> },  {...}, ... ,  {...} ]
+	 */
+	@RequestMapping( value="/sendMail", method=RequestMethod.PUT, consumes={"application/json"})
+	public @ResponseBody Map<String, Object> sendMail(@RequestBody Map<String, Object> json) {
+		Map<String, Object> map = new LinkedHashMap<String, Object>() ;
+		boolean operationStatus = false ;
+		String operationMessage = "ERROR" ;
+		
+		String sender = (String) json.get("sender") ;
+		String to = (String) json.get("mailTo") ;
+		String firstName = (String) json.get("firstName") ;
+		String lastName = (String) json.get("lastName") ;
+		String email = (String) json.get("email") ;
+		String subject = (String) json.get("subject") ;
+		String message = (String) json.get("message") ;		
+		String title = (String) json.get("title") ;
+		
+		
+		Map<String, Object> model = new HashMap<String, Object>() ;
+		
+		model.put("firstName", firstName) ;
+		model.put("lastName", lastName) ;
+		model.put("email", email) ;
+		model.put("subject", subject) ;
+		model.put("message", message) ;
+		model.put("sender", sender) ;
+		
+		
+		
+		
+		try{
+			
+		
+			ServicesImpl.getMailService().sendMail("mail_contact_form_mail.ftl", model, title, to);
+			
+		} catch(Exception ex){}
+		
+		return map ;
+	}
+	
+	
+	
 }

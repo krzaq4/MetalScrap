@@ -463,21 +463,30 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 	}
 
 	public void updateCategory(Category category, Window win, Listbox grid, AnnotateDataBinder binder) {
-
+try {
 		Page page = grid.getPage() ;
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 		
 		String equalIdent = category.getEqualIdentifier();
+		/*List<Property> prs = new ArrayList<Property>() ;
+		for(Property p:category.getProps()){
+			if(p.getEqualIdentifier()==null)
+				p.setEqualIdentifier(Utilities.hash(Utilities.HASH_METHOD_MD5, p.getName().concat(p.getDescription())));
+			prs.add(p) ;
+		}
+		category.getProps().clear();
+		category.getProps().addAll(prs) ;*/
+		ServicesImpl.getCategoryService().update(category);
 		
-		Category cat ;
 		
-			for (String lang:ServicesImpl.getLangLabelService().findAllLangs()) {
-				cat = ServicesImpl.getCategoryService().getEqual(equalIdent, lang) ;
+			//for (String lang:ServicesImpl.getLangLabelService().findAllLangs()) {
+		for(Category cat:ServicesImpl.getCategoryService().getEquals(equalIdent)){
+				//cat = ServicesImpl.getCategoryService().getEqual(equalIdent, lang) ;
 				
-				if(lang.equals(locale.getLanguage())) {
-					cat.getProps().clear();
-				}
-				
+				//if(lang.equals(locale.getLanguage())) {
+					//cat.getProps().clear();
+				//}
+				if(!cat.getLang().equals(category.getLang())){
 				Iterator<Property> itProp = category.getProps().iterator() ;
 				
 				int propNo = 0 ;
@@ -506,31 +515,46 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 				
 					}
 				newProp.setAttributes(newAttrs);
-				newProp.setLang(lang);
-			
-			
+				newProp.setLang(cat.getLang());
+				
 				newProp.setDescription(property.getDescription());
 				newProp.setExposed(property.getExposed());
 				newProp.setName(property.getName());
 				
-				if(lang.equals(locale.getLanguage())) {
-					cat.getProps().add(newProp) ;
-				} 
-				else
-				if(propNo>=cat.getProps().size()){
-					cat.getProps().add(newProp) ;
+				
+				//if(!cat.getLang().equals(locale.getLanguage())) {
+					
+					boolean contains=false;
+					for(Property p:cat.getProps()){
+						String toCompare = p.getEqualIdentifier() ;
+						String toCompare2 = property.getEqualIdentifier() ;
+						if(toCompare.equals(toCompare2)){
+							contains=true ;
+							
+						}
+					}
+					
+					if(!contains){
+						newProp.setEqualIdentifier(Utilities.hash(Utilities.HASH_METHOD_MD5, newProp.getName().concat(newProp.getDescription())));
+						cat.getProps().add(newProp) ;
+					}
+				//} 
+				//else
+				//if(propNo>=cat.getProps().size()){
+				//	cat.getProps().add(newProp) ;
+				//}
+				
+				
+				
+			}
+				
+			//if(lang.equals(locale.getLanguage())) {
+			//	cat.setName(category.getName());
+			//	cat.setDescription(category.getDescription());
+			//}
 				}
-				
-				
-				
-			}
-				
-			if(lang.equals(locale.getLanguage())) {
-				cat.setName(category.getName());
-				cat.setDescription(category.getDescription());
-			}
-				
 			ServicesImpl.getCategoryService().update(cat);
+			
 			
 		}
 		
@@ -542,6 +566,10 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 		Collections.sort(categories);
 		page.setAttribute("categories", categories) ;
 		binder.loadComponent(grid);
+		
+} catch(NoSuchAlgorithmException nsa) {
+	
+}
 	}
 
 	public void deleteCategory(final Category category,  Listbox grid, final AnnotateDataBinder binder) {
@@ -670,7 +698,10 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 	}
 	
 	public void admin_onClickAddPropertyToCategory(Category category, Property property, Grid grid, Window win, AnnotateDataBinder binder) {
+		
 		Page page = grid.getPage() ;
+		try{
+		
 		String equalIdent = category.getEqualIdentifier();
 		//List<Category> equals = ServicesImpl.getCategoryService().getEquals(equalIdent) ;
 		
@@ -678,7 +709,7 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 		Category cat ;
 		for (String lang:ServicesImpl.getLangLabelService().findAllLangs()) {
 			cat = ServicesImpl.getCategoryService().getEqual(equalIdent, lang) ;
-			
+			String propEqualIdent = Utilities.hash(Utilities.HASH_METHOD_MD5,property.getName().concat(property.getDescription())) ;
 			Property newProp = new Property() ;
 			List<PropertyAttribute> newAttrs = new ArrayList<PropertyAttribute>() ;
 			List<PropertyAttributeValue> newVals = new ArrayList<PropertyAttributeValue>() ;
@@ -707,6 +738,7 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 			newProp.setDescription(property.getDescription());
 			newProp.setExposed(property.getExposed());
 			newProp.setName(property.getName());
+			newProp.setEqualIdentifier(propEqualIdent);
 			property.setLang(lang);
 			cat.getProps().add(newProp) ;
 			if (lang.equals(locale.getLanguage())) {
@@ -714,6 +746,9 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 			}
 		}
 		
+		} catch(NoSuchAlgorithmException nsa) {
+			
+		}
 		
 		property = new Property() ;
 		property.setAttributes(new ArrayList<PropertyAttribute>());
@@ -733,8 +768,10 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 	public void admin_onClickUpdateCategoryProperty(Category category, Property property, Grid grid, Window win, AnnotateDataBinder binder) {
 		Page page = grid.getPage() ;
 		int indexOf = category.getProperties().indexOf(property) ;
+		Property oldProperty = category.getProperties().get(indexOf) ;
+		String equalIdent = oldProperty.getEqualIdentifier() ;
 		category.getProperties().remove(indexOf) ;
-		
+		property.setEqualIdentifier(equalIdent);
 		category.getProperties().add(indexOf, property) ;
 		property = new Property() ;
 		property.setAttributes(new ArrayList<PropertyAttribute>());

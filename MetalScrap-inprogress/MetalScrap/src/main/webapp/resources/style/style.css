@@ -7,21 +7,6 @@ body {
 	
 }
 
-.z-caption-cnt{
-	color: #444444;
-}
-
-
-.toRight{
-	display: block ;	
-	float:right ;
-}
-
-.toLeft {
-	display:block ;
-	float: left ;
-}
-
 .header {
 	
 	display: block ;
@@ -44,6 +29,26 @@ body {
 	height: 40px ;
 	float: right ;
 	text-align: right ;
+	
+}
+
+.userInfo {
+	position:absolute;
+	top:40px;
+	right:10px;
+	color:#fefefe;
+	z-index:2;
+	width:auto;
+	height: 40px; 
+	color: #444444;
+	font-family: Verdana ;
+	font-size: 1.0em;
+	
+}
+
+.userInfo .z-label {
+	
+	color: #eeeeee;
 	
 }
 
@@ -76,56 +81,8 @@ border-radius: 8px;
 	
 }
 
-.fbshare.z-button-os{
-	
-	width: 33px ;
-	height: 32px ;
-	background-image: url(../images/fbshare.png) ;
-	background-repeat: no-repeat ;
-	cursor: pointer ;
-}
 
-.deleteButton.z-button-os {
-	border: none ;
-	width: 20px ;
-	height: 20px ;
-	background-image: url(../images/minus20.png) ;
-}
 
-.deleteButton-S.z-button-os {
-	border: none ;
-	width: 15px ;
-	height: 15px ;
-	background-image: url(../images/minus15.png) ;
-}
-
-.addButton.z-button-os {
-	border: none ;
-	float: right ;
-	width: 20px ;
-	height: 20px ;
-	background-image: url(../images/plus20.png) ;
-}
-
-.userInfo {
-	position:absolute;
-	top:40px;
-	right:10px;
-	color:#fefefe;
-	z-index:2;
-	width:auto;
-	height: 40px; 
-	color: #444444;
-	font-family: Verdana ;
-	font-size: 1.0em;
-	
-}
-
-.userInfo .z-label {
-	
-	color: #eeeeee;
-	
-}
 
 .tiles{
 	
@@ -248,6 +205,82 @@ border-radius: 8px;
 	border-radius: 6px;
 	-moz-border-radius: 6px;
 }
+
+
+
+.z-caption-cnt{
+	color: #444444;
+}
+
+
+.toRight{
+	display: block ;	
+	float:right ;
+}
+
+.toLeft {
+	display:block ;
+	float: left ;
+}
+
+
+
+
+
+
+
+
+.fbshare.z-button-os{
+	
+	width: 33px ;
+	height: 32px ;
+	background-image: url(../images/fbshare.png) ;
+	background-repeat: no-repeat ;
+	cursor: pointer ;
+}
+
+.fbshare.z-button-os:hover{
+	
+}
+
+.deleteButton.z-button-os {
+	border: none ;
+	width: 20px ;
+	height: 20px ;
+	background-image: url(../images/minus20.png) ;
+}
+
+.deleteButton.z-button-os:hover{
+	
+}
+
+.deleteButton-S.z-button-os {
+	border: none ;
+	width: 15px ;
+	height: 15px ;
+	background-image: url(../images/minus15.png) ;
+}
+
+.deleteButton-S.z-button-os:hover{
+	
+}
+
+
+.addButton.z-button-os {
+	border: none ;
+	float: right ;
+	width: 20px ;
+	height: 20px ;
+	background-image: url(../images/plus20.png) ;
+}
+
+.addButton.z-button-os:hover{
+	
+}
+
+
+
+
 
 h1{
 	

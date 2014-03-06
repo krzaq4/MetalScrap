@@ -14,6 +14,7 @@ import org.joda.time.Duration;
 import org.joda.time.Period;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.annotation.SelectorParam;
 import org.zkoss.image.AImage;
@@ -39,6 +40,8 @@ public class AuctionView extends HomePage{
 
 	private Auction auction ;
 	private String timeLeft ;
+	private Page page ;
+	private Label label ;
 	
 	@Override
 	public void doInit(Page page, Map<String, Object> arg1) throws Exception {
@@ -103,6 +106,8 @@ public class AuctionView extends HomePage{
 			page.setAttribute("auction", auction) ;
 			this.auction = auction ;
 			page.setAttribute("images", images) ;
+			this.page = page ;
+			
 			
 		} else {
 			
@@ -124,7 +129,7 @@ public class AuctionView extends HomePage{
 	public void doAfterCompose(Page page, Component[] arg1) throws Exception {
 		
 		super.doAfterCompose(page, arg1);
-		
+		this.label = (Label)this.page.getFellow("label") ;
 		
 		
 	}
@@ -143,42 +148,34 @@ public class AuctionView extends HomePage{
 
 	
 	
-	@Command("doit")
+	@Init
 	public void doit() {
 		
 		System.out.println("do") ;
+		
+		HttpServletRequest request = (HttpServletRequest) Executions.getCurrent().getNativeRequest() ;
+		AuctionTimeLeftConverter atc = new AuctionTimeLeftConverter() ;
+		if (request.getParameter("id")!=null) {
+			
+			Long id = Long.valueOf( (String) request.getParameter("id")) ;
+			Auction auction = ServicesImpl.getAuctionService().findById(id) ;
+			this.setAuction(auction);
+			this.setTimeLeft((String) atc.coerceToUi(auction, null));
+		}
 	}
 	
 	
 	
-	  //@NotifyChange("clicks")
+		@Command("update")
+		@NotifyChange(value={"timeLeft"})
 	  public void update() {
-	  
-	    
-	    Runnable r = new Runnable() {
-	            @Override
-	            public void run(){
-	            	try {
-	            	AuctionTimeLeftConverter atc = new AuctionTimeLeftConverter() ;
-	            	while(!auction.getStatus().getCode().equals(AuctionStatus.STATUS_FINISHED)) {
-	            		
-	            		timeLeft = (String) atc.coerceToUi(auction, null) ;
-	            		Thread.sleep(1000);
-	            		BindUtils.postNotifyChange(null, null, this, "timeLeft");
-	            	}
-	            	
-	            	} catch(InterruptedException ie) {
-	            		
-	            	}
-	            }
-	            
-	            
-	    	} ;
-	    	
-	    	Thread thread = new Thread(r);
-	        thread.start();
-	    }
+			AuctionTimeLeftConverter atc = new AuctionTimeLeftConverter() ;
+			this.setTimeLeft( (String) atc.coerceToUi(auction, null) );
+			
+			 
+		}
 
+		
 	public Auction getAuction() {
 		return auction;
 	}
@@ -188,11 +185,31 @@ public class AuctionView extends HomePage{
 	}
 
 	public String getTimeLeft() {
+		
 		return timeLeft;
 	}
 
-	public void setTimeLeft(String timeLeft) {
+	
+	
+	
+	public void setTimeLeft(String timeLeft) {	
 		this.timeLeft = timeLeft;
+	}
+
+	public Page getPage() {
+		return page;
+	}
+
+	public void setPage(Page page) {
+		this.page = page;
+	}
+
+	public Label getLabel() {
+		return label;
+	}
+
+	public void setLabel(Label label) {
+		this.label = label;
 	}        
 	
 	

@@ -11,11 +11,14 @@ import java.util.Date;
 
 
 import java.util.List;
+import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.util.resource.Labels;
+import org.zkoss.web.Attributes;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.util.Clients;
@@ -37,6 +40,7 @@ import pl.krzaq.metalscrap.model.Property;
 import pl.krzaq.metalscrap.model.PropertyAttribute;
 import pl.krzaq.metalscrap.model.PropertyAttributeValue;
 import pl.krzaq.metalscrap.model.User;
+import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 
 public class Utilities {
 
@@ -226,15 +230,17 @@ public class Utilities {
 		List<Property> result = new ArrayList<Property>() ;
 		List<Component> list = c.getChildren() ;
 		
+		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
+		
+		for (String lang:ServicesImpl.getLangLabelService().findAllLangs()) {
+			
 		for (Component cc:list) {
 			
 			Property newProp = new Property() ;
+			String equalIdent = "" ;
+			Property equalProp = null ; 
 			List<PropertyAttribute> attrs = new ArrayList<PropertyAttribute>() ;
 			
-			if (cc instanceof Label) {
-				newProp.setName( ( (Label) cc).getValue() );
-			}
-			else
 			if(cc instanceof Vbox){    // Property
 				
 				List<Component> innerList = cc.getChildren() ;
@@ -244,15 +250,22 @@ public class Utilities {
 					PropertyAttribute newAttr = new PropertyAttribute() ;
 					newAttr.setProperty(newProp);
 					
-					
+					if (at instanceof Label) {
+						equalIdent = ( (Label) cc).getId() ;
+						equalProp = ServicesImpl.getPropertyService().findEqual(equalIdent, lang) ;
+						newProp.setName( equalProp.getName() );
+						//Property inLangProp = ServicesImpl.getPropertyService().findEqual(equalIdentifier, lang)
+					}
+					else
 					if(at instanceof Hbox) {   // PropertyAttribute
 						
 						List<Component> attrList = at.getChildren() ;
-						
+						int nextAttr = 0 ;
 						for (Component pc:attrList) {
-							
+							PropertyAttribute equalAttr = equalProp.getAttributes().get(nextAttr) ;
 							if(pc instanceof Label) {
-								newAttr.setName(((Label)pc).getValue()) ;
+								
+								newAttr.setName(equalAttr.getName()) ;
 							}
 							else
 							if(pc instanceof Textbox) {
@@ -271,6 +284,7 @@ public class Utilities {
 							if(pc instanceof Datebox) {
 								
 								newAttr.setType(PropertyAttribute.TYPE_DATE);
+								
 								PropertyAttributeValue val = new PropertyAttributeValue() ;
 								val.setAttribute(newAttr);
 								DateFormat df = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss") ;
@@ -364,10 +378,11 @@ public class Utilities {
 			result.add(newProp) ;
 			
 		}
-		
+	}
 		return result ;
 		
 	}
+	
 	
 	
 	

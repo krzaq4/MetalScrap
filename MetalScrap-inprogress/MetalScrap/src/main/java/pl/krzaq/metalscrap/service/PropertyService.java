@@ -31,7 +31,10 @@ public interface PropertyService {
 	
 	public void save(Property property) ;
 	
+	public void update(Property property);
+	
 	public void delete(Object object) ;
 	
+	public Property findEqual(String equalIdentifier, String lang) ;
 	
 }

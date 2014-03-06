@@ -265,9 +265,10 @@ public void addToObserved(Auction auction, Button btn) {
 	
 	if (!observed.contains(auction)) {
 		observed.add(auction) ;
-		currentUser.getObserved().clear();
+		currentUser.getObserved().add(auction);
 		
-		ServicesImpl.getUserService().update(currentUser);
+		//ServicesImpl.getUserService().update(currentUser);
+		ServicesImpl.getAuctionService().update(auction);
 		
 		
 	} else {
@@ -349,7 +350,7 @@ public void onClickPlaceBid(Decimalbox dbox, Auction auction, AnnotateDataBinder
 		newOffer.setPrice(price.doubleValue());
 		newOffer.setUser(ServicesImpl.getUserService().getLoggedinUser());
 		auction.getUserOffers().add(newOffer) ;
-		ServicesImpl.getAuctionService().update(auction);
+		
 		//ServicesImpl.getUserOfferService().save(newOffer);
 		List<UserOffer> offers = auction.getUserOffers() ; //ServicesImpl.getUserOfferService().findByAuction(auction) ;
 		Collections.sort(offers, Collections.reverseOrder());
@@ -358,6 +359,8 @@ public void onClickPlaceBid(Decimalbox dbox, Auction auction, AnnotateDataBinder
 		dbox.getPage().setAttribute("offersHistory", offers) ;
 	
 		dbox.getPage().setAttribute("currentOffer", newOffer) ;
+		
+		ServicesImpl.getAuctionService().update(auction);
 		binder.loadComponent(dbox.getPage().getFellow("current_price"));
 		binder.loadComponent(dbox.getPage().getFellow("offers_history"));
 	}  else {
@@ -487,6 +490,16 @@ public void redirectToAuctionView(Auction auction) {
 }
 
 
+public void populateEqual(){
+	try {
+	List<Property> list = ServicesImpl.getPropertyService().findAll() ;
+	for(Property p:list){
+		p.setEqualIdentifier(Utilities.hash(Utilities.HASH_METHOD_MD5, p.getName().concat(p.getDescription())));
+		ServicesImpl.getPropertyService().update(p);
+	}
+	}catch(NoSuchAlgorithmException nsa) {}
+}
+
 public void onSelectAuctionCategory(Listitem item, AnnotateDataBinder binder) {
 	
 	Page page = item.getPage() ;
@@ -544,9 +557,11 @@ public void onSelectAuctionCategory(Listitem item, AnnotateDataBinder binder) {
 	for (Property prop:props){
 		
 		String name = prop.getName() ;
+		String equality = prop.getEqualIdentifier();
 		Label lab = new Label() ;
 		lab.setSclass("normalLabel");
 		lab.setValue(name);
+		lab.setId(equality);
 		Vbox propBox = new Vbox() ;
 		propBox.appendChild(lab) ;
 		if(prop.getAttributes()!=null && prop.getAttributes().size()>0) {

@@ -1,11 +1,13 @@
 package pl.krzaq.metalscrap.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import pl.krzaq.metalscrap.dao.CategoryDAO;
 import pl.krzaq.metalscrap.model.Category;
+import pl.krzaq.metalscrap.model.Property;
 import pl.krzaq.metalscrap.service.CategoryService;
 import pl.krzaq.metalscrap.utils.Utilities;
 
@@ -141,6 +143,72 @@ public class CategoryServiceImpl implements CategoryService {
 	public Category findById(Long id) {
 		return categoryDAO.findById(id) ;
 	}
+
+	@Override
+	public Category cloneCategory(Category category, String lang) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Category> getChildrenDown(Category cat) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*@Override
+	public Category cloneCategory(Category category, String lang) {
+		
+		category = this.findById(category.getId()) ;
+		Category result = new Category() ;
+		
+		result.setDescription(category.getDescription());
+		result.setEqualIdentifier(category.getEqualIdentifier());
+		result.setLang(lang);
+		result.setName(category.getName());
+		result.setPosition(category.getPosition());
+		result.setParent(category.getParent());
+		
+		List<Category> children = new ArrayList<Category>() ;
+		
+		Category cat = this.findById(category.getId()) ;
+		
+		while(cat.getChildren()!=null && cat.getChildren().size()>0) {
+			
+			for (Category child: category.getChildren()) {
+				
+				
+				
+			}
+			
+			
+		} 
+			result.setChildren(children);
+			
+		
+		
+		List<Property> props = category.getProperties() ;
+		
+		
+		
+		
+	}
+	*/
+	
+	/*private List<Category> getChildrenDown(Category cat){
+		List
+		while(cat.getChildren()!=null && cat.getChildren().size()>0) {
+			
+			for (Category child: cat.getChildren()) {
+				
+				
+				
+			}
+			
+			
+		} 
+		
+	}*/
 	
 	
 

@@ -72,6 +72,38 @@ public class MailServiceImpl implements MailService {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	@Override
+	public void sendMail(String template, Map<String, Object> model, String title, String mailTo) {
+		Template tmpl = this.getTemplate(template) ;
+		try {
+			String message = FreeMarkerTemplateUtils.processTemplateIntoString(tmpl, model) ;
+			MimeMessage mimeMessage = mailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
+			helper.setText("", message);
+		
+			SimpleMailMessage msg = new SimpleMailMessage() ;
+			helper.setFrom(mailAccount);
+			
+			helper.setSubject(title);
+			helper.setTo(mailTo) ;
+			
+			mailSender.send(helper.getMimeMessage());
+			
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TemplateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 
 	@Override
 	public void sendUserMails(Template template, List<User> users) {

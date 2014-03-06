@@ -61,6 +61,10 @@ public class PropertyServiceImpl implements PropertyService {
 		return propertyDAO.findValueById(id) ;
 	}
 
+	@Override
+	public Property findEqual(String equalIdentifier, String lang){
+		return propertyDAO.findEqual(equalIdentifier, lang) ;
+	}
 
 	@Override
 	public void delete(Object object) {
@@ -68,6 +72,11 @@ public class PropertyServiceImpl implements PropertyService {
 
 	}
 
+	@Override
+	public void update(Property property) {
+		propertyDAO.update(property);
+	}
+	
 	public PropertyDAO getPropertyDAO() {
 		return propertyDAO;
 	}
