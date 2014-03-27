@@ -30,7 +30,8 @@ public class PageEvents {
 	
 		Page page = (Page) Executions.getCurrent().getSession().getAttribute("page") ;
 		
-		//Page page = c.getPage() ;
+		if(page==null)
+			page = c.getPage() ;
 		
 		
 		

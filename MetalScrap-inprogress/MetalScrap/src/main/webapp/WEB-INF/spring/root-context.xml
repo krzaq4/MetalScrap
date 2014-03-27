@@ -4,6 +4,7 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:jee="http://www.springframework.org/schema/jee"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc 
 					http://www.springframework.org/schema/mvc/spring-mvc.xsd
 					http://www.springframework.org/schema/tx					
@@ -11,6 +12,7 @@
 					http://www.springframework.org/schema/context 
 					http://www.springframework.org/schema/context/spring-context.xsd
 					http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+					http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd	
 						">
 	
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
@@ -39,13 +41,18 @@
    		 
 	</bean>
 	
-	<bean name="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+	<jee:jndi-lookup id="dataSource" jndi-name="java:/jboss/datasources/MySQLDS"/>
+	
+	 
+	<!-- <bean name="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean"> -->
    		 <!-- <property name="driverClassName" value="com.mysql.jdbc.Driver" />
    		 <property name="url" value="${jdbc.url}" />
   		 <property name="username" value="${jdbc.user}" />
   	   	 <property name="password" value="${jdbc.pass}" /> -->
-  	   	 <property name="jndiName" value="java:jboss/datasources/MysqlDS"/>
-	</bean>
+  	   	 <!-- <property name="jndiName" value="java&#58;jboss/datasources/MysqlDS"/>
+	</bean> -->
+	
+	
  
     <bean id="sessionFactory"
         class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
@@ -68,7 +75,7 @@
         </property>
     </bean>
 	
-	<bean id="savedRequestAwareHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+	<bean id="savedRequestAwareHandler" class="pl.krzaq.metalscrap.security.CustomAuthenticationRequestHandler">
 	</bean>
 
     <bean id="transactionManager"

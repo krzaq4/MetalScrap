@@ -1,5 +1,6 @@
 <?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
 <?init class="pl.krzaq.metalscrap.pages.Login"?>
+
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
 <?page title="${labels.common.register}" contentType="text/html;charset=UTF-8" ?>
 
@@ -67,163 +68,37 @@
 </div>
 
 			
-<div class="rightContent">
+<div class="rightContent" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('pl.krzaq.metalscrap.bind.UserViewBind')">
 
+		<div visible="@bind(vm.error)">
+			<label value="@bind(vm.message)" />
+		</div>
 		
+		<vbox visible="@bind(vm.step1)">
+			<hbox>
+				<label value="Nazwa użytkownika: " />
+				<textbox constraint="no empty" maxlength="24" value="@bind(vm.user.login)" onChange="@command('checkLogin')" />
+			</hbox>
+			<hbox>
+				<label value="Adres e-mail: " />
+				<textbox constraint="no empty" maxlength="24" value="@bind(vmuser.email)" onChange="@command('checkEmail')"/>
+			</hbox>
+			<hbox>
+				<label value="Hasło: " />
+				<textbox id="user_pass" name="password" constraint="no empty" maxlength="24" value="@bind(user.password)" onChange="@command('checkPassword')" />
+			</hbox>
+			<hbox>
+				<label value="Powtórz hasło: " />
+				<textbox constraint="no empty" maxlength="24" onChange="@command('checkPasswordMatch')" />
+			</hbox>
+			<button label="Zarejestruj mnie!" disabled="@bind(not vm.allowRegistration)" onClick="@command('registerUser')" />
+		</vbox>
+		
+		<vbox visible="@bind(vm.step2)">
+		
+		</vbox>
 
-					<div id="step2" visible="true" width="100%" action="show: slideDown;hide: slideUp">
-						<div id="wizardSteps" class="wizardSteps" >
-		
-						
-							<div sclass="wizardStep"><div sclass="active"></div>${labels.common.personalData}</div>
-							<div sclass="wizardStep"><div sclass="inactive"></div>${labels.common.addressData}</div>
-							<div sclass="wizardStep"><div sclass="inactive"></div>${labels.common.registrationConfirmation}</div>
-						
-		
-						</div>
-						<space/>
-						<grid id="personalGrid" width="460px">
-							<columns>
-								<column width="150px"></column>
-								<column width="300px"></column>
-							</columns>
-							<rows>
-								<row>
-									<label value="Imię:"></label>
-									<textbox id="user_first"
-										value="@{user.firstName}" width="300px" constraint="/[a-zA-Z]+/: Imię może składać się tylko z liter" />
-								</row>
-								<row>
-									<label value="Drugie imię:"></label>
-									<textbox id="user_second"
-										value="@{user.secondName}" width="300px"  constraint="/[a-zA-Z]*/: Drugie imię może składać się tylko z liter"/>
-								</row>
-								<row>
-									<label value="Nazwisko:"></label>
-									<textbox id="user_name"
-										value="@{user.lastName}" width="300px"  constraint="/[a-zA-Z-]+/: Nazwisko może składać się z liter i znaku '-'"/>
-								</row>
-								<row>
-									<label value="Adres e-mail:"></label>
-									<textbox id="user_email"
-										value="@{user.email}" width="300px"  constraint="/.+@.+\.[a-z]+/: Niepoprawny adres e-mail" />
-								</row>
-								<row>
-									<label value="Login:"></label>
-									<textbox id="user_login"
-										value="@{user.login}" width="300px" constraint="/[a-zA-Z0-9-_]{6,16}/: Login może zawierać tylko litery, cyfry i znaki '-','_','@' i nie może być krótszy niż 6 znaków" />
-								</row>
-								<row>
-									<label value="Hasło:"></label>
-									<textbox type="password"
-										id="user_pass" value="@{user.password}" width="300px"  constraint="/[a-zA-Z+0-9+!@#*]{6,16}/: Hasło może składać się z liter, cyfr i znaków '!@#%', przy czym musi zawierać przynajmniej jedną cyfrę i jedną literę i składać się w sumie z conajmniej 6 znaków"  />
-								</row>
-								<row>
-									<label value="Powtórz hasło:"></label>
-									<textbox type="password"
-										id="user_repass" width="300px" constraint="${matchPass}" />
-								</row>
-
-
-
-							</rows>
-						</grid>
-						<div style="width:50%;float:left;" visible="false">
-							<button
-								onClick="formEvents.showAuctionParameters(step2, step3)"
-								label="&lt;&lt; Wstecz" />
-						</div>
-						<div style="width:50%;float:right;" visible="true">
-							<button
-								onClick="formEvents.showAuctionPositions(step2, step3)">
-								Dalej >>
-							</button>
-
-						</div>
-					</div>
-					<div id="step3" visible="false" width="100%" action="show: slideDown;hide: slideUp">
-		
-					<div id="wizardSteps2" class="wizardSteps" >
-		
-						
-							<div sclass="wizardStep"><div sclass="inactive"></div>${labels.common.personalData}</div>
-							<div sclass="wizardStep"><div sclass="active"></div>${labels.common.addressData}</div>
-							<div sclass="wizardStep"><div sclass="inactive"></div>${labels.common.registrationConfirmation}</div>
-						
-		
-						</div>
-		
-					<space/>
 					
-						<grid width="460px">
-							<columns>
-								<column width="150px"></column>
-								<column width="300px"></column>
-							</columns>
-							<rows>
-								<row>
-									<label
-										value="Adres do korespondencji" />
-									<label />
-								</row>
-								<row>
-									<label value="Ulica:"></label>
-									<textbox id="company_street2"
-										value="@{company.addressAdditional.street}" width="300px">
-									</textbox>
-								</row>
-								<row>
-									<label value="${labels.auction.auctionnumber.$} domu:"></label>
-									<textbox id="company_houseno2"
-										value="@{company.addressAdditional.houseNo}" width="300px">
-									</textbox>
-								</row>
-								<row>
-									<label value="${labels.auction.auctionnumber.$} lokalu:">
-									</label>
-									<textbox id="company_flatno2"
-										value="@{company.addressAdditional.flatNo}" width="300px">
-									</textbox>
-								</row>
-								<row>
-									<label value="Kod pocztowy:">
-									</label>
-									<textbox id="company_postal2"
-										value="@{company.addressAdditional.postal}" width="300px" constraint="/([0-9]{2}\-*[0-9]{3})||\b\b/: Wpisz kod pocztowy w formacie xx-xxx lub xxxxx, gdzie x - cyfra">
-									</textbox>
-								</row>
-								<row>
-									<label value="Miasto:"></label>
-									<textbox id="company_city2"
-										value="@{company.addressAdditional.city}" width="300px">
-									</textbox>
-								</row>
-								<row>
-									<label value="Kraj:"></label>
-									<textbox id="company_country2"
-										value="@{company.addressAdditional.country}" width="300px">
-									</textbox>
-								</row>
-
-							</rows>
-						</grid>
-
-
-
-						<div style="width:50%;float:left;">
-							<button
-								onClick="formEvents.showAuctionParameters(step2, step3)"
-								label="&lt;&lt; Wstecz" />
-						</div>
-						
-						<div style="width:50%;float:right;">
-							<button
-								onClick="auctionEvents.registerCompanyUser(company,user)">
-								Zarejestruj
-							</button>
-						</div>
-						
-					</div>
 					
 					</div>
 				<space></space>

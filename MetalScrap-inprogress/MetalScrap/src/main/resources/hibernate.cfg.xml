@@ -5,7 +5,7 @@
 <hibernate-configuration>
 
 	<session-factory name="sessionFactory">
-		<property name="hibernate.connection.datasource">java:jboss/datasources/MysqlDS</property>
+		<property name="hibernate.connection.datasource">java:/jboss/datasources/MySQLDS</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="hibernate.hbm2ddl.auto">update</property>
 		<!-- <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property> -->

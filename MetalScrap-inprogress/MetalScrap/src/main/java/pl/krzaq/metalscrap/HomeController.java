@@ -85,6 +85,11 @@ public class HomeController {
 		return "index";
 	}
 	
+	@RequestMapping(value="/", method=RequestMethod.GET)
+	public String root(Locale locale, Model model) {
+		model.addAttribute("user", ( (User) userDAO.getUserByLogin(((UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername())).getLogin());
+		return "home" ;
+	}
 	
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {

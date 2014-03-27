@@ -2,6 +2,7 @@ package pl.krzaq.metalscrap.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -48,6 +49,8 @@ public class User implements Serializable {
 	@Column(name="id")
 	private Long id ;
 	
+	@Column(name="completed")
+	private Boolean completed ;
 	
 	@ManyToOne
 	private Company company ;
@@ -105,6 +108,13 @@ public class User implements Serializable {
 	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
 	@IndexColumn(name="OFFERS")
 	private List<UserOffer> userOffers ;
+	
+	
+	@Column(name="registered_on")
+	private Date createdOn ;
+	
+	@Column(name="status")
+	private Integer status ;
 	
 	
 	public Company getCompany() {
@@ -218,6 +228,26 @@ public class User implements Serializable {
 
 	public void setContactAddress(Address contactAddress) {
 		this.contactAddress = contactAddress;
+	}
+
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	
