@@ -55,6 +55,6 @@ public interface CategoryService {
 	
 	public Category cloneCategory(Category category, String lang) ;
 	
-	private List<Category> getChildrenDown(Category cat);
+	public List<Category> getChildrenDown(Category cat);
 	
 }

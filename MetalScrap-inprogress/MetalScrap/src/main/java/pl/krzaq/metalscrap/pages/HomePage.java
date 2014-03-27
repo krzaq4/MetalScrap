@@ -51,7 +51,7 @@ public class HomePage implements Initiator, InitiatorExt {
 		Executions.getCurrent().getDesktop().addListener(new ComponentEventInterceptor());
 		
 		
-		// wyúwietlanie sub menu
+		// wy≈õwietlanie sub menu
 		page.setAttribute("auctionsSubMenu", false);
 		page.setAttribute("companiesSubMenu", false);
 
@@ -74,7 +74,7 @@ public class HomePage implements Initiator, InitiatorExt {
 			String login = ((UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername() ;
 			System.out.println("Logged in user: "+login) ;
 			
-			// Aktualnie zalogowany uøytkownik
+			// Aktualnie zalogowany u≈ºytkownik
 			User currentUser =userService.getUserByLogin(login); 
 			if (currentUser != null) {
 				
@@ -102,7 +102,7 @@ public class HomePage implements Initiator, InitiatorExt {
 		
 		
 
-		// Uprawnienia uøytkownika
+		// Uprawnienia u≈ºytkownika
 
 		page.setAttribute("isUser", isUser);
 		page.setAttribute("isAdmin", isAdmin);

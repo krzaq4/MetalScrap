@@ -48,7 +48,7 @@ public class BasePage implements Initiator, InitiatorExt {
 			String login = ((UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername() ;
 			System.out.println("Logged in user: "+login) ;
 			
-			// Aktualnie zalogowany uøytkownik
+			// Aktualnie zalogowany u≈ºytkownik
 			User currentUser = ServicesImpl.getUserService().getUserByLogin(login); 
 			if (currentUser != null) {
 			page.setAttribute("currentUser", currentUser);
@@ -74,7 +74,7 @@ public class BasePage implements Initiator, InitiatorExt {
 		
 		
 
-		// Uprawnienia uøytkownika
+		// Uprawnienia u≈ºytkownika
 		page.setAttribute("isLoggedIn", isLoggedIn) ;
 		page.setAttribute("isUser", isUser);
 		page.setAttribute("isAdmin", isAdmin);

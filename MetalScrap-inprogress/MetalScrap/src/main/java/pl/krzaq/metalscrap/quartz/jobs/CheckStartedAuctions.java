@@ -32,7 +32,7 @@ public class CheckStartedAuctions {
 		//Aktualny czas serwera
 		Date currentTime = new Date() ;
 		
-		// sp≥aszczenie milisekund
+		// sp≈Çaszczenie milisekund
 		Calendar cal = new GregorianCalendar() ;
 		cal.setTime(currentTime);
 		cal.set(Calendar.MILLISECOND, 0);

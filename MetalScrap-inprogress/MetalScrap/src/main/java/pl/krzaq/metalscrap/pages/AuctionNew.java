@@ -112,7 +112,7 @@ public class AuctionNew extends HomePage{
 		
 		final HttpSession ses = (HttpSession) Executions.getCurrent().getSession().getNativeSession() ;
 		
-		// zdjêcia
+		// zdjÄ™cia
 		
 		final Div overflow = new Div() ;
 		overflow.setSclass("galleryOverflow");

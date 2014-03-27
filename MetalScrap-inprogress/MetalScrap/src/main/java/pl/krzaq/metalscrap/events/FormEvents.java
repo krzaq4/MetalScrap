@@ -55,7 +55,7 @@ public class FormEvents {
 		String format = media.getFormat() ;
 		if (format !=null && !format.equalsIgnoreCase("jpg") && !format.equalsIgnoreCase("png") && !format.equalsIgnoreCase("gif") && !format.equalsIgnoreCase("jpeg")){
 			
-			Messagebox.show("Nieobs≥ugiwany format pliku. \n Obs≥ugiwane formaty to .jpeg, .jpg, .gif, .png") ;
+			Messagebox.show("Nieobs≈Çugiwany format pliku. \n Obs≈Çugiwane formaty to .jpeg, .jpg, .gif, .png") ;
 			
 		} else {
 		
@@ -121,7 +121,7 @@ public class FormEvents {
 			Listcell lc = new Listcell() ;
 			Listcell lc2 = new Listcell() ;
 			
-			Button delImage = new Button("UsuÒ") ;
+			Button delImage = new Button("Usu≈Ñ") ;
 			delImage.addEventListener("onClick", new EventListener<Event>(){
 
 				@Override

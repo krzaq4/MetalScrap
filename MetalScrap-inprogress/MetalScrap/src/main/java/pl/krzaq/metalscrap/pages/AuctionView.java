@@ -111,7 +111,7 @@ public class AuctionView extends HomePage{
 			
 		} else {
 			
-			Messagebox.show("Niew≥aúciwe wywo≥anie strony.", "B≥πd", Messagebox.OK, "", new EventListener<Event>(){
+			Messagebox.show("Niew≈Ça≈õciwe wywo≈Çanie strony.", "B≈ÇƒÖd", Messagebox.OK, "", new EventListener<Event>(){
 
 				@Override
 				public void onEvent(Event arg0) throws Exception {

@@ -57,7 +57,7 @@ public class AuctionTimeLeftConverter implements TypeConverter {
 			}
 		} else {
 			DateFormat df = new SimpleDateFormat("hh:mm:ss dd-MM-yyyy") ;
-			result = "Aukcja zakoñczona" ;
+			result = "Aukcja zakoÅ„czona" ;
 		}
 		
 		return result ;

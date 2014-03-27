@@ -26,7 +26,7 @@ public class Login implements Initiator, InitiatorExt {
 	public void doInit(Page page, Map<String, Object> arg1) throws Exception {
 		// TODO Auto-generated method stub
 		//super.doInit(page, arg1);
-		// wyúwietlanie sub menu
+		// wy≈õwietlanie sub menu
 		Boolean isCategoriesVisible = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("auction_categories_visible").getValue()) ;
 		Boolean isCommoditiesVisible = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("auction_commodities_visible").getValue());
 		

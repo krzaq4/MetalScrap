@@ -135,13 +135,13 @@ public void saveNewAuction(Auction auction, Page p) {
 		
 		if (auction.getId()==null && ServicesImpl.getAuctionService().findByNumber(auction.getNumber())!=null) {
 			wrongValueComponent = p.getFellow("auction_number") ;
-			wrongValueMessage = "Aukcja o podanym numerze istnieje ju¿ w systemie" ;
+			wrongValueMessage = "Aukcja o podanym numerze istnieje juÅ¼ w systemie" ;
 			throw new WrongValueException(wrongValueComponent, wrongValueMessage) ;
 			
 		} else 
 		if(((Listbox)p.getFellow("auction_category")).getSelectedCount()==0 ){
 			wrongValueComponent = p.getFellow("auction_category") ;
-			wrongValueMessage = "Wybierz kategoriê" ;
+			wrongValueMessage = "Wybierz kategoriÄ™" ;
 			throw new WrongValueException(wrongValueComponent, wrongValueMessage) ;
 		} else 
 		if (validateForm(p)) {
@@ -158,7 +158,7 @@ public void saveNewAuction(Auction auction, Page p) {
 		}
 				
 				
-		//usuwanie atrybutów sesji z zapamietanymi danymi aukcji
+		//usuwanie atrybutÃ³w sesji z zapamietanymi danymi aukcji
 		
 		HttpSession ses = (HttpSession) Executions.getCurrent().getSession().getNativeSession() ;
 		
@@ -225,7 +225,7 @@ public void saveNewAuction(Auction auction, Page p) {
 				
 		
 		
-		// okienko potwierdzaj¹ce i przekierowanie do edycji aukcji
+		// okienko potwierdzajÄ…ce i przekierowanie do edycji aukcji
 		
 		final String id = String.valueOf(auction.getId()) ;
 		Messagebox.show("Aukcja utworzona", "Informacja", Messagebox.OK, "", new EventListener<Event>(){
@@ -253,7 +253,7 @@ public void addToObserved(Auction auction, Button btn) {
 	auction.getObeservers().add(currentUser) ;
 	
 	List<Auction> observed = ServicesImpl.getAuctionService().findByObserver(currentUser) ;
-	String message = "Dodano aukcjê "+auction.getName()+" do obserwowanych" ;
+	String message = "Dodano aukcjÄ™ "+auction.getName()+" do obserwowanych" ;
 	
 	
 	//ServicesImpl.getAuctionService().update(auction);
@@ -272,7 +272,7 @@ public void addToObserved(Auction auction, Button btn) {
 		
 		
 	} else {
-		message="Aukcja znajduje siê ju¿ na liœcie aukcji obserwowanych" ; 
+		message="Aukcja znajduje siÄ™ juÅ¼ na liÅ›cie aukcji obserwowanych" ; 
 	}
 	
 	
@@ -325,7 +325,7 @@ public void onClickPlaceBid(Decimalbox dbox, Auction auction, AnnotateDataBinder
 	Timestamp current = new Timestamp(new Date().getTime()) ;
 	if(current.compareTo(auction.getEndDate())>=0){
 		
-		Messagebox.show("Aukcja zakoñczy³a siê") ;
+		Messagebox.show("Aukcja zakoÅ„czyÅ‚a siÄ™") ;
 		
 		Label currentPrice = (Label) page.getFellow("current_price") ;
 		Label tillEnd = (Label) page.getFellow("till_end") ;
@@ -365,7 +365,7 @@ public void onClickPlaceBid(Decimalbox dbox, Auction auction, AnnotateDataBinder
 		binder.loadComponent(dbox.getPage().getFellow("offers_history"));
 	}  else {
 		
-		throw new WrongValueException(dbox, "Cena musi byæ wy¿sza ni¿ aktualna oferta") ;
+		throw new WrongValueException(dbox, "Cena musi byÄ‡ wyÅ¼sza niÅ¼ aktualna oferta") ;
 		
 	}
 }
@@ -457,13 +457,13 @@ public void registerCompanyUser(Company company, User user) {
 	model.put("loginlabel", "Login:") ;
 	model.put("login", user.getLogin()) ;
 	model.put("name", user.getFirstName()+" "+user.getLastName()) ;
-	model.put("namelabel", "Imiê i nazwisko:") ;
+	model.put("namelabel", "ImiÄ™ i nazwisko:") ;
 	model.put("confirmationlinkcaption", "Potwierdzenie rejestracji") ;
 	model.put("confirmationlink", "http://google.pl") ;
 	model.put("confirmationlinklabel", "Link do potwierdzenia") ;
 	model.put("platformnamelabel", "Licytuj.to - platforma aukcyjna") ;
 	model.put("platforminfo", "Witamy na platformie") ;
-	model.put("platforminfo2", "Dziêkujemy za rejestracjê") ;
+	model.put("platforminfo2", "DziÄ™kujemy za rejestracjÄ™") ;
 	ServicesImpl.getMailService().sendUserMail("mail_registration_confirmation.ftl", model, "Rejestracja", user);
 	//companyDAO.saveCompany(company);
 	
@@ -506,12 +506,12 @@ public void onSelectAuctionCategory(Listitem item, AnnotateDataBinder binder) {
 	Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 	Category selectedCategory = item.getValue() ;
 	
-	if (selectedCategory.getId()==null) {  // powrót do kategorii nadrzêdnej
+	if (selectedCategory.getId()==null) {  // powrï¿½t do kategorii nadrzï¿½dnej
 		
 		if (selectedCategory.getParent()!=null) {
 			
 			List<Category> subCategories = ServicesImpl.getCategoryService().findSubCategoriesByLang(selectedCategory.getParent(), locale.getLanguage()) ;
-			Category previous = new Category(Labels.getLabel("auction.auctioncategory.back"), "Powrót do nadrzêdnej kategorii", selectedCategory.getParent().getParent()) ;
+			Category previous = new Category(Labels.getLabel("auction.auctioncategory.back"), "PowrÃ³t do nadrzÄ™dnej kategorii", selectedCategory.getParent().getParent()) ;
 			subCategories.add(0, previous) ;
 			
 			ListModelList lml = (ListModelList) ((Listbox)page.getFellow("auction_category")).getModel() ;
@@ -538,7 +538,7 @@ public void onSelectAuctionCategory(Listitem item, AnnotateDataBinder binder) {
 	if (selectedCategory.getChildren()!=null && selectedCategory.getChildren().size()>0) {
 		
 		List<Category> subCategories = ServicesImpl.getCategoryService().findSubCategoriesByLang(selectedCategory, locale.getLanguage());
-		Category previous = new Category(Labels.getLabel("auction.auctioncategory.back"), "Powrót do nadrzêdnej kategorii", selectedCategory.getParent()) ;
+		Category previous = new Category(Labels.getLabel("auction.auctioncategory.back"), "PowrÃ³t do nadrzÄ™dnej kategorii", selectedCategory.getParent()) ;
 		subCategories.add(0, previous) ;
 		
 		ListModelList lml = (ListModelList) ((Listbox)page.getFellow("auction_category")).getModel() ;
@@ -681,7 +681,7 @@ public void deleteSelectedAuctions(final Listbox lbx, final AnnotateDataBinder b
 	
 	if (selectedCount>1){
 		
-		Messagebox.show("Zaznaczy³aœ/eœ "+selectedCount+" aukcji. Czy napewno chcesz usun¹æ wybrane pozycje?", "Uwaga!", Messagebox.CANCEL|Messagebox.YES, "", new EventListener<Event>(){
+		Messagebox.show("ZaznaczyÅ‚eÅ›/aÅ› "+selectedCount+" aukcji. Czy napewno chcesz usunÄ…Ä‡ wybrane pozycje?", "Uwaga!", Messagebox.CANCEL|Messagebox.YES, "", new EventListener<Event>(){
 
 			@Override
 			public void onEvent(Event arg0) throws Exception {
@@ -841,7 +841,7 @@ public void endSelectedAuctions(final Listbox lbx, final AnnotateDataBinder bind
 	
 	if (selectedCount>1){
 		
-		Messagebox.show("Zaznaczy³aœ/eœ "+selectedCount+" aukcji. Czy napewno chcesz zakoñczyæ wybrane aukcje?", "Uwaga!", Messagebox.CANCEL|Messagebox.YES, "", new EventListener<Event>(){
+		Messagebox.show("ZaznaczyÅ‚eÅ›/aÅ› "+selectedCount+" aukcji. Czy napewno chcesz zakoÅ„czyÄ‡ wybrane aukcje?", "Uwaga!", Messagebox.CANCEL|Messagebox.YES, "", new EventListener<Event>(){
 
 			@Override
 			public void onEvent(Event arg0) throws Exception {
@@ -983,7 +983,7 @@ public void delPosition(Listbox lbx) {
 	final Page p = lbx.getPage();
 	
 	
-	// Usuwanie wiêcej niz jedn¹ pozycjê
+	// Usuwanie wiÄ™cej niz jednÄ… pozycjÄ™
 	if(lbx.getSelectedCount()>1) {
 		
 		final List<Commodity> selected = new ArrayList<Commodity>() ;
@@ -998,7 +998,7 @@ public void delPosition(Listbox lbx) {
 		
 		int selectedCount = lbx.getSelectedCount() ;
 		
-		Messagebox.show("Czy napewno usun¹æ wybrane "+selectedCount+" pozycji/e?", "Usuñ pozycje", Messagebox.YES|Messagebox.CANCEL, "", new EventListener<Event>(){
+		Messagebox.show("Czy napewno usunÄ…Ä‡ wybrane "+selectedCount+" pozycji/e?", "UsuÅ„ pozycje", Messagebox.YES|Messagebox.CANCEL, "", new EventListener<Event>(){
 
 			@Override
 			public void onEvent(Event arg0) throws Exception {
@@ -1027,7 +1027,7 @@ public void delPosition(Listbox lbx) {
 		
 		
 		
-		Messagebox.show("Czy napewno usun¹æ pozycjê?", "Usuñ pozycjê", Messagebox.YES|Messagebox.CANCEL, "", new EventListener<Event>(){
+		Messagebox.show("Czy napewno usunÄ…Ä‡ pozycjÄ™?", "UsuÅ„ pozycjÄ™", Messagebox.YES|Messagebox.CANCEL, "", new EventListener<Event>(){
 
 			@Override
 			public void onEvent(Event arg0) throws Exception {

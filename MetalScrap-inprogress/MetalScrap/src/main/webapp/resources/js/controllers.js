@@ -260,5 +260,5 @@ function Categories($scope, $http, auctionService){
 	$scope.auctions = $scope.getA() ;
 	//$scope.auct = [{'name':'dddd', 'code':1},{'name':'dddd', 'code':2},{'name':'dddd', 'code':3} ] ;
 	//$scope.auctions=$scope.getAuctions(1) ;
-	$scope.gridOptions = { data: 'getA()', columnDefs: [{field:'name', displayName:'Nazwa aukcji'}, {field:'from', displayName:'Data rozpoczêcia'}, {field:'to', displayName:'Data zakoñczenia'},{field:'price', displayName:'Aktualna cena'}, {field:'end', displayName:'Do koñca aukcji'}] };
+	$scope.gridOptions = { data: 'getA()', columnDefs: [{field:'name', displayName:'Nazwa aukcji'}, {field:'from', displayName:'Data rozpoczÄ™cia'}, {field:'to', displayName:'Data zakoÅ„czenia'},{field:'price', displayName:'Aktualna cena'}, {field:'end', displayName:'Do koÅ„ca aukcji'}] };
 }

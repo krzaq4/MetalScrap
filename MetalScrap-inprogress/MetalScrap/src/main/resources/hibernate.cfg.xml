@@ -5,14 +5,11 @@
 <hibernate-configuration>
 
 	<session-factory name="sessionFactory">
-		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-		<property name="hibernate.connection.password">krzaq666</property>
-		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/metalscrap</property>
-		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.datasource">java:jboss/datasources/MysqlDS</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="hibernate.hbm2ddl.auto">update</property>
 		<!-- <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property> -->
-		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.show_sql">false</property>
 		<mapping class="pl.krzaq.metalscrap.model.Address" />
 		<mapping class="pl.krzaq.metalscrap.model.Auction" />
 		<mapping class="pl.krzaq.metalscrap.model.AuctionStatus" />

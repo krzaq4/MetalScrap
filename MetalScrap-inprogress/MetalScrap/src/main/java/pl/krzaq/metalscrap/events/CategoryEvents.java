@@ -577,7 +577,7 @@ try {
 		Page page = grid.getPage() ;
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 		
-		Messagebox.show("Czy napewno usun¹æ kategoriê?", "Usuwanie kategorii", Messagebox.OK|Messagebox.CANCEL, "", new EventListener<Event>(){
+		Messagebox.show("Czy napewno usunÄ…Ä‡ kategoriÄ™?", "Usuwanie kategorii", Messagebox.OK|Messagebox.CANCEL, "", new EventListener<Event>(){
 
 			@Override
 			public void onEvent(Event event) throws Exception {
