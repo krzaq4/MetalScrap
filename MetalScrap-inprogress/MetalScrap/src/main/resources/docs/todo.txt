@@ -41,4 +41,5 @@
 15. Wersjonowanie aplikacji
 16. Changelog'i
 17. Aplikacja facebook
+18. Status użytkownika "Zablokowany"
     

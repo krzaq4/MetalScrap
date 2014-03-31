@@ -58,7 +58,7 @@
 		<panel id="content" height="500px" border="none">
 			<panelchildren>
 
-<div class="otherContent">
+<div class="rightContent" height="90%">
 					<grid id="allAuctions" model="@{categoryAuctions}" sclass="auctionsList" height="100%" mold="paging">
 						<columns>
 							<column width="100px"></column>

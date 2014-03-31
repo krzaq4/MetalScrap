@@ -3,6 +3,7 @@ package pl.krzaq.metalscrap.pages;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -11,9 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 
 
 
+
+
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpRequest;
+import org.zkoss.web.Attributes;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
@@ -41,8 +46,9 @@ public class Login implements Initiator, InitiatorExt {
 		// wyświetlanie sub menu
 		Boolean isCategoriesVisible = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("auction_categories_visible").getValue()) ;
 		Boolean isCommoditiesVisible = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("auction_commodities_visible").getValue());
+		boolean userVerificationModeAuto = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("user.verification.mode.auto").getValue()).booleanValue() ;
 		
-		
+		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 		
 		Address main = new Address() ;
 		Address additional = new Address() ;
@@ -61,7 +67,7 @@ public class Login implements Initiator, InitiatorExt {
 		boolean isAdmin = false;
 		boolean isSuperAdmin = false;
 		
-		List<Category> categories = ServicesImpl.getCategoryService().findRootCategories() ;
+		List<Category> categories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
 		List<Auction> auctions = ServicesImpl.getAuctionService().findByStatus(ServicesImpl.getAuctionService().findStatusByCode(AuctionStatus.STATUS_STARTED)) ;
 		
 		page.setAttribute("auctionsSubMenu", false);
@@ -99,8 +105,15 @@ public class Login implements Initiator, InitiatorExt {
 			}
 			
 			if(confirm) {
-				user.setStatus(User.STATUS_CONFIRMED);
-				user.setCompleted(false);
+				if(userVerificationModeAuto) {
+					user.setStatus(User.STATUS_CONFIRMED);
+					user.setCompleted(false);
+				} else {
+					user.setStatus(User.STATUS_VERIFIED);
+					user.setCompleted(false);
+				}
+				
+				
 				
 				ServicesImpl.getUserService().update(user);
 				confirmation = true ;

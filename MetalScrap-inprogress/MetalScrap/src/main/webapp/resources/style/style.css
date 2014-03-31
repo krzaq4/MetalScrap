@@ -606,6 +606,7 @@ h1{
 
 div .z-tree {
 	border: none ;
+	background: none;
 }
 
 .z-button .z-button-cm{
@@ -620,17 +621,18 @@ div .z-tree {
 
 div.z-tree-header tr.z-treecols, div.z-tree-header tr.z-auxhead {
 	height:20px;
-	background-image: url(../images/menubar2.jpg) ;
-	background-repeat: repeat-x ;
+	background: none ;
+	/*background-image: url(../images/menubar2.jpg) ;
+	background-repeat: repeat-x ;*/
 	
 	
 }
 
 div.z-treefooter-cnt, div.z-treecol-cnt {
-	color: #dedede;
+	color: #777777;
 
 	font-size: 1.0em;
-	text-shadow: 2px 2px #676767;
+	/*text-shadow: 2px 2px #676767;*/
 	height:20px;
 }
 
@@ -678,10 +680,14 @@ div.z-treefooter-cnt, div.z-treecol-cnt {
 .auctionsList.z-grid {
 	border: none ;
 	padding: 0 0 0 5px ;
+	background: none ;
 }
 
-.auctionsList.z-grid .z-column{
+.auctionsList.z-grid.z-column{
 	border:none ;
+}
+.auctionsList.z-grid.z-grid-header.z-columns  {
+	border: none ;
 }
 
 .z-groupbox-cnt{

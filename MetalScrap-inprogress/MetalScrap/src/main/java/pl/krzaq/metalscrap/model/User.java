@@ -58,6 +58,8 @@ public class User implements Serializable {
 
 	public static Integer STATUS_NEW = 1 ;
 	public static Integer STATUS_CONFIRMED = 2 ;
+	public static Integer STATUS_VERIFIED = 3 ;
+	public static Integer STATUS_PENDING_VERIFICATION = 4 ;
 	
 	
 	

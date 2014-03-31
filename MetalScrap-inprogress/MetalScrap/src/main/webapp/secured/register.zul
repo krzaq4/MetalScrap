@@ -97,10 +97,39 @@
 	<div style="font-family: verdana; color: #565656; font-size: 13px;">
 		<!-- Weryfikacja użytkownika nie wymaga zatwierdzenia przez admionistratora -->
 		<div visible="@{userVerificationModeAuto}">
+		<vbox>
+			<label value="Udało się! Twoja rejestracja dobiegła końca." />
+			<label value="Jednak, aby móc brać udział w aukcjach, konieczne jest uzupełnienie danych personalnych." />
+			<hbox>
+				<label value="Możesz to zrobić, w zakładce Moje Konto, dostępnym" />
+				<label value=" tutaj">
+					<attribute name="onClick">
+					<![CDATA[
+						Executions.getCurrent().sendRedirect("/app/user/myaccount");
+					]]>
+					</attribute>
+				</label>
+			</hbox>
+		</vbox>
 		</div>
 		
 		<!-- Weryfikacja użytkownika wymaga zatwierdzenia przez admionistratora -->		
 		<div visible="@{userVerificationModeAuto, converter='pl.krzaq.metalscrap.converter.NegativeConverter'}">
+		<vbox>
+			<label value="Udało się! Twoja rejestracja dobiegła końca." />
+			<label value="Jednak, aby móc brać udział w aukcjach, Twoje konto musi zostać zweryfikowane." />
+			<label value="Najpierw jednak, konieczne jest uzupełnienie danych personalnych."
+			<hbox>
+				<label value="Możesz to zrobić, w zakładce Moje Konto, dostępnym" />
+				<label value=" tutaj">
+					<attribute name="onClick">
+					<![CDATA[
+						Executions.getCurrent().sendRedirect("/app/user/myaccount");
+					]]>
+					</attribute>
+				</label>
+			</hbox>
+		</vbox>
 		</div>
 	
 	</div>

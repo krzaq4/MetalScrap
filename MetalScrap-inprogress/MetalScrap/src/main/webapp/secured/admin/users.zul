@@ -9,7 +9,7 @@
 <div class="head"><div class="userInfo">${labels.common.loggedinas}: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/> ( <label id="logout" value="${labels.common.logout}" sclass="asLink" onClick="pageEvents.logout()" /> )</div>
 </div>
 <div class="log"></div>
-<div style="width:970px;height: 740px;margin: 0 auto ; border: 1px solid #333333;">
+<div style="width:970px;height: 740px;margin: 0 auto ; ">
 
 <div id="header" class="header">
 <div class="logo">
@@ -21,41 +21,7 @@
 
 <include id="men"  src="/common/menu.zul" ></include>
 
-<!-- 	<div id="menu" class="menu">
-		<menubar id="main" orient="horizontal">
 
-			<menuitem id="about" label="${labels.about.title}"></menuitem>
-			<menuseparator />
-			<menuitem id="auctions" label="${labels.auction.title}"
-				onClick="pageEvents.showAuctionsSubeMenu(main,binder)">
-			</menuitem>
-			<menuitem id="companies" label="Firmy"
-				onClick="pageEvents.showCompaniesSubMenu(main,binder)">
-			</menuitem>
-			<menuseparator />
-			<menuitem id="regulations" label="${labels.regulation.title}"></menuitem>
-			<menuitem id="help" label="${labels.help.title}"></menuitem>
-			<menuseparator />
-			<menuitem id="contact" label="${labels.contact.title}"></menuitem>
-
-		</menubar>
-
-		<menubar id="submenu" visible="true" orient="horizontal">
-			<menuitem id="auctions_list" label="${labels.auction.auctionlist}"
-				visible="@{auctionsSubMenu}" value="/secured/auctions/list.zul"
-				onClick="pageEvents.open(auctions_list.getValue())" />
-			<menuitem id="new_auction" label="${labels.auction.newauction}"
-				visible="@{auctionsSubMenu}" value="/secured/auctions/new.zul"
-				onClick="pageEvents.open(new_auction.getValue())" />
-			<menuitem id="companies_list" label="Lista firm"
-				visible="@{companiesSubMenu}" />
-
-
-		</menubar>
-
-	</div>
-
-	 -->
 	 
 <div>
 	<hbox>
@@ -75,7 +41,7 @@
 						<listheader label="Imię" />
 						<listheader label="Nazwisko" />
 						<listheader label="E-mail" />
-						<listheader label="Firma" />
+						
 					</listhead>
 					<listitem self="@{each=user}">
 						<listcell>
@@ -92,10 +58,7 @@
 							<label
 								value="@{user.email}" />
 						</listcell>
-						<listcell>
-							<label
-								value="@{user.company.name}" />
-						</listcell>
+						
 						
 
 					</listitem>

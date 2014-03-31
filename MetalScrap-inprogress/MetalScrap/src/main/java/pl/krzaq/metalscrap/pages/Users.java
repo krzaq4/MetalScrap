@@ -19,7 +19,7 @@ public class Users extends HomePage {
 		List<User> users = ServicesImpl.getUserService().getUsers() ;
 		User user = new User() ;
 		
-		page.setAttribute("users", user) ;
+		page.setAttribute("users", users) ;
 		page.setAttribute("user", user) ;
 		
 	}

@@ -41,6 +41,13 @@ public class ServicesImpl {
 	@Autowired 
 	private static PropertyServiceImpl propertyService ;
 	
+	@Autowired
+	private static EventServiceImpl eventService ;
+	
+	public static EventServiceImpl getEventService() {
+		return eventService ;
+	}
+	
 	public static PropertyServiceImpl getPropertyService() {
 		return propertyService ;
 	}
@@ -145,6 +152,10 @@ public class ServicesImpl {
 	
 	public void setPropertyService(PropertyServiceImpl propertyService){
 		this.propertyService = propertyService ;
+	}
+
+	public void setEventService(EventServiceImpl eventService) {
+		this.eventService = eventService;
 	}
 	
 	

@@ -12,7 +12,7 @@
 
 				<menuitem id="about" label="${labels.about.title}"></menuitem>
 				
-				<menuitem id="user" label="${labels.admin.userpanel}"
+				<menuitem id="user" label="${labels.admin.userpanel}" visible="@{isUser}"
 					value="/app/user/myaccount"
 					onClick="pageEvents.open(user.getValue())"></menuitem>
 				

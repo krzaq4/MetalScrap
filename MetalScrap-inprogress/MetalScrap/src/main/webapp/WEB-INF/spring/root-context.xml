@@ -228,6 +228,7 @@
 		<property name="langLabelService" ref="langLabelService" />
 		<property name="mailService" ref="mailService"></property>
 		<property name="propertyService" ref="propertyService" />
+		<property name="eventService" ref="eventService" />
 	</bean>
 	
 	<bean id="langEvents" class="pl.krzaq.metalscrap.events.LangEvents"></bean>

@@ -5,6 +5,7 @@ import pl.krzaq.metalscrap.service.impl.AuctionServiceImpl;
 import pl.krzaq.metalscrap.service.impl.CategoryServiceImpl;
 import pl.krzaq.metalscrap.service.impl.ConfigServiceImpl;
 import pl.krzaq.metalscrap.service.impl.DeliveryTypeServiceImpl;
+import pl.krzaq.metalscrap.service.impl.EventServiceImpl;
 import pl.krzaq.metalscrap.service.impl.LangLabelServiceImpl;
 import pl.krzaq.metalscrap.service.impl.MailServiceImpl;
 import pl.krzaq.metalscrap.service.impl.PaymentMethodServiceImpl;
@@ -24,4 +25,5 @@ public interface Services {
 	public LangLabelServiceImpl getLangLabelService() ;
 	public MailServiceImpl getMailService();
 	public PropertyServiceImpl getPropertyService() ;
+	public EventServiceImpl getEventService() ;
 }

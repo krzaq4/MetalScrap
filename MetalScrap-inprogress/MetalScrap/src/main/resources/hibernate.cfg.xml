@@ -32,5 +32,6 @@
 		<mapping class="pl.krzaq.metalscrap.model.Property" />
 		<mapping class="pl.krzaq.metalscrap.model.PropertyAttribute" />
 		<mapping class="pl.krzaq.metalscrap.model.PropertyAttributeValue" />
+		<mapping class="pl.krzaq.metalscrap.model.Event" />
 	</session-factory>
 	</hibernate-configuration>
