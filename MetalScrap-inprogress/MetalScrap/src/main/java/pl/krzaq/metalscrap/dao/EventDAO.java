@@ -8,10 +8,12 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import pl.krzaq.metalscrap.model.Event;
 import pl.krzaq.metalscrap.model.User;
 
+@Transactional
 @Component(value="eventDAO")
 public class EventDAO {
 

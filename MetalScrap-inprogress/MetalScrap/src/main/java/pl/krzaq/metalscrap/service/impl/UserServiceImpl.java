@@ -32,9 +32,12 @@ public class UserServiceImpl implements UserService {
 	
 	@Override 
 	public User getLoggedinUser() {
+		User res = null ;
+		if (SecurityContextHolder.getContext().getAuthentication()!=null) {
+			res = userDAO.getUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName()) ;
+		} 
 		
-		return userDAO.getUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName()) ;
-		
+		return res ;
 	}
 	
 	//-----------------------------------------------------------------------------
