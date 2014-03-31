@@ -104,9 +104,9 @@ public class HomeController {
 	}
 	
 	
-	@RequestMapping(value="/{page}", method=RequestMethod.GET)
-	public String page(@PathVariable String page) {
-		return page ;
+	@RequestMapping(value="/{path}/{page}", method=RequestMethod.GET)
+	public String page(@PathVariable String page, @PathVariable String path) {
+		return path+"/"+page ;
 		
 	}
 	

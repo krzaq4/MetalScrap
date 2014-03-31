@@ -76,6 +76,7 @@
     </bean>
 	
 	<bean id="savedRequestAwareHandler" class="pl.krzaq.metalscrap.security.CustomAuthenticationRequestHandler">
+	    <property name="defaultTargetUrl" value="/app/home"></property>
 	</bean>
 
     <bean id="transactionManager"

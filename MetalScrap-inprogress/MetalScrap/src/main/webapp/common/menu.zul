@@ -12,6 +12,10 @@
 
 				<menuitem id="about" label="${labels.about.title}"></menuitem>
 				
+				<menuitem id="user" label="${labels.admin.userpanel}"
+					value="/app/user/myaccount"
+					onClick="pageEvents.open(user.getValue())"></menuitem>
+				
 				<menuitem id="auctions" label="${labels.auction.title}" visible="@{isAdmin}"
 					onClick="pageEvents.showSubMenu(self.getId(), self, binder)">
 				</menuitem>
@@ -36,13 +40,13 @@
 				
 				<!-- AUKCJE -->
 				<menuitem id="auctions_list" label="${labels.auction.auctionlist}"
-					value="/secured/auctions/list.zul"
+					value="/app/auctions/list"
 					onClick="pageEvents.open(auctions_list.getValue())"/>
 				<menuitem id="new_auction" label="${labels.auction.newauction}"
-					value="/secured/auctions/new.zul"
+					value="/app/auctions/new"
 					onClick="pageEvents.open(new_auction.getValue())"/>
 				<menuitem id="auction_categories" label="${labels.admin.menu.configuration.auctioncategories}" visible="@{isCategoriesVisible}"
-					value="/secured/auctions/auction_categories.zul"
+					value="/app/auctions/auction_categories"
 					onClick="pageEvents.open(auction_categories.getValue())"/>
 					
 			</menubar>
@@ -53,27 +57,27 @@
 			<menubar  class="subMenu" id="adminSubMenu"  orient="vertical" visible="@{subMenu}" action="show:slideDown; hide:slideUp">
 				<!-- ADMIN -->
 				<menuitem id="delivery_types" label="${labels.admin.menu.deliverytypes}"
-					value="/secured/admin/delivery_types.zul"
+					value="/app/admin/delivery_types"
 					onClick="pageEvents.open(delivery_types.getValue())"/>
 					
 				<menuitem id="payment_methods" label="${labels.admin.menu.paymentmethods}"
-					value="/secured/admin/payment_methods.zul"
+					value="/app/admin/payment_methods"
 					onClick="pageEvents.open(payment_methods.getValue())"/>
 					
 				<menuitem id="measure_units" label="${labels.admin.menu.measureunits}"
-					value="/secured/admin/measure_units.zul"
+					value="/app/admin/measure_units"
 					onClick="pageEvents.open(measure_units.getValue())"/>
 					
 				<menuitem id="users" label="${labels.admin.menu.users}"
-					value="/secured/admin/users.zul"
+					value="/app/admin/users"
 					onClick="pageEvents.open(users.getValue())"/>
 					
 				<menuitem id="config" label="${labels.admin.menu.configuration.$}"
-					value="/secured/admin/config.zul"
+					value="/app/admin/config"
 					onClick="pageEvents.open(config.getValue())"/>
 					
 					<menuitem id="translations" label="${labels.admin.menu.translations}"
-					value="/secured/admin/translations.zul"
+					value="/app/admin/translations"
 					onClick="pageEvents.open(self.getValue())"/>
 					
 			</menubar>
@@ -81,7 +85,7 @@
 				<!-- CMS -->
 
 				<menuitem id="cms_edit" label="Edytuj treści"
-					visible="@{cmsSubMenu}" value="/secured/cms/edit.zul"
+					visible="@{cmsSubMenu}" value="/app/cms/edit"
 					onClick="pageEvents.open(cms_edit.getValue())"/>
 			</menubar>
 		</div>

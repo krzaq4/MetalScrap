@@ -6,7 +6,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
+
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpRequest;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.util.Initiator;
 import org.zkoss.zk.ui.util.InitiatorExt;
@@ -22,6 +31,9 @@ import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 
 public class Login implements Initiator, InitiatorExt {
 
+	
+	private boolean confirm = false ;
+	
 	@Override
 	public void doInit(Page page, Map<String, Object> arg1) throws Exception {
 		// TODO Auto-generated method stub
@@ -37,7 +49,7 @@ public class Login implements Initiator, InitiatorExt {
 		Company company = new Company() ;
 		User user = new User() ;
 		List<User> users = new ArrayList<User>() ;
-		List<Role> roles = new ArrayList<Role>() ;
+		Set<Role> roles = new HashSet<Role>() ;
 		user.setRoles(roles);
 		company.setUsers(users);
 		company.setAddressMain(main);
@@ -66,6 +78,39 @@ public class Login implements Initiator, InitiatorExt {
 		page.setAttribute("isAdmin", isAdmin);
 		page.setAttribute("isSuperAdmin", isSuperAdmin);
 		
+		HttpServletRequest request = (HttpServletRequest) Executions.getCurrent().getNativeRequest() ;
+		String token = request.getParameter("confirmation") ;
+		
+		
+		boolean confirmation = false ;
+		boolean completed = false ;
+		if(token!=null) {
+			confirmation = true ;
+			page.setAttribute("token", token) ;
+			
+			List<User> allUsers = ServicesImpl.getUserService().getUsers() ;
+			for(User u:allUsers) {
+				String utoken = u.getToken() ;
+				if(utoken.equals(token) && !u.getStatus().equals(User.STATUS_CONFIRMED)) {
+					user = u ;
+					this.confirm = true ;
+					break ;
+				}
+			}
+			
+			if(confirm) {
+				user.setStatus(User.STATUS_CONFIRMED);
+				user.setCompleted(false);
+				
+				ServicesImpl.getUserService().update(user);
+				confirmation = true ;
+			}
+		}
+		
+		completed =  (user.getStatus()!=null && user.getStatus().equals(User.STATUS_CONFIRMED)) ;
+		page.setAttribute("confirmation", confirmation) ;
+		page.setAttribute("confirm", this.confirm) ;
+		page.setAttribute("completed", completed) ;
 	}
 
 	@Override

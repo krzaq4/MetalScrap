@@ -1,13 +1,16 @@
 package pl.krzaq.metalscrap.service.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,14 +32,14 @@ public class DBUserServiceImpl implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
 		String password = userService.getUserByLogin(username).getPassword() ;
-		List<Role> roles = userService.getUserByLogin(username).getRoles() ;
+		Set<Role> roles = userService.getUserByLogin(username).getRoles() ;
 		
-		Set<GrantedAuthorityImpl> authorities = new HashSet<GrantedAuthorityImpl>() ;
-		Iterator<Role> i = roles.iterator() ;
-		
-		while(i.hasNext()) {
-			
-			authorities.add(new GrantedAuthorityImpl(i.next().getName())) ;
+		Set<SimpleGrantedAuthority> authorities = new LinkedHashSet<SimpleGrantedAuthority>();
+		//Set<GrantedAuthorityImpl> authorities = new HashSet<GrantedAuthorityImpl>() ;
+		for (Role role:roles) {
+			if(role!=null) {
+				authorities.add(new SimpleGrantedAuthority(role.getName().toUpperCase())) ;
+			}
 			
 		}
 		

@@ -37,8 +37,7 @@ public class Role implements Serializable{
 	@Column(name="name")
 	private String name ;
 	
-	@ManyToMany(mappedBy="roles")
-	private List<User> users ;
+	
 
 	public Long getId() {
 		return id;
@@ -56,17 +55,6 @@ public class Role implements Serializable{
 		this.name = name;
 	}
 
-	public List<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(List<User> users) {
-		this.users = users;
-	}
-
-	
-
-	
 	
 	
 }

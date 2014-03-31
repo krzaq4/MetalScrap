@@ -1,0 +1,44 @@
+1. Dokończyć rejestrację
+  - komunikaty na każdy krok rejestracji
+  - informacja o konieczności uzupełnienia danych do weryfikacji
+  - funkcja weryfikacji ( opcja automatyczna i opcja manualna - potiwerdzenie przez administratora )
+2. Zakładka moje konto
+  - moje aukcje
+  - moje dane
+  - weryfikacja
+  - płatności
+3. Menu kategorii przerobić
+  - wygląd
+4. Breadcrumb'y po zmiennej wstrzykniętej w stronę a nie aktualnej kategorii
+5. Dopracować definiiowanie parametrów kategorii i same kategorie, włącznie z klonowaniem na inne języki
+6. Kopiowanie wszystkich danych zawierających wersję językową przy tworzeniu nowego języka
+7. Wyświetlanie parametrów kategorii pod menu z kategoriami
+8. Zmienić logowanie - wygląd okienka i jego umiejscowienie
+9. Poprawić wyświetlanie podmenu
+10. Dorobić weryfikację dostępu do stron
+  - wyświetla stronę jak user ma uprawnienia
+  - wyświetla informację o braku dostępu do strony gdy user nie ma uprawnień
+11. Wyświetlanie wybranych wartości parametrów kategorii na liście aukcji pod nazwą
+12. Przerobić strony z szczegółami aukcji tak aby była dostępna bez logowania
+13. Menu administracja
+  - konfiguracja ustawień aukcji
+    # kategorie dostępne/ niedostępne
+    # pozycje aukcji dostępne/ niedostępne
+	# płatności za aukcje wł/ wył
+	# płatności "z góry"/ "po"
+  - konfiguracja systemu:
+    # ustawienia płatnosci24.pl
+	# dane firmy
+	# adres www strony platformy
+	# logo
+	# skórka
+	# rodzaj weryfikacji użytkownika automatyczny/ manualny
+14. Ekran nowej aukcji
+  - poprawa wyglądu 
+    # zdjęcia
+	# placeholdery
+	# aktywacja przycisku "Zapisz" dopiero gdy wszystkie pola są uzupełnione
+15. Wersjonowanie aplikacji
+16. Changelog'i
+17. Aplikacja facebook
+    

@@ -15,7 +15,7 @@
 
 </div>
 <div class="headerinfo">
-<div visible="@{isLoggedIn}" class="userInfo">${labels.common.loggedinas}: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/> ( <label id="logout" value="${labels.common.logout}" sclass="asLink" onClick="pageEvents.logout()" /> )</div>
+	<div class="userInfo">${labels.common.loggedinas}: <label value="@{currentUser.login}"/>, <label value="@{currentUser.firstName}"/> <label value="@{currentUser.lastName}"/> ( <label id="logout" value="${labels.common.logout}" sclass="asLink" onClick="pageEvents.logout()" /> )</div>
 
 </div>
 </div>

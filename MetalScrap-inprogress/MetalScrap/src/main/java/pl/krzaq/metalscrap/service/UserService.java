@@ -1,9 +1,16 @@
 package pl.krzaq.metalscrap.service;
 
+import java.util.List;
+
 import pl.krzaq.metalscrap.dao.UserDAO;
+import pl.krzaq.metalscrap.model.Role;
 import pl.krzaq.metalscrap.model.User;
 
 public interface UserService {
+
+public Role getRoleByName(String name) ;
+
+public List<User> getUsers() ;
 
 public User getUserByLogin(String login) ;
 

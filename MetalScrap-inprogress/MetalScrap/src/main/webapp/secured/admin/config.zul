@@ -35,19 +35,22 @@
 
 <div sclass="tilesInside">
 
-<div class="tilesRow" height="50%">
-<button sclass="tileButton">${labels.common.lookandfeel}</button>
-<button sclass="tileButton">${labels.common.services}</button> 
-</div>
-<div sclass="tilesRow" height="50%">
-<button sclass="tileButton">${labels.common.socialservices}</button>
-<button sclass="tileButton">${labels.common.options}</button>
-</div>
+<vbox>
+	<hbox>
+		<button sclass="green tileButton">${labels.common.lookandfeel}</button>
+		<button sclass="blue tileButton">${labels.common.services}</button>
+	</hbox> 
+
+	<hbox>
+		<button sclass="tileButton">${labels.common.socialservices}</button>
+		<button sclass="button tileButton">${labels.common.options}</button>
+	</hbox>
+
+</vbox>
 
 </div>
 
 </div>
-
 
 <div sclass="pageFooter"></div>
 </panelchildren>

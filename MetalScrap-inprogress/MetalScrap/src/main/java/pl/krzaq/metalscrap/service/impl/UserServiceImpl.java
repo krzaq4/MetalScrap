@@ -1,9 +1,12 @@
 package pl.krzaq.metalscrap.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 
+import pl.krzaq.metalscrap.model.Role;
 import pl.krzaq.metalscrap.model.User;
 import pl.krzaq.metalscrap.service.UserService;
 import pl.krzaq.metalscrap.dao.UserDAO; 
@@ -69,6 +72,18 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getUserById(Long id) {
 		return userDAO.getUserById(id) ;
+	}
+
+	@Override
+	public List<User> getUsers() {
+		// TODO Auto-generated method stub
+		return userDAO.getUsers() ;
+	}
+
+	@Override
+	public Role getRoleByName(String name) {
+		// TODO Auto-generated method stub
+		return userDAO.getRoleByName(name) ;
 	}
 	
 	

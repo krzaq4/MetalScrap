@@ -56,49 +56,150 @@
 </div>
 		
 
-		<panel id="content" height="500px" border="none">
+		<panel id="content" height="900px" border="none">
 			<panelchildren>
 					
-<div class="leftContent">
 
 
-<div style=""></div>
+			
+<div id="cnt" width="100%" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('pl.krzaq.metalscrap.bind.UserViewBind') ">
+
+<div visible="@{confirmation}">
+
+<div visible="@{completed}" >
+
+<div visible="@{confirm, converter='pl.krzaq.metalscrap.converter.NegativeConverter'}">
+	<div style="vertical-align: middle">
+		<image  src="../resources/images/confirmerror-ico.png" ></image>
+		<label style="position: relative; top: 40px; vertical-align: top; font-size: 28px; color: #4569d0 ; font-family: verdana;" value="Potwierdzenie rejestracji" />
+	</div>
+	<div>	
+	
+	<space/><space/>
+	<div class="info" style="vertical-align: top; color: #565656; font-family: verdana; font-size: 18px; ">
+		<image src="../resources/images/error-ico.png"  style="padding-left: 30px; padding-top: 15px; "/>
+		<label style="position: relative; font-size: 18px ;  top: -12px; " value="Niepoprawny link aktywacyjny :-(" />
+	</div>
+	
+	</div>
+</div>
+
+<div visible="@{confirm}">
+
+	<div style="vertical-align: middle">
+		<image  src="../resources/images/confirm-ico.png" ></image>
+		<label style="position: relative; top: 40px; vertical-align: top; font-size: 28px; color: #4569d0 ; font-family: verdana;" value="Potwierdzenie rejestracji" />
+	</div>
+	<div class="info" style="vertical-align: top; color: #565656; font-family: verdana; font-size: 18px; ">	
+		<image src="../resources/images/success-ico.png"  style="padding-left: 30px; padding-top: 15px; "/>
+		<label style="position: relative; font-size: 18px ;  top: -12px; " value="Aktywacja konta powiodła się :-)" />
+	</div>
+	<div style="font-family: verdana; color: #565656; font-size: 13px;">
+		<!-- Weryfikacja użytkownika nie wymaga zatwierdzenia przez admionistratora -->
+		<div visible="@{userVerificationModeAuto}">
+		</div>
+		
+		<!-- Weryfikacja użytkownika wymaga zatwierdzenia przez admionistratora -->		
+		<div visible="@{userVerificationModeAuto, converter='pl.krzaq.metalscrap.converter.NegativeConverter'}">
+		</div>
+	
+	</div>
+</div>
+
+
+</div>
+<div visible="@{completed, converter='pl.krzaq.metalscrap.converter.NegativeConverter'}">
+
+
+<div visible="@{confirm, converter='pl.krzaq.metalscrap.converter.NegativeConverter'}">
+	<div style="vertical-align: middle">
+		<image  src="../resources/images/confirmerror-ico.png" ></image>
+		<label style="position: relative; top: 40px; vertical-align: top; font-size: 28px; color: #4569d0 ; font-family: verdana;" value="Potwierdzenie rejestracji" />
+	</div>
+	<div>	
+	
+	<div class="info" style="vertical-align: top; color: #565656; font-family: verdana; font-size: 18px; ">
+		<image src="../resources/images/error-ico.png" style="padding-left: 30px; padding-top: 15px; "/>
+		<label style="position: relative; font-size: 18px ;  top: -12px; " value="Konto zostało już aktywowane." />
+	</div>
+	
+	</div>
+
+</div>
+
+
 
 
 </div>
 
+
+
+</div>	
+
+<div visible="@{confirmation, converter='pl.krzaq.metalscrap.converter.NegativeConverter'}">
+	<div style="vertical-align: middle"><image  src="../resources/images/register-ico.png" ></image><label style="position: relative; top: 40px; vertical-align: top; font-size: 28px; color: #4569d0 ; font-family: verdana;" value="Rejestracja" /></div>
+	<div>	
+	<div id="error" class="error" >
+		<vbox style="padding:10px 10px 10px 10px">
+			<label value="@bind(vm.loginMessage)" class="validation" visible="@bind(vm.loginExists)" />
+			<label value="@bind(vm.emailMessage)" class="validation" visible="@bind(vm.emailExists)"/>
+			<label value="@bind(vm.passMessage)" class="validation" visible="@bind(vm.passwordNotFormatted)"/>
+			<label value="@bind(vm.repassMessage)" class="validation" visible="@bind(vm.passwordNotMatch)"/>
+		</vbox>
+	</div>
+	<space></space>
+		<vbox id="register" visible="@bind(vm.step1)" width="50%" align="end">
 			
-<div class="rightContent" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('pl.krzaq.metalscrap.bind.UserViewBind')">
-
-		<div visible="@bind(vm.error)">
-			<label value="@bind(vm.message)" />
+			<hbox>
+				<div  style="float:left; width:200px; vertical-align: middle;" >
+					<label sclass="register" value="Nazwa użytkownika: "/>
+				</div>
+				<div style="float:left; width:220px">
+					<textbox id="username" name="username" class="default" maxlength="24" value="@bind(vm.user.login)" onChange="@command('checkLogin')" cols="24"/>
+				</div>
+				
+			</hbox>
+			<hbox>
+				<div  style="float:left; width:200px">
+					<label sclass="register" value="Adres e-mail: "/>
+				</div>
+				<div style="float:left; width:220px">
+					<textbox id="email" name="email" sclass="default" maxlength="24" value="@bind(vm.user.email)" onChange="@command('checkEmail')"  cols="24"/>
+				</div>
+				
+			</hbox>
+			<hbox>
+				<div style="float:left; width:200px">
+					<label sclass="register" value="Hasło: "/>
+				</div>
+				<div style="float:left; width:220px">
+					<textbox type="password" sclass="default" name="password" id="password"  maxlength="24" value="@bind(vm.user.password)" onChange="@command('checkPassword')"  cols="24"/>
+				</div>
+				
+			</hbox>
+			<hbox>
+				<div style="float:left; width:200px">
+					<label sclass="register" value="Powtórz hasło: "/>
+				</div>
+				<div style="float:left; width:220px">
+					<textbox id="repassword" type="password" sclass="default" name="repassword" maxlength="24" value="@bind(vm.rePassword)" onChange="@command('checkPasswordMatch')"  cols="24"/>
+				</div>
+				
+			</hbox>
+			<button class="button" label="Zarejestruj mnie!" disabled="@init(vm.allowRegistration) @bind(not vm.allowRegistration)" onClick="@command('registerUser')" />
+		</vbox>
+		
+		<vbox id="confirm" visible="@bind(vm.step2)" style="text-align: center ; margin: 0 auto ;">
+		
+		<div class="info" style="vertical-align: top; color: #565656; font-family: verdana; font-size: 18px; ">
+			<image src="../resources/images/success-ico.png"  style="padding-left: 30px; padding-top: 15px; "/>
+			<label style="position: relative; font-size: 18px ;  top: -12px; " value="Rejestracja przebiegła pomyślnie! " />
 		</div>
-		
-		<vbox visible="@bind(vm.step1)">
-			<hbox>
-				<label value="Nazwa użytkownika: " />
-				<textbox constraint="no empty" maxlength="24" value="@bind(vm.user.login)" onChange="@command('checkLogin')" />
-			</hbox>
-			<hbox>
-				<label value="Adres e-mail: " />
-				<textbox constraint="no empty" maxlength="24" value="@bind(vmuser.email)" onChange="@command('checkEmail')"/>
-			</hbox>
-			<hbox>
-				<label value="Hasło: " />
-				<textbox id="user_pass" name="password" constraint="no empty" maxlength="24" value="@bind(user.password)" onChange="@command('checkPassword')" />
-			</hbox>
-			<hbox>
-				<label value="Powtórz hasło: " />
-				<textbox constraint="no empty" maxlength="24" onChange="@command('checkPasswordMatch')" />
-			</hbox>
-			<button label="Zarejestruj mnie!" disabled="@bind(not vm.allowRegistration)" onClick="@command('registerUser')" />
-		</vbox>
-		
-		<vbox visible="@bind(vm.step2)">
+			<label value="Sprawdź swoją skrzynkę e-mail w poszukiwaniu wiadomości z linkiem aktywacyjnym :-)" />
 		
 		</vbox>
-
-					
+	</div>
+</div>				
 					
 					</div>
 				<space></space>
@@ -106,6 +207,7 @@
 					<div sclass="inner"><label value="${labels.contact.title}"/> | <label value="${labels.regulation.title}"/> | <label value="${labels.privacy.title}"/> | <label value="${labels.about.title}"/> </div>
 				</div>
 			</panelchildren>
+			
 		</panel>
 
 		<popup id="loginPopup" action="show: slideDown;hide: slideUp"

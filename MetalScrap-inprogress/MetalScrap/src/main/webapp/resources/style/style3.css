@@ -7,6 +7,28 @@ body {
 	
 }
 
+.default.z-textbox {
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	border: 1px solid #444444;
+	-webkit-transition: border 0.5s; /* For Safari 3.1 to 6.0 */
+	transition: border 0.5s;
+}
+
+.default.correctValue.z-textbox {
+	border: 1px solid #49c318;
+	-webkit-transition: border 0.5s; /* For Safari 3.1 to 6.0 */
+	transition: border 0.5s;
+}
+
+.default .wrongValue .z-textbox {
+	border: 1px solid #ec0f0f !important;
+	-webkit-transition: border 0.5s; /* For Safari 3.1 to 6.0 */
+	transition: border 0.5s;
+}
+
+
 .z-caption-cnt{
 	color: #444444;
 }

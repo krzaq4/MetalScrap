@@ -10,9 +10,11 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
+import org.hibernate.transform.ResultTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import pl.krzaq.metalscrap.model.Role;
 import pl.krzaq.metalscrap.model.User;
 
 @Transactional
@@ -23,22 +25,48 @@ public class UserDAO {
 	private SessionFactory sessionFactory ;
 	
 	
+	public Role getRoleByName(String name){
+		
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Role.class, "role");
+		criteria.add(Restrictions.eq("name", name))
+				.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+		
+		return (Role) criteria.uniqueResult() ;
+		
+	}
+	
+	public List<User> getUsers() {
+		
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(User.class, "usr") ;
+		criteria.createCriteria("usr.roles", "roles", JoinType.LEFT_OUTER_JOIN) ;
+		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY) ;
+		//criteria.setProjection(Projections.)
+		return criteria.list() ;
+	}
+	
 	public User getUserByLogin(String login) {
 		
-		User u =  (User)sessionFactory.getCurrentSession().getNamedQuery("User.findByLogin").setParameter("login", login).list().get(0) ;
-		if (u!=null)
-			Hibernate.initialize(u.getRoles());
-		return u ;
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(User.class, "usr") 
+			.add(Restrictions.eq("usr.login", login))
+			.createCriteria("usr.auctions", "auctions", JoinType.LEFT_OUTER_JOIN)
+			.createCriteria("usr.observed", "observed", JoinType.LEFT_OUTER_JOIN)
+			.createCriteria("usr.userOffers", "offers", JoinType.LEFT_OUTER_JOIN)
+			.createCriteria("usr.roles", "roles", JoinType.LEFT_OUTER_JOIN) ;
+		
+		return (User) criteria.uniqueResult() ;
 		
 		
 	}
 	
 	public User getUserByEmail(String email) {
 		
-		User u =  (User)sessionFactory.getCurrentSession().getNamedQuery("User.findByEmail").setParameter("email", email).list().get(0) ;
-		if (u!=null)
-			Hibernate.initialize(u.getRoles());
-		return u ;
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(User.class, "usr") 
+				.add(Restrictions.eq("usr.email", email))
+				.createCriteria("usr.auctions", "auctions", JoinType.LEFT_OUTER_JOIN)
+				.createCriteria("usr.observed", "observed", JoinType.LEFT_OUTER_JOIN)
+				.createCriteria("usr.userOffers", "offers", JoinType.LEFT_OUTER_JOIN) ;
+			
+			return (User) criteria.uniqueResult() ;
 	}
 	
 	public User getUserById(Long id) {

@@ -69,7 +69,7 @@
 
 <div id="listMenu" class="listMenu"></div>
 <listbox id="usersList" model="@{users}"
-					mold="paging" pageSize="10" checkmark="true" selectedItem="@{auction}" multiple="true">
+					mold="paging" pageSize="10" checkmark="true" selectedItem="@{user}" multiple="true">
 					<listhead>
 						<listheader label="Login" />
 						<listheader label="Imię" />

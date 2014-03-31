@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -67,7 +68,7 @@ public class HomePage implements Initiator, InitiatorExt {
 		
 		Boolean isCategoriesVisible = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("auction_categories_visible").getValue()) ;
 		Boolean isCommoditiesVisible = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("auction_commodities_visible").getValue());
-		
+		boolean userVerificationModeAuto = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("user.verification.mode.auto").getValue()).booleanValue() ;
 		
 		
 		if ( isLoggedIn ) {
@@ -80,20 +81,20 @@ public class HomePage implements Initiator, InitiatorExt {
 				
 				currentUser = ServicesImpl.getUserService().getUserById(currentUser.getId()) ;
 				page.setAttribute("currentUser", currentUser);
-
-			Iterator<Role> iterator = currentUser.getRoles().iterator() ; 
+			Set<Role> roles = currentUser.getRoles() ;
+			//Iterator<Role> iterator = .iterator() ; 
 			
-				while (iterator.hasNext()) {
+				for(Role role:roles) {
+					if(role!=null) {
+						String roleName = role.getName();
 
-					String roleName = iterator.next().getName();
-
-					if (roleName.equalsIgnoreCase(Constants.ROLE_USER))
-						isUser = true ;
-					if(roleName.equalsIgnoreCase(Constants.ROLE_ADMIN))
-						isAdmin = true ;
-					if(roleName.equalsIgnoreCase(Constants.ROLE_SUPERADMIN))
-						isSuperAdmin = true ;
-
+						if (roleName.equalsIgnoreCase(Constants.ROLE_USER))
+							isUser = true ;
+						if(roleName.equalsIgnoreCase(Constants.ROLE_ADMIN))
+							isAdmin = true ;
+						if(roleName.equalsIgnoreCase(Constants.ROLE_SUPERADMIN))
+							isSuperAdmin = true ;
+					}
 				}
 
 			}
@@ -110,6 +111,7 @@ public class HomePage implements Initiator, InitiatorExt {
 		
 		page.setAttribute("isCommoditiesVisible", isCommoditiesVisible) ;
 		page.setAttribute("isCategoriesVisible", isCategoriesVisible) ;
+		page.setAttribute("userVerificationModeAuto", userVerificationModeAuto) ;
 		page.setAttribute("subMenu", false) ;
 
 	}

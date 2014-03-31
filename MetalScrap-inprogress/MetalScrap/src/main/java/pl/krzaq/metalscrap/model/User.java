@@ -1,6 +1,8 @@
 package pl.krzaq.metalscrap.model;
 
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +28,18 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+
+
+
+
+
+
+
 import org.hibernate.annotations.IndexColumn;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import pl.krzaq.metalscrap.utils.Utilities;
 
 @SuppressWarnings("serial")
 @Entity
@@ -43,6 +56,21 @@ import org.hibernate.annotations.IndexColumn;
 @XmlRootElement(name = "userDetails")
 public class User implements Serializable {
 
+	public static Integer STATUS_NEW = 1 ;
+	public static Integer STATUS_CONFIRMED = 2 ;
+	
+	
+	
+	public User() {
+		
+		this.email = "" ;
+		this.login = "" ;
+		this.firstName = "" ;
+		this.lastName = "" ;
+		this.secondName = "" ;
+		
+	}
+	
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -87,26 +115,20 @@ public class User implements Serializable {
 	private Address contactAddress ;
 	
 	@ManyToMany(cascade=CascadeType.ALL)
-	@JoinTable(name="user_roles", joinColumns=@JoinColumn(name="user_id", referencedColumnName="id"),
-								inverseJoinColumns=@JoinColumn(name="role_id", referencedColumnName="id"))
-	private List<Role> roles ;
+	@JoinTable(name="users_roles", joinColumns=@JoinColumn(name="user_id", referencedColumnName="id"), inverseJoinColumns=@JoinColumn(name="role_id", referencedColumnName="id"))
+	@IndexColumn(name="rls", nullable=false )
+	private Set<Role> roles ;
 	
-	@ManyToMany(cascade=CascadeType.MERGE)
-	@JoinTable(name="user_observed_auctions", joinColumns={
-			@JoinColumn(name="user_id")
-	},
-	inverseJoinColumns={
-			@JoinColumn(name="auction_id")
-	})
-	@IndexColumn(name="OBSERVED")
-	private List<Auction> observed = new ArrayList<Auction>();
+	@OneToMany(cascade=CascadeType.MERGE)
+	@IndexColumn(name="obsvr", nullable=false)
+	private List<Auction> observed ;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="ownerUser")
-	@IndexColumn(name="AUCTIONS")
+	@IndexColumn(name="actns", nullable=false)
 	private List<Auction> auctions ;
 	
 	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
-	@IndexColumn(name="OFFERS")
+	@IndexColumn(name="offrs", nullable=false)
 	private List<UserOffer> userOffers ;
 	
 	
@@ -182,11 +204,11 @@ public class User implements Serializable {
 		return id;
 	}
 
-	public List<Role> getRoles() {
+	public Set<Role> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<Role> roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
 
@@ -251,7 +273,30 @@ public class User implements Serializable {
 	}
 
 	
-	
+	public String getToken() {
+		String res = "" ;
+		System.out.println("login: "+this.getLogin());
+		System.out.println("email: "+this.getEmail());
+		System.out.println("milis: "+this.getCreatedOn().getTime());
+		
+		try {
+			res = Utilities.hash(Utilities.HASH_METHOD_MD5, this.getLogin().concat(this.getEmail().concat(String.valueOf(this.getCreatedOn().getTime())))) ;
+			System.out.println("token: "+res);
+			
+		} catch(NoSuchAlgorithmException ex) {
+			
+		}
+		
+		return res ;
+	}
+
+	public Boolean getCompleted() {
+		return completed;
+	}
+
+	public void setCompleted(Boolean completed) {
+		this.completed = completed;
+	}
 	
 	
 	
