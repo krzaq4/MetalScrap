@@ -118,7 +118,7 @@
 		<vbox>
 			<label value="Udało się! Twoja rejestracja dobiegła końca." />
 			<label value="Jednak, aby móc brać udział w aukcjach, Twoje konto musi zostać zweryfikowane." />
-			<label value="Najpierw jednak, konieczne jest uzupełnienie danych personalnych."
+			<label value="Najpierw jednak, konieczne jest uzupełnienie danych personalnych."/>
 			<hbox>
 				<label value="Możesz to zrobić, w zakładce Moje Konto, dostępnym" />
 				<label value=" tutaj">

@@ -9,17 +9,35 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeansException;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.stereotype.Component;
 
 import pl.krzaq.metalscrap.model.Event;
 import pl.krzaq.metalscrap.model.User;
 import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 
+
 public class SecurityLogoutFilter extends LogoutFilter {
 
 	
+	@Override
+	protected void initBeanWrapper(BeanWrapper bw) throws BeansException {
+		// TODO Auto-generated method stub
+		super.initBeanWrapper(bw);
+	}
+
+
+	@Override
+	protected void initFilterBean() throws ServletException {
+		// TODO Auto-generated method stub
+		super.initFilterBean();
+	}
+
+
 	public SecurityLogoutFilter(String logoutSuccessUrl,
 			LogoutHandler[] handlers) {
 		super(logoutSuccessUrl, handlers);

@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
@@ -18,6 +20,7 @@ import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Div;
@@ -31,7 +34,7 @@ import pl.krzaq.metalscrap.utils.Utilities;
 
 public class UserViewBind {
 
-	
+	// Rejestracja
 	
 	@Wire("#username")
 	private Textbox username ;
@@ -47,6 +50,15 @@ public class UserViewBind {
 	
 	@Wire("#error")
 	private Div error ;
+	
+	
+	// -----------------------------
+	
+	
+	
+	
+	
+	// Rejestracja
 	
 	private User user = new User() ;
 	private String registerImage = "resources/images/register-ico.png";
@@ -191,7 +203,7 @@ public class UserViewBind {
 
 	
 	 @AfterCompose
-	 @NotifyChange({"loginExists", "emailExists", "passwordNotFormatted", "passwordNotMatch", "allowRegistration", "message"})
+	 @NotifyChange({"loginExists", "emailExists", "passwordNotFormatted", "passwordNotMatch", "allowRegistration", "message", "jUserMessage", "jPassMessage", "jUserInvalid", "jPassInvalid", "allowLogin"})
 	    public void afterCompose(@ContextParam(ContextType.VIEW) Component view){
 	        Selectors.wireComponents(view, this, false);
 	        this.setAllowRegistration(false);
@@ -200,7 +212,7 @@ public class UserViewBind {
 	    	loginExists = false ;
 	    	passwordNotFormatted = false ;
 	    	passwordNotMatch = false ;
-	        
+	    	
 	    	
 	        
 	        //wire event listener
@@ -222,6 +234,7 @@ public class UserViewBind {
 			if(passwordNotFormatted){
 				count++ ;
 			}
+			
 			if(count==0){
 				error.setSclass("error");
 			} else
@@ -239,6 +252,18 @@ public class UserViewBind {
 			}
 		 
 	 }
+	 
+	 
+	 
+	 // ----------------------------------------------
+	 
+	 
+	 // Logowanie
+	 
+	 
+	 
+	 
+	 //----------------------
 	 
 	public User getUser() {
 		return user;
@@ -355,6 +380,9 @@ public class UserViewBind {
 	public void setRegisterImage(String registerImage) {
 		this.registerImage = registerImage;
 	}
+
+	
+	
 	
 	
 }

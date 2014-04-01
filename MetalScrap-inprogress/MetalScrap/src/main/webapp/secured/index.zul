@@ -29,7 +29,7 @@
 				
 			</div>
 			<div class="headerinfo">
-				<div class="userInfo"><hbox><a onClick="loginPopup.open(content,popPos)" style="color: #eee">
+				<div class="userInfo"><hbox><a href="/app/signin" > <!-- onClick="loginPopup.open(content,popPos)" style="color: #eee"> -->
 					${labels.common.login}
 				</a>
 				

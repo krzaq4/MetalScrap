@@ -1,0 +1,121 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="pl.krzaq.metalscrap.pages.Login"?>
+
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+<?page title="${labels.common.register}" contentType="text/html;charset=UTF-8" ?>
+
+
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+
+<div class="head"></div>
+<div class="log"></div>
+	<div
+		style="width:80%;height: 740px;margin: 0 auto ;">
+
+		<div id="header" class="header">
+			<div class="logo">
+				
+			</div>
+			<div class="headerinfo">
+				<div class="userInfo"><hbox><a onClick="loginPopup.open(content,popPos)" style="color: #eee">
+					${labels.common.login}
+				</a>
+				
+				<!-- <a onClick="registerPopup.open(content,popPos)" style="color:#eee">
+					${labels.common.register}
+				</a> -->
+				
+				</hbox>
+				</div>
+			</div>
+		</div>
+		
+
+
+		<include id="men"  src="/common/menu.zul" ></include>
+		
+		<breadcrumb id="breadcrumb" standalone="false" currentCategory="@{selectedCategory}"></breadcrumb>
+		<separator bar="true" orient="horizontal"></separator>
+
+<div>
+	<hbox>
+		<label value="${labels.common.preferredlanguage} : " />	<langbox />
+	</hbox>
+</div>
+		
+
+		<panel id="content" height="900px" border="none">
+			<panelchildren>
+					
+
+
+			
+<div id="cnt" width="100%" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('pl.krzaq.metalscrap.bind.UserLoginBind') ">
+
+
+
+<div>
+	<div style="vertical-align: middle"><image  src="../resources/images/login-ico.png" ></image><label style="position: relative; top: 40px; vertical-align: top; font-size: 28px; color: #4569d0 ; font-family: verdana;" value="Logowanie" /></div>
+	<div>	
+	<div id="error" class="error" >
+		<vbox style="padding:10px 10px 10px 10px">
+			<label value="@bind(vm.jUserMessage)" class="validation" visible="@bind(vm.jUserInvalid)" />
+			<label value="@bind(vm.jPassMessage)" class="validation" visible="@bind(vm.jPassInvalid)" />
+		</vbox>
+	</div>
+	<div height="30px"></div>
+		<vbox id="login" visible="@bind(vm.step1)" width="50%" align="end" style="padding: 10px 0 0 0 ">
+			<h:form method="post" id="j_spring_security_check"
+						action="../j_spring_security_check">
+			<hbox>
+				<div  style="float:left; width:200px; vertical-align: middle;" >
+					<label sclass="register" value="Nazwa użytkownika: "/>
+				</div>
+				<div style="float:left; width:220px">
+					<textbox id="j_username" name="j_username" class="default" maxlength="24"  onChange="@command('checkJUser')" cols="24"/>
+				</div>
+				
+			</hbox>
+			<hbox>
+				<div style="float:left; width:200px">
+					<label sclass="register" value="Hasło: "/>
+				</div>
+				<div style="float:left; width:220px">
+					<textbox type="password" sclass="default" name="j_password" id="j_password"  maxlength="24"  onChange="@command('checkJPass')"  cols="24"/>
+				</div>
+				
+			</hbox>
+			<div style="padding: 10px 0 0 0 ">
+				<h:input type="submit" value="Zaloguj" class="button z-button-os" />
+			</div>
+			</h:form>
+		</vbox>
+		
+		
+	</div>
+</div>				
+					
+					</div>
+				<space></space>
+				<div sclass="pageFooter">
+					<div sclass="inner"><label value="${labels.contact.title}"/> | <label value="${labels.regulation.title}"/> | <label value="${labels.privacy.title}"/> | <label value="${labels.about.title}"/> </div>
+				</div>
+			</panelchildren>
+			
+		</panel>
+
+		
+
+
+		
+
+		<div>
+			<div id="additional" class="additional"></div>
+
+			<div id="footer" class="footer"></div>
+		</div>
+	</div>
+	
+	
+	
+</zk>
