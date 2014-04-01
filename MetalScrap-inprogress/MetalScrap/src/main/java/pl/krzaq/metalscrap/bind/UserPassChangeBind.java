@@ -126,6 +126,68 @@ public class UserPassChangeBind {
 	        //wire event listener
 //	      Selectors.wireEventListeners(view, this);
 	    }
+
+
+	public Div getError() {
+		return error;
+	}
+
+
+	public void setError(Div error) {
+		this.error = error;
+	}
+
+
+	public Textbox getEmail() {
+		return email;
+	}
+
+
+	public void setEmail(Textbox email) {
+		this.email = email;
+	}
+
+
+	public boolean isEmailInvalid() {
+		return emailInvalid;
+	}
+
+
+	public void setEmailInvalid(boolean emailInvalid) {
+		this.emailInvalid = emailInvalid;
+	}
+
+
+	public boolean isAllowRequest() {
+		return allowRequest;
+	}
+
+
+	public void setAllowRequest(boolean allowRequest) {
+		this.allowRequest = allowRequest;
+	}
+
+
+	public boolean isRequestSent() {
+		return requestSent;
+	}
+
+
+	public void setRequestSent(boolean requestSent) {
+		this.requestSent = requestSent;
+	}
+
+
+	public String getMessage() {
+		return message;
+	}
+
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	
+	
 	
 	
 }

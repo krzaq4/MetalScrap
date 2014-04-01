@@ -49,10 +49,7 @@
 
 		<panel id="content" height="900px" border="none">
 			<panelchildren>
-					
-
-
-			
+	
 <div id="cnt" width="100%" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('pl.krzaq.metalscrap.bind.UserPassChangeBind') ">
 
 
@@ -81,7 +78,7 @@
 			<div style="padding: 10px 0 0 0 ">
 				<button label="Zresetuj hasło" class="button z-button-os" onClick="@command('requestPassword')"/>
 			</div>
-			</h:form>
+			
 			<space/>
 			<vbox class="remind">
 				<a  href="/app/signin">Masz już konto? Zaloguj się tutaj</a>
@@ -100,7 +97,7 @@
 	</div>
 </div>				
 					
-					</div>
+</div>
 				<space></space>
 				<div sclass="pageFooter">
 					<div sclass="inner"><label value="${labels.contact.title}"/> | <label value="${labels.regulation.title}"/> | <label value="${labels.privacy.title}"/> | <label value="${labels.about.title}"/> </div>
