@@ -2,7 +2,7 @@
 <?init class="pl.krzaq.metalscrap.pages.Login"?>
 
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
-<?page title="${labels.common.login}" contentType="text/html;charset=UTF-8" ?>
+<?page title="Przypomnienie hasła" contentType="text/html;charset=UTF-8" ?>
 
 
 <zk xmlns:h="http://www.w3.org/1999/xhtml">
@@ -20,7 +20,9 @@
 				<div class="userInfo">
 				<hbox>
 				
-				
+				<a href="/app/signin" style="color:#eee">
+					${labels.common.login}
+				</a>
 				
 				<a href="/app/register" style="color:#eee">
 					${labels.common.register}
@@ -51,53 +53,50 @@
 
 
 			
-<div id="cnt" width="100%" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('pl.krzaq.metalscrap.bind.UserLoginBind') ">
+<div id="cnt" width="100%" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('pl.krzaq.metalscrap.bind.UserPassChangeBind') ">
 
 
 
 <div>
 	<div style="vertical-align: middle"><image  src="../resources/images/login-ico.png" ></image><label style="position: relative; top: 40px; vertical-align: top; font-size: 28px; color: #4569d0 ; font-family: verdana;" value="Logowanie" /></div>
-	<div>	
+	<div visible="@bind(vm.requestSent)">	
 	<div id="error" class="error" >
 		<vbox style="padding:10px 10px 10px 10px">
-			<label value="@bind(vm.jUserMessage)" class="validation" visible="@bind(vm.jUserInvalid)" />
-			<label value="@bind(vm.jPassMessage)" class="validation" visible="@bind(vm.jPassInvalid)" />
+			<label value="@bind(vm.message)" class="validation" visible="@bind(vm.emailInvalid)" />			
 		</vbox>
 	</div>
 	<div height="30px"></div>
-		<vbox id="loginf"  width="50%" align="end" style="padding: 10px 0 0 0 ">
-			<h:form method="post" id="j_spring_security_check"
-						action="../j_spring_security_check">
-			<hbox>
-				<div  style="float:left; width:200px; vertical-align: middle;" >
-					<label sclass="register" value="Nazwa użytkownika: "/>
-				</div>
-				<div style="float:left; width:220px">
-					<textbox id="j_username" name="j_username" class="default" maxlength="24"  onChange="@command('checkJUser')" cols="24"/>
-				</div>
-				
-			</hbox>
+		<vbox id="remind"  width="50%" align="end" style="padding: 10px 0 0 0 ">
+			
+			
 			<hbox>
 				<div style="float:left; width:200px">
 					<label sclass="register" value="Hasło: "/>
 				</div>
 				<div style="float:left; width:220px">
-					<textbox type="password" sclass="default" name="j_password" id="j_password"  maxlength="24"  onChange="@command('checkJPass')"  cols="24"/>
+					<textbox sclass="default" name="email" id="email"  maxlength="24"  onChange="@command('checkEmail')"  cols="24"/>
 				</div>
 				
 			</hbox>
 			<div style="padding: 10px 0 0 0 ">
-				<h:input type="submit" value="Zaloguj" class="button z-button-os" />
+				<button label="Zresetuj hasło" class="button z-button-os" onClick="@command('requestPassword')"/>
 			</div>
 			</h:form>
 			<space/>
 			<vbox class="remind">
-				<a  href="/app/register">Nie masz konta? Zarejestruj się za darmo!</a>
-				<a href="/app/remindpass">Masz konto ale zapomniałeś hasła? Skorzystaj z przypomnienia</a>
+				<a  href="/app/signin">Masz już konto? Zaloguj się tutaj</a>
+				<a  href="/app/register">Nie masz konta? Zarejestruj się za darmo!</a>				
 			</vbox>
 		</vbox>
 		
 		
+	</div>
+	<div visible="@bind(vm.requestSent)">
+		<div class="info" style="vertical-align: top; color: #565656; font-family: verdana; font-size: 18px; ">	
+			<image src="../resources/images/success-ico.png"  style="padding-left: 30px; padding-top: 15px; "/>
+			<label style="position: relative; font-size: 18px ;  top: -12px; " value="Email z linkiem do zresetowania hasła został wysłany" />
+		</div>
+	
 	</div>
 </div>				
 					

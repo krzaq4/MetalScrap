@@ -16,5 +16,6 @@ public class Constants {
 	public static final String ROLE_SUPERADMIN="ROLE_SUPERADMIN" ;
 	
 	public static String MAIL_REGISTRATION_CONFIRMATION = "mail_registration_confirmation.ftl" ;
+	public static String MAIL_PASSWORD_REMIND = "mail_remind_password.ftl" ;
 	
 }

@@ -8,6 +8,30 @@ body {
 }
 
 
+.remind a {
+	
+	color: #666666;
+	font-family: verdana;
+	font-size: 11px ;
+	text-decoration: none ;
+}
+
+.remind a:hover {
+	
+	text-decoration: underline ;
+	
+}
+
+.remind a:active {
+	color: #565656;
+	
+	
+}
+
+.remind a:visited {
+	color:#787878 ;
+}
+
 .info.z-div {
 	
 	height: 90px ;

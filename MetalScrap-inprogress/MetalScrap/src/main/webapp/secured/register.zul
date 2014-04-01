@@ -216,7 +216,13 @@
 				
 			</hbox>
 			<button class="button" label="Zarejestruj mnie!" disabled="@init(vm.allowRegistration) @bind(not vm.allowRegistration)" onClick="@command('registerUser')" />
+			<space/>
+			<vbox class="remind">
+				<a  href="/app/signin">Masz już konto? Zaloguj się tutaj</a>
+				<a href="/app/remindpass">Masz konto ale zapomniałeś hasła? Skorzystaj z przypomnienia</a>
+			</vbox>
 		</vbox>
+		
 		
 		<vbox id="confirm" visible="@bind(vm.step2)" style="text-align: center ; margin: 0 auto ;">
 		
@@ -239,43 +245,7 @@
 			
 		</panel>
 
-		<popup id="loginPopup" action="show: slideDown;hide: slideUp"
-			width="350px" height="120px">
-
-
-			<panel id="login" width="100%">
-				<panelchildren>
-					<h:form method="post" id="j_spring_security_check"
-						action="../j_spring_security_check"
-						style="width:100%;height:120px">
-						<grid>
-							<columns>
-								<column width="120px"></column>
-								<column width="140px"></column>
-							</columns>
-							<rows>
-								<row>
-									<label>Nazwa uzytkownika</label>
-									<textbox id="j_username"
-										name="j_username" constraint="no empty">
-									</textbox>
-
-								</row>
-								<row>
-									<label>Haslo</label>
-									<textbox id="j_password"
-										name="j_password" type="password" constraint="no empty">
-									</textbox>
-								</row>
-							</rows>
-						</grid>
-						<h:input type="submit" value="Login" />
-					</h:form>
-				</panelchildren>
-			</panel>
-
-
-		</popup>
+		
 
 
 		<popup id="registerPopup" action="show: slideDown;hide: slideUp"  style="background-color:#9975ff"

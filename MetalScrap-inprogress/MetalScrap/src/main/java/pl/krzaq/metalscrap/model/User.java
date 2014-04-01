@@ -133,6 +133,8 @@ public class User implements Serializable {
 	@IndexColumn(name="offrs", nullable=false)
 	private List<UserOffer> userOffers ;
 	
+	@Column(name="password_change")
+	private Boolean passwordChange ;
 	
 	@Column(name="registered_on")
 	private Date createdOn ;
@@ -277,13 +279,23 @@ public class User implements Serializable {
 	
 	public String getToken() {
 		String res = "" ;
-		System.out.println("login: "+this.getLogin());
-		System.out.println("email: "+this.getEmail());
-		System.out.println("milis: "+this.getCreatedOn().getTime());
-		
 		try {
 			res = Utilities.hash(Utilities.HASH_METHOD_MD5, this.getLogin().concat(this.getEmail().concat(String.valueOf(this.getCreatedOn().getTime())))) ;
-			System.out.println("token: "+res);
+			
+			
+		} catch(NoSuchAlgorithmException ex) {
+			
+		}
+		
+		return res ;
+	}
+	
+	public String getRemindToken() {
+		String res = "" ;
+		
+		try {
+			res = Utilities.hash(Utilities.HASH_METHOD_MD5, this.getLogin().concat(this.getEmail())) ;
+			
 			
 		} catch(NoSuchAlgorithmException ex) {
 			
@@ -298,6 +310,14 @@ public class User implements Serializable {
 
 	public void setCompleted(Boolean completed) {
 		this.completed = completed;
+	}
+
+	public Boolean getPasswordChange() {
+		return passwordChange;
+	}
+
+	public void setPasswordChange(Boolean passwordChange) {
+		this.passwordChange = passwordChange;
 	}
 	
 	
