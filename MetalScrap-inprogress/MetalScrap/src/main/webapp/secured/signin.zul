@@ -10,7 +10,7 @@
 <div class="head"></div>
 <div class="log"></div>
 	<div
-		style="width:80%;height: 740px;margin: 0 auto ;">
+		style="width:80%;height: auto;margin: 0 auto ;">
 
 		<div id="header" class="header">
 			<div class="logo">
@@ -45,7 +45,7 @@
 </div>
 <space/>
 
-		<panel id="content" height="900px" border="none">
+		<panel id="content" height="auto" border="none">
 			<panelchildren>
 					
 
@@ -60,8 +60,8 @@
 	<div>	
 	<div id="error" class="error" >
 		<vbox style="padding:10px 10px 10px 10px">
-			<label value="@bind(vm.jUserMessage)" class="validation" visible="@bind(vm.jUserInvalid)" />
-			<label value="@bind(vm.jPassMessage)" class="validation" visible="@bind(vm.jPassInvalid)" />
+			<label value="@bind(vm.userMessage)" class="validation" visible="@bind(vm.userInvalid)" />
+			<label value="@bind(vm.passMessage)" class="validation" visible="@bind(vm.passInvalid)" />
 		</vbox>
 	</div>
 	<div height="30px"></div>
@@ -115,11 +115,7 @@
 
 		
 
-		<div>
-			<div id="additional" class="additional"></div>
-
-			<div id="footer" class="footer"></div>
-		</div>
+	
 	</div>
 	
 	

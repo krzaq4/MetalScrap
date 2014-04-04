@@ -5,7 +5,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.AuctionStatus;
@@ -45,6 +47,14 @@ public interface AuctionService {
 	public List<Auction> findByCategoryDown(Category category) ;
 	
 	public List<Auction> findByCategoryDown(Category category, AuctionStatus status) ;
+	
+	public List<Auction> findLostByUser(User user) ;
+	
+	public List<Auction> findActiveByUser(User user) ;
+	
+	public List<Auction> findWonByUser(User user) ;
+	
+	public List<Auction> findOwnedByUser(User user) ;
 	
 	public List<Long> findIds(AuctionStatus status, Date from, Date to) ;
 	

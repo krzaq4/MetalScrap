@@ -60,7 +60,7 @@ public class Login implements Initiator, InitiatorExt {
 		company.setUsers(users);
 		company.setAddressMain(main);
 		company.setAddressAdditional(additional);
-		page.setAttribute("user", user) ;
+		
 		page.setAttribute("company", company) ;
 		
 		boolean isUser = false;
@@ -86,10 +86,15 @@ public class Login implements Initiator, InitiatorExt {
 		
 		HttpServletRequest request = (HttpServletRequest) Executions.getCurrent().getNativeRequest() ;
 		String token = request.getParameter("confirmation") ;
-		
+		String remindToken = request.getParameter("user") ;
 		
 		boolean confirmation = false ;
 		boolean completed = false ;
+		
+		boolean remind = false ;
+		boolean remindError = false ;
+		
+		
 		if(token!=null) {
 			confirmation = true ;
 			page.setAttribute("token", token) ;
@@ -119,6 +124,37 @@ public class Login implements Initiator, InitiatorExt {
 				confirmation = true ;
 			}
 		}
+		
+		if(remindToken!=null) {
+			
+			List<User> allUsers = ServicesImpl.getUserService().getUsers() ;
+			for (User us: allUsers){
+				if (us.getRemindToken().equals(remindToken)) {
+					user = us ;
+					remind = true ;
+					break ;
+				}
+				
+			}
+			
+			if(!remind) {
+				remindError = true ;
+			}
+			else
+			{
+				if(!user.getPasswordChange()) {
+					remindError = true ;
+					remind = false ;
+				}
+			}
+			
+			
+		}
+		
+		page.setAttribute("user", user) ;
+		
+		page.setAttribute("remind", remind) ;
+		page.setAttribute("remindError", remindError) ;
 		
 		completed =  (user.getStatus()!=null && user.getStatus().equals(User.STATUS_CONFIRMED)) ;
 		page.setAttribute("confirmation", confirmation) ;

@@ -132,8 +132,9 @@ public class UserViewBind {
 	public void checkPassword() {
 		
 		if( user.getPassword().matches("\\b(?=.{6,})(?=.*[a-z])(?=.*[A-Z])(?=.*[_-]).*$\\b")) {
-			allowRegistration =  !loginExists && !emailExists && !passwordNotFormatted && !passwordNotMatch ;
 			passwordNotFormatted = false ;
+			allowRegistration =  !loginExists && !emailExists && !passwordNotFormatted && !passwordNotMatch ;
+			
 			passMessage="" ;
 			password.setSclass("default correctValue");
 		} else {

@@ -4,6 +4,7 @@ import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -11,6 +12,8 @@ import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Textbox;
+
+import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 
 public class UserLoginBind {
 
@@ -30,60 +33,68 @@ public class UserLoginBind {
 	private Textbox jPassword ;
 	
 		
-		private boolean jUserInvalid = false ;
+		private boolean userInvalid = false ;
 		
-		private boolean jPassInvalid = false ;
+		private boolean passInvalid = false ;
 		
 		private boolean remindPassword = false ;
 		
 		private boolean allowLogin = false ;
 		
-		private String jPassMessage = "" ;
+		private String passMessage = "" ;
 		
-		private String jUserMessage = "" ;
+		private String userMessage = "" ;
 		
 		@Command
-		@NotifyChange({ "jUserInvalid", "jUserMessage", "allowLogin"})
+		@NotifyChange({ "userInvalid", "userMessage", "allowLogin"})
 		public void checkJUser() {
 			
 			String jUser = jUserName.getValue() ;
 			if (jUser!=null && jUser.length()>0) {
-				jUserInvalid = false ;
-				jUserMessage = "" ;
-				jUserName.setSclass("default correctValue");
+				
+				if(ServicesImpl.getUserService().getUserByLogin(jUser)!=null) {
+					userInvalid = false ;
+					userMessage = "" ;
+					jUserName.setSclass("default correctValue");
+				} else {
+					userInvalid = true ;
+					userMessage = "Nie ma użytkownika o podanym adresie e-mail" ;
+					jUserName.setSclass("default wrongValue");
+				}
+				
 			}
 			else
 			{
-				jUserInvalid = true ;
-				jUserMessage = "Nazwa użytkownika nie może być pusta" ;
+				userInvalid = true ;
+				userMessage = "Nazwa użytkownika nie może być pusta" ;
 				jUserName.setSclass("default wrongValue");
 			}
 			
-			allowLogin = !jUserInvalid && !jPassInvalid;
+			allowLogin = !userInvalid && !passInvalid;
 			resize() ;
 			
 		}
 		
 		@Command
-		@NotifyChange({"jPassInvalid", "jPassMessage", "allowLogin"})
+		@NotifyChange({"passInvalid", "passMessage", "allowLogin"})
 		public void checkJPass() {
 			
 			String jPass = jPassword.getValue() ;
 			
 			if (jPass!=null && jPass.length()>0) {
-				jPassInvalid = false ;
-				jPassMessage = "" ;
+				passInvalid = false ;
+				passMessage = "" ;
 				jPassword.setSclass("default correctValue");
 				
 			}
 			else
 			{
-				jPassInvalid = true ;
-				jPassMessage = "Hasło użytkownika nie może być puste" ;
+				passInvalid = true ;
+				passMessage = "Hasło użytkownika nie może być puste" ;
 				jPassword.setSclass("default wrongValue");
 			}
 			
-			allowLogin = !jUserInvalid && !jPassInvalid;
+			allowLogin = !userInvalid && !passInvalid;
 			resize() ;
 		}
 		
@@ -106,10 +117,10 @@ public class UserLoginBind {
 		 private void resize() {
 			 int count = 0 ;
 				
-				if(jUserInvalid){
+				if(userInvalid){
 					count++ ;
 				}
-				if(jPassInvalid) {
+				if(passInvalid) {
 					count++ ;
 				}
 				if(count==0){
@@ -126,22 +137,39 @@ public class UserLoginBind {
 		 
 		 
 		 @AfterCompose
-		 @NotifyChange({"jUserMessage", "jPassMessage", "jUserInvalid", "jPassInvalid", "allowLogin"})
+		 @NotifyChange({"userMessage", "passMessage", "userInvalid", "passInvalid", "allowLogin"})
 		    public void afterCompose(@ContextParam(ContextType.VIEW) Component view){
-		        Selectors.wireComponents(view, this, false);
+		        
+			 	allowLogin = false ;
+		    	userMessage = "" ;
+		    	passMessage = "" ;
+		    	userInvalid = false ;
+		    	passInvalid = false ;
+		    	
+			 Selectors.wireComponents(view, this, false);
 		       
 		    	
-		    	allowLogin = false ;
-		    	jUserMessage = "" ;
-		    	jPassMessage = "" ;
-		    	jUserInvalid = false ;
-		    	jPassInvalid = false ;
+		    	
 		        
 		    	
 		        
 		        //wire event listener
 //		      Selectors.wireEventListeners(view, this);
 		    }
+		 
+		 
+		 @Init
+		 @NotifyChange({"allowLogin", "userMessage", "userInvalid", "passMessage", "passInvalid"})
+		 public void init() {
+			 
+			 	allowLogin = false ;
+		    	userMessage = "" ;
+		    	passMessage = "" ;
+		    	userInvalid = false ;
+		    	passInvalid = false ;
+		    	
+			 
+		 }
 
 		public Div getError() {
 			return error;
@@ -167,23 +195,9 @@ public class UserLoginBind {
 			this.jPassword = jPassword;
 		}
 
-		public boolean isjUserInvalid() {
-			return jUserInvalid;
-		}
+		
 
-		public void setjUserInvalid(boolean jUserInvalid) {
-			this.jUserInvalid = jUserInvalid;
-		}
-
-		public boolean isjPassInvalid() {
-			return jPassInvalid;
-		}
-
-		public void setjPassInvalid(boolean jPassInvalid) {
-			this.jPassInvalid = jPassInvalid;
-		}
-
-		public boolean isRemindPassword() {
+		public boolean getRemindPassword() {
 			return remindPassword;
 		}
 
@@ -191,7 +205,7 @@ public class UserLoginBind {
 			this.remindPassword = remindPassword;
 		}
 
-		public boolean isAllowLogin() {
+		public boolean getAllowLogin() {
 			return allowLogin;
 		}
 
@@ -199,21 +213,38 @@ public class UserLoginBind {
 			this.allowLogin = allowLogin;
 		}
 
-		public String getjPassMessage() {
-			return jPassMessage;
+		public boolean getUserInvalid() {
+			return userInvalid;
 		}
 
-		public void setjPassMessage(String jPassMessage) {
-			this.jPassMessage = jPassMessage;
+		public void setUserInvalid(boolean userInvalid) {
+			this.userInvalid = userInvalid;
 		}
 
-		public String getjUserMessage() {
-			return jUserMessage;
+		public boolean getPassInvalid() {
+			return passInvalid;
 		}
 
-		public void setjUserMessage(String jUserMessage) {
-			this.jUserMessage = jUserMessage;
+		public void setPassInvalid(boolean passInvalid) {
+			this.passInvalid = passInvalid;
 		}
+
+		public String getPassMessage() {
+			return passMessage;
+		}
+
+		public void setPassMessage(String passMessage) {
+			this.passMessage = passMessage;
+		}
+
+		public String getUserMessage() {
+			return userMessage;
+		}
+
+		public void setUserMessage(String userMessage) {
+			this.userMessage = userMessage;
+		}
+
 		
 		 
 		 

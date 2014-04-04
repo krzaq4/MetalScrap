@@ -242,6 +242,30 @@ public class AuctionServiceImpl implements AuctionService {
 			return findAuctions(subCategories, result, null) ;
 		}
 
+		@Override
+		public List<Auction> findLostByUser(User user) {
+			// TODO Auto-generated method stub
+			return auctionDAO.findLostByUser(user) ;
+		}
+
+		@Override
+		public List<Auction> findWonByUser(User user) {
+			// TODO Auto-generated method stub
+			return auctionDAO.findWonByUser(user) ;
+		}
+
+		@Override
+		public List<Auction> findOwnedByUser(User user) {
+			// TODO Auto-generated method stub
+			return auctionDAO.findOwnedByUser(user) ;
+		}
+
+		@Override
+		public List<Auction> findActiveByUser(User user) {
+			// TODO Auto-generated method stub
+			return auctionDAO.findActiveByUser(user) ;
+		}
+
 
 
 	

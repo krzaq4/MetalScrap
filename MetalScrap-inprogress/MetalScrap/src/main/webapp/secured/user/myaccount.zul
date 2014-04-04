@@ -27,18 +27,40 @@
 <div>
 	<hbox>
 		<label value="${labels.common.preferredlanguage} : " />	<langbox />
+		<space/> 
 	</hbox>
 </div>
 
-<panel id="content" border="none" height="800px">
+<panel id="content" border="none" height="auto">
 <panelchildren >
-<div class="content">
 
-<div>
 
-</div>
+	<div style="vertical-align: middle;width:100%;">
+		<image  src="../../resources/images/userinfo-ico64.png" ></image>
+		<label style="position: relative; top: 20px; vertical-align: top; font-size: 24px; color: #4569d0 ; font-family: verdana;" value="Moje konto" />
+	</div>
+	<space orient="horizontal"/>
+	
+	<div class="one error" visible="@{user.completed, converter='pl.krzaq.metalscrap.converter.NegativeConverter'}">
+		<div style="padding: 5px 5px 5px 5px; text-align: center;">
+			<label class="validation" value="Twoje konto nie jest jeszcze aktywne. Uzupełnij swoje dane" />
+		</div>
+	</div>
+	
+		
+	
+			<menubar id="userMenu" sclass="userAccount" orient="vertical" >
+				<menuitem sclass="userAccount" label="Moje dane" onClick="@command('selectMenuitem', item=self)"></menuitem> 
+				<menuitem sclass="userAccount" label="Aukcje" onClick=""></menuitem>
+			</menubar>
+			
+		
+			
+		
+		
+	
 
-</div>
+
 <space></space>
 <div sclass="pageFooter">
 	<div sclass="inner"><label value="${labels.contact.title}"/> | <label value="${labels.regulation.title}"/> | <label value="${labels.privacy.title}"/> | <label value="${labels.about.title}"/> </div>

@@ -94,6 +94,47 @@ public class AuctionDAO {
 		return sessionFactory.getCurrentSession().createCriteria(Auction.class).createAlias("obeservers", "observer").add(Restrictions.eq("observer.id", user.getId())).list() ;
 	}
 	
+	public List<Auction> findActiveByUser(User user) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Auction.class, "auction") ;
+		criteria.createCriteria("auction.userOffers", "offers", JoinType.LEFT_OUTER_JOIN)
+		.createAlias("offers", "offer")
+		.createAlias("offer.user", "user")
+		.add(Restrictions.eq("user", user)) ;
+		
+		return criteria.list() ;
+	}
+	
+	public List<Auction> findLostByUser(User user) {
+		
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Auction.class, "auction") ;
+		criteria.createCriteria("auction.userOffers", "offers", JoinType.LEFT_OUTER_JOIN)
+				.createAlias("offers", "offer")
+				.createAlias("offer.user", "user")
+				.add(Restrictions.eq("user", user))
+				.add(Restrictions.ne("winnerUser", user));
+		
+		return criteria.list() ;
+		
+	}
+	
+	public List<Auction> findWonByUser(User user) {
+		
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Auction.class, "auction") ;
+		criteria.add(Restrictions.eq("winnerUser", user)) ;
+		
+		return criteria.list() ;
+		
+	}
+	
+public List<Auction> findOwnedByUser(User user) {
+		
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Auction.class, "auction") ;
+		criteria.add(Restrictions.eq("ownerUser", user)) ;
+		
+		return criteria.list() ;
+		
+	}
+	
 	public List<Auction> findByCategory(Category category) {
 		
 		return sessionFactory.getCurrentSession().getNamedQuery("Auction.findByCategory").setParameter("category", category).list() ;

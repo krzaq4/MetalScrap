@@ -42,4 +42,4 @@
 16. Changelog'i
 17. Aplikacja facebook
 18. Status użytkownika "Zablokowany"
-    
+19. Autobidder

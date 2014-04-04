@@ -8,6 +8,8 @@ body {
 }
 
 
+ 
+
 .remind a {
 	
 	color: #666666;
@@ -309,6 +311,7 @@ border-radius: 8px;
 	
 }
 
+
 .z-menubar-hor.subMenu  {
 	background: none ;
 	background-image: url(../images/submenubar2.jpg) ;
@@ -331,6 +334,132 @@ border-radius: 8px;
 	-moz-border-radius: 6px;
 }
 
+
+
+.z-menubar-ver.userAccount {
+	/*background-image: url(../images/menubar2.jpg) ;
+	background-repeat: repeat-x ;*/
+	background: transparent ;
+	/*border-radius: 6px;
+	-moz-border-radius: 6px;*/
+	
+	border:none ;
+}
+ .userAccount .z-menuitem {
+ 	width: 180px;
+ 	height: 40px;
+ 
+	-webkit-border-top-right-radius: 3px;
+	-webkit-border-bottom-right-radius: 3px;
+	-moz-border-radius-topright: 3px;
+	-moz-border-radius-bottomright: 3px;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+	
+	font-family:Verdana ;
+	font-size: 14pxem;
+	color: #565656;
+	-webkit-box-shadow: 3px 3px 4px 0px rgba(50, 50, 50, 0.75);
+-moz-box-shadow:    3px 3px 4px 0px rgba(50, 50, 50, 0.75);
+box-shadow:         3px 3px 4px 0px rgba(50, 50, 50, 0.75);
+
+transition: all 1s;
+
+}
+
+.userAccount .z-menuitem:link {
+ 	width: 180px;
+ 	height: 40px;
+ 
+	-webkit-border-top-right-radius: 3px;
+	-webkit-border-bottom-right-radius: 3px;
+	-moz-border-radius-topright: 3px;
+	-moz-border-radius-bottomright: 3px;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+	
+	font-family:Verdana ;
+	font-size: 14pxem;
+	color: #565656;
+	-webkit-box-shadow: 3px 3px 4px 0px rgba(50, 50, 50, 0.75);
+-moz-box-shadow:    3px 3px 4px 0px rgba(50, 50, 50, 0.75);
+box-shadow:         3px 3px 4px 0px rgba(50, 50, 50, 0.75);
+
+transition: all 1s;
+
+}
+
+.userAccount .z-menuitem:visited {
+ 	width: 180px;
+ 	height: 40px;
+ 
+	-webkit-border-top-right-radius: 3px;
+	-webkit-border-bottom-right-radius: 3px;
+	-moz-border-radius-topright: 3px;
+	-moz-border-radius-bottomright: 3px;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+	
+	font-family:Verdana ;
+	font-size: 15pxem;
+	color: #565656;
+	-webkit-box-shadow: 3px 3px 4px 0px rgba(50, 50, 50, 0.75);
+-moz-box-shadow:    3px 3px 4px 0px rgba(50, 50, 50, 0.75);
+box-shadow:         3px 3px 4px 0px rgba(50, 50, 50, 0.75);
+
+transition: all 1s;
+
+}
+
+.userAccount.visited .z-menuitem {
+	
+	width: 280px;
+ 	height: 40px;
+ 
+	-webkit-border-top-right-radius: 3px;
+	-webkit-border-bottom-right-radius: 3px;
+	-moz-border-radius-topright: 3px;
+	-moz-border-radius-bottomright: 3px;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+	
+	font-family:Verdana ;
+	font-size: 15pxem;
+	color: #565656;
+	-webkit-box-shadow: 3px 3px 4px 0px rgba(50, 50, 50, 0.75);
+-moz-box-shadow:    3px 3px 4px 0px rgba(50, 50, 50, 0.75);
+box-shadow:         3px 3px 4px 0px rgba(50, 50, 50, 0.75);
+
+transition: all 1s;
+	
+}
+
+.userAccount .z-menuitem:hover {
+ 	width: 180px;
+ 	height: 40px;
+ 	-webkit-box-shadow: 3px 3px 4px 0px rgba(60, 55, 35, 0.75);
+	-moz-box-shadow:    4px 4px 5px 0px rgba(28, 75, 35, 0.75);
+	box-shadow:         4px 4px 5px 0px rgba(28, 75, 30, 0.75);
+ 	
+	 transition: all 1s;	
+}
+
+
+
+.z-menubar-ver.userAccount .z-menuitem .z-menuitem-btn  {
+	font-family:Verdana ;
+	font-size: 16px;
+	color: #565656;
+	
+}
+
+.z-menuitem-body-over {
+	background:none!important;
+	background-clip:none!important;
+	background-origin:none!important;
+	border:none;
+	
+}
 
 
 .z-caption-cnt{

@@ -55,20 +55,26 @@
 
 
 <div>
-	<div style="vertical-align: middle"><image  src="../resources/images/login-ico.png" ></image><label style="position: relative; top: 40px; vertical-align: top; font-size: 28px; color: #4569d0 ; font-family: verdana;" value="Logowanie" /></div>
-	<div visible="@bind(vm.requestSent)">	
+	<div style="vertical-align: middle"><image  src="../resources/images/login-ico.png" ></image><label style="position: relative; top: 40px; vertical-align: top; font-size: 28px; color: #4569d0 ; font-family: verdana;" value="Przypomnienie hasła" /></div>
+	
 	<div id="error" class="error" >
 		<vbox style="padding:10px 10px 10px 10px">
-			<label value="@bind(vm.message)" class="validation" visible="@bind(vm.emailInvalid)" />			
+			<label value="@bind(vm.message)" class="validation" visible="@bind(vm.emailInvalid)" />		
+			<label value="@bind(vm.passMessage)" visible="@bind(vm.passInvalid)" />
+			<label value="@bind(vm.passMatchMessage)" visible="@bind(vm.passNotMatch)" />	
 		</vbox>
 	</div>
+	
+	<div visible="@{remind, converter='pl.krzaq.metalscrap.converter.NegativeConverter'}">
+	<div visible="@bind(vm.requestSent ne true)">	
+	
 	<div height="30px"></div>
-		<vbox id="remind"  width="50%" align="end" style="padding: 10px 0 0 0 ">
+		<vbox id="remindpass"  width="50%" align="end" style="padding: 10px 0 0 0 ">
 			
 			
 			<hbox>
 				<div style="float:left; width:200px">
-					<label sclass="register" value="Hasło: "/>
+					<label sclass="register" value="Adres email: "/>
 				</div>
 				<div style="float:left; width:220px">
 					<textbox sclass="default" name="email" id="email"  maxlength="24"  onChange="@command('checkEmail')"  cols="24"/>
@@ -95,9 +101,76 @@
 		</div>
 	
 	</div>
+	
+	</div>
+	<div visible="@{remind}">
+	
+		
+	<div height="30px"></div>
+	
+	<div visible="@bind(vm.passwordChanged ne true)">
+		<vbox id="newpass"  width="50%" align="end" style="padding: 10px 0 0 0 ">
+			
+			
+			<hbox>
+				<div style="float:left; width:200px">
+					<label sclass="register" value="Nowe hasło: "/>
+				</div>
+				<div style="float:left; width:220px">
+					<textbox sclass="default" name="pass" id="pass" type="password" maxlength="24"  onChange="@command('checkPass')"  cols="24"/>
+				</div>
+				
+			</hbox>
+			<hbox>
+				<div style="float:left; width:200px">
+					<label sclass="register" value="Powtórz hasło: "/>
+				</div>
+				<div style="float:left; width:220px">
+					<textbox sclass="default" name="repass" id="repass" type="password" maxlength="24"  onChange="@command('checkPassMatch')"  cols="24"/>
+				</div>
+				
+			</hbox>
+			<div style="padding: 10px 0 0 0 ">
+				<button label="Zapisz" class="button z-button-os" onClick="@command('changePassword')"/>
+			</div>
+			
+			<space/>
+			<vbox class="remind">
+				<a  href="/app/signin">Masz już konto? Zaloguj się tutaj</a>
+				<a  href="/app/register">Nie masz konta? Zarejestruj się za darmo!</a>				
+			</vbox>
+			
+		</vbox>
+		</div>
+		<div visible="@bind(vm.passwordChanged)">
+		
+		<div class="info" style="vertical-align: top; color: #565656; font-family: verdana; font-size: 18px; ">
+			<image src="../resources/images/success-ico.png" style="padding-left: 30px; padding-top: 15px; "/>
+			<label style="position: relative; font-size: 18px ;  top: -12px; " value="Hasło zostało zmienione." />
+		</div>
+		
+		</div>
+		
+	</div>
+	
+	<div visible="@{remind, converter='pl.krzaq.metalscrap.converter.NegativeConverter'}">
+	
+		<div visible="@{remindError}">
+		
+		<div class="info" style="vertical-align: top; color: #565656; font-family: verdana; font-size: 18px; ">
+			<image src="../resources/images/error-ico.png" style="padding-left: 30px; padding-top: 15px; "/>
+			<label style="position: relative; font-size: 18px ;  top: -12px; " value="Wystąpił nieoczekiwany błąd, skontaktuj się z adminem." />
+		</div>
+		
+		</div>
+	
+	</div>
+		
+	
+	</div>
 </div>				
 					
-</div>
+
 				<space></space>
 				<div sclass="pageFooter">
 					<div sclass="inner"><label value="${labels.contact.title}"/> | <label value="${labels.regulation.title}"/> | <label value="${labels.privacy.title}"/> | <label value="${labels.about.title}"/> </div>
