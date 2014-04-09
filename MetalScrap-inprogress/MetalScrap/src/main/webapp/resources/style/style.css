@@ -8,7 +8,35 @@ body {
 }
 
 
- 
+.back{
+	
+	height: 21px;
+	width: 90% ;
+	
+	
+	
+	padding: 3px 3px 3px 3px ;
+	margin-bottom: 12px ;
+	margin-top: 10px ;
+	
+	border-bottom: 1px solid #ededed;
+	border-left: 1px solid #ededed;
+	background-color: transparent;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	
+	-webkit-box-shadow: 7px 7px 14px -11px rgba(0,0,0,1);
+	-moz-box-shadow: 7px 7px 14px -11px rgba(0,0,0,1);
+	box-shadow: 7px 7px 14px -11px rgba(0,0,0,1);
+}
+
+.back .z-label {
+	font-family: verdana ;
+	color: #999999;
+	font-size: 14px ;
+	
+}
 
 .remind a {
 	
@@ -116,6 +144,32 @@ body {
 	transition: box-shadow 1s;
 }
 
+
+.default-s.z-textbox {
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	font-size: 15px ;
+	font-family: verdana;
+	color:#555555;
+	height: 25px ;
+	-webkit-transition: border 1s; /* For Safari 3.1 to 6.0 */
+	transition: border 1s;
+}
+
+.default-s.correctValue.z-textbox {
+	box-shadow: 2px 1px 1px #49c318 !important;
+	-webkit-transition: border 1s; /* For Safari 3.1 to 6.0 */
+	transition: box-shadow 1s;
+}
+
+.default-s.wrongValue.z-textbox {
+	box-shadow: 2px 1px 1px #ec0f0f !important;
+	-webkit-transition: border 1s; /* For Safari 3.1 to 6.0 */
+	transition: box-shadow 1s;
+}
+
+
 .validation.z-label{
 	
 	opacity: 1 ;
@@ -128,6 +182,13 @@ body {
 .register.z-label {
 	
 	font-size: 16px ;
+	font-family: verdana ;
+	color: #444444;
+}
+
+.register-s.z-label {
+	
+	font-size: 14px ;
 	font-family: verdana ;
 	color: #444444;
 }
@@ -186,7 +247,8 @@ body {
 	height: 70px ;
 	left: 50px ;
 	top:10px ;
-	background-image: url(../images/logos.png)
+	/*background-image: url(../images/logos.png)*/
+	background: none ;
 }
 
 .head {
@@ -345,60 +407,20 @@ border-radius: 8px;
 	
 	border:none ;
 }
- .userAccount .z-menuitem {
- 	width: 180px;
- 	height: 40px;
  
-	-webkit-border-top-right-radius: 3px;
-	-webkit-border-bottom-right-radius: 3px;
-	-moz-border-radius-topright: 3px;
-	-moz-border-radius-bottomright: 3px;
-	border-top-right-radius: 3px;
-	border-bottom-right-radius: 3px;
-	
-	font-family:Verdana ;
-	font-size: 14pxem;
-	color: #565656;
-	-webkit-box-shadow: 3px 3px 4px 0px rgba(50, 50, 50, 0.75);
--moz-box-shadow:    3px 3px 4px 0px rgba(50, 50, 50, 0.75);
-box-shadow:         3px 3px 4px 0px rgba(50, 50, 50, 0.75);
 
-transition: all 1s;
 
-}
-
-.userAccount .z-menuitem:link {
+.userAccount.z-tab {
  	width: 180px;
- 	height: 40px;
- 
+ 	height: 22px;
+ 	top:4px;
+ 	left:1px;
 	-webkit-border-top-right-radius: 3px;
-	-webkit-border-bottom-right-radius: 3px;
+	-webkit-border-top-left-radius: 3px;
+	-moz-border-radius-topleft: 3px;
 	-moz-border-radius-topright: 3px;
-	-moz-border-radius-bottomright: 3px;
 	border-top-right-radius: 3px;
-	border-bottom-right-radius: 3px;
-	
-	font-family:Verdana ;
-	font-size: 14pxem;
-	color: #565656;
-	-webkit-box-shadow: 3px 3px 4px 0px rgba(50, 50, 50, 0.75);
--moz-box-shadow:    3px 3px 4px 0px rgba(50, 50, 50, 0.75);
-box-shadow:         3px 3px 4px 0px rgba(50, 50, 50, 0.75);
-
-transition: all 1s;
-
-}
-
-.userAccount .z-menuitem:visited {
- 	width: 180px;
- 	height: 40px;
- 
-	-webkit-border-top-right-radius: 3px;
-	-webkit-border-bottom-right-radius: 3px;
-	-moz-border-radius-topright: 3px;
-	-moz-border-radius-bottomright: 3px;
-	border-top-right-radius: 3px;
-	border-bottom-right-radius: 3px;
+	border-top-left-radius: 3px;
 	
 	font-family:Verdana ;
 	font-size: 15pxem;
@@ -407,11 +429,98 @@ transition: all 1s;
 -moz-box-shadow:    3px 3px 4px 0px rgba(50, 50, 50, 0.75);
 box-shadow:         3px 3px 4px 0px rgba(50, 50, 50, 0.75);
 
-transition: all 1s;
+transition: all 0.5s;
+z-index: 0 ;
+}
+
+.userAccount.z-tab-seld {
+ 	width: 180px;
+ 	height: 26px;
+ 	top:0px;
+
+	-webkit-border-top-right-radius: 3px;
+	-webkit-border-top-left-radius: 3px;
+	-moz-border-radius-topleft: 3px;
+	-moz-border-radius-topright: 3px;
+	border-top-right-radius: 3px;
+	border-top-left-radius: 3px;
+	background: rgb(76,76,76); /* Old browsers */
+background: -moz-linear-gradient(top,  rgba(76,76,76,1) 0%, rgba(89,89,89,1) 12%, rgba(102,102,102,1) 25%, rgba(71,71,71,1) 39%, rgba(44,44,44,1) 50%, rgba(0,0,0,1) 51%, rgba(17,17,17,1) 60%, rgba(43,43,43,1) 76%, rgba(28,28,28,1) 91%, rgba(19,19,19,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(76,76,76,1)), color-stop(12%,rgba(89,89,89,1)), color-stop(25%,rgba(102,102,102,1)), color-stop(39%,rgba(71,71,71,1)), color-stop(50%,rgba(44,44,44,1)), color-stop(51%,rgba(0,0,0,1)), color-stop(60%,rgba(17,17,17,1)), color-stop(76%,rgba(43,43,43,1)), color-stop(91%,rgba(28,28,28,1)), color-stop(100%,rgba(19,19,19,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  rgba(76,76,76,1) 0%,rgba(89,89,89,1) 12%,rgba(102,102,102,1) 25%,rgba(71,71,71,1) 39%,rgba(44,44,44,1) 50%,rgba(0,0,0,1) 51%,rgba(17,17,17,1) 60%,rgba(43,43,43,1) 76%,rgba(28,28,28,1) 91%,rgba(19,19,19,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  rgba(76,76,76,1) 0%,rgba(89,89,89,1) 12%,rgba(102,102,102,1) 25%,rgba(71,71,71,1) 39%,rgba(44,44,44,1) 50%,rgba(0,0,0,1) 51%,rgba(17,17,17,1) 60%,rgba(43,43,43,1) 76%,rgba(28,28,28,1) 91%,rgba(19,19,19,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  rgba(76,76,76,1) 0%,rgba(89,89,89,1) 12%,rgba(102,102,102,1) 25%,rgba(71,71,71,1) 39%,rgba(44,44,44,1) 50%,rgba(0,0,0,1) 51%,rgba(17,17,17,1) 60%,rgba(43,43,43,1) 76%,rgba(28,28,28,1) 91%,rgba(19,19,19,1) 100%); /* IE10+ */
+background: linear-gradient(to bottom,  rgba(76,76,76,1) 0%,rgba(89,89,89,1) 12%,rgba(102,102,102,1) 25%,rgba(71,71,71,1) 39%,rgba(44,44,44,1) 50%,rgba(0,0,0,1) 51%,rgba(17,17,17,1) 60%,rgba(43,43,43,1) 76%,rgba(28,28,28,1) 91%,rgba(19,19,19,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313',GradientType=0 ); /* IE6-9 */
+
+
+
+
+
+	
+	font-family:Verdana ;
+	font-size: 13px;
+	color: #eeeeee;
+	-webkit-box-shadow: 3px 3px 4px 0px rgba(50, 50, 50, 0.75);
+-moz-box-shadow:    3px 3px 4px 0px rgba(50, 50, 50, 0.75);
+box-shadow:         3px 3px 4px 0px rgba(50, 50, 50, 0.75);
+
+transition: all 0.5s;
+z-index: 1 ;
 
 }
 
-.userAccount.visited .z-menuitem {
+.userAccount .z-tabs-header {
+	padding-top:8px;
+	
+}
+
+.userAccount .z-tab-hm  {
+background: none ;	
+	font-family:Verdana ;
+	font-size: 13px;
+	color: #565656;
+}
+
+.userAccount .z-tab-hr  {
+background: none ;	
+	font-family:Verdana ;
+	font-size: 13px;
+	color: #565656;
+}
+
+.userAccount .z-tab-hl {
+background: none ;	
+	font-family:Verdana ;
+	font-size: 13px;
+	color: #565656;
+}
+
+.userAccount.z-tab.z-tab-text {
+background: none ;	
+	font-family:Verdana ;
+	font-size: 13px;
+	color: #676767;
+}
+
+ .z-tab-seld .z-tab-text {
+background: none ;	
+	font-family:Verdana ;
+	font-size: 13px;
+	color: #ededed;
+}
+
+.userAccount .z-menuitem:hover {
+ 	width: 180px;
+ 	height: 40px;
+ 	-webkit-box-shadow: 3px 3px 4px 0px rgba(60, 55, 35, 0.75);
+	-moz-box-shadow:    4px 4px 5px 0px rgba(28, 75, 35, 0.75);
+	box-shadow:         4px 4px 5px 0px rgba(28, 75, 30, 0.75);
+ 	
+	 transition: all 1s;	
+}
+
+.userAccount.visited.z-menuitem {
 	
 	width: 280px;
  	height: 40px;
@@ -434,17 +543,12 @@ transition: all 1s;
 	
 }
 
-.userAccount .z-menuitem:hover {
- 	width: 180px;
- 	height: 40px;
- 	-webkit-box-shadow: 3px 3px 4px 0px rgba(60, 55, 35, 0.75);
-	-moz-box-shadow:    4px 4px 5px 0px rgba(28, 75, 35, 0.75);
-	box-shadow:         4px 4px 5px 0px rgba(28, 75, 30, 0.75);
- 	
-	 transition: all 1s;	
+
+.z-tabpanel {
+	
+	transition: all 0.5s ;
+	
 }
-
-
 
 .z-menubar-ver.userAccount .z-menuitem .z-menuitem-btn  {
 	font-family:Verdana ;
@@ -453,13 +557,6 @@ transition: all 1s;
 	
 }
 
-.z-menuitem-body-over {
-	background:none!important;
-	background-clip:none!important;
-	background-origin:none!important;
-	border:none;
-	
-}
 
 
 .z-caption-cnt{

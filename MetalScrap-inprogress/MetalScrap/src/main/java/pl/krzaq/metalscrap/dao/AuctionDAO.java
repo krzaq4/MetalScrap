@@ -97,8 +97,7 @@ public class AuctionDAO {
 	public List<Auction> findActiveByUser(User user) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Auction.class, "auction") ;
 		criteria.createCriteria("auction.userOffers", "offers", JoinType.LEFT_OUTER_JOIN)
-		.createAlias("offers", "offer")
-		.createAlias("offer.user", "user")
+		.createAlias("offers.user", "user")
 		.add(Restrictions.eq("user", user)) ;
 		
 		return criteria.list() ;
@@ -107,11 +106,11 @@ public class AuctionDAO {
 	public List<Auction> findLostByUser(User user) {
 		
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Auction.class, "auction") ;
-		criteria.createCriteria("auction.userOffers", "offers", JoinType.LEFT_OUTER_JOIN)
-				.createAlias("offers", "offer")
-				.createAlias("offer.user", "user")
+		criteria.add(Restrictions.ne("winnerUser", user))
+				.createCriteria("auction.userOffers", "offers", JoinType.LEFT_OUTER_JOIN)
+				.createAlias("offers.user", "user")
 				.add(Restrictions.eq("user", user))
-				.add(Restrictions.ne("winnerUser", user));
+				;
 		
 		return criteria.list() ;
 		

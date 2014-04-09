@@ -1,5 +1,6 @@
 package pl.krzaq.metalscrap.bind;
 
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -200,6 +201,23 @@ public class UserViewBind {
 		} catch(NoSuchAlgorithmException ex) {
 			
 		}
+		
+		// Folder użytkownika na potrzeby awatarów, plików itp.
+		
+		String dataDir = System.getProperty("jboss.server.data.dir") ;
+		dataDir = dataDir.concat("/platform/users");
+		
+		File dataDirFolder = new File(dataDir) ;
+		
+		dataDirFolder.mkdir();
+		
+		String userDir = dataDir.concat("/").concat(user.getLogin()) ;
+		
+		File userDirFolder = new File(userDir) ;
+		
+		userDirFolder.mkdir();
+		
+		
 	}
 
 	

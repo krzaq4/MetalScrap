@@ -1,0 +1,52 @@
+<zk>
+
+<image id="logoImage" style="cursor: pointer;">
+	<attribute name="onClick">
+	<![CDATA[
+		Executions.getCurrent().sendRedirect("/app/home");
+	]]>
+	</attribute>
+</image>
+
+<zscript>
+<![CDATA[
+		 import org.zkoss.image.AImage;
+		 import java.io.IOException;
+		 import java.io.File;
+		 
+         String dataDir = System.getProperty("jboss.server.data.dir") ;
+         
+         String systemDir = dataDir.concat("/platform/logo") ;
+         
+         
+         
+         
+         String logoPath=systemDir.concat("/logo");
+         
+         
+         
+         File tmp = new File(logoPath.concat(".png")) ;
+         if( tmp.exists() ) {
+        	 
+        	 logoPath=logoPath.concat(".png");
+        	 
+         } else {
+        	 tmp = new File(logoPath.concat(".jpg")) ;
+        	 if(tmp.exists()){
+        		 logoPath=logoPath.concat(".jpg");	 
+        	 } else {
+        		 tmp = new File(logoPath.concat(".gif")) ;
+            	 if(tmp.exists()){
+            		 logoPath=logoPath.concat(".gif");	 
+            	 } 
+        	 }
+         } 
+		        
+         org.zkoss.image.AImage img = new org.zkoss.image.AImage(logoPath) ;
+         logoImage.setContent(img);
+         
+         
+]]>
+</zscript>
+
+</zk>
