@@ -60,6 +60,7 @@ public class User implements Serializable {
 	public static Integer STATUS_CONFIRMED = 2 ;
 	public static Integer STATUS_VERIFIED = 3 ;
 	public static Integer STATUS_PENDING_VERIFICATION = 4 ;
+	public static Integer STATUS_VERIFICATION_SENT = 5 ;
 	
 	
 	
@@ -107,6 +108,15 @@ public class User implements Serializable {
 	@NotNull
 	@Column(name="email", unique=true)
 	private String email ;
+	
+	@Column(name="phone")
+	private String phone ;
+	
+	@Column(name="mobile")
+	private String mobile ;
+	
+	@Column(name="avatar_file")
+	private String avatarFileName ;
 	
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="address_main")
@@ -277,6 +287,30 @@ public class User implements Serializable {
 	}
 
 	
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getAvatarFileName() {
+		return avatarFileName;
+	}
+
+	public void setAvatarFileName(String avatarFileName) {
+		this.avatarFileName = avatarFileName;
+	}
+
 	public String getToken() {
 		String res = "" ;
 		try {

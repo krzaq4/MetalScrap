@@ -95,21 +95,77 @@ body {
 }
 
 .error.two.z-div {
-	height: 70px;
+	height: 65px;
 	transition: all 1s;
 	opacity:1 ;
 }
 
 .error.three.z-div {
-	height: 105px;
+	height: 100px;
 	transition: all 1s;
 	opacity:1 ;
 }
 
 .error.four.z-div{
-	height: 140px;
+	height: 130px;
 	transition: all 1s;
 	opacity:1 ;
+}
+
+.error.five.z-div{
+	height: 160px;
+	transition: all 1s;
+	opacity:1 ;
+}
+
+.error.six.z-div{
+	height: 190px;
+	transition: all 1s;
+	opacity:1 ;
+}
+
+.error.seven.z-div{
+	height: 220px;
+	transition: all 1s;
+	opacity:1 ;
+}
+
+.error.eight.z-div{
+	height: 250px;
+	transition: all 1s;
+	opacity:1 ;
+}
+
+.error.nine.z-div{
+	height: 280px;
+	transition: all 1s;
+	opacity:1 ;
+}
+
+.error.ten.z-div{
+	height: 310px;
+	transition: all 1s;
+	opacity:1 ;
+}
+
+
+.infor.z-div {
+	width: 500px;
+	height: 0px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	border: 1px solid #42d545;
+	transition: all 1s;
+	margin: 0 auto ;
+	opacity: 0 ;
+}
+
+.infor.ok.z-div {
+	height: auto;
+	transition: all 1s;
+	opacity: 1 ;
+	
 }
 
 .rounded.z-div {
@@ -169,6 +225,21 @@ body {
 	transition: box-shadow 1s;
 }
 
+.default-s.z-select {
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	border-top: 1px solid #b2b2b2;
+	border-left: 1px solid #e6e6e6;
+	border-bottom: 1px solid #e6e6e6;
+	border-right: 1px solid #e6e6e6;
+	font-size: 15px ;
+	font-family: verdana;
+	color:#555555;
+	height: 30px ;
+	-webkit-transition: border 1s; /* For Safari 3.1 to 6.0 */
+	transition: border 1s;
+}
 
 .validation.z-label{
 	
@@ -859,13 +930,25 @@ div .z-tree {
 	background: none;
 }
 
+
+.z-image.rounded {
+	
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	
+}
+
+.z-button {
+	height: 10px;
+}
+
 .z-button .z-button-cm{
 	background: none ;
-	background-image: url(../images/button.jpg) ;
-	background-repeat: repeat-x ;
-	font-size: 1.1em;
-	font-weight: bold ;
-	color: #fefefe;
+	color: #dcdcdc;
+	font-family: Verdana;
+	
+	
 }
 
 

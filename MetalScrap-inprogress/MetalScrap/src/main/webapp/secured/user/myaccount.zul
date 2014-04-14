@@ -6,6 +6,9 @@
 
 <zk xmlns:h="http://www.w3.org/1999/xhtml">
 
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js" />
+<script type="text/javascript" src="/resources/js/jquery.maskedinput.js" />
+
 <div class="head"></div>
 <div class="log">
 	<include src="/common/logo.zul"></include>
@@ -33,8 +36,22 @@
 		<space/> 
 	</hbox>
 </div>
-
+ <script type="text/javascript">
+       function applyZipCodeMask(compId){
+   			applyMask(compId, "99-999");
+		}
+		
+		function applyMask(compId, mask){
+   			compId = '#' + compId;
+   			jQuery(compId).mask(mask);
+		}
+    </script>
 <panel id="content" border="none" height="auto">
+					<attribute name="onCreate">
+							
+            				String command = "applyZipCodeMask('"+postal.getUuid()+"');applyZipCodeMask('"+addpostal.getUuid()+"')";
+            				Clients.evalJavaScript(command);
+       				</attribute>
 <panelchildren >
 <div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('pl.krzaq.metalscrap.bind.UserAccountBind') ">
 
@@ -44,71 +61,91 @@
 	</div>
 	<space orient="horizontal"/>
 	
-	<div class="one error" visible="@{user.completed, converter='pl.krzaq.metalscrap.converter.NegativeConverter'}">
+	<div id="userCompleteInfo" class="one error" >
 		<div style="padding: 5px 5px 5px 5px; text-align: center;">
 			<label class="validation" value="Twoje konto nie jest jeszcze aktywne. Uzupełnij swoje dane" />
 		</div>
 	</div>
+	
+	<div id="userPendingVerificationInfo" class="infor" >
+		<div style="padding: 5px 5px 5px 5px; text-align: center;">
+		<vbox>
+			<label class="validation" value="Twoje konto oczekuje na weryfikację" />
+			<label class="validation" value="List z danymi weryfikacyjnymi został wysłany na Twój adres" visible="@load(vm.verificationType eq 'letter'?true : false)" />
+			<label class="validation" value="List z danymi weryfikacyjnymi został wysłany sms'em na Twój numer telefonu" visible="@load(vm.verificationType eq 'sms'?true:false)" />
+			<label class="validation" value="Twoje zgłoszenie oczekuje na weryfikację przez administratora" visible="@load(vm.verificationType eq 'manual'?true:false)" />
+			<label class="validation" value="Po weryfikacji konta otrzymasz e-mail z potwierdzeniem" visible="@load(vm.verificationType eq 'none'?true:false)" />
+			<label class="validation" value="W zakładce weryfikacja możesz wpisać otrzymany kod i aktywować konto" visible="@load(vm.verificationType eq 'none' and vm.verificationType ne 'manual')"/>
+		</vbox>
+		</div>
+	</div>
+	
 	<space/>
 		<tabbox>
 			<tabs style="height:44px">
 				<tab  sclass="userAccount" label="Moje dane"></tab>
 				<tab sclass="userAccount" label="Aukcje"></tab>
 				<tab sclass="userAccount" label="Komentarze"></tab>
+				<tab sclass="userAccount" label="Weryfikacja"  visible="@load(vm.user.status eq 4 and vm.verificationType ne 'manual')"></tab>
 			</tabs>
 			<tabpanels>
 				<tabpanel id="userData">
-				
-				<hbox>
-				<div>
-					<div class="back">
-						<label value="Dane dostępowe:" />
-					</div>
-					<vbox id="register" width="45%" align="end">
-			
-			<hbox>
-				<div  style="float:left; width:200px; vertical-align: middle;" >
-					<label sclass="register-s" value="Nazwa użytkownika: "/>
-				</div>
-				<div style="float:left; width:220px">
-					<textbox id="username" name="username" class="default-s" maxlength="24" value="@bind(vm.user.login)" disabled="true" cols="24"/>
-				</div>
-				
-			</hbox>
-			<hbox>
-				<div  style="float:left; width:200px">
-					<label sclass="register-s" value="Adres e-mail: "/>
-				</div>
-				<div style="float:left; width:220px">
-					<textbox id="email" name="email" sclass="default-s" maxlength="24" value="@bind(vm.user.email)" disabled="true" onChange="@command('checkEmail')"  cols="24"/>
-				</div>
-				
-			</hbox>
-			<hbox>
-				<div style="float:left; width:200px">
-					<label sclass="register-s" value="Hasło: "/>
-				</div>
-				<div style="float:left; width:220px">
-					<textbox type="password" sclass="default-s" name="password" id="password"  maxlength="24" value="@bind(vm.user.password)" onChange="@command('checkPassword')"  cols="24"/>
-				</div>
-				
-			</hbox>
-			<hbox>
-				<div style="float:left; width:200px">
-					<label sclass="register-s" value="Powtórz hasło: "/>
-				</div>
-				<div style="float:left; width:220px">
-					<textbox id="repassword" type="password" sclass="default-s" name="repassword" maxlength="24" value="@bind(vm.rePassword)" onChange="@command('checkPasswordMatch')"  cols="24"/>
-				</div>
-				
-			</hbox>
-			
-			
+				<space></space>
+	<div class="error" id="error">
+		<div style="padding: 5px 5px 5px 5px; text-align: center;">
+		<vbox>
+			<label value="@bind(vm.passMessage)" class="validation" visible="@bind(vm.passwordNotFormatted)"/>
+			<label value="@bind(vm.repassMessage)" class="validation" visible="@bind(vm.passwordNotMatch)"/>
+			<label value="@bind(vm.mainCityMsg)" class="validation" visible="@bind(vm.mainCityError)"/>
+			<label value="@bind(vm.cityMsg)" class="validation" visible="@bind(vm.cityError)"/>
+			<label value="@bind(vm.mainPostalMsg)" class="validation" visible="@bind(vm.mainPostalError)"/>
+			<label value="@bind(vm.postalMsg)" class="validation" visible="@bind(vm.postalError)"/>
+			<label value="@bind(vm.mainHouseNoMsg)" class="validation" visible="@bind(vm.mainHouseNoError)"/>
+			<label value="@bind(vm.houseNoMsg)" class="validation" visible="@bind(vm.houseNoError)"/>
 		</vbox>
-					
-				</div>
-		</hbox>
-		<hbox>	
+		</div>
+	</div>
+	<hbox width="100%">
+		<vbox width="460px">
+			<div class="back">
+				<label value="Dane dostępowe:" />
+			</div>
+			<vbox id="register" width="45%" align="end">
+				<hbox>
+					<div  style="float:left; width:200px; vertical-align: middle;" >
+						<label sclass="register-s" value="Nazwa użytkownika: "/>
+					</div>
+					<div style="float:left; width:220px">
+						<textbox id="username" name="username" class="default-s" maxlength="24" value="@bind(vm.user.login)" disabled="true" cols="24"/>
+					</div>
+				</hbox>
+				<hbox>
+					<div  style="float:left; width:200px">
+						<label sclass="register-s" value="Adres e-mail: "/>
+					</div>
+					<div style="float:left; width:220px">
+					<textbox id="email" name="email" sclass="default-s" maxlength="24" value="@bind(vm.user.email)" disabled="true" onChange="@command('checkEmail')"  cols="24"/>
+					</div>				
+				</hbox>
+				<hbox>
+					<div style="float:left; width:200px">
+						<label sclass="register-s" value="Hasło: "/>
+					</div>
+					<div style="float:left; width:220px">
+						<textbox type="password" sclass="default-s" name="password" id="password"  maxlength="24" value="@bind(vm.user.password)" onChange="@command('checkPassword')"  cols="24"/>
+					</div>				
+				</hbox>
+				<hbox>
+					<div style="float:left; width:200px">
+						<label sclass="register-s" value="Powtórz hasło: "/>
+					</div>
+					<div style="float:left; width:220px">
+						<textbox id="repassword" type="password" sclass="default-s" name="repassword" maxlength="24" value="@bind(vm.rePassword)" onChange="@command('checkPasswordMatch')"  cols="24"/>
+					</div>				
+				</hbox>			
+			</vbox>
+			<button label="Zmień hasło" disabled="@load(vm.allowRegistration ne true)" onClick="@command('changePassword')" />
+		
 				<div>
 				<div class="back">
 					<label value="Adres główny" />
@@ -124,7 +161,7 @@
 						</hbox>
 						<hbox>
 							<div  style="float:left; width:200px; vertical-align: middle;" >
-								<label sclass="register-s" value="Numer domu: "/>
+								<label sclass="register-s" value="Numer domu*: "/>
 							</div>
 							<div style="float:left; width:220px">
 								<textbox id="houseNo" name="houseNo" class="default-s" maxlength="24" value="@bind(vm.user.mainAddress.houseNo)" onChange="@command('checkMainHouseNo')" cols="24"/>
@@ -135,20 +172,25 @@
 								<label sclass="register-s" value="Numer lokalu: "/>
 							</div>
 							<div style="float:left; width:220px">
-								<textbox id="flatNo" name="flatNo" class="default-s" maxlength="24" value="@bind(vm.user.mainAddress.flatNo)"  cols="24"/>
+								<textbox id="flatNo" name="flatNo" class="default-s" maxlength="24" value="@bind(vm.user.mainAddress.flatNo)" onChange="@command('checkMainFlatNo')" cols="24"/>
 							</div>				
 						</hbox>
 						<hbox>
 							<div  style="float:left; width:200px; vertical-align: middle;" >
-								<label sclass="register-s" value="Kod pocztowy: "/>
+								<label sclass="register-s" value="Kod pocztowy*: "/>
 							</div>
 							<div style="float:left; width:220px">
-								<textbox id="postal" name="postal"  class="default-s" maxlength="24"  onChanging="@command('checkPostalFormat', val=event.value, cmp=self)" placeholder="__-___"  cols="24" onChange="@command('checkMainPostal')" />
+								<textbox id="postal" name="postal" value="@bind(vm.user.mainAddress.postal)"  class="default-s" maxlength="24"   placeholder="__-___"  cols="24" onChange="@command('checkMainPostal')"   > <!--  onChanging="@command('checkPostalFormat', val=event.value, cmp=self)"  -->
+									<!-- <attribute name="onCreate">
+            							String command = "applyZipCodeMask('"+postal.getUuid()+"');applyZipCodeMask('"+addpostal.getUuid()+"')";
+            							Clients.evalJavaScript(command);
+       								</attribute> -->
+								</textbox>
 							</div>				
 						</hbox>
 						<hbox>
 							<div  style="float:left; width:200px; vertical-align: middle;" >
-								<label sclass="register-s" value="Miasto: "/>
+								<label sclass="register-s" value="Miasto*: "/>
 							</div>
 							<div style="float:left; width:220px">
 								<textbox id="city" name="city" class="default-s" maxlength="24" value="@bind(vm.user.mainAddress.city)" onChange="@command('checkMainCity')" cols="24"/>
@@ -156,10 +198,10 @@
 						</hbox>
 						<hbox>
 							<div  style="float:left; width:200px; vertical-align: middle;" >
-								<label sclass="register-s" value="Kraj: "/>
+								<label sclass="register-s" value="Kraj*: "/>
 							</div>
 							<div style="float:left; width:220px">
-								<listbox mold="select" model="@bind(vm.countries)" selectedItem="@bind(vm.user.mainAddress.country)">
+								<listbox class="default-s" mold="select" model="@bind(vm.countries)" selectedItem="@bind(vm.user.mainAddress.country)" width="245px">
 								<template name="model" var="cnt">
 									<listitem label="@bind(cnt) @converter(vm.langConverter)"></listitem>
 								</template>
@@ -177,7 +219,7 @@
 								<label sclass="register-s" value="Ulica: "/>
 							</div>
 							<div style="float:left; width:220px">
-								<textbox id="addstreet" name="street" class="default-s" maxlength="24" value="@bind(vm.user.mainAddress.street)" onChange="@command('checkStreet')" cols="24"/>
+								<textbox id="addstreet" name="street" class="default-s" maxlength="24" value="@bind(vm.user.contactAddress.street)" onChange="@command('checkStreet')" cols="24"/>
 							</div>				
 						</hbox>
 						<hbox>
@@ -185,7 +227,7 @@
 								<label sclass="register-s" value="Numer domu: "/>
 							</div>
 							<div style="float:left; width:220px">
-								<textbox id="addhouseNo" name="houseNo" class="default-s" maxlength="24" value="@bind(vm.user.mainAddress.houseNo)" onChange="@command('checkHouseNo')" cols="24"/>
+								<textbox id="addhouseNo" name="houseNo" class="default-s" maxlength="24" value="@bind(vm.user.contactAddress.houseNo)" onChange="@command('checkHouseNo')" cols="24"/>
 							</div>				
 						</hbox>
 						<hbox>
@@ -193,7 +235,7 @@
 								<label sclass="register-s" value="Numer lokalu: "/>
 							</div>
 							<div style="float:left; width:220px">
-								<textbox id="addflatNo" name="flatNo" class="default-s" maxlength="24" value="@bind(vm.user.mainAddress.flatNo)" onChange="@command('checkFlatNo')" cols="24"/>
+								<textbox id="addflatNo" name="flatNo" class="default-s" maxlength="24" value="@bind(vm.user.contactAddress.flatNo)" onChange="@command('checkFlatNo')" cols="24"/>
 							</div>				
 						</hbox>
 						<hbox>
@@ -201,7 +243,7 @@
 								<label sclass="register-s" value="Kod pocztowy: "/>
 							</div>
 							<div style="float:left; width:220px">
-								<textbox id="addpostal" name="postal" class="default-s" maxlength="24" value="@bind(vm.user.mainAddress.postal)" onChanging="@command('checkPostalFormat', val=event.value, cmp=self)" placeholder="__-___"  onChange="@command('checkPostal')" cols="24"/>
+								<textbox id="addpostal" name="postal" class="default-s" maxlength="24" value="@bind(vm.user.contactAddress.postal)" placeholder="__-___"  onChange="@command('checkPostal')" cols="24"/>
 							</div>				
 						</hbox>
 						<hbox>
@@ -209,7 +251,7 @@
 								<label sclass="register-s" value="Miasto: "/>
 							</div>
 							<div style="float:left; width:220px">
-								<textbox id="addcity" name="city" class="default-s" maxlength="24" value="@bind(vm.user.mainAddress.city)" onChange="@command('checkCity')" cols="24"/>
+								<textbox id="addcity" name="city" class="default-s" maxlength="24" value="@bind(vm.user.contactAddress.city)" onChange="@command('checkCity')" cols="24"/>
 							</div>				
 						</hbox>
 						<hbox>
@@ -217,16 +259,34 @@
 								<label sclass="register-s" value="Kraj: "/>
 							</div>
 							<div style="float:left; width:220px">
-								<textbox id="addcountry" name="country" class="default-s" maxlength="24" value="@bind(vm.user.mainAddress.country)" onChange="@command('checkCountry')" cols="24"/>
+							
+								<listbox class="default-s" mold="select" model="@bind(vm.countries)" selectedItem="@bind(vm.user.contactAddress.country)" width="245px">
+									<template name="model" var="cnt">
+										<listitem label="@bind(cnt) @converter(vm.langConverter)"></listitem>
+									</template>
+								</listbox>
+								<!-- <textbox id="addcountry" name="country" class="default-s" maxlength="24" value="@bind(vm.user.mainAddress.country)" onChange="@command('checkCountry')" cols="24"/> -->
 							</div>				
 						</hbox>
 			</vbox>
 			
 			</div>
+			</vbox>
+			<vbox align="end" vflex="1" hflex="1" >				
+				<image id="avatar" width="225px" height="225px" src="/resources/images/noavatar.jpg" class="rounded"></image>
+				<hbox>
+					<button mold="trendy" label="usuń" />
+					<fileupload id="uploader" label="zmień avatar" onUpload="@command('uploadFile')" ></fileupload>
+					<label class="validation" value="max 3 obrazki" />
+				</hbox>
+				<fisheyebar id="avatars" itemWidth="60" itemHeight="60">
+				
+				</fisheyebar>
+			</vbox>
 			</hbox>
 			
-				<button class="green" label="Zmień dane" visible="@{user.completed}" />
-				<button class="blue" label="Uzupełnij dane" visible="@{user.completed, converter='pl.krzaq.metalscrap.converter.NegativeConverter'}" />
+				<button  label="Zmień dane" disabled="@bind(vm.allowSave ne true or vm.user.status ne 3)" onClick="@command('updateUser')" visible="@load(vm.user.completed eq true)"  />
+				<button  label="Uzupełnij dane" disabled="@bind(vm.allowComplete ne true)" onClick="@command('completeUser')" visible="@load(vm.user.completed ne true)" />
 			<space/>
 				</tabpanel>
 				<tabpanel id="userAuctions">
@@ -235,6 +295,10 @@
 				</tabpanel>
 				<tabpanel id="userComments">
 				
+				
+				</tabpanel>
+				
+				<tabpanel id="userVerification" visible="@bind(vm.user.status eq 4)">
 				
 				</tabpanel>
 			</tabpanels>
@@ -257,6 +321,28 @@
 	<div sclass="inner"><label value="${labels.contact.title}"/> | <label value="${labels.regulation.title}"/> | <label value="${labels.privacy.title}"/> | <label value="${labels.about.title}"/> </div>
 </div>	
 
+
+<window id="fileUp" title="Wczytaj plik" border="normal" closable="true" mode="modal" visible="false" width="375px" height="225px">
+
+<groupbox>
+	<caption label="Wybierz plik"></caption>
+	<vbox>
+		<hbox>
+			<label value="Plik: "/>
+			<label value="@{fileName}" />
+			
+		</hbox>
+		<hbox>
+			<button label="Zapisz" onClick="@command('uploadFile')" />
+		</hbox>
+	
+	</vbox>
+</groupbox>
+
+</window>
+
+
+
 </div>
 </panelchildren>
 </panel>
@@ -266,4 +352,9 @@
 
 
 </div>
+
+
+
+   
+
 </zk>

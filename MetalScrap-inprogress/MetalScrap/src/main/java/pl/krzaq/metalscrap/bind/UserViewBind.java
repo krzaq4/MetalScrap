@@ -217,6 +217,10 @@ public class UserViewBind {
 		
 		userDirFolder.mkdir();
 		
+		File avatarDirFolder = new File(userDir.concat("/avatar")) ;
+		
+		avatarDirFolder.mkdir() ;
+		
 		
 	}
 

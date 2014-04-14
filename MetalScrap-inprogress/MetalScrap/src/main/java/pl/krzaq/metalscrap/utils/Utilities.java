@@ -384,6 +384,16 @@ public class Utilities {
 	}
 	
 	
+	public static String getUserDataFolder(User user) {
+		String dataDir = System.getProperty("jboss.server.data.dir") ;
+		String usersDir = dataDir.concat("\\platform\\users\\").concat(user.getLogin()) ;
+		return usersDir ;
+	}
 	
+	public static String getUserDataFolder(String userName) {
+		String dataDir = System.getProperty("jboss.server.data.dir") ;
+		String usersDir = dataDir.concat("\\platform\\users\\").concat(userName) ;
+		return usersDir ;
+	}
 	
 }

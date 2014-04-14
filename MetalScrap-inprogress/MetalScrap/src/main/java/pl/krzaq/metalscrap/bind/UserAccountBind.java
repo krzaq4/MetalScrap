@@ -1,10 +1,26 @@
 package pl.krzaq.metalscrap.bind;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStreamImpl;
+import javax.imageio.stream.ImageOutputStreamImpl;
 import javax.servlet.http.HttpSession;
 
 import org.zkoss.bind.BindContext;
@@ -16,16 +32,26 @@ import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.image.AImage;
+import org.zkoss.util.media.Media;
 import org.zkoss.web.Attributes;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.InputEvent;
+import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zkex.zul.Fisheye;
+import org.zkoss.zkex.zul.Fisheyebar;
 import org.zkoss.zul.Div;
+import org.zkoss.zul.Fileupload;
+import org.zkoss.zul.Image;
 import org.zkoss.zul.Menubar;
 import org.zkoss.zul.Menuitem;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 
 import pl.krzaq.metalscrap.converter.LanguageISOConverter;
@@ -33,6 +59,7 @@ import pl.krzaq.metalscrap.model.Address;
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.User;
 import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class UserAccountBind {
 
@@ -44,6 +71,12 @@ public class UserAccountBind {
 	
 	
 	// Rejestracja
+	
+		@Wire("#userPendingVerificationInfo")
+		private Div userPendingVerificationInfo;
+		
+		@Wire("#userCompleteInfo")
+		Div userCompleteInfo ;
 	
 		@Wire("#username")
 		private Textbox username ;
@@ -59,31 +92,157 @@ public class UserAccountBind {
 		
 		@Wire("#error")
 		private Div error ;
-	
-	
-	private LangConverter langConverter ;	
 		
-	private List<String> countries ;	
+		@Wire("#avatar")
+		private Image avatar ;
 		
-	private User user ;
+		@Wire("#avatars")
+		private Fisheyebar avatars ;
+		
+		//=============================
+		
+		@Wire("#street")
+		private Textbox street ;
+		
+		@Wire("#houseNo")
+		private Textbox houseNo ;
+		
+		@Wire("#postal")
+		private Textbox postal ;
+		
+		@Wire("#city")
+		private Textbox city ;
+		
+		@Wire("#flatNo")
+		private Textbox flatNo ;
+		
+		@Wire("#addstreet")
+		private Textbox addStreet ;
+		
+		@Wire("#addhouseNo")
+		private Textbox addHouseNo ;
+		
+		@Wire("#addpostal")
+		private Textbox addPostal ;
+		
+		@Wire("#addcity")
+		private Textbox addCity ;
+		
+		@Wire("#addflatNo")
+		private Textbox addFlatNo ;
+		
+		@Wire("#uploader")
+		private Fileupload uploader ;
+		
+		private org.zkoss.image.AImage image ;
+		
+		private boolean allowComplete = false ;
+		private boolean allowSave = false ;
+		
+		private Boolean allowRegistration = false ;
+		
+		private boolean emailExists = false ;
+		private boolean loginExists = false ;
+		private boolean passwordNotFormatted = false ;
+		private boolean passwordNotMatch = false ;
+		
+		private boolean step1 = true ;
+		private boolean step2 = false ;
+		
+		private String loginMessage ="";
+		private String emailMessage ="";
+		private String passMessage ="";
+		private String repassMessage ="";
+		private String rePassword="" ;
+		
+		private boolean mainStreetChanged = false ;
+		private boolean streetChanged = false ;
+		
+		private boolean mainFlatNoChanged = false ;
+		private boolean flatNoChanged = false ;
+		
+		private String mainHouseNoMsg="" ;
+		private boolean mainHouseNoError=false;
+
+		private String houseNoMsg="" ;
+		private boolean houseNoError=false;
+		
+		private String mainCityMsg="" ;
+		private boolean mainCityError=false;
+		
+		private String cityMsg="" ;
+		private boolean cityError=false;
+
+		private String mainPostalMsg="" ;
+		private boolean mainPostalError=false;
+		
+		private String postalMsg="" ;
+		private boolean postalError=false;
 	
-	private Address main ;
 	
-	private Address additional ;
+		private LangConverter langConverter ;	
+		
+		private List<String> countries ;	
+		
+		private User user ;
 	
-	private boolean useAdditional ;
+		private Address main ;
 	
-	private List<Auction> observed ;
+		private Address additional ;
 	
-	private List<Auction> won ;
+		private boolean useAdditional  ;
 	
-	private List<Auction> lost ;
+		private List<Auction> observed ;
 	
-	private List<Auction> active ;
+		private List<Auction> won ;
 	
-	private List<Auction> owned ;
+		private List<Auction> lost ;
 	
+		private List<Auction> active ;
 	
+		private List<Auction> owned ;
+	
+		private String verificationType ;
+	
+		
+	@Command
+	public void uploadFile(@ContextParam(ContextType.TRIGGER_EVENT) UploadEvent event){
+		Media media = event.getMedia();
+		String dataDir = System.getProperty("jboss.server.data.dir") ;
+		String userDir = dataDir.concat("\\platform\\users\\").concat(user.getLogin()) ;
+		String avatarDir = userDir.concat("\\avatar") ;
+		File avatarDirFolder = new File(avatarDir) ;
+		if(avatarDirFolder.listFiles().length<3) {
+			
+		
+			if(media instanceof org.zkoss.image.Image) {
+			
+				FileOutputStream file;
+				String fileName = media.getName()+"."+media.getFormat() ;
+				File f = new File(userDir.concat("\\avatar\\"+ fileName )) ;
+			
+				try {
+					f.createNewFile() ;
+					file = new FileOutputStream(userDir.concat("\\avatar\\"+fileName ));
+					file.write(((Media)media).getByteData());
+					file.close();
+					user.setAvatarFileName(fileName);
+					ServicesImpl.getUserService().update(user);
+				
+					avatar.setContent(scaleImage(225,225,(AImage)media,f));
+					prepareAvatars();
+				} catch (FileNotFoundException e) {
+					Messagebox.show("Nie udało się zapisać pliku") ;
+				} catch (IOException e) {
+					Messagebox.show("Błąd dostępu do systemu plików") ;
+				}
+			
+			}
+		
+		} else {
+			Messagebox.show("Osiągnąłeś limit ilości awatarów") ;
+		}
+	}
 	
 	@AfterCompose
 	public void init(@ContextParam(ContextType.VIEW) Component view) {
@@ -101,12 +260,16 @@ public class UserAccountBind {
 			this.main = user.getMainAddress() ;
 		} else {
 			this.main = new Address() ;
+			user.setMainAddress(new Address());
+			user.getMainAddress().setCountry("PL");
 		}
 		
 		if(this.user.getContactAddress()!=null) {
 			this.additional = this.user.getContactAddress() ;
 		} else {
 			this.additional = null ;
+			user.setContactAddress(new Address());
+			user.getContactAddress().setCountry("PL");
 		}
 		
 		if(this.additional!=null) {
@@ -136,26 +299,35 @@ public class UserAccountBind {
 		
 		langConverter = new LangConverter();
 		
+		if(user.getCompleted())
+			userCompleteInfo.setSclass("error");
+		else
+			userCompleteInfo.setSclass("one error");
+		
+		Boolean userVerificationAuto = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("user.verification.mode.auto").getValue());	
+		verificationType = ServicesImpl.getConfigService().findByKey("user.verification.mode.type").getValue() ;
+		if(!userVerificationAuto && user.getStatus().equals(User.STATUS_PENDING_VERIFICATION)) {
+			userPendingVerificationInfo.setSclass("ok infor");
+		} else 
+		if (userVerificationAuto || user.getStatus().equals(User.STATUS_VERIFIED)) {
+			userPendingVerificationInfo.setSclass("infor");
+		}
+		
+		prepareAvatar();
+		prepareAvatars() ;
 	}
 	
 	
 	
 	
-private Boolean allowRegistration = false ;
 	
-	private boolean emailExists = false ;
-	private boolean loginExists = false ;
-	private boolean passwordNotFormatted = false ;
-	private boolean passwordNotMatch = false ;
-	
-	private boolean step1 = true ;
-	private boolean step2 = false ;
-	
-	private String loginMessage ="";
-	private String emailMessage ="";
-	private String passMessage ="";
-	private String repassMessage ="";
-	private String rePassword="" ;
+	@Command
+	public void changeAvatar(){
+		
+		
+		
+	}
+
 	
 	@Command
 	@NotifyChange({"loginExists", "allowRegistration", "loginMessage"})
@@ -210,7 +382,7 @@ private Boolean allowRegistration = false ;
 		
 		if( user.getPassword().matches("\\b(?=.{6,})(?=.*[a-z])(?=.*[A-Z])(?=.*[_-]).*$\\b")) {
 			passwordNotFormatted = false ;
-			allowRegistration =  !loginExists && !emailExists && !passwordNotFormatted && !passwordNotMatch ;
+			
 			
 			passMessage="" ;
 			password.setSclass("default correctValue");
@@ -220,6 +392,7 @@ private Boolean allowRegistration = false ;
 			passMessage = "Hasło musi składać się z przynajmniej 6 znaków oraz zawierać chociaż jedną małą, jedną dużą literę i cyfrę" ;
 			password.setSclass("default wrongValue");
 		}
+			allowRegistration =   !passwordNotFormatted && !passwordNotMatch ;
 		resize() ;
 		
 	}
@@ -229,16 +402,18 @@ private Boolean allowRegistration = false ;
 	public void checkPasswordMatch() {
 		
 		if(!user.getPassword().equals(rePassword)) {
-			allowRegistration = false ;
+			
 			passwordNotMatch = true ;
 			repassMessage = "Hasła różnią się" ;
 			repassword.setSclass("default wrongValue");
 		} else {
-			allowRegistration = true ;
+			
 			passwordNotMatch= false ;
 			repassMessage = "" ;
 			repassword.setSclass("default correctValue");
 		}
+		
+		allowRegistration =  !loginExists && !emailExists && !passwordNotFormatted && !passwordNotMatch ;
 		resize() ;
 		
 	}
@@ -298,6 +473,234 @@ private Boolean allowRegistration = false ;
 	}
 	
 	
+	@Command
+	@NotifyChange({"allowComplete", "allowSave", "mainStreetChanged"})
+	public void checkMainStreet() {
+		
+		if(!street.getValue().equals(user.getMainAddress().getStreet())) {
+			mainStreetChanged = true ;
+		} else {
+			mainStreetChanged = false ;
+		}
+		
+		if(!mainHouseNoError && !houseNoError && !mainCityError && !cityError && !mainPostalError && !postalError) {
+			allowSave = streetChanged || mainStreetChanged ;
+			allowComplete = streetChanged || mainStreetChanged ;
+		} else {
+			allowSave = flatNoChanged || mainFlatNoChanged ;
+			allowComplete = flatNoChanged || mainFlatNoChanged;
+		}
+		
+		
+	}
+	
+	@Command
+	@NotifyChange({"allowComplete", "allowSave", "mainFlatNoChanged"})
+	public void checkMainFlatNo() {
+		
+		if(!flatNo.getValue().equals(user.getMainAddress().getFlatNo())) {
+			mainFlatNoChanged = true ;
+		} else {
+			mainFlatNoChanged = false ;
+		}
+		
+		if(!mainHouseNoError && !houseNoError && !mainCityError && !cityError && !mainPostalError && !postalError) {
+			allowSave = flatNoChanged || mainFlatNoChanged ;
+			allowComplete = flatNoChanged || mainFlatNoChanged ;
+		} else {
+			allowSave = streetChanged || mainStreetChanged;
+			allowComplete = streetChanged || mainStreetChanged;
+		}
+		
+		
+	}
+	
+	@Command
+	@NotifyChange({"allowSave", "allowComplete", "mainHouseNoMsg", "mainHouseNoError"})
+	public void checkMainHouseNo() {
+		
+		if(houseNo.getValue()!=null && houseNo.getValue().length()>0) {
+			
+			houseNo.setSclass("correctValue default-s");
+			mainHouseNoMsg = "" ;
+			mainHouseNoError = false ;
+			
+		} else {
+			
+			houseNo.setSclass("wrongValue default-s");
+			mainHouseNoMsg = "Numer domu/ posesji nie może być pusty" ;
+			mainHouseNoError = true ;
+		}
+		
+		allowSave = !mainHouseNoError && !houseNoError && !mainCityError && !cityError && !mainPostalError && !postalError;
+		allowComplete = !mainHouseNoError && !houseNoError && !mainCityError && !cityError && !mainPostalError && !postalError;
+		
+		resize() ;
+	}
+	
+	@Command
+	@NotifyChange({"allowSave", "allowComplete", "mainCityMsg", "mainCityError"})
+	public void checkMainCity() {
+		
+		if(city.getValue()!=null && city.getValue().length()>0) {
+			
+			city.setSclass("correctValue default-s");
+			mainCityMsg = "" ;
+			mainCityError = false ;
+			
+		} else {
+			
+			city.setSclass("wrongValue default-s");
+			mainCityMsg = "Nazwa miejscowości nie może być pusta" ;
+			mainCityError = true ;
+		}
+		
+		allowSave = !mainHouseNoError && !houseNoError && !mainCityError && !cityError && !mainPostalError && !postalError;
+		allowComplete = !mainHouseNoError && !houseNoError && !mainCityError && !cityError && !mainPostalError && !postalError;
+		
+		resize() ;
+		
+	}
+	
+	@Command
+	@NotifyChange({"allowSave", "allowComplete", "mainPostalMsg", "mainPostalError"})
+	public void checkMainPostal() {
+		
+		if(postal.getValue()!=null && postal.getValue().length()>0 && postal.getValue().matches("[0-9]{2}-{1}[0-9]{3}")) {
+			
+			postal.setSclass("correctValue default-s");
+			mainPostalMsg = "" ;
+			mainPostalError = false ;
+			
+		} else {
+			
+			postal.setSclass("wrongValue default-s");
+			mainPostalMsg = "Kod pocztowy nie został poprawnie podany" ;
+			mainPostalError = true ;
+		}
+		
+		allowSave = !mainHouseNoError && !houseNoError && !mainCityError && !cityError && !mainPostalError && !postalError;
+		allowComplete = !mainHouseNoError && !houseNoError && !mainCityError && !cityError && !mainPostalError && !postalError;
+		
+		resize() ;
+		
+	}
+	
+	
+	
+	
+	@Command
+	@NotifyChange({"allowSave", "allowComplete", "houseNoMsg", "houseNoError"})
+	public void checkHouseNo() {
+		
+		if(addHouseNo.getValue()!=null && addHouseNo.getValue().length()>0) {
+			
+			addHouseNo.setSclass("correctValue default-s");
+			houseNoMsg = "" ;
+			houseNoError = false ;
+			
+		} else {
+			
+			addHouseNo.setSclass("wrongValue default-s");
+			houseNoMsg = "Numer domu/ posesji nie może być pusty" ;
+			houseNoError = true ;
+		}
+		
+		allowSave = !mainHouseNoError && !houseNoError && !mainCityError && !cityError && !mainPostalError && !postalError;
+		allowComplete = !mainHouseNoError && !houseNoError && !mainCityError && !cityError && !mainPostalError && !postalError;
+		
+		resize() ;
+	}
+	
+	@Command
+	@NotifyChange({"allowSave", "allowComplete", "cityMsg", "cityError"})
+	public void checkCity() {
+		
+		if(addCity.getValue()!=null && addCity.getValue().length()>0) {
+			
+			addCity.setSclass("correctValue default-s");
+			cityMsg = "" ;
+			cityError = false ;
+			
+		} else {
+			
+			addCity.setSclass("wrongValue default-s");
+			cityMsg = "Nazwa miejscowości nie może być pusta" ;
+			cityError = true ;
+		}
+		
+		allowSave = !mainHouseNoError && !houseNoError && !mainCityError && !cityError && !mainPostalError && !postalError;
+		allowComplete = !mainHouseNoError && !houseNoError && !mainCityError && !cityError && !mainPostalError && !postalError;
+		
+		resize() ;
+		
+	}
+	
+	@Command
+	@NotifyChange({"allowSave", "allowComplete", "postalMsg", "postalError"})
+	public void checkPostal() {
+		
+		if(addPostal.getValue()!=null && addPostal.getValue().length()>0 && addPostal.getValue().matches("[0-9]{2}-{1}[0-9]{3}")) {
+			
+			addPostal.setSclass("correctValue default-s");
+			postalMsg = "" ;
+			postalError = false ;
+			
+		} else {
+			
+			addPostal.setSclass("wrongValue default-s");
+			postalMsg = "Kod pocztowy nie został poprawnie podany" ;
+			postalError = true ;
+		}
+		
+		allowSave = !mainHouseNoError && !houseNoError && !mainCityError && !cityError && !mainPostalError && !postalError;
+		allowComplete = !mainHouseNoError && !houseNoError && !mainCityError && !cityError && !mainPostalError && !postalError;
+		
+		resize() ;
+		
+	}
+	
+	@Command
+	@NotifyChange({"allowComplete", "allowSave", "streetChanged"})
+	public void checkStreet() {
+		
+		if(!addStreet.getValue().equals(user.getMainAddress().getStreet())) {
+			streetChanged = true ;
+		} else {
+			streetChanged = false ;
+		}
+		
+		if(!mainHouseNoError && !houseNoError && !mainCityError && !cityError && !mainPostalError && !postalError) {
+			allowSave = mainStreetChanged ||  streetChanged ;
+			allowComplete = mainStreetChanged || streetChanged ;
+		} else {
+			allowSave = flatNoChanged || mainFlatNoChanged ;
+			allowComplete = flatNoChanged || mainFlatNoChanged;
+		}
+		
+		
+	}
+	
+	@Command
+	@NotifyChange({"allowComplete", "allowSave", "flatNoChanged"})
+	public void checkFlatNo() {
+		
+		if(!addFlatNo.getValue().equals(user.getMainAddress().getFlatNo())) {
+			flatNoChanged = true ;
+		} else {
+			flatNoChanged = false ;
+		}
+		
+		if(!mainHouseNoError && !houseNoError && !mainCityError && !cityError && !mainPostalError && !postalError) {
+			allowSave = mainFlatNoChanged || flatNoChanged ;
+			allowComplete = mainFlatNoChanged ||  flatNoChanged ;
+		} else {
+			allowSave = streetChanged || mainStreetChanged;
+			allowComplete = streetChanged || mainStreetChanged;
+		}
+		
+		
+	}
 	
 	private void resize() {
 		 int count = 0 ;
@@ -311,6 +714,24 @@ private Boolean allowRegistration = false ;
 				count++ ;
 			}
 			if(passwordNotFormatted){
+				count++ ;
+			}
+			if(mainHouseNoError){
+				count++ ;
+			}
+			if(houseNoError){
+				count++ ;
+			}
+			if(mainCityError){
+				count++ ;
+			}
+			if(cityError) {
+				count++ ;
+			}
+			if(mainPostalError){
+				count++ ;
+			}
+			if(postalError){
 				count++ ;
 			}
 			
@@ -328,10 +749,77 @@ private Boolean allowRegistration = false ;
 			} else
 			if(count==4) {
 				error.setSclass("error four");
+			} else
+			if(count==5) {
+				error.setSclass("error five");
+			} else
+			if(count==6) {
+				error.setSclass("error six");
+			} else
+			if(count==7) {
+				error.setSclass("error seven");
+			} else
+			if(count==8) {
+				error.setSclass("error eight");
+			} else
+			if(count==9) {
+				error.setSclass("error nine");
+			} else
+			if(count==10) {
+				error.setSclass("error ten");
 			}
 		 
 	 }
 	
+	
+	@Command
+	public void changePassword() {
+		try {
+			user.setPassword(Utilities.hash(Utilities.HASH_METHOD_MD5, user.getPassword()));
+			ServicesImpl.getUserService().update(user);
+			Messagebox.show("Hasło zostało zmienione") ;
+		} catch(NoSuchAlgorithmException ex){
+			Messagebox.show("Nie udało się zmienić hasła") ;
+		}
+	}
+	
+	@Command
+	public void updateUser(){
+		
+		ServicesImpl.getUserService().update(user);
+		Messagebox.show("Dane zostały zapisane") ;
+	}
+	
+	
+	@Command
+	public void completeUser() {
+		
+		Boolean userVerificationModeAuto = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("user.verification.mode.auto").getValue()) ;
+		String userVerificationModeType = ServicesImpl.getConfigService().findByKey("user.verification.mode.type").getValue() ;
+		
+		//rodzaj weryfikacji użytkownika
+		
+		if(userVerificationModeAuto) {
+			
+			user.setCompleted(true);
+			user.setStatus(User.STATUS_VERIFIED);
+			
+		} else {
+			user.setStatus(User.STATUS_PENDING_VERIFICATION);
+			user.setCompleted(true);
+		}
+		
+		ServicesImpl.getUserService().update(user);
+		
+		if(userVerificationModeAuto) {
+			Messagebox.show("Dane zostały zapisane") ;
+		} else {
+			Messagebox.show("Dane zostały zapisane. Będziesz mógł w pełni korzystać z serwisu po weryfikacji swojego konta") ;
+		}
+		
+		userCompleteInfo.setSclass("error");
+		
+	}
 	
 	@Command
 	public void selectMenuitem(@BindingParam("item") Menuitem item) {
@@ -603,12 +1091,637 @@ private Boolean allowRegistration = false ;
 
 	
 	
+	
 	// --------------------------------------------------------------------
 	
 	
 
+	public Textbox getStreet() {
+		return street;
+	}
+
+	public void setStreet(Textbox street) {
+		this.street = street;
+	}
+
+	public Textbox getHouseNo() {
+		return houseNo;
+	}
+
+	public void setHouseNo(Textbox houseNo) {
+		this.houseNo = houseNo;
+	}
+
+	public Textbox getPostal() {
+		return postal;
+	}
+
+	public void setPostal(Textbox postal) {
+		this.postal = postal;
+	}
+
+	public Textbox getCity() {
+		return city;
+	}
+
+	public void setCity(Textbox city) {
+		this.city = city;
+	}
+
+	public Textbox getAddStreet() {
+		return addStreet;
+	}
+
+	public void setAddStreet(Textbox addStreet) {
+		this.addStreet = addStreet;
+	}
+
+	public Textbox getAddHouseNo() {
+		return addHouseNo;
+	}
+
+	public void setAddHouseNo(Textbox addHouseNo) {
+		this.addHouseNo = addHouseNo;
+	}
+
+	public Textbox getAddPostal() {
+		return addPostal;
+	}
+
+	public void setAddPostal(Textbox addPostal) {
+		this.addPostal = addPostal;
+	}
+
+	public Textbox getAddCity() {
+		return addCity;
+	}
+
+	public void setAddCity(Textbox addCity) {
+		this.addCity = addCity;
+	}
+
+	public boolean isAllowComplete() {
+		return allowComplete;
+	}
+
+	public void setAllowComplete(boolean allowComplete) {
+		this.allowComplete = allowComplete;
+	}
+
+	public boolean isAllowSave() {
+		return allowSave;
+	}
+
+	public void setAllowSave(boolean allowSave) {
+		this.allowSave = allowSave;
+	}
+
+	public String getMainHouseNoMsg() {
+		return mainHouseNoMsg;
+	}
+
+	public void setMainHouseNoMsg(String mainHouseNoMsg) {
+		this.mainHouseNoMsg = mainHouseNoMsg;
+	}
+
+	public boolean isMainHouseNoError() {
+		return mainHouseNoError;
+	}
+
+	public void setMainHouseNoError(boolean mainHouseNoError) {
+		this.mainHouseNoError = mainHouseNoError;
+	}
+
+	public String getHouseNoMsg() {
+		return houseNoMsg;
+	}
+
+	public void setHouseNoMsg(String houseNoMsg) {
+		this.houseNoMsg = houseNoMsg;
+	}
+
+	public boolean isHouseNoError() {
+		return houseNoError;
+	}
+
+	public void setHouseNoError(boolean houseNoError) {
+		this.houseNoError = houseNoError;
+	}
+
+	public String getMainCityMsg() {
+		return mainCityMsg;
+	}
+
+	public void setMainCityMsg(String mainCityMsg) {
+		this.mainCityMsg = mainCityMsg;
+	}
+
+	public boolean isMainCityError() {
+		return mainCityError;
+	}
+
+	public void setMainCityError(boolean mainCityError) {
+		this.mainCityError = mainCityError;
+	}
+
+	public String getCityMsg() {
+		return cityMsg;
+	}
+
+	public void setCityMsg(String cityMsg) {
+		this.cityMsg = cityMsg;
+	}
+
+	public boolean isCityError() {
+		return cityError;
+	}
+
+	public void setCityError(boolean cityError) {
+		this.cityError = cityError;
+	}
+
+	public String getMainPostalMsg() {
+		return mainPostalMsg;
+	}
+
+	public void setMainPostalMsg(String mainPostalMsg) {
+		this.mainPostalMsg = mainPostalMsg;
+	}
+
+	public boolean isMainPostalError() {
+		return mainPostalError;
+	}
+
+	public void setMainPostalError(boolean mainPostalError) {
+		this.mainPostalError = mainPostalError;
+	}
+
+	public String getPostalMsg() {
+		return postalMsg;
+	}
+
+	public void setPostalMsg(String postalMsg) {
+		this.postalMsg = postalMsg;
+	}
+
+	public boolean isPostalError() {
+		return postalError;
+	}
+
+	public void setPostalError(boolean postalError) {
+		this.postalError = postalError;
+	}
+
+	
+
+	public Div getUserPendingVerificationInfo() {
+		return userPendingVerificationInfo;
+	}
+
+	public void setUserPendingVerificationInfo(Div userPendingVerificationInfo) {
+		this.userPendingVerificationInfo = userPendingVerificationInfo;
+	}
 
 
+	public String getVerificationType() {
+		return verificationType;
+	}
+
+
+	public void setVerificationType(String verificationType) {
+		this.verificationType = verificationType;
+	}
+
+
+
+	public Div getUserCompleteInfo() {
+		return userCompleteInfo;
+	}
+
+	public void setUserCompleteInfo(Div userCompleteInfo) {
+		this.userCompleteInfo = userCompleteInfo;
+	}
+
+
+	
+	
+	//--------------------------------------------
+	
+	
+	public Image getAvatar() {
+		return avatar;
+	}
+
+
+
+
+
+	public void setAvatar(Image avatar) {
+		this.avatar = avatar;
+	}
+
+
+
+
+
+	public Textbox getFlatNo() {
+		return flatNo;
+	}
+
+
+
+
+
+	public void setFlatNo(Textbox flatNo) {
+		this.flatNo = flatNo;
+	}
+
+
+
+
+
+	public Textbox getAddFlatNo() {
+		return addFlatNo;
+	}
+
+
+
+
+
+	public void setAddFlatNo(Textbox addFlatNo) {
+		this.addFlatNo = addFlatNo;
+	}
+
+
+
+
+
+	public org.zkoss.image.AImage getImage() {
+		return image;
+	}
+
+
+
+
+
+	public void setImage(org.zkoss.image.AImage image) {
+		this.image = image;
+	}
+
+
+
+
+
+	public boolean isMainStreetChanged() {
+		return mainStreetChanged;
+	}
+
+
+
+
+
+	public void setMainStreetChanged(boolean mainStreetChanged) {
+		this.mainStreetChanged = mainStreetChanged;
+	}
+
+
+
+
+
+	public boolean isStreetChanged() {
+		return streetChanged;
+	}
+
+
+
+
+
+	public void setStreetChanged(boolean streetChanged) {
+		this.streetChanged = streetChanged;
+	}
+
+
+
+
+
+	public boolean isMainFlatNoChanged() {
+		return mainFlatNoChanged;
+	}
+
+
+
+
+
+	public void setMainFlatNoChanged(boolean mainFlatNoChanged) {
+		this.mainFlatNoChanged = mainFlatNoChanged;
+	}
+
+
+
+
+
+	public boolean isFlatNoChanged() {
+		return flatNoChanged;
+	}
+
+
+
+
+
+	public void setFlatNoChanged(boolean flatNoChanged) {
+		this.flatNoChanged = flatNoChanged;
+	}
+
+
+
+
+
+	private void prepareAvatar(){
+		
+	try {
+		
+		if(user.getAvatarFileName()!=null) {
+			File afile = new File(Utilities.getUserDataFolder(user).concat("\\avatar\\").concat(user.getAvatarFileName())) ;
+			AImage img = new AImage(afile) ;
+			
+			AImage newImg = scaleImage(225, 225, img, afile) ;
+			avatar.setContent(newImg);
+			
+		} 
+		/*else {
+			File afile = new File("/images/noavatar.jpg") ;
+			AImage img = new AImage(afile) ;
+			avatar.setContent(img);
+		}*/
+		
+		
+		
+	} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	}
+	
+	}
+	
+	private void prepareAvatars(){
+		try {
+		String userDir = Utilities.getUserDataFolder(user) ;
+		String avatarDir = userDir.concat("\\avatar") ;
+		File avatarDirFolder = new File(avatarDir) ;
+		File[] files = avatarDirFolder.listFiles() ;
+		if(files.length>1){
+			for(final File file:files){
+				
+					AImage img = scaleImage(100, 100, new AImage(file), file) ;
+					Fisheye fe = new Fisheye() ;
+					//fe.setId(file.getAbsolutePath());
+					
+					fe.addEventListener("onClick", new EventListener<Event>(){
+
+						@Override
+						public void onEvent(Event arg0) throws Exception {
+							AImage fullImg = scaleImage(225, 225, new AImage(file), file) ;
+							avatar.setContent(fullImg);
+							
+						}
+						
+					}) ;
+					
+					fe.setImageContent(img);
+					avatars.appendChild(fe);
+			}
+			
+		} else {
+			avatars.setVisible(false) ;
+		}
+		
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private AImage scaleImage(int x, int y, AImage img, File afile) {
+		
+		String userDir = Utilities.getUserDataFolder(user) ;
+		String avatarDir = userDir.concat("\\avatar") ;
+		File avatarDirFolder = new File(avatarDir) ;
+		
+		AImage res = null;
+		BigDecimal realWidth = new BigDecimal(img.getWidth()) ;
+		BigDecimal realHeight = new BigDecimal(img.getHeight()) ;
+		
+		BigDecimal aspectRatio = realWidth.divide(realHeight, 2, RoundingMode.FLOOR) ;
+		
+		BufferedImage out = new BufferedImage(x, y, BufferedImage.TYPE_INT_RGB) ;
+		
+		if(aspectRatio.compareTo(new BigDecimal(1))>0) {
+			
+			// landscape
+			try {
+				BigDecimal widthPercent = new BigDecimal(x).divide(realWidth, 2, RoundingMode.FLOOR) ;
+				
+			
+			if (widthPercent.compareTo(new BigDecimal(1))>=0) {
+				BigDecimal newWidth = realWidth ;
+				BigDecimal newHeight = realHeight ;
+				BigDecimal heightOffset = new BigDecimal(y).subtract(realHeight) ;
+				heightOffset = heightOffset.divide(new BigDecimal(2), 2, RoundingMode.FLOOR) ;
+				
+				BigDecimal widthOffset = new BigDecimal(x).subtract(realWidth) ;
+				widthOffset = widthOffset.divide(new BigDecimal(2), 2, RoundingMode.FLOOR) ;
+				
+				Graphics2D g = (Graphics2D) out.getGraphics() ;
+				g.setColor(Color.LIGHT_GRAY);
+				g.fillRect(1, 1, x-1, y-1);
+				
+				java.awt.Image fil = ImageIO.read(img.getStreamData()) ;
+				
+				g.drawImage(fil, widthOffset.intValue(), heightOffset.intValue(), newWidth.intValue(), newHeight.intValue(), null);
+				File newFile = new File(avatarDir.concat("/thumb")) ;
+				
+				ImageIO.write(out, img.getFormat(), newFile) ;
+				
+				res = new AImage(newFile) ;
+				newFile.delete();
+				
+			} else {
+				
+				BigDecimal newWidth = realWidth.multiply(widthPercent) ;
+				BigDecimal newHeight = realHeight.multiply(widthPercent) ;
+				
+				BigDecimal heightOffset = new BigDecimal(y).subtract(newHeight) ;
+				heightOffset = heightOffset.divide(new BigDecimal(2), 2, RoundingMode.FLOOR) ;
+				BigDecimal widthOffset = new BigDecimal(1) ;
+				
+				Graphics2D g = (Graphics2D) out.getGraphics() ;
+				g.setColor(Color.LIGHT_GRAY);
+				g.fillRect(1, 1, x-1, y-1);
+				
+				java.awt.Image fil = ImageIO.read(img.getStreamData()) ;
+				
+				g.drawImage(fil, widthOffset.intValue(), heightOffset.intValue(), newWidth.intValue(), newHeight.intValue(), null);
+				
+				File newFile = new File(avatarDir.concat("/thumb")) ;
+				
+				ImageIO.write(out, img.getFormat(), newFile) ;
+				
+				res = new AImage(newFile) ;
+				newFile.delete();
+				
+				
+				
+				//g.
+				
+			}
+			
+			
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		} else
+		if (aspectRatio.compareTo(new BigDecimal(1))==0){
+			
+			//square
+			try{
+			BigDecimal heightPercent = new BigDecimal(y).divide(realHeight, 2, RoundingMode.FLOOR) ;
+			
+			if (heightPercent.compareTo(new BigDecimal(1))>=0) {
+				
+				BigDecimal newWidth= realWidth ;
+				BigDecimal newHeight = realHeight ;
+				
+				BigDecimal heightOffset = new BigDecimal(y).subtract(realHeight) ;
+				heightOffset = heightOffset.divide(new BigDecimal(2)) ;
+				
+				BigDecimal widthOffset = new BigDecimal(x).subtract(realWidth) ;
+				widthOffset = widthOffset.divide(new BigDecimal(2), 2, RoundingMode.FLOOR) ;
+				
+				Graphics2D g = (Graphics2D) out.getGraphics() ;
+				g.setColor(Color.LIGHT_GRAY);
+				g.fillRect(1, 1, x-1, y-1);
+				
+				java.awt.Image fil = ImageIO.read(img.getStreamData()) ;
+				
+				g.drawImage(fil, widthOffset.intValue(), heightOffset.intValue(), newWidth.intValue(), newHeight.intValue(), null);
+				
+				File newFile = new File(avatarDir.concat("/thumb")) ;
+				
+				ImageIO.write(out, img.getFormat(), newFile) ;
+				
+				res = new AImage(newFile) ;
+				newFile.delete();
+				
+				
+			} else {
+				
+				
+				BigDecimal newWidth = realWidth.multiply(heightPercent) ;
+				BigDecimal newHeight = realHeight.multiply(heightPercent) ;
+				
+				BigDecimal widthOffset = new BigDecimal(y).subtract(newWidth) ;
+				widthOffset = widthOffset.divide(new BigDecimal(2), 2, RoundingMode.FLOOR) ;
+				BigDecimal heightOffset = new BigDecimal(y).subtract(newHeight) ;
+				heightOffset = heightOffset.divide(new BigDecimal(2), 2, RoundingMode.FLOOR) ;
+				
+				Graphics2D g = (Graphics2D) out.getGraphics() ;
+				g.setColor(Color.LIGHT_GRAY);
+				g.fillRect(1, 1, x-1, y-1);
+				
+				java.awt.Image fil = ImageIO.read(img.getStreamData()) ;
+				
+				g.drawImage(fil, widthOffset.intValue(), heightOffset.intValue(), newWidth.intValue(), newHeight.intValue(), null);
+				
+				File newFile = new File(avatarDir.concat("/thumb")) ;
+				
+				ImageIO.write(out, img.getFormat(), newFile) ;
+				
+				res = new AImage(newFile) ;
+				newFile.delete();
+			}
+			
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+		} else {
+			
+			//portrait
+			
+			try {
+			BigDecimal heightPercent = new BigDecimal(y).divide(realHeight, 2, RoundingMode.FLOOR) ;
+			
+			if (heightPercent.compareTo(new BigDecimal(1))>=0) {
+				
+				BigDecimal newHeight = realHeight ;
+				BigDecimal newWidth = realWidth ;
+				
+				BigDecimal heightOffset = new BigDecimal(y).subtract(realHeight) ;
+				heightOffset = heightOffset.divide(new BigDecimal(2), 2, RoundingMode.FLOOR) ;
+				
+				BigDecimal widthOffset = new BigDecimal(x).subtract(realWidth) ;
+				widthOffset = widthOffset.divide(new BigDecimal(2), 2, RoundingMode.FLOOR) ;
+				
+				Graphics2D g = (Graphics2D) out.getGraphics() ;
+				g.setColor(Color.LIGHT_GRAY);
+				g.fillRect(1, 1, x-1, y-1);
+				
+				java.awt.Image fil = ImageIO.read(img.getStreamData()) ;
+				
+				g.drawImage(fil, widthOffset.intValue(), heightOffset.intValue(), newWidth.intValue(), newHeight.intValue(), null);
+				
+				File newFile = new File(avatarDir.concat("/thumb")) ;
+				
+				ImageIO.write(out, img.getFormat(), newFile) ;
+				
+				res = new AImage(newFile) ;
+				newFile.delete();
+				
+				
+			} else {
+				
+				BigDecimal newWidth = realWidth.multiply(heightPercent) ;
+				BigDecimal newHeight = realHeight.multiply(heightPercent) ;
+				
+				BigDecimal widthOffset = new BigDecimal(y).subtract(newWidth) ;
+				widthOffset = widthOffset.divide(new BigDecimal(2), 2, RoundingMode.FLOOR) ;
+				BigDecimal heightOffset = new BigDecimal(1) ;
+				
+				Graphics2D g = (Graphics2D) out.getGraphics() ;
+				g.setColor(Color.LIGHT_GRAY);
+				g.fillRect(1, 1, x-1, y-1);
+				
+				java.awt.Image fil = ImageIO.read(img.getStreamData()) ;
+				
+				g.drawImage(fil, widthOffset.intValue(), heightOffset.intValue(), newWidth.intValue(), newHeight.intValue(), null);
+				
+				File newFile = new File(avatarDir.concat("/thumb")) ;
+				
+				ImageIO.write(out, img.getFormat(), newFile) ;
+				
+				res = new AImage(newFile) ;
+				newFile.delete();
+				
+			}
+			
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
+		
+		return res ;
+		
+	}
+	
+	//--------------------------------------------
 
 	private class LangConverter implements Converter{
 		
@@ -625,7 +1738,7 @@ private Boolean allowRegistration = false ;
 			HttpSession session = (HttpSession) Executions.getCurrent().getSession().getNativeSession() ;
 			Locale currentLocale = (Locale) session.getAttribute(Attributes.PREFERRED_LOCALE) ;
 			
-			String country = loc.getDisplayLanguage(currentLocale) ;
+			String country = loc.getDisplayCountry(currentLocale) ;
 			return country ;
 		}
 

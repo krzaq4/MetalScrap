@@ -110,13 +110,13 @@ public class Login implements Initiator, InitiatorExt {
 			}
 			
 			if(confirm) {
-				if(userVerificationModeAuto) {
+				//if(!userVerificationModeAuto) {
 					user.setStatus(User.STATUS_CONFIRMED);
 					user.setCompleted(false);
-				} else {
-					user.setStatus(User.STATUS_VERIFIED);
-					user.setCompleted(false);
-				}
+				//} else {
+				//	user.setStatus(User.STATUS_VERIFIED);
+				//	user.setCompleted(false);
+				//}
 				
 				
 				
