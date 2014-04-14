@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.NoSuchAlgorithmException;
@@ -1470,6 +1471,7 @@ public class UserAccountBind {
 		File avatarDirFolder = new File(avatarDir) ;
 		File[] files = avatarDirFolder.listFiles() ;
 		if(files.length>1){
+			avatars.getChildren().clear();
 			for(final File file:files){
 				
 					AImage img = scaleImage(100, 100, new AImage(file), file) ;
@@ -1482,6 +1484,8 @@ public class UserAccountBind {
 						public void onEvent(Event arg0) throws Exception {
 							AImage fullImg = scaleImage(225, 225, new AImage(file), file) ;
 							avatar.setContent(fullImg);
+							user.setAvatarFileName(file.getName());
+							ServicesImpl.getUserService().update(user);
 							
 						}
 						
@@ -1499,6 +1503,53 @@ public class UserAccountBind {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	
+	@Command
+	public void deleteAvatar() {
+		
+		String userDir = Utilities.getUserDataFolder(user) ;
+		final String avatarDir = userDir.concat("\\avatar") ;
+		final File avatarDirFolder = new File(avatarDir) ;
+		
+		
+		
+		final File[] files = avatarDirFolder.listFiles() ;
+		if(files.length>=1){
+		
+			Messagebox.show("Czy napewno chcesz usunąć awatar?", "Usuń awatar", Messagebox.YES|Messagebox.NO, null, new EventListener<Event>(){
+
+				@Override
+				public void onEvent(Event arg0) throws Exception {
+					
+					if(arg0.getName().equalsIgnoreCase("onYes")){
+						
+						if(files.length>1) {
+							
+							AImage nextAvatar = new AImage(files[1]) ;
+							avatar.setContent(nextAvatar);
+						} else {
+							avatar.redraw(new StringWriter());
+						}
+						
+						String toDelete = avatarDir.concat(((AImage) avatar.getContent()).getName()) ;
+						File toDeleteFile = new File(toDelete) ;
+						toDeleteFile.delete() ;
+						
+					}
+					
+				}
+				
+			}) ;
+			
+			
+			
+			
+			
+			
+		}
+		
 	}
 	
 	private AImage scaleImage(int x, int y, AImage img, File afile) {

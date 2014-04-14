@@ -275,7 +275,7 @@
 			<vbox align="end" vflex="1" hflex="1" >				
 				<image id="avatar" width="225px" height="225px" src="/resources/images/noavatar.jpg" class="rounded"></image>
 				<hbox>
-					<button mold="trendy" label="usuń" />
+					<button mold="trendy" label="usuń" onClick="@command('deleteAvatar')" />
 					<fileupload id="uploader" label="zmień avatar" onUpload="@command('uploadFile')" ></fileupload>
 					<label class="validation" value="max 3 obrazki" />
 				</hbox>
