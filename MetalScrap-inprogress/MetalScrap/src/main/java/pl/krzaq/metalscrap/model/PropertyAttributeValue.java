@@ -10,6 +10,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import pl.krzaq.metalscrap.model.generalization.Translatable;
+
 
 @Entity
 @Table(name="property_attribute_value")
@@ -18,9 +20,9 @@ import javax.persistence.Table;
 	@NamedQuery(name="PropertyAttributeValue.findById", query="from PropertyAttributeValue a where a.id=:id")
 	
 })
-public class PropertyAttributeValue {
+public class PropertyAttributeValue implements Translatable {
 
-	
+	Boolean isChild = true ;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -29,6 +31,9 @@ public class PropertyAttributeValue {
 	
 	@Column(name="value")
 	private String value ;
+	
+	@Column(name="lang")
+	private String lang ;
 	
 	@ManyToOne
 	private PropertyAttribute attribute ;
@@ -88,7 +93,26 @@ public class PropertyAttributeValue {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String getLang() {
+		return this.lang ;
+	}
+
+	@Override
+	public Boolean isChild() {
+		return this.isChild ;
+	}
+
+	public void setLang(String lang) {
+		this.lang = lang;
+	}
 	
-	
+	/*public PropertyAttributeValue clone(String lang, boolean save) {
+		
+		PropertyAttributeValue pav = new PropertyAttributeValue() ;
+		pav.setLang(lang);
+		pav.set
+	}*/
 	
 }

@@ -21,6 +21,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.IndexColumn;
 
+import pl.krzaq.metalscrap.model.generalization.Translatable;
 import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 
 
@@ -39,8 +40,11 @@ import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 	
 	
 })
-public class Category implements Serializable, Comparable {
+public class Category implements Serializable, Comparable, Translatable {
 
+	
+	private Boolean isChild = false ;
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="id")
@@ -225,7 +229,7 @@ public Category(String name, String description, Category parent, String lang) {
 	}
 
 	
-
+	@Override
 	public String getLang() {
 		return lang;
 	}
@@ -279,9 +283,101 @@ public Category(String name, String description, Category parent, String lang) {
 		if (this.getPosition()==toCompare.getPosition()) cmp=0 ;
 		return cmp ;
 	}
+
+	@Override
+	public Boolean isChild() {
+		return this.isChild ;
+	}
 	
 	
-	
+	public Category clone(String lang, boolean save) {
+		
+		Category ca = new Category() ;
+		ca.setDescription(this.getDescription());
+		ca.setLang(lang);
+		ca.setName(this.getName());
+		
+		if(this.getParent()!=null) {
+			ca.setParent(this);getParent().clone(lang, save) ;
+		} else {
+			ca.setParent(null);
+		}
+		
+		ca.setPosition(this.getPosition());
+		
+		if (this.getAuctions()!=null) {
+			List<Auction> auctions = new ArrayList<Auction>(this.getAuctions()) ;
+			ca.setAuctions(auctions);
+		} else {
+			ca.setAuctions(null);
+		}
+		
+		if(this.getChildren()!=null) {
+			List<Category> childs = new ArrayList<Category>() ;
+			for (Category c:this.getChildren()) {
+				childs.add(c.clone(lang, save)) ;
+			}
+			ca.setChildren(childs);
+		} else {
+			ca.setChildren(null);
+		}
+		
+		if(this.getProps()!=null) {
+			List<Property> props = new ArrayList<Property>() ;
+			for (Property p:this.getProps()) {
+				Property newP = new Property() ;
+				newP.setDescription(p.getDescription());
+				newP.setExposed(p.getExposed());
+				newP.setLang(lang);
+				newP.setName(p.getName());
+				if(p.getAttributes()!=null) {
+					List<PropertyAttribute> patts = new ArrayList<PropertyAttribute>() ;
+					for (PropertyAttribute pa:p.getAttributes()) {
+						PropertyAttribute newPa = new PropertyAttribute() ;
+						newPa.setLang(lang);
+						newPa.setName(pa.getName());
+						newPa.setProperty(newP);
+						newPa.setType(pa.getType());
+						
+						if(pa.getValues()!=null) {
+							List<PropertyAttributeValue> pvals = new ArrayList<PropertyAttributeValue>() ;
+							
+							for (PropertyAttributeValue pav:pa.getValues()) {
+								PropertyAttributeValue newPav = new PropertyAttributeValue() ;
+								newPav.setAttribute(newPa);
+								newPav.setLang(lang);
+								newPav.setValue(pav.getValue());
+								pvals.add(newPav) ;
+							}
+							
+							newPa.setValues(pvals);
+						} else {
+							newPa.setValues(null);
+						}
+						
+					}
+					
+					
+				} else {
+					newP.setAttributes(null);
+				}
+				
+				
+				props.add(newP) ;
+			}
+			
+			ca.setProperties(props);
+			
+		} else {
+			ca.setProperties(null);
+		}
+		
+		if(save) {
+			ServicesImpl.getCategoryService().save(ca);
+		}
+		
+		return ca ;
+	}
 	
 	
 }

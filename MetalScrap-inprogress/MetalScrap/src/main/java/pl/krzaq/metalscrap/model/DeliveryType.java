@@ -1,6 +1,7 @@
 package pl.krzaq.metalscrap.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +16,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import pl.krzaq.metalscrap.model.generalization.Translatable;
+import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+
 
 @Entity
 @Table(name="delivery_type")
@@ -24,8 +28,9 @@ import javax.persistence.Table;
 	
 	
 })
-public class DeliveryType implements Serializable {
+public class DeliveryType implements Serializable, Translatable {
 
+	private Boolean isChild = false ;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -37,6 +42,9 @@ public class DeliveryType implements Serializable {
 	
 	@Column(name="name")
 	private String name ;
+	
+	@Column(name="lang")
+	private String lang ;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="deliveryType")
 	private List<Auction> auctions ;
@@ -73,7 +81,34 @@ public class DeliveryType implements Serializable {
 		this.auctions = auctions;
 	}
 
-	
+	@Override
+	public String getLang() {
+		return this.lang ;
+	}
+
+	public void setLang(String lang) {
+		this.lang = lang;
+	}
+
+	@Override
+	public Boolean isChild() {
+	return this.isChild ;
+	}
+
+	public DeliveryType clone(String lang, boolean save) {
+		DeliveryType dt = new DeliveryType() ;
+		if(this.getAuctions()!=null) {
+			dt.setAuctions(new ArrayList<Auction>(this.getAuctions()));
+		}
+		dt.setCode(this.getCode());
+		dt.setLang(lang);
+		dt.setName(this.getName());
+		
+		if(save) {
+			ServicesImpl.getAuctionService().getAuctionDAO().save(dt);
+		}
+		return dt ;
+	}
 	
 	//----------------------------------------------------------------------
 	

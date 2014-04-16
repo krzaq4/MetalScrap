@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -27,6 +28,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
 
 
 
@@ -130,6 +132,14 @@ public class User implements Serializable {
 	@JoinTable(name="users_roles", joinColumns=@JoinColumn(name="user_id", referencedColumnName="id"), inverseJoinColumns=@JoinColumn(name="role_id", referencedColumnName="id"))
 	@IndexColumn(name="rls", nullable=false )
 	private Set<Role> roles ;
+	
+	@OneToMany
+	@IndexColumn(name="cmnts", nullable=false)
+	private List<Comment> comments ;
+	
+	@OneToMany
+	@IndexColumn(name="msgs", nullable=false)
+	private List<Message> messages ;
 	
 	@OneToMany(cascade=CascadeType.MERGE)
 	@IndexColumn(name="obsvr", nullable=false)
@@ -309,6 +319,24 @@ public class User implements Serializable {
 
 	public void setAvatarFileName(String avatarFileName) {
 		this.avatarFileName = avatarFileName;
+	}
+	
+	
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+
+	public List<Message> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(List<Message> messages) {
+		this.messages = messages;
 	}
 
 	public String getToken() {

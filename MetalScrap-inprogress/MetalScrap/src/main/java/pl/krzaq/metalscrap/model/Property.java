@@ -16,6 +16,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.IndexColumn;
 
+import pl.krzaq.metalscrap.model.generalization.Translatable;
+
 
 @Entity
 @Table(name="property")
@@ -24,9 +26,9 @@ import org.hibernate.annotations.IndexColumn;
 	@NamedQuery(name="Property.findById", query="from Property a where a.id=:id")
 	
 })
-public class Property implements Serializable {
+public class Property implements Serializable, Translatable {
 
-	
+	private Boolean isChild = false ;
 	
 
 	@Id
@@ -147,6 +149,11 @@ public class Property implements Serializable {
 
 	public void setEqualIdentifier(String equalIdentifier) {
 		this.equalIdentifier = equalIdentifier;
+	}
+
+	@Override
+	public Boolean isChild() {
+		return this.isChild ;
 	}
 
 	

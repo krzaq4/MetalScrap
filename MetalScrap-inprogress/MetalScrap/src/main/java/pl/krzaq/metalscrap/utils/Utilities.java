@@ -28,6 +28,7 @@ import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Decimalbox;
 import org.zkoss.zul.Hbox;
+import org.zkoss.zul.Image;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Textbox;
@@ -394,6 +395,47 @@ public class Utilities {
 		String dataDir = System.getProperty("jboss.server.data.dir") ;
 		String usersDir = dataDir.concat("\\platform\\users\\").concat(userName) ;
 		return usersDir ;
+	}
+	
+	
+public static Image scaleImage(Image image, int maxWidth, int maxHeight) {
+		
+		float maxRatio = (float) maxWidth / (float) maxHeight ;
+		float widthRatio = (float) maxWidth / (float) image.getContent().getWidth() ;
+		float heightRatio = (float) maxHeight / (float) image.getContent().getHeight() ;
+		
+		float scale = 100 ;
+		
+		if (widthRatio<heightRatio || widthRatio==0) {
+			
+			scale = heightRatio ;
+			
+		} else
+		if (widthRatio>heightRatio || heightRatio==0){
+			scale = widthRatio ;
+		}
+		
+		Image img = (Image)image.clone() ;
+		int w = img.getContent().getWidth() ;
+		int h = img.getContent().getHeight() ;
+		int newWidth = Math.round((float)w*(float)scale) ;
+		int newHeight = Math.round((float)h*(float)scale) ;
+		
+		
+		
+		img.setWidth(String.valueOf(Math.round((float)w*(float)scale))+"px");
+		img.setHeight(String.valueOf(Math.round((float)h*(float)scale))+"px");
+		
+		if (newWidth>maxWidth && maxWidth>0) {
+			img = scaleImage(img, maxWidth,0) ;
+		}
+		
+		if(newHeight>maxHeight && maxHeight>0) {
+			img = scaleImage(img, 0, maxHeight) ;
+		}
+		
+		return img ;
+		
 	}
 	
 }

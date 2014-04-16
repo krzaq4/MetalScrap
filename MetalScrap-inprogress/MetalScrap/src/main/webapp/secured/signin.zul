@@ -86,10 +86,14 @@
 				</div>
 				
 			</hbox>
+			<hbox>
 			<div style="padding: 10px 0 0 0 ">
 				<h:input type="submit" value="Zaloguj" class="button z-button-os" />
 			</div>
+			<button label="FB" onClick="@command('fbLogin')" />
+			</hbox>
 			</h:form>
+			<label value="Fbuser " /><label value="@load(vm.fbUser)" />
 			<space/>
 			<vbox class="remind">
 				<a  href="/app/register">Nie masz konta? Zarejestruj się za darmo!</a>

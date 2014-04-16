@@ -16,6 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import pl.krzaq.metalscrap.model.generalization.Translatable;
+
 
 @Entity
 @Table(name="commodity_type")
@@ -24,8 +26,9 @@ import javax.persistence.Table;
 	
 	
 })
-public class CommodityType implements Serializable {
+public class CommodityType implements Serializable, Translatable {
 
+	private Boolean isChild = false ;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -34,6 +37,9 @@ public class CommodityType implements Serializable {
 	
 	@Column(name="name")
 	private String name ;
+	
+	@Column(name="lang")
+	private String lang ;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="commodityType")
 	private List<Commodity> commodities ;
@@ -60,6 +66,20 @@ public class CommodityType implements Serializable {
 
 	public void setCommodities(List<Commodity> commodities) {
 		this.commodities = commodities;
+	}
+
+	@Override
+	public String getLang() {
+		return this.lang ;
+	}
+
+	public void setLang(String lang) {
+		this.lang = lang;
+	}
+
+	@Override
+	public Boolean isChild() {
+		return this.isChild ;
 	}
 	
 	

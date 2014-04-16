@@ -11,6 +11,8 @@ import java.util.Set;
 
 
 
+
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,6 +30,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -89,6 +92,14 @@ public class Auction implements Serializable {
 	@Cascade(value={CascadeType.ALL, CascadeType.DELETE_ORPHAN})
 	@IndexColumn(name="FILES")
 	private List<AttachementFile> files = new ArrayList<AttachementFile>();
+	
+	@OneToMany
+	@IndexColumn(name="cmnts", nullable=false)
+	private List<Comment> comments ;
+	
+	@OneToMany
+	@IndexColumn(name="msgs", nullable=false)
+	private List<Message> messages ;	
 	
 	@OneToOne
 	@JoinColumn(name="winner")
@@ -155,6 +166,11 @@ public class Auction implements Serializable {
 	@Cascade(value={CascadeType.ALL})
 	@IndexColumn(name="props")
 	private List<Property> properties; 
+	
+	
+	@NotNull
+	@Column(name="hits_count")
+	private Integer hitsCount ;
 	
 	// -------------------------------------------------------------------------------
 	
@@ -359,6 +375,33 @@ public class Auction implements Serializable {
 
 	public void setMinPrice(Double minPrice) {
 		this.minPrice = minPrice;
+	}
+
+	
+	
+	
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+
+	public List<Message> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(List<Message> messages) {
+		this.messages = messages;
+	}
+	
+	public Integer getHitsCount() {
+		return hitsCount;
+	}
+
+	public void setHitsCount(Integer hitsCount) {
+		this.hitsCount = hitsCount;
 	}
 
 	@Override

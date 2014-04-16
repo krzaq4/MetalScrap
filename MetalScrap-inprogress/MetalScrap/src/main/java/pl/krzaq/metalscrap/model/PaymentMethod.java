@@ -1,6 +1,7 @@
 package pl.krzaq.metalscrap.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +16,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import pl.krzaq.metalscrap.model.generalization.Translatable;
+import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+
 
 @Entity
 @Table(name="payment_method")
@@ -24,8 +28,9 @@ import javax.persistence.Table;
 	
 	
 })
-public class PaymentMethod implements Serializable {
+public class PaymentMethod implements Serializable, Translatable {
 
+	private Boolean isChild = false ;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -37,6 +42,9 @@ public class PaymentMethod implements Serializable {
 	
 	@Column(name="name")
 	private String name ;
+	
+	@Column(name="lang")
+	private String lang ;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="paymentMethod")
 	private List<Auction> auctions ;
@@ -73,7 +81,38 @@ public class PaymentMethod implements Serializable {
 		this.auctions = auctions;
 	}
 
+	@Override
+	public String getLang() {
+		return this.lang ;
+	}
+
+	public void setLang(String lang) {
+		this.lang = lang;
+	}
+
+	@Override
+	public Boolean isChild() {
+		return this.isChild ;
+	}
+
+	public PaymentMethod clone(String lang, boolean save) {
+		
+		PaymentMethod pm = new PaymentMethod() ;
+		if(this.getAuctions()!=null) {
+			pm.setAuctions(new ArrayList<Auction>(this.getAuctions()));
+		} else {
+			pm.setAuctions(null);
+		}
 	
+		pm.setCode(this.getCode());
+		pm.setLang(lang);
+		pm.setName(this.getName());
+		
+		if(save) {
+			ServicesImpl.getAuctionService().getAuctionDAO().save(pm);
+		}
+		return pm ;
+	}
 	
 	
 }

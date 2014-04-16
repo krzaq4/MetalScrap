@@ -3,12 +3,14 @@ package pl.krzaq.metalscrap.bind;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.math.BigDecimal;
@@ -1473,8 +1475,12 @@ public class UserAccountBind {
 		if(files.length>1){
 			avatars.getChildren().clear();
 			for(final File file:files){
-				
-					AImage img = scaleImage(100, 100, new AImage(file), file) ;
+					Image img = new Image() ;
+					
+					AImage im = new AImage(file) ;
+					img.setContent(im);
+					img = Utilities.scaleImage(img, 100,100) ;
+					//AImage img = scaleImage(100, 100, new AImage(file), file) ;
 					Fisheye fe = new Fisheye() ;
 					//fe.setId(file.getAbsolutePath());
 					
@@ -1491,8 +1497,9 @@ public class UserAccountBind {
 						
 					}) ;
 					
-					fe.setImageContent(img);
+					fe.setImageContent(img.getContent()); //.setImageContent(img);
 					avatars.appendChild(fe);
+					avatars.setVisible(true) ;
 			}
 			
 		} else {
@@ -1524,19 +1531,54 @@ public class UserAccountBind {
 				public void onEvent(Event arg0) throws Exception {
 					
 					if(arg0.getName().equalsIgnoreCase("onYes")){
-						
+						String toDelete = avatarDir.concat("\\").concat(((AImage) avatar.getContent()).getName()) ;
 						if(files.length>1) {
 							
-							AImage nextAvatar = new AImage(files[1]) ;
-							avatar.setContent(nextAvatar);
+							int fNo = 0 ;
+							boolean foundNext = false ;
+							for(File f:files) {
+								if(f.getName().equals(avatar.getContent().getName())) {
+									foundNext = true ;
+									break ;
+								}
+								fNo++ ;
+							}
+							
+							
+							if (foundNext) {
+								
+								if (fNo<files.length-1) {
+									
+									AImage nextAvatar = new AImage(files[fNo+1]) ;
+									avatar.setContent(nextAvatar);
+									
+								} else if(fNo-1>=0) {
+									AImage nextAvatar = new AImage(files[fNo-1]) ;
+									avatar.setContent(nextAvatar);
+								} else {
+									AImage nextAvatar = null ;
+									avatar.setContent(nextAvatar);
+								}
+								
+								
+							} else {
+								AImage nextAvatar = null ;
+								avatar.setContent(nextAvatar);
+							}
+							
+							
+							
+							
 						} else {
-							avatar.redraw(new StringWriter());
+							//avatar.redraw(new StringWriter());
+							AImage nextAvatar = null ;
+							avatar.setContent(nextAvatar);
 						}
 						
-						String toDelete = avatarDir.concat(((AImage) avatar.getContent()).getName()) ;
+						
 						File toDeleteFile = new File(toDelete) ;
 						toDeleteFile.delete() ;
-						
+						prepareAvatars();
 					}
 					
 				}
@@ -1585,12 +1627,16 @@ public class UserAccountBind {
 				java.awt.Image fil = ImageIO.read(img.getStreamData()) ;
 				
 				g.drawImage(fil, widthOffset.intValue(), heightOffset.intValue(), newWidth.intValue(), newHeight.intValue(), null);
-				File newFile = new File(avatarDir.concat("/thumb")) ;
 				
-				ImageIO.write(out, img.getFormat(), newFile) ;
+				File newFile = new File(avatarDir.concat("\\").concat(afile.getName())) ;
+				
+				OutputStream os = new ByteArrayOutputStream() ;
+				
+				ImageIO.write(out, img.getFormat(), os) ;
 				
 				res = new AImage(newFile) ;
-				newFile.delete();
+				
+				//newFile.delete();
 				
 			} else {
 				
@@ -1609,12 +1655,12 @@ public class UserAccountBind {
 				
 				g.drawImage(fil, widthOffset.intValue(), heightOffset.intValue(), newWidth.intValue(), newHeight.intValue(), null);
 				
-				File newFile = new File(avatarDir.concat("/thumb")) ;
+				File newFile = new File(avatarDir.concat("\\").concat(afile.getName())) ;
 				
 				ImageIO.write(out, img.getFormat(), newFile) ;
 				
 				res = new AImage(newFile) ;
-				newFile.delete();
+				//newFile.delete();
 				
 				
 				
@@ -1655,12 +1701,12 @@ public class UserAccountBind {
 				
 				g.drawImage(fil, widthOffset.intValue(), heightOffset.intValue(), newWidth.intValue(), newHeight.intValue(), null);
 				
-				File newFile = new File(avatarDir.concat("/thumb")) ;
+				File newFile = new File(avatarDir.concat("\\").concat(afile.getName())) ;
 				
 				ImageIO.write(out, img.getFormat(), newFile) ;
 				
 				res = new AImage(newFile) ;
-				newFile.delete();
+				//newFile.delete();
 				
 				
 			} else {
@@ -1682,12 +1728,12 @@ public class UserAccountBind {
 				
 				g.drawImage(fil, widthOffset.intValue(), heightOffset.intValue(), newWidth.intValue(), newHeight.intValue(), null);
 				
-				File newFile = new File(avatarDir.concat("/thumb")) ;
+				File newFile = new File(avatarDir.concat("\\").concat(afile.getName())) ;
 				
 				ImageIO.write(out, img.getFormat(), newFile) ;
 				
 				res = new AImage(newFile) ;
-				newFile.delete();
+				//newFile.delete();
 			}
 			
 			
@@ -1722,12 +1768,12 @@ public class UserAccountBind {
 				
 				g.drawImage(fil, widthOffset.intValue(), heightOffset.intValue(), newWidth.intValue(), newHeight.intValue(), null);
 				
-				File newFile = new File(avatarDir.concat("/thumb")) ;
+				File newFile = new File(avatarDir.concat("\\").concat(afile.getName())) ;
 				
 				ImageIO.write(out, img.getFormat(), newFile) ;
 				
 				res = new AImage(newFile) ;
-				newFile.delete();
+				//newFile.delete();
 				
 				
 			} else {
@@ -1747,12 +1793,12 @@ public class UserAccountBind {
 				
 				g.drawImage(fil, widthOffset.intValue(), heightOffset.intValue(), newWidth.intValue(), newHeight.intValue(), null);
 				
-				File newFile = new File(avatarDir.concat("/thumb")) ;
+				File newFile = new File(avatarDir.concat("\\").concat(afile.getName())) ;
 				
 				ImageIO.write(out, img.getFormat(), newFile) ;
 				
 				res = new AImage(newFile) ;
-				newFile.delete();
+				//newFile.delete();
 				
 			}
 			

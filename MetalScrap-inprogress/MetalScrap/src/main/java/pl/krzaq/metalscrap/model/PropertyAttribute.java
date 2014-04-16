@@ -17,6 +17,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.IndexColumn;
 
+import pl.krzaq.metalscrap.model.generalization.Translatable;
+
 @Entity
 @Table(name="property_attribute")
 @NamedQueries({
@@ -24,7 +26,7 @@ import org.hibernate.annotations.IndexColumn;
 	@NamedQuery(name="PropertyAttribute.findById", query="from PropertyAttribute a where a.id=:id")
 	
 })
-public class PropertyAttribute implements Serializable{
+public class PropertyAttribute implements Serializable, Translatable{
 
 	public static Integer TYPE_TEXT = 1 ;
 	public static Integer TYPE_DECIMAL = 2 ;
@@ -32,6 +34,7 @@ public class PropertyAttribute implements Serializable{
 	public static Integer TYPE_SELECT = 4 ;
 	public static Integer TYPE_MULTISELECT = 5 ;
 	
+	private Boolean isChild = true ;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -40,10 +43,12 @@ public class PropertyAttribute implements Serializable{
 	
 	@Column(name="name")
 	private String name ;
-	
-	
+		
 	@Column(name="type")
 	private Integer type ;
+	
+	@Column(name="lang")
+	private String lang ;
 	
 	@ManyToOne
 	private Property property ;
@@ -132,6 +137,20 @@ public class PropertyAttribute implements Serializable{
 		} else if (!type.equals(other.type))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String getLang() {
+		return this.lang ;
+	}
+
+	@Override
+	public Boolean isChild() {
+		return this.isChild ;
+	}
+
+	public void setLang(String lang) {
+		this.lang = lang;
 	}
 
 	

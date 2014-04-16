@@ -25,7 +25,7 @@ import pl.krzaq.metalscrap.model.Commodity;
 import pl.krzaq.metalscrap.model.User;
 
 @Transactional
-public class AuctionDAO {
+public class AuctionDAO extends GenericDAO{
 
 	@Autowired
 	private SessionFactory sessionFactory ;
@@ -172,12 +172,7 @@ public List<Auction> findOwnedByUser(User user) {
 		return (Auction) c1.uniqueResult() ;
 	}
 	
-	public void save(Auction a){
-		
-		sessionFactory.getCurrentSession().save(a) ;
-		
-		
-	}
+	
 
 	public List<Commodity> findAuctionCommodities(Auction auction) {
 		
