@@ -5,8 +5,97 @@
 <?page title="${labels.common.login}" contentType="text/html;charset=UTF-8" ?>
 
 
-<zk xmlns:h="http://www.w3.org/1999/xhtml">
+<zk xmlns:h="http://www.w3.org/1999/xhtml" xmlns:n="native">
+<n:div id="fb-root"></n:div>
 
+<script type="text/javascript">
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '228453697351919',
+          status     : true,
+          xfbml      : true
+        });
+      };
+
+      (function(d, s, id){
+      var l_lang;
+  		if (navigator.userLanguage) // Explorer
+    		l_lang = navigator.userLanguage;
+  		else if (navigator.language) // FF
+    		l_lang = navigator.language;
+  		else
+    		l_lang = "pl";
+      
+      var p_lang = l_lang.toUpperCase() ;
+      
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/"+l_lang.concat("_").concat(p_lang)+"/all.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    </script>
+
+  
+<script type="text/javascript">
+
+
+var fbreal ;
+
+function pushlogin() {
+		alert(fbreal) ;
+         var evt2 = document.createEvent('HTMLEvents');
+    	evt2.initEvent( 'blur', false, false);
+    	fbreal.dispatchEvent(evt2);
+
+}
+
+function bindbutton(but) {
+alert('bind') ;
+	fbreal = but ;
+}
+
+function loginfb(fbsec) {
+	FB.login(function(response) {
+		if (response.authResponse) {
+			// connected
+			//$('#fb_login_link').css('display', 'none');
+			
+			loginStatusInfo(fbsec);
+			
+		} else {
+			// cancelled
+		}
+	}, {scope: 'read_friendlists,user_about_me,user_birthday,user_videos,user_activities,user_interests,email,user_status,publish_stream'});
+}
+
+
+function loginStatusInfo(fbsec) {
+	FB.getLoginStatus(function(response) {
+	if (response.status === 'connected') {
+		fbsec.value=response.authResponse.accessToken;
+
+	} else {
+		fbsec.value=' ';
+	}
+	if (document.createEvent) {
+		var evt = document.createEvent('HTMLEvents');
+    	evt.initEvent( 'blur', false, false);
+    	fbsec.dispatchEvent(evt);
+   
+   	 	var evt2 = document.createEvent('HTMLEvents');
+    	evt2.initEvent( 'change', false, false);
+    	fbsec.dispatchEvent(evt2);
+     } else if (document.createEventObject) {
+         fbsec.fireEvent('onblur');
+         fbsec.fireEvent('onchange');
+       }
+
+});
+}
+</script>
+     
+    
 <div class="head"></div>
 <div class="log"></div>
 	<div
@@ -62,6 +151,7 @@
 		<vbox style="padding:10px 10px 10px 10px">
 			<label value="@bind(vm.userMessage)" class="validation" visible="@bind(vm.userInvalid)" />
 			<label value="@bind(vm.passMessage)" class="validation" visible="@bind(vm.passInvalid)" />
+			<label value="Logowanie nie powiodło się" class="validation" visible="@bind(vm.loginFailed)" />
 		</vbox>
 	</div>
 	<div height="30px"></div>
@@ -90,10 +180,20 @@
 			<div style="padding: 10px 0 0 0 ">
 				<h:input type="submit" value="Zaloguj" class="button z-button-os" />
 			</div>
-			<button label="FB" onClick="@command('fbLogin')" />
+			<textbox id="fbsecret" onChange="@command('fbAccess')" visible="false" />
+			
+			
+			<button  visible="true" sclass="loginfb">
+				<attribute name="onClick">
+				<![CDATA[
+				Clients.evalJavaScript("loginfb("+fbsecret.getUuid()+")") ;
+				]]>
+				</attribute>
+				
+			</button>  
 			</hbox>
 			</h:form>
-			<label value="Fbuser " /><label value="@load(vm.fbUser)" />
+			
 			<space/>
 			<vbox class="remind">
 				<a  href="/app/register">Nie masz konta? Zarejestruj się za darmo!</a>

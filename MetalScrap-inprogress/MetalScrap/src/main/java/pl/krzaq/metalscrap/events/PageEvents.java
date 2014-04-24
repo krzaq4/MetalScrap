@@ -117,10 +117,11 @@ public class PageEvents {
 		
 		SecurityContextHolder.clearContext();
 		HttpSession session = (HttpSession)Executions.getCurrent().getSession().getNativeSession();
+		Executions.getCurrent().sendRedirect("home");
 		if (session != null) {
 		   session.invalidate();
 		}
-		Executions.getCurrent().sendRedirect("/app/home");
+		
 	}
 	
 	

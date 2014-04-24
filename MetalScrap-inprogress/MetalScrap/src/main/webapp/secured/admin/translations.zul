@@ -97,31 +97,31 @@
 <caption label="${labels.common.sitesections}" />
 <tabbox>
 	<tabs>
-		<tab label="${labels.about.title}">
+		<tab sclass="userAccount" label="${labels.about.title}">
 			
 		</tab>
-		<tab label="${labels.admin.menu.title}">
+		<tab sclass="userAccount" label="${labels.admin.menu.title}">
 		
 		</tab>
-		<tab label="${labels.auction.title}">
+		<tab sclass="userAccount" label="${labels.auction.title}">
 			
 		</tab>
-		<tab label="CMS">
+		<tab sclass="userAccount" label="CMS">
 		
 		</tab>
-		<tab label="${labels.regulation.title}">
+		<tab sclass="userAccount" label="${labels.regulation.title}">
 		
 		</tab>
-		<tab label="${labels.help.title}">
+		<tab sclass="userAccount" label="${labels.help.title}">
 		
 		</tab>
-		<tab label="${labels.contact.title}">
+		<tab sclass="userAccount" label="${labels.contact.title}">
 		
 		</tab>
-		<tab label="${labels.common.title}">
+		<tab sclass="userAccount" label="${labels.common.title}">
 		
 		</tab>
-		<tab label="${labels.privacy.title}">
+		<tab sclass="userAccount" label="${labels.privacy.title}">
 		
 		</tab>
 	</tabs>

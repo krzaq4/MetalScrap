@@ -35,6 +35,9 @@ public class PropertyAttributeValue implements Translatable {
 	@Column(name="lang")
 	private String lang ;
 	
+	@Column(name="equal_ident")
+	private String equalIdentifier ;
+	
 	@ManyToOne
 	private PropertyAttribute attribute ;
 
@@ -106,6 +109,14 @@ public class PropertyAttributeValue implements Translatable {
 
 	public void setLang(String lang) {
 		this.lang = lang;
+	}
+
+	public String getEqualIdentifier() {
+		return equalIdentifier;
+	}
+
+	public void setEqualIdentifier(String equalIdentifier) {
+		this.equalIdentifier = equalIdentifier;
 	}
 	
 	/*public PropertyAttributeValue clone(String lang, boolean save) {

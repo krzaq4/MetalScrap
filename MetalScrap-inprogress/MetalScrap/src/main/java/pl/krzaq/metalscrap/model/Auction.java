@@ -93,11 +93,11 @@ public class Auction implements Serializable {
 	@IndexColumn(name="FILES")
 	private List<AttachementFile> files = new ArrayList<AttachementFile>();
 	
-	@OneToMany
+	@OneToMany(mappedBy="auction")
 	@IndexColumn(name="cmnts", nullable=false)
 	private List<Comment> comments ;
 	
-	@OneToMany
+	@OneToMany(mappedBy="auction")
 	@IndexColumn(name="msgs", nullable=false)
 	private List<Message> messages ;	
 	
@@ -158,7 +158,8 @@ public class Auction implements Serializable {
 	
 
 	@ManyToOne
-	@JoinColumn(name="category_id")
+	//0@JoinTable(name="auction_category", joinColumns=@JoinColumn(name="auction_id", referencedColumnName="id"), inverseJoinColumns=@JoinColumn(name="category_id", referencedColumnName="id"))
+	//@JoinColumn(name="category")
 	private Category category ;
 	
 	

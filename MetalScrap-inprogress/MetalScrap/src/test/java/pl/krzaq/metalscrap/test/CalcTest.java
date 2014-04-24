@@ -2,6 +2,10 @@ package pl.krzaq.metalscrap.test;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -19,6 +23,22 @@ import pl.krzaq.metalscrap.utils.LangUtils;
 
 public class CalcTest {
 
+	@Test
+	public void testSmsTest() {
+		
+		try {
+			URLConnection c = new URL("https://api1.serwersms.pl/zdalnie/index.php?login=webapi&haslo=webapitest&akcja=wyslij_sms&numer=%2B48796926305&wiadomosc=Test").openConnection() ;
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
 	@Test
 	public void testCashTest() {
 		Double cash = 23000.00 ;
@@ -54,7 +74,7 @@ public class CalcTest {
 	public void testChechRegexTest(){
 		
 		String tt="45-429";
-		String regex = "[0-9]{2}-{1}[0-9]{3}";
+		String regex = "(\\b[0-9]+-*\\b)+";
 		System.out.println(tt+" matches "+regex+"  :"+tt.matches(regex));
 	}
 	

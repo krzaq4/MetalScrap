@@ -1,6 +1,8 @@
 package pl.krzaq.metalscrap.pages;
 
+import java.util.Calendar;
 import java.util.Enumeration;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -8,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionBindingListener;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.zkoss.web.Attributes;
@@ -29,6 +33,7 @@ import org.zkoss.zul.Textbox;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import pl.krzaq.metalscrap.listener.ComponentEventInterceptor;
+import pl.krzaq.metalscrap.model.Event;
 import pl.krzaq.metalscrap.model.Role;
 import pl.krzaq.metalscrap.model.User;
 import pl.krzaq.metalscrap.service.UserService;
@@ -42,7 +47,7 @@ public class HomePage implements Initiator, InitiatorExt {
 
 	
 	private UserServiceImpl userService ;
-	
+	User currentUser = null ;
 	
 	
 	@Override
@@ -76,7 +81,7 @@ public class HomePage implements Initiator, InitiatorExt {
 			System.out.println("Logged in user: "+login) ;
 			
 			// Aktualnie zalogowany użytkownik
-			User currentUser =userService.getUserByLogin(login); 
+			currentUser =userService.getUserByLogin(login); 
 			if (currentUser != null) {
 				
 				currentUser = ServicesImpl.getUserService().getUserById(currentUser.getId()) ;
@@ -217,6 +222,16 @@ public class HomePage implements Initiator, InitiatorExt {
 					.getAttribute(attribute));
 
 		}
+	}
+
+	
+
+	public User getCurrentUser() {
+		return currentUser;
+	}
+
+	public void setCurrentUser(User currentUser) {
+		this.currentUser = currentUser;
 	}
 
 	

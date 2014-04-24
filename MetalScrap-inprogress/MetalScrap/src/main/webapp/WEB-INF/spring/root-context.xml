@@ -17,6 +17,10 @@
 	
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
+	
+	
+	
+	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<mvc:annotation-driven />
 
@@ -33,6 +37,11 @@
 
 	
 	<mvc:resources mapping="/resources/**" location="/, classpath:/resources/" />
+	
+	
+	
+	
+	
 	
 	<!-- <import resource="/appServlet/servlet-context.xml"/> -->
 	

@@ -67,10 +67,9 @@ public class PropertyDAO {
 			update(property) ;
 		}
 		else {
-			for (String lang: ServicesImpl.getLangLabelService().findAllLangs()){
-				property.setLang(lang);
+			
 				sessionFactory.getCurrentSession().save(property);
-			}
+			
 			
 		}
 		

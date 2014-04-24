@@ -411,11 +411,11 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 	public void saveCategory(Category category, Window win, Listbox grid, AnnotateDataBinder binder) {
 	
 		
-			try {
+		
 				
 				if (Utilities.validate(win, true)) {
 				
-				String equalIdent = Utilities.hash(Utilities.HASH_METHOD_MD5, category.getName().concat(category.getDescription()));
+				
 				Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 				Listbox cmbx = (Listbox) win.getFellow("selectedCategory") ;
 				Page page = grid.getPage() ;
@@ -428,10 +428,11 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 		
 				List<String> langs = ServicesImpl.getLangLabelService().findAllLangs() ;
 		
-		
+				category.setAuctions(new ArrayList<Auction>());
+				
 				for (String lang:langs) {
 				
-					if (parent!=null) {
+					/*if (parent!=null) {
 						parent = ServicesImpl.getCategoryService().getEqual( Utilities.hash(Utilities.HASH_METHOD_MD5, parent.getName().concat(parent.getDescription())) , lang) ;
 					}
 			
@@ -441,9 +442,15 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 						parent.getChildren().add(category) ;					
 					}
 				
-					category.setEqualIdentifier(equalIdent);
-					category.setLang(lang);
-					ServicesImpl.getCategoryService().save(category);
+					category.setEqualIdentifier(equalIdent);*/
+					
+					category.setParent(parent);
+					
+					//category.setLang(lang);
+					
+					category = category.clone(lang, true); 
+					
+					//ServicesImpl.getCategoryService().save(category);
 				
 				}
 		
@@ -456,9 +463,7 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 				
 				}
 				
-			} catch (NoSuchAlgorithmException e) {
-				
-			}
+		
 		
 	}
 
@@ -468,30 +473,167 @@ try {
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 		
 		String equalIdent = category.getEqualIdentifier();
-		/*List<Property> prs = new ArrayList<Property>() ;
-		for(Property p:category.getProps()){
-			if(p.getEqualIdentifier()==null)
-				p.setEqualIdentifier(Utilities.hash(Utilities.HASH_METHOD_MD5, p.getName().concat(p.getDescription())));
-			prs.add(p) ;
-		}
-		category.getProps().clear();
-		category.getProps().addAll(prs) ;*/
-		ServicesImpl.getCategoryService().update(category);
 		
 		
-			//for (String lang:ServicesImpl.getLangLabelService().findAllLangs()) {
-		for(Category cat:ServicesImpl.getCategoryService().getEquals(equalIdent)){
-				//cat = ServicesImpl.getCategoryService().getEqual(equalIdent, lang) ;
+		for(Property prop:category.getProps()) {
+			
+			if(prop.getEqualIdentifier()==null) {
+				// New Property in category	
 				
-				//if(lang.equals(locale.getLanguage())) {
-					//cat.getProps().clear();
-				//}
+				for(Category cat:ServicesImpl.getCategoryService().getEquals(equalIdent)){
+				
+					Property newProp = new Property() ;
+					
+					newProp.setLang(cat.getLang());
+					newProp.setEqualIdentifier(Utilities.hash(Utilities.HASH_METHOD_MD5, prop.getName().concat(prop.getDescription())));
+					newProp.setName(prop.getName());
+					newProp.setDescription(prop.getDescription());
+					newProp.setExposed(prop.getExposed());
+					newProp.setAttributes(new ArrayList<PropertyAttribute>());
+					
+					for(PropertyAttribute attr:prop.getAttributes()) {
+						PropertyAttribute newAttr = new PropertyAttribute() ;
+						newAttr.setProperty(newProp);
+						newAttr.setLang(cat.getLang());
+						newAttr.setEqualIdentifier(Utilities.hash(Utilities.HASH_METHOD_MD5, attr.getType().toString().concat(newProp.getName())));
+						newAttr.setType(attr.getType());
+						newAttr.setName(attr.getName());
+						newAttr.setValues(new ArrayList<PropertyAttributeValue>());
+						for(PropertyAttributeValue pval:attr.getValues()) {
+							PropertyAttributeValue newVal = new PropertyAttributeValue() ;
+							newVal.setAttribute(newAttr);
+							newVal.setLang(cat.getLang());
+							newVal.setEqualIdentifier(Utilities.hash(Utilities.HASH_METHOD_MD5, pval.getValue().concat(newProp.getName())));
+							newVal.setValue(pval.getValue());
+							newAttr.getValues().add(newVal);
+						}
+						
+						newProp.getAttributes().add(newAttr) ;
+					}
+				
+					cat.getProps().add(newProp);
+					
+				ServicesImpl.getPropertyService().save(newProp);	
+				
+				ServicesImpl.getCategoryService().update(cat);
+				
+				}	
+					
+				
+			} else {
+				// Property already exists
+				String equalProp = prop.getEqualIdentifier() ;
+				
+				// iterate through other categories
+				// check if propertyAttributes or propertyAttributeValues has changed
+				for(Category cat:ServicesImpl.getCategoryService().getEquals(equalIdent)){
+					
+					if(!cat.getLang().equals(category.getLang())){
+						
+						for(Property catProp:cat.getProps()) {
+							
+							if(catProp.getEqualIdentifier().equals(prop.getEqualIdentifier())) {
+								
+								//Found equal Property
+								for (PropertyAttribute attr:prop.getAttributes()) {
+									for(PropertyAttribute catAttr:catProp.getAttributes()) {
+									
+										if(attr.getEqualIdentifier()==null) {
+											// PropertyAttribute is new
+											PropertyAttribute newAttr = new PropertyAttribute() ;
+											newAttr.setLang(cat.getLang());
+											newAttr.setName(attr.getName());
+											newAttr.setProperty(catProp);
+											newAttr.setType(attr.getType());
+											
+											attr.setProperty(prop);
+											attr.setEqualIdentifier(Utilities.hash(Utilities.HASH_METHOD_MD5, attr.getType().toString().concat(attr.getProperty().getName())));
+											newAttr.setEqualIdentifier(Utilities.hash(Utilities.HASH_METHOD_MD5, attr.getType().toString().concat(attr.getProperty().getName())));
+											
+											newAttr.setValues(new ArrayList<PropertyAttributeValue>());
+											for(PropertyAttributeValue val:attr.getValues()) {
+												
+														PropertyAttributeValue newVal = new PropertyAttributeValue() ;
+														newVal.setEqualIdentifier(Utilities.hash(Utilities.HASH_METHOD_MD5, newVal.getValue().concat(newVal.getAttribute().getProperty().getName())));
+														newVal.setAttribute(newAttr);
+														newVal.setLang(cat.getLang());
+														newVal.setValue(val.getValue());
+														newAttr.getValues().add(newVal) ;
+													
+											}
+											
+											
+											
+										} else
+										if(attr.getEqualIdentifier()!=null && attr.getEqualIdentifier().equals(catAttr.getEqualIdentifier()) ) {
+											
+											
+											for(PropertyAttributeValue val:attr.getValues()) {
+												for(PropertyAttributeValue catVal:catAttr.getValues()) {
+													
+													if(val.getEqualIdentifier()==null) {
+														PropertyAttributeValue newVal = new PropertyAttributeValue() ;
+														
+														newVal.setAttribute(catAttr);
+														newVal.setLang(cat.getLang());
+														newVal.setValue(val.getValue());
+														newVal.setEqualIdentifier(Utilities.hash(Utilities.HASH_METHOD_MD5, newVal.getValue().concat(newVal.getAttribute().getProperty().getName())));
+														catAttr.getValues().add(newVal) ;
+													}
+													
+												}
+												
+											}
+											
+											
+										}
+									
+									}
+								}
+								
+								ServicesImpl.getPropertyService().update(catProp);
+								ServicesImpl.getPropertyService().update(prop);
+								//continue;
+							}
+							
+							/*if(toDelete) {
+								if(cat.getProps().contains(catProp)) {
+									cat.getProps().remove(catProp) ;
+								}
+								//ServicesImpl.getPropertyService().delete(prop);
+								ServicesImpl.getPropertyService().delete(catProp);
+						}*/
+						
+						
+							
+						}
+					}
+					
+					ServicesImpl.getCategoryService().update(cat);
+				}
+				
+			}
+			
+			
+			
+		}
+		
+		
+		
+		//ServicesImpl.getCategoryService().update(category);
+		
+		/*for(Category cat:ServicesImpl.getCategoryService().getEquals(equalIdent)){
+				
 				if(!cat.getLang().equals(category.getLang())){
 				Iterator<Property> itProp = category.getProps().iterator() ;
 				
 				int propNo = 0 ;
 				while(itProp.hasNext()) {
 					Property property = itProp.next() ;
+					
+					
+					
+					
 					
 				Property newProp = new Property() ;
 				List<PropertyAttribute> newAttrs = new ArrayList<PropertyAttribute>() ;
@@ -556,10 +698,10 @@ try {
 			ServicesImpl.getCategoryService().update(cat);
 			
 			
-		}
+		}*/
 		
 		
-		
+		deleteUnusedProperty(category) ;
 		
 		win.setVisible(false) ;
 		List<Category> categories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
@@ -571,6 +713,42 @@ try {
 	
 }
 	}
+	
+	
+	
+	private void deleteUnusedProperty(Category category) {
+		
+		for(Category cat:ServicesImpl.getCategoryService().getEquals(category.getEqualIdentifier())){
+			
+			Iterator<Property> it = cat.getProps().iterator() ;
+			
+			while(it.hasNext()) {
+				Property p = it.next();
+				boolean toDelete = true ;
+				
+				for(Property pp:category.getProps()) {
+					
+					if(pp.getEqualIdentifier().equals(p.getEqualIdentifier())) {
+						toDelete = false ;
+					}
+					
+				}
+				
+				if(toDelete) {
+					it.remove();
+					ServicesImpl.getCategoryService().update(cat);
+					ServicesImpl.getPropertyService().delete(p);
+					
+				}
+				
+			}
+			
+			
+		}
+		
+		
+	}
+	
 
 	public void deleteCategory(final Category category,  Listbox grid, final AnnotateDataBinder binder) {
 	
@@ -625,7 +803,7 @@ try {
 		
 		Property property = row.getValue() ;
 		
-		category.getProperties().remove(property) ;
+		category.getProps().remove(property) ;
 		window.setAttribute("newParameter", new Property()) ;
 		window.getFellow("attributes_div").setVisible(false) ;
 		
@@ -738,7 +916,7 @@ try {
 			newProp.setDescription(property.getDescription());
 			newProp.setExposed(property.getExposed());
 			newProp.setName(property.getName());
-			newProp.setEqualIdentifier(propEqualIdent);
+			//newProp.setEqualIdentifier(propEqualIdent);
 			property.setLang(lang);
 			cat.getProps().add(newProp) ;
 			if (lang.equals(locale.getLanguage())) {

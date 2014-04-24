@@ -57,7 +57,8 @@ public class PropertyAttribute implements Serializable, Translatable{
 	@IndexColumn(name="INDEX_COL4")
 	private List<PropertyAttributeValue> values ;
 
-	
+	@Column(name="equal_ident")
+	private String equalIdentifier ;
 
 	public Long getId() {
 		return id;
@@ -151,6 +152,14 @@ public class PropertyAttribute implements Serializable, Translatable{
 
 	public void setLang(String lang) {
 		this.lang = lang;
+	}
+
+	public String getEqualIdentifier() {
+		return equalIdentifier;
+	}
+
+	public void setEqualIdentifier(String equalIdentifier) {
+		this.equalIdentifier = equalIdentifier;
 	}
 
 	

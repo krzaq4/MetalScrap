@@ -25,7 +25,7 @@ import pl.krzaq.metalscrap.model.Commodity;
 import pl.krzaq.metalscrap.model.User;
 
 @Transactional
-public class AuctionDAO extends GenericDAO{
+public class AuctionDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory ;
@@ -46,6 +46,10 @@ public class AuctionDAO extends GenericDAO{
 		
 		return sessionFactory.getCurrentSession().getNamedQuery("Auction.findByStatus").setParameter("status", status).list() ;
 		
+	}
+	
+	public void save(Object o) {
+		sessionFactory.getCurrentSession().save(o);
 	}
 	
 	public List<Long> findIds(AuctionStatus status, Date from, Date to) {

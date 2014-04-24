@@ -201,7 +201,7 @@
 								<label sclass="register-s" value="Kraj*: "/>
 							</div>
 							<div style="float:left; width:220px">
-								<listbox class="default-s" mold="select" model="@bind(vm.countries)" selectedItem="@bind(vm.user.mainAddress.country)" width="245px">
+								<listbox id="country" class="default-s" mold="select" model="@bind(vm.countries)" selectedItem="@bind(vm.user.mainAddress.country)" width="245px">
 								<template name="model" var="cnt">
 									<listitem label="@bind(cnt) @converter(vm.langConverter)"></listitem>
 								</template>
@@ -211,7 +211,7 @@
 						</hbox>
 			</vbox>
 			<div class="back">
-				<checkbox id="addAddressVisible" checked="@bind(vm.useAdditional)"></checkbox><label value="Adres korespondencyjny" />
+				<checkbox id="addAddressVisible" checked="@bind(vm.useAdditional)" onCheck="@command('useAdditional')"></checkbox><label value="Adres korespondencyjny" />
 			</div>
 					<vbox visible="@load(vm.useAdditional)">
 						<hbox>
@@ -260,7 +260,7 @@
 							</div>
 							<div style="float:left; width:220px">
 							
-								<listbox class="default-s" mold="select" model="@bind(vm.countries)" selectedItem="@bind(vm.user.contactAddress.country)" width="245px">
+								<listbox id="addcountry" class="default-s" mold="select" model="@bind(vm.countries)" selectedItem="@bind(vm.user.contactAddress.country)" width="245px">
 									<template name="model" var="cnt">
 										<listitem label="@bind(cnt) @converter(vm.langConverter)"></listitem>
 									</template>
@@ -272,20 +272,54 @@
 			
 			</div>
 			</vbox>
-			<vbox align="end" vflex="1" hflex="1" >				
+			<vbox  vflex="1" hflex="1" >		
+			<div>		
 				<image id="avatar" width="225px" height="225px" src="/resources/images/noavatar.jpg" class="rounded"></image>
 				<hbox>
 					<button mold="trendy" label="usuń" onClick="@command('deleteAvatar')" />
 					<fileupload id="uploader" label="zmień avatar" onUpload="@command('uploadFile')" ></fileupload>
 					<label class="validation" value="max 3 obrazki" />
 				</hbox>
-				<fisheyebar id="avatars" itemWidth="60" itemHeight="60">
+				<fisheyebar id="avatars" itemWidth="60" itemHeight="60" style="padding-right: 25px ;">
 				
 				</fisheyebar>
+			</div>
+			<div>
+			<div class="back">
+				<label value="Dane osobowe:" />
+			</div>
+			<vbox id="personal" width="45%" align="end">
+				<hbox>
+					<div  style="float:left; width:200px; vertical-align: middle;" >
+						<label sclass="register-s" value="Imię: "/>
+					</div>
+					<div style="float:left; width:220px">
+						<textbox id="firstname" name="firstname" class="default-s" maxlength="24" value="@bind(vm.user.firstName)"  onChange="@command('checkFirstName')" cols="24"/>
+					</div>
+				</hbox>
+				<hbox>
+					<div  style="float:left; width:200px">
+						<label sclass="register-s" value="Nazwisko: "/>
+					</div>
+					<div style="float:left; width:220px">
+					<textbox id="lastname" name="lastname" sclass="default-s" maxlength="24" value="@bind(vm.user.lastName)"  onChange="@command('checkLastName')"  cols="24"/>
+					</div>				
+				</hbox>
+				<hbox>
+					<div style="float:left; width:200px">
+						<label sclass="register-s" value="Nr komórkowy: "/>
+					</div>
+					<div style="float:left; width:220px">
+						<textbox sclass="default-s" name="mobile" id="mobile"  maxlength="24" value="@bind(vm.user.mobile)" onChange="@command('checkMobile')"  cols="24"/>
+					</div>				
+				</hbox>
+				
+			</vbox>
+			</div>
 			</vbox>
 			</hbox>
 			
-				<button  label="Zmień dane" disabled="@bind(vm.allowSave ne true or vm.user.status ne 3)" onClick="@command('updateUser')" visible="@load(vm.user.completed eq true)"  />
+				<button  label="Zmień dane" disabled="@bind(vm.allowSave ne true or vm.user.status eq 3)" onClick="@command('updateUser')" visible="@load(vm.user.completed eq true)"  />
 				<button  label="Uzupełnij dane" disabled="@bind(vm.allowComplete ne true)" onClick="@command('completeUser')" visible="@load(vm.user.completed ne true)" />
 			<space/>
 				</tabpanel>

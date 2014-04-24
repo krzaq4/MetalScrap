@@ -1,11 +1,34 @@
 package pl.krzaq.metalscrap.bind;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 
+import org.jboss.resteasy.core.Headers;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.codec.Base64;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
@@ -15,17 +38,23 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Div;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.json.JsonObject;
+import com.restfb.types.Photo;
 import com.restfb.types.User;
 
+import pl.krzaq.metalscrap.model.Role;
 import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.ApplicationContextProvider;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class UserLoginBind {
 
@@ -44,8 +73,14 @@ public class UserLoginBind {
 	@Wire("#j_password")
 	private Textbox jPassword ;
 	
+	@Wire("#fbsecret")
+	private Textbox fbsecret ;
+	
+	private Page page ;
 		
 	private User fbUser = new User();
+	
+	private boolean loginFailed = false ;
 	
 		private boolean userInvalid = false ;
 		
@@ -59,6 +94,169 @@ public class UserLoginBind {
 		
 		private String userMessage = "" ;
 		
+		
+		@Command
+		@NotifyChange({"fbUser"})
+		public void fbAccess() {
+			
+			String accessToken = fbsecret.getValue() ;
+			FacebookClient fbc = new DefaultFacebookClient(accessToken) ;
+			fbUser = fbc.fetchObject("me", User.class) ;
+			
+			pl.krzaq.metalscrap.model.User fbAppUser = ServicesImpl.getUserService().getUserDAO().getUserbyFbId(fbUser.getId()) ;
+			if(fbAppUser!=null) {
+				// registered
+				
+				String password = fbAppUser.getPassword() ;
+				Set<Role> roles = fbAppUser.getRoles() ;
+				
+				Set<SimpleGrantedAuthority> authorities = new LinkedHashSet<SimpleGrantedAuthority>();
+				//Set<GrantedAuthorityImpl> authorities = new HashSet<GrantedAuthorityImpl>() ;
+				for (Role role:roles) {
+					if(role!=null) {
+						authorities.add(new SimpleGrantedAuthority(role.getName().toUpperCase())) ;
+					}
+					
+				}
+				//login
+				org.springframework.security.core.userdetails.User user = new org.springframework.security.core.userdetails.User(fbAppUser.getLogin(), password, authorities) ;
+				Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+				SecurityContextHolder.getContext().setAuthentication(auth);
+				//profile photo update
+				updateProfilePhoto(fbUser, fbAppUser) ;
+				
+				Executions.sendRedirect("user/myaccount");
+						
+			} else {
+				// not registered
+				fbAppUser = new pl.krzaq.metalscrap.model.User() ;
+				
+				if(fbUser.getUsername()!=null) {
+					// use eusername as login
+					fbAppUser.setLogin(fbUser.getUsername());
+				} else {
+					// use email as login
+					fbAppUser.setLogin(fbUser.getEmail());
+				}
+				
+				fbAppUser.setEmail(fbUser.getEmail());
+				
+				if(ServicesImpl.getUserService().getUserByLogin(fbAppUser.getLogin())!=null 
+						|| ServicesImpl.getUserService().getUserByLogin(fbAppUser.getEmail())!=null							 
+							|| ServicesImpl.getUserService().getUserByEmail(fbAppUser.getEmail())!=null){
+					
+					//login or email already taken
+					fbUser = new User() ;
+					Messagebox.show("Nazwa lub e-mail użytkownika jest już zajęty") ;
+				} else {
+					// login and email is free to go
+					try {
+					
+					if(fbUser.getFirstName()!=null) {
+						fbAppUser.setFirstName(fbUser.getFirstName());
+					} else {
+						fbAppUser.setFirstName("");
+					}
+					
+					if(fbUser.getLastName()!=null) {
+						fbAppUser.setLastName(fbUser.getLastName());
+					} else {
+						fbAppUser.setLastName("");
+					}
+					fbAppUser.setCompleted(false);
+					fbAppUser.setStatus(pl.krzaq.metalscrap.model.User.STATUS_CONFIRMED);
+					
+					Set<Role> roles = new HashSet<Role>() ;
+					roles.add(ServicesImpl.getUserService().getRoleByName("ROLE_USER"));
+					
+					fbAppUser.setRoles(roles);
+					fbAppUser.setPassword(Utilities.hash(Utilities.HASH_METHOD_MD5, fbAppUser.getLogin().concat(fbAppUser.getEmail())));
+					Calendar cal = new GregorianCalendar() ;
+					fbAppUser.setFbId(fbUser.getId());
+					fbAppUser.setCreatedOn(cal.getTime());
+					ServicesImpl.getUserService().save(fbAppUser);
+					
+					String dataDir = System.getProperty("jboss.server.data.dir") ;
+					dataDir = dataDir.concat("/platform/users");
+					
+					File dataDirFolder = new File(dataDir) ;
+					
+					dataDirFolder.mkdir();
+					
+					String userDir = dataDir.concat("/").concat(fbAppUser.getLogin()) ;
+					
+					File userDirFolder = new File(userDir) ;
+					
+					userDirFolder.mkdir();
+					
+					File avatarDirFolder = new File(userDir.concat("/avatar")) ;
+					
+					avatarDirFolder.mkdir() ;
+					
+					
+					updateProfilePhoto(fbUser, fbAppUser) ;
+					
+					String password = fbAppUser.getPassword() ;
+					
+					
+					Set<SimpleGrantedAuthority> authorities = new LinkedHashSet<SimpleGrantedAuthority>();
+					//Set<GrantedAuthorityImpl> authorities = new HashSet<GrantedAuthorityImpl>() ;
+					for (Role role:roles) {
+						if(role!=null) {
+							authorities.add(new SimpleGrantedAuthority(role.getName().toUpperCase())) ;
+						}
+						
+					}
+					
+					org.springframework.security.core.userdetails.User user = new org.springframework.security.core.userdetails.User(fbAppUser.getLogin(), password, authorities) ;
+					Authentication auth = 
+							  new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+
+							SecurityContextHolder.getContext().setAuthentication(auth);
+					
+					Executions.sendRedirect("user/myaccount");
+					} catch(NoSuchAlgorithmException ex) {
+						Messagebox.show("Błąd rejestracji użytkownika FB") ;
+					}
+				}
+				
+				
+			}
+			
+		}
+		
+		private void updateProfilePhoto(User fbUser, pl.krzaq.metalscrap.model.User fbAppUser) {
+			String dataDir = System.getProperty("jboss.server.data.dir") ;
+			dataDir = dataDir.concat("/platform/users");
+			String userDir = dataDir.concat("/").concat(fbAppUser.getLogin()) ;
+			String url = "http://graph.facebook.com/"+fbUser.getId()+"/picture?type=large";
+			
+			try {
+				URL u = new URL(url) ;
+				URLConnection uu = u.openConnection() ;
+				String redirUrl = uu.getHeaderField("Location") ;
+				URL u2 = new URL(redirUrl) ;
+				URLConnection uu2 =u2.openConnection() ;
+				InputStream is = uu2.getInputStream();
+				byte[] bytes = new byte[is.available()] ;
+				is.read(bytes) ;
+				ByteArrayInputStream bis = new ByteArrayInputStream(bytes); 
+				String fileName = userDir.concat("/avatar/fb") ;
+				FileOutputStream fos = new FileOutputStream(fileName) ;
+				fos.write(bytes);
+				fos.close();
+				fbAppUser.setAvatarFileName("fb");
+				
+				
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
 		@Command
 		@NotifyChange({ "userInvalid", "userMessage", "allowLogin"})
 		public void checkJUser() {
@@ -151,7 +349,7 @@ public class UserLoginBind {
 		 
 		 
 		 @AfterCompose
-		 @NotifyChange({"userMessage", "passMessage", "userInvalid", "passInvalid", "allowLogin"})
+		 @NotifyChange({"userMessage", "passMessage", "userInvalid", "passInvalid", "allowLogin", "loginFailed"})
 		    public void afterCompose(@ContextParam(ContextType.VIEW) Component view){
 		        
 			 	allowLogin = false ;
@@ -162,7 +360,15 @@ public class UserLoginBind {
 		    	
 			 Selectors.wireComponents(view, this, false);
 		       
+			 this.page = jUserName.getPage() ;
+			 
+			 
+		    String status = (String) this.page.getAttribute("status") ;
+		    if(status!=null && status.equals("failure")) {
+		    	loginFailed = true ;
+		    	error.setSclass("one error");
 		    	
+		    }
 		    	
 		        
 		    	
@@ -350,6 +556,31 @@ public class UserLoginBind {
 			this.fbUser = fbUser;
 		}
 
+		public Textbox getFbsecret() {
+			return fbsecret;
+		}
+
+		public void setFbsecret(Textbox fbsecret) {
+			this.fbsecret = fbsecret;
+		}
+
+		public Page getPage() {
+			return page;
+		}
+
+		public void setPage(Page page) {
+			this.page = page;
+		}
+
+		public boolean isLoginFailed() {
+			return loginFailed;
+		}
+
+		public void setLoginFailed(boolean loginFailed) {
+			this.loginFailed = loginFailed;
+		}
+		
+		
 		
 		 
 		 

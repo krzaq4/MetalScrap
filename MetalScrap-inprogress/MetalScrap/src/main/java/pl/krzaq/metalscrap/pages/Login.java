@@ -88,6 +88,10 @@ public class Login implements Initiator, InitiatorExt {
 		String token = request.getParameter("confirmation") ;
 		String remindToken = request.getParameter("user") ;
 		
+		String status = request.getParameter("status") ;
+		
+		page.setAttribute("status", status) ;
+		
 		boolean confirmation = false ;
 		boolean completed = false ;
 		

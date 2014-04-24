@@ -44,6 +44,20 @@ public class UserDAO {
 		return criteria.list() ;
 	}
 	
+	public User getUserbyFbId(String fbId) {
+		
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(User.class, "usr") 
+				.add(Restrictions.eq("usr.fbId", fbId))
+				.createCriteria("usr.auctions", "auctions", JoinType.LEFT_OUTER_JOIN)
+				.createCriteria("usr.observed", "observed", JoinType.LEFT_OUTER_JOIN)
+				.createCriteria("usr.userOffers", "offers", JoinType.LEFT_OUTER_JOIN)
+				.createCriteria("usr.roles", "roles", JoinType.LEFT_OUTER_JOIN) ;
+			
+			return (User) criteria.uniqueResult() ;
+			
+		
+	}
+	
 	public User getUserByLogin(String login) {
 		
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(User.class, "usr") 

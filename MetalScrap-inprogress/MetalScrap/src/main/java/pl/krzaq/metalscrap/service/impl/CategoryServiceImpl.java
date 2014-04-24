@@ -89,7 +89,7 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public void save(Category category) {
 		
-			categoryDAO.merge(category) ;
+			categoryDAO.save(category) ;
 	
 
 	}

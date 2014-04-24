@@ -70,14 +70,15 @@ public class Category implements Serializable, Comparable, Translatable {
 	private Category parent ;
 	
 	@OneToMany(cascade=CascadeType.ALL)
-	@IndexColumn(name="INDEX_COL2")
+	@IndexColumn(name="index_children", nullable=false)
 	private List<Category> children ;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="category")
+	@IndexColumn(name="index_auctions", nullable=false)
 	private List<Auction> auctions ;
 
 	@OneToMany(cascade=CascadeType.ALL)
-	@IndexColumn(name="INDEX_COL")
+	@IndexColumn(name="index_props", nullable=false)
 	private List<Property> properties = new ArrayList<Property>();
 	
 	public Category() {
@@ -298,19 +299,19 @@ public Category(String name, String description, Category parent, String lang) {
 		ca.setName(this.getName());
 		
 		if(this.getParent()!=null) {
-			ca.setParent(this);getParent().clone(lang, save) ;
+			ca.setParent(ServicesImpl.getCategoryService().getCategoryDAO().findEqualByLang(lang, this.getParent().getEqualIdentifier())) ;			
 		} else {
 			ca.setParent(null);
 		}
 		
-		ca.setPosition(this.getPosition());
+		//ca.setPosition(this.getPosition());
 		
-		if (this.getAuctions()!=null) {
+		/*if (this.getAuctions()!=null) {
 			List<Auction> auctions = new ArrayList<Auction>(this.getAuctions()) ;
 			ca.setAuctions(auctions);
 		} else {
 			ca.setAuctions(null);
-		}
+		}*/
 		
 		if(this.getChildren()!=null) {
 			List<Category> childs = new ArrayList<Category>() ;

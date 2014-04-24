@@ -6,10 +6,14 @@
 
 ]]>
 </zscript>
+
 	<div id="menu" class="menu">
 		<div>
 			<menubar class="mainMenu" id="main" orient="horizontal" >
-
+				<menuitem visible="@{isUser}" image="resources/images/plus20.png" value="/app/auctions/new"
+						  style="color:#5d2ac6 ; font-weight: bold ;" label=" Nowa Aukcja!" onClick="pageEvents.open(self.getValue())">
+				</menuitem>
+				
 				<menuitem id="about" label="${labels.about.title}"></menuitem>
 				
 				<menuitem id="user" label="${labels.admin.userpanel}" visible="@{isUser}"
@@ -90,4 +94,6 @@
 			</menubar>
 		</div>
 	</div>
+	
+
 </zk>

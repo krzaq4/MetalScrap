@@ -92,6 +92,9 @@ public class User implements Serializable {
 	@Column(name="login",unique=true)
 	private String login ;
 	
+	@Column(name="fb_id")
+	private String fbId ;
+	
 	@NotNull
 	@Column(name="password")
 	private String password ;
@@ -133,11 +136,11 @@ public class User implements Serializable {
 	@IndexColumn(name="rls", nullable=false )
 	private Set<Role> roles ;
 	
-	@OneToMany
+	@OneToMany(mappedBy="user")
 	@IndexColumn(name="cmnts", nullable=false)
 	private List<Comment> comments ;
 	
-	@OneToMany
+	@OneToMany(mappedBy="user")
 	@IndexColumn(name="msgs", nullable=false)
 	private List<Message> messages ;
 	
@@ -380,6 +383,14 @@ public class User implements Serializable {
 
 	public void setPasswordChange(Boolean passwordChange) {
 		this.passwordChange = passwordChange;
+	}
+
+	public String getFbId() {
+		return fbId;
+	}
+
+	public void setFbId(String fbId) {
+		this.fbId = fbId;
 	}
 	
 	

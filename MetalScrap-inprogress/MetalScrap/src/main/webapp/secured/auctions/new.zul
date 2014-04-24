@@ -22,6 +22,9 @@
 		</div>
 
 <include id="men"  src="/common/menu.zul" ></include>
+
+<breadcrumb id="breadcrumb" standalone="false" currentCategory="@{selectedCategory}"></breadcrumb>
+<separator bar="true" orient="horizontal"></separator>
 		
 <div>
 	<hbox>
@@ -30,10 +33,17 @@
 </div>
 
 <panel id="parameters" height="auto" border="none" collapsible="true"  action="show:slideIn;hide:slideOut">
-<caption label="${labels.auction.auctionparameters}"></caption>
+<!-- <caption label="${labels.auction.auctionparameters}"></caption> -->
 <panelchildren>
+
+<div style="vertical-align: middle;width:100%;">
+		<image  src="../../resources/images/addauction-ico64.png" ></image>
+		<label style="position: relative; top: 20px; vertical-align: top; font-size: 24px; color: #4569d0 ; font-family: verdana;" value="Nowa aukcja" />
+	</div>
+	<space orient="horizontal"/>
+
 <div>
-	<groupbox>
+	<groupbox class="borderless">
 
 				
 				<grid>
@@ -43,16 +53,16 @@
 					</columns>
 					<rows>
 						<row>
-							<label value="${labels.auction.auctiontitle.$}:" />	<textbox id="auction_name" value="@{auction.name}" constraint="no empty" placeholder="${labels.auction.auctiontitle.placeholder}"/>
+							<label class="register-s" value="${labels.auction.auctiontitle.$}:" />	<textbox id="auction_name" value="@{auction.name}" constraint="no empty" sclass="default-s"  cols="75" maxlength="75"/>
 						</row>
 						<row>
-							<label value="${labels.auction.auctionnumber.$}:" />	<textbox id="auction_number" value="@{auction.number}" constraint="no empty" placeholder="${labels.auction.auctionnumber.placeholder}"/>
+							<label class="register-s" value="${labels.auction.auctionnumber.$}:" />	<textbox id="auction_number" value="@{auction.number}" constraint="no empty" sclass="default-s"  cols="30"/>
 						</row>
 						<row>
-							<label value="${labels.auction.auctionstart.$}:" />	<div><datebox id="auction_start_date" cols="12" width="230px" format="long+medium"  value="@{auction.startDate}" constraint="no empty" placeholder="${labels.auction.auctionstart.placeholder}"/> </div>
+							<label class="register-s" value="${labels.auction.auctionstart.$}:" />	<div><datebox id="auction_start_date" cols="12" width="230px" format="long+medium"  value="@{auction.startDate}" constraint="no empty"  class="default-s"  /> </div>
 						</row>
 						<row>	
-							<label value="${labels.auction.auctionend}:" /> <div><datebox id="auction_end_date" cols="12" width="230px"   format="long+medium"  value="@{auction.endDate}" constraint="no empty" placeholder="${labels.auction.auctionstart.placeholder}">
+							<label class="register-s" value="${labels.auction.auctionend}:" /> <div><datebox id="auction_end_date" cols="12" width="230px"   format="long+medium"  value="@{auction.endDate}" constraint="no empty" class="default-s" >
 							<attribute name="onChange">
 								<![CDATA[
 								
@@ -66,7 +76,7 @@
 							</div>
 						</row>
 						<row visible="@{isCategoriesVisible}">
-							<label value="${labels.auction.auctioncategory.$}:" />
+							<label class="register-s" value="${labels.auction.auctioncategory.$}:" />
 							<listbox id="auction_category" mold="select" rows="4" multiple="false" model="@{auctionCategories}" selectedItem="@{auction.category}" selectedIndex="@{selectedCategoryIndex}" width="230px">
 								<listitem self="@{each=cat}" value="@{cat}" onClick="auctionEvents.onSelectAuctionCategory(self, binder)" tooltiptext="@{cat.description}">
 									<listcell label="@{cat.name}"  >
@@ -76,21 +86,21 @@
 							</listbox>
 						</row>
 						<row>
-							<label value="Atrybuty kategorii:" />
+							<label class="register-s" value="Atrybuty kategorii:" />
 							<groupbox id="auction_category_attributes"></groupbox>
 						</row>
 						<row>
-							<label value="${labels.auction.auctionminpriceenabled}:" />
+							<label class="register-s" value="${labels.auction.auctionminpriceenabled}:" />
 							<checkbox id="min_price" onCheck="min_price_amount.setVisible(self.isChecked())"></checkbox>
 						</row>
 						<row id="min_price_amount" visible="@{min_price.checked}" >
-							<label value="Cena minimalna:" />
-							<hbox><decimalbox id="auction_min_price" format="###.##"  value="@{auction.minPrice}" width="180px" placeholder="${labels.auction.auctionsetminprice}"></decimalbox><label value=" PLN"/></hbox>
+							<label class="register-s" value="Cena minimalna:" />
+							<hbox><decimalbox id="auction_min_price" format="###.##"  value="@{auction.minPrice}" width="180px"  sclass="default-s"  cols="30"></decimalbox><label value=" PLN"/></hbox>
 						</row>
 					</rows>
 				</grid>
 	</groupbox>
-	<groupbox>
+	<groupbox class="borderless">
 				<grid>
 					<columns>
 						<column width="20%"></column>
@@ -98,28 +108,28 @@
 					</columns>
 					<rows>
 						<row>
-							<label value="${labels.auction.auctionissueinvoice}" />	<checkbox id="auction_invoice"  checked="@{auction.invoice}"/>
+							<label class="register-s" value="${labels.auction.auctionissueinvoice}" />	<checkbox id="auction_invoice"  checked="@{auction.invoice}"/>
 						</row>
 						<row>
-							<label value="${labels.auction.paymentmethod.$}:" />	
-							<combobox id="auction_payment"  model="@{paymentMethods}" selectedItem="@{auction.paymentMethod}"  value="@{auction.paymentMethod.name}" placeholder="${labels.auction.paymentmethod.placeholder}" constraint="no empty"  >
+							<label class="register-s" value="${labels.auction.paymentmethod.$}:" />	
+							<combobox id="auction_payment"  model="@{paymentMethods}" selectedItem="@{auction.paymentMethod}"  value="@{auction.paymentMethod.name}"  class="default-s"  cols="30" constraint="no empty"  >
 								<comboitem self="@{each=method}" label="@{method.name}" value="@{method}"></comboitem>
 							</combobox>
 															
 						</row>
 						<row>
-							<label value="${labels.auction.auctiondeliverytype.$}:" />
-							<combobox id="auction_delivery" model="@{deliveryTypes}" selectedItem="@{auction.deliveryType}" value="@{auction.deliveryType.name}" constraint="no empty" placeholder="${labels.auction.auctiondeliverytype.placeholder}">
+							<label class="register-s" value="${labels.auction.auctiondeliverytype.$}:" />
+							<combobox id="auction_delivery" model="@{deliveryTypes}" selectedItem="@{auction.deliveryType}" value="@{auction.deliveryType.name}" constraint="no empty"  class="default-s"  cols="30">
 								<comboitem self="@{each=dtype}" label="@{dtype.name}" value="@{dtype}"></comboitem>
 							</combobox>
 						</row>
 						<row>
-							<label value="${labels.auction.auctiondeliverytime.$}:" /><textbox id="auction_delivery_time"  value="@{auction.deliveryTime}" constraint="no empty" placeholder="${labels.auction.auctiondeliverytime.placeholder}"/>
+							<label class="register-s" value="${labels.auction.auctiondeliverytime.$}:" /><textbox id="auction_delivery_time"  value="@{auction.deliveryTime}" constraint="no empty"  sclass="default-s"  cols="30"/>
 						</row>
 					</rows>
 				</grid>
 	</groupbox>
-	<groupbox >
+	<groupbox class="borderless" >
 				<grid>
 					<columns>
 						<column width="20%"></column>
@@ -128,15 +138,19 @@
 					<rows>
 						<row>
 						
-							<label value="${labels.auction.auctiondescription}:" />
+							<label class="register-s" value="${labels.auction.auctiondescription}:" />
 							
 							<ckeditor id="auction_description" value="@{auction.description}" height="300px">
 							
-							<attribute name="onCreate">
+							<!-- <attribute name="onCreate">
 							<![CDATA[
-								self.setValue(((pl.krzaq.metalscrap.model.Auction)page.getAttribute("auction")).getDescription());
+							         
+							    if(page.getAttribute("auction")!=null){
+							    	pl.krzaq.metalscrap.model.Auction ac1=page.getAttribute("auction");
+							    }
+								self.setValue(ac1.getDescription());
 							]]>
-							</attribute>
+							</attribute> -->
 							<attribute name="onChange">
 							
 							<![CDATA[
