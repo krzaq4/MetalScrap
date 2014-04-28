@@ -62,7 +62,7 @@ import pl.krzaq.metalscrap.converter.LanguageISOConverter;
 import pl.krzaq.metalscrap.model.Address;
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.User;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+
 import pl.krzaq.metalscrap.utils.Utilities;
 
 public class UserAccountBind {
@@ -254,7 +254,7 @@ public class UserAccountBind {
 					file.write(((Media)media).getByteData());
 					file.close();
 					user.setAvatarFileName(fileName);
-					ServicesImpl.getUserService().update(user);
+					Utilities.getServices().getUserService().update(user);
 				
 					avatar.setContent(scaleImage(225,225,(AImage)media,f));
 					prepareAvatars();
@@ -308,15 +308,15 @@ public class UserAccountBind {
 		
 		// pobranie list aukcji
 		
-		observed = ServicesImpl.getAuctionService().findByObserver(user) ;
+		observed = Utilities.getServices().getAuctionService().findByObserver(user) ;
 		
-		won = ServicesImpl.getAuctionService().findWonByUser(user) ;
+		won = Utilities.getServices().getAuctionService().findWonByUser(user) ;
 		
-		lost  = ServicesImpl.getAuctionService().findLostByUser(user) ;
+		lost  = Utilities.getServices().getAuctionService().findLostByUser(user) ;
 		
-		active = ServicesImpl.getAuctionService().findActiveByUser(user) ;
+		active = Utilities.getServices().getAuctionService().findActiveByUser(user) ;
 		
-		owned = ServicesImpl.getAuctionService().findOwnedByUser(user) ;
+		owned = Utilities.getServices().getAuctionService().findOwnedByUser(user) ;
 		
 		
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
@@ -344,11 +344,11 @@ public class UserAccountBind {
 @NotifyChange({"user","allowSave", "allowComplete"})
 private void validateUserData() {
 		
-		Boolean verificationModeAuto = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("user.verification.mode.auto").getValue()) ;
+		Boolean verificationModeAuto = Boolean.valueOf(Utilities.getServices().getConfigService().findByKey("user.verification.mode.auto").getValue()) ;
 		
 		if(!verificationModeAuto || user.getStatus().equals(User.STATUS_PENDING_VERIFICATION)) {
 			
-			String verificationType = ServicesImpl.getConfigService().findByKey("user.verification.mode.type").getValue() ;
+			String verificationType = Utilities.getServices().getConfigService().findByKey("user.verification.mode.type").getValue() ;
 			
 			if(verificationType.equals("sms") && user.getStatus().equals(User.STATUS_PENDING_VERIFICATION) ) {
 				mobile.setDisabled(true);
@@ -388,8 +388,8 @@ private void validateUserData() {
 	
 	@NotifyChange({"user"})
 	private void prepareVerificationInfo() {
-		Boolean userVerificationAuto = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("user.verification.mode.auto").getValue());	
-		verificationType = ServicesImpl.getConfigService().findByKey("user.verification.mode.type").getValue() ;
+		Boolean userVerificationAuto = Boolean.valueOf(Utilities.getServices().getConfigService().findByKey("user.verification.mode.auto").getValue());	
+		verificationType = Utilities.getServices().getConfigService().findByKey("user.verification.mode.type").getValue() ;
 		if(!userVerificationAuto && user.getStatus().equals(User.STATUS_PENDING_VERIFICATION)) {
 			userPendingVerificationInfo.setSclass("ok infor");
 		} else 
@@ -498,7 +498,7 @@ private void validateUserData() {
 	@NotifyChange({"allowSave", "allowComplete"})
 	public boolean checkMobile(@ContextParam(ContextType.TRIGGER_EVENT) InputEvent event) {
 		
-		String confirmationType = ServicesImpl.getConfigService().findByKey("user.verification.mode.type").getValue() ;
+		String confirmationType = Utilities.getServices().getConfigService().findByKey("user.verification.mode.type").getValue() ;
 		
 		if(mobile.getValue()!=null && mobile.getValue().length()>0 && mobile.getValue().matches("(\\b[0-9]+-*\\b)+") || ( event!=null && mobile.getValue()!=null && event.getValue().length()>0 && event.getValue().matches("(\\b[0-9]+-*\\b)+") && !event.getValue().equals(mobile.getValue()))) {
 			if(event!=null) {
@@ -542,7 +542,7 @@ private void validateUserData() {
 	@NotifyChange({"loginExists", "allowRegistration", "loginMessage"})
 	public void checkLogin() {
 		
-		if (ServicesImpl.getUserService().getUserByLogin(user.getLogin()) != null ) {
+		if (Utilities.getServices().getUserService().getUserByLogin(user.getLogin()) != null ) {
 			allowRegistration = false ;
 			loginExists = true ;
 			loginMessage = "Podana nazwa użytkownika jest już zajęta" ;
@@ -562,7 +562,7 @@ private void validateUserData() {
 	@NotifyChange({ "emailExists", "allowRegistration", "emailMessage"})
 	public void checkEmail() {
 		
-		if (ServicesImpl.getUserService().getUserByEmail(user.getEmail()) != null ) {
+		if (Utilities.getServices().getUserService().getUserByEmail(user.getEmail()) != null ) {
 			allowRegistration = false ;
 			emailExists = true ;
 			emailMessage = "Podany adres e-mail jest już zajęty" ;
@@ -1090,7 +1090,7 @@ private void validateUserData() {
 	public void changePassword() {
 		try {
 			user.setPassword(Utilities.hash(Utilities.HASH_METHOD_MD5, user.getPassword()));
-			ServicesImpl.getUserService().update(user);
+			Utilities.getServices().getUserService().update(user);
 			Messagebox.show("Hasło zostało zmienione") ;
 		} catch(NoSuchAlgorithmException ex){
 			Messagebox.show("Nie udało się zmienić hasła") ;
@@ -1100,7 +1100,7 @@ private void validateUserData() {
 	@Command
 	public void updateUser(){
 		
-		ServicesImpl.getUserService().update(user);
+		Utilities.getServices().getUserService().update(user);
 		Messagebox.show("Dane zostały zapisane") ;
 	}
 	
@@ -1108,8 +1108,8 @@ private void validateUserData() {
 	@Command
 	public void completeUser() {
 		
-		Boolean userVerificationModeAuto = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("user.verification.mode.auto").getValue()) ;
-		String userVerificationModeType = ServicesImpl.getConfigService().findByKey("user.verification.mode.type").getValue() ;
+		Boolean userVerificationModeAuto = Boolean.valueOf(Utilities.getServices().getConfigService().findByKey("user.verification.mode.auto").getValue()) ;
+		String userVerificationModeType = Utilities.getServices().getConfigService().findByKey("user.verification.mode.type").getValue() ;
 		
 		//rodzaj weryfikacji użytkownika
 		
@@ -1123,7 +1123,7 @@ private void validateUserData() {
 			user.setCompleted(true);
 		}
 		
-		ServicesImpl.getUserService().update(user);
+		Utilities.getServices().getUserService().update(user);
 		
 		if(userVerificationModeAuto) {
 			Messagebox.show("Dane zostały zapisane") ;
@@ -1199,7 +1199,7 @@ private void validateUserData() {
 							AImage fullImg = scaleImage(225, 225, new AImage(file), file) ;
 							avatar.setContent(fullImg);
 							user.setAvatarFileName(file.getName());
-							ServicesImpl.getUserService().update(user);
+							Utilities.getServices().getUserService().update(user);
 							
 						}
 						

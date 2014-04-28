@@ -21,9 +21,14 @@
   <import resource="../root-context.xml"/>
   
  <!-- This is where we configure Spring-Security  -->
- <security:http create-session="always" auto-config="false"  use-expressions="true" authentication-manager-ref="authenticationManager"    access-denied-page="/app/login">
+ <security:http create-session="always" auto-config="false"  use-expressions="true" authentication-manager-ref="authenticationManager"    access-denied-page="/app/home?status=denied">
 
-	   
+	   <security:session-management>
+        	<security:concurrency-control max-sessions="1" />
+       </security:session-management>
+       <security:session-management invalid-session-url="/app/signin?status=timeout">
+    		<security:concurrency-control expired-url="/app/signin?status=timeout" />
+	   </security:session-management>
 
   <security:intercept-url pattern="/app/login" access="permitAll"/>
   
@@ -46,7 +51,7 @@
  
    
   <security:form-login 
-    login-page="/app/login" always-use-default-target="true"   authentication-success-handler-ref="savedRequestAwareHandler" authentication-failure-url="/app/signin?status=failure" />
+    login-page="/app/signin" always-use-default-target="true"   authentication-success-handler-ref="savedRequestAwareHandler" authentication-failure-url="/app/signin?status=failure" />
    
   
   

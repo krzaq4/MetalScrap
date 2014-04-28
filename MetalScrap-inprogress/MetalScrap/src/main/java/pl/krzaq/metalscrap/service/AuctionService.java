@@ -9,6 +9,7 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 
+import pl.krzaq.metalscrap.dao.AuctionDAO;
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.AuctionStatus;
 import pl.krzaq.metalscrap.model.Category;
@@ -18,7 +19,7 @@ import pl.krzaq.metalscrap.model.User;
 
 public interface AuctionService {
 
-	
+	public AuctionDAO getAuctionDAO();
 	
 	public List<Auction> findAll() ;
 	

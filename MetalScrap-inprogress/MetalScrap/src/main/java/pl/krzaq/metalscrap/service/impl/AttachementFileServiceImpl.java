@@ -3,12 +3,14 @@ package pl.krzaq.metalscrap.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import pl.krzaq.metalscrap.dao.AttachementFileDAO;
 import pl.krzaq.metalscrap.model.AttachementFile;
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.service.AttachementFileService;
 
+@Component(value="attachementFileService")
 public class AttachementFileServiceImpl implements AttachementFileService {
 
 	@Autowired

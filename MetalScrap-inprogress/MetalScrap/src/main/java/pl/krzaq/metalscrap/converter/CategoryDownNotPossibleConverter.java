@@ -8,7 +8,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zkplus.databind.TypeConverter;
 
 import pl.krzaq.metalscrap.model.Category;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class CategoryDownNotPossibleConverter implements TypeConverter {
 
@@ -27,10 +27,10 @@ public class CategoryDownNotPossibleConverter implements TypeConverter {
 			Category cat = (Category) arg0 ;
 			if (cat.getParent()!=null) {
 			
-				return cat.getPosition()==ServicesImpl.getCategoryService().findSubCategoriesByLang(cat.getParent(), locale.getLanguage()).size() ;
+				return cat.getPosition()==Utilities.getServices().getCategoryService().findSubCategoriesByLang(cat.getParent(), locale.getLanguage()).size() ;
 						
 			} else {
-				return cat.getPosition()==ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()).size() ;
+				return cat.getPosition()==Utilities.getServices().getCategoryService().findRootCategoriesByLang(locale.getLanguage()).size() ;
 			}
 			
 			

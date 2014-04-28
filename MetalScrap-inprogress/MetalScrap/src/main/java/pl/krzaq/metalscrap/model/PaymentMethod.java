@@ -17,7 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import pl.krzaq.metalscrap.model.generalization.Translatable;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 
 @Entity
@@ -109,7 +109,7 @@ public class PaymentMethod implements Serializable, Translatable {
 		pm.setName(this.getName());
 		
 		if(save) {
-			ServicesImpl.getAuctionService().getAuctionDAO().save(pm);
+			Utilities.getServices().getAuctionService().getAuctionDAO().save(pm);
 		}
 		return pm ;
 	}

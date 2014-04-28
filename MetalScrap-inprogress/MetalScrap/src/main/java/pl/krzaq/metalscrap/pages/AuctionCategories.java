@@ -17,7 +17,7 @@ import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.model.Property;
 import pl.krzaq.metalscrap.model.PropertyAttribute;
 import pl.krzaq.metalscrap.service.impl.AuctionServiceImpl;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class AuctionCategories extends HomePage{
 	
@@ -47,7 +47,7 @@ public class AuctionCategories extends HomePage{
 		super.doInit(page, arg1);
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 		
-		List<Category> categories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
+		List<Category> categories = Utilities.getServices().getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
 		Collections.sort(categories);
 		
 		

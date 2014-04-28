@@ -29,7 +29,7 @@ import org.zkoss.zul.Textbox;
 
 import pl.krzaq.metalscrap.model.Role;
 import pl.krzaq.metalscrap.model.User;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+
 import pl.krzaq.metalscrap.utils.Constants;
 import pl.krzaq.metalscrap.utils.Utilities;
 
@@ -85,7 +85,7 @@ public class UserViewBind {
 	@NotifyChange({"loginExists", "allowRegistration", "loginMessage"})
 	public void checkLogin() {
 		
-		if (ServicesImpl.getUserService().getUserByLogin(user.getLogin()) != null ) {
+		if (Utilities.getServices().getUserService().getUserByLogin(user.getLogin()) != null ) {
 			allowRegistration = false ;
 			loginExists = true ;
 			loginMessage = "Podana nazwa użytkownika jest już zajęta" ;
@@ -105,7 +105,7 @@ public class UserViewBind {
 	@NotifyChange({ "emailExists", "allowRegistration", "emailMessage"})
 	public void checkEmail() {
 		
-		if (ServicesImpl.getUserService().getUserByEmail(user.getEmail()) != null ) {
+		if (Utilities.getServices().getUserService().getUserByEmail(user.getEmail()) != null ) {
 			allowRegistration = false ;
 			emailExists = true ;
 			emailMessage = "Podany adres e-mail jest już zajęty" ;
@@ -179,9 +179,9 @@ public class UserViewBind {
 			user.setStatus(User.STATUS_NEW);
 			Set<Role> roles = new HashSet<Role>() ;
 			
-			roles.add(ServicesImpl.getUserService().getRoleByName("ROLE_USER"));
+			roles.add(Utilities.getServices().getUserService().getRoleByName("ROLE_USER"));
 			user.setRoles(roles);
-			ServicesImpl.getUserService().save(user);
+			Utilities.getServices().getUserService().save(user);
 			
 			String link = "http://localhost:8080/MetalScrap/app/register?confirmation=" ;
 			String token = Utilities.hash(Utilities.HASH_METHOD_MD5, user.getLogin().concat(user.getEmail().concat(String.valueOf(user.getCreatedOn().getTime())))) ;
@@ -194,7 +194,7 @@ public class UserViewBind {
 			model.put("login", user.getLogin()) ;
 			model.put("email", user.getEmail()) ;
 			
-			ServicesImpl.getMailService().sendMail(Constants.MAIL_REGISTRATION_CONFIRMATION, model, "Potwierdzenie rejestracji", user.getEmail());
+			Utilities.getServices().getMailService().sendMail(Constants.MAIL_REGISTRATION_CONFIRMATION, model, "Potwierdzenie rejestracji", user.getEmail());
 			step1 = false ;
 			step2 = true ;
 			

@@ -16,6 +16,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import pl.krzaq.metalscrap.model.Category;
@@ -23,6 +24,7 @@ import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 import pl.krzaq.metalscrap.utils.Utilities;
 
 @Transactional
+@Component(value="categoryDAO")
 public class CategoryDAO {
 
 	@Autowired

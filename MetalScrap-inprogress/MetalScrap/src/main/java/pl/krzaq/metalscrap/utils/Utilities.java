@@ -41,6 +41,7 @@ import pl.krzaq.metalscrap.model.Property;
 import pl.krzaq.metalscrap.model.PropertyAttribute;
 import pl.krzaq.metalscrap.model.PropertyAttributeValue;
 import pl.krzaq.metalscrap.model.User;
+import pl.krzaq.metalscrap.service.Services;
 import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 
 public class Utilities {
@@ -49,6 +50,12 @@ public class Utilities {
 	public static String HASH_METHOD_SHA512 = "sha" ;
 	static Logger log = LoggerFactory.getLogger(Utilities.class) ;
 	
+	private static Services services ;
+	
+	
+	public static Services getServices() {
+		return services ;
+	}
 	
 	public static String hash(String hashMethod, String input) throws NoSuchAlgorithmException {
 		String result = null ;
@@ -233,7 +240,7 @@ public class Utilities {
 		
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 		
-		for (String lang:ServicesImpl.getLangLabelService().findAllLangs()) {
+		for (String lang:services.getLangLabelService().findAllLangs()) {
 			
 		for (Component cc:list) {
 			
@@ -253,7 +260,7 @@ public class Utilities {
 					
 					if (at instanceof Label) {
 						equalIdent = ( (Label) cc).getId() ;
-						equalProp = ServicesImpl.getPropertyService().findEqual(equalIdent, lang) ;
+						equalProp = services.getPropertyService().findEqual(equalIdent, lang) ;
 						newProp.setName( equalProp.getName() );
 						//Property inLangProp = ServicesImpl.getPropertyService().findEqual(equalIdentifier, lang)
 					}

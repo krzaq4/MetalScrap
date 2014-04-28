@@ -34,7 +34,8 @@ import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.AuctionStatus;
 import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.model.UserOffer;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class AuctionView extends HomePage{
 
@@ -53,9 +54,9 @@ public class AuctionView extends HomePage{
 		if (request.getParameter("id")!=null) {
 			
 			Long id = Long.valueOf( (String) request.getParameter("id")) ;
-			Auction auction = ServicesImpl.getAuctionService().findById(id) ;
+			Auction auction = Utilities.getServices().getAuctionService().findById(id) ;
 			
-			List<AttachementFile> attachements = ServicesImpl.getAttachementFileService().findByAuction(auction) ;
+			List<AttachementFile> attachements = Utilities.getServices().getAttachementFileService().findByAuction(auction) ;
 			
 			List<Image> images = new ArrayList<Image>() ;
 			
@@ -69,7 +70,7 @@ public class AuctionView extends HomePage{
 			}
 			
 			
-			List<UserOffer> offers = ServicesImpl.getUserOfferService().findByAuction(auction) ;
+			List<UserOffer> offers = Utilities.getServices().getUserOfferService().findByAuction(auction) ;
 			Collections.sort(offers);
 			
 			if (offers!=null && offers.size()>0) {
@@ -158,7 +159,7 @@ public class AuctionView extends HomePage{
 		if (request.getParameter("id")!=null) {
 			
 			Long id = Long.valueOf( (String) request.getParameter("id")) ;
-			Auction auction = ServicesImpl.getAuctionService().findById(id) ;
+			Auction auction = Utilities.getServices().getAuctionService().findById(id) ;
 			this.setAuction(auction);
 			this.setTimeLeft((String) atc.coerceToUi(auction, null));
 		}

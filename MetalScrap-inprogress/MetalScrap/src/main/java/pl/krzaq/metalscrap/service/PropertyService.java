@@ -4,12 +4,15 @@ import java.util.List;
 
 import org.hibernate.criterion.Restrictions;
 
+import pl.krzaq.metalscrap.dao.PropertyDAO;
 import pl.krzaq.metalscrap.model.Property;
 import pl.krzaq.metalscrap.model.PropertyAttribute;
 import pl.krzaq.metalscrap.model.PropertyAttributeValue;
 
 public interface PropertyService {
 
+	
+	public PropertyDAO getPropertyDAO() ;
 	
 	public List<Property> findAll() ;
 	

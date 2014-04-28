@@ -2,10 +2,13 @@ package pl.krzaq.metalscrap.service;
 
 import java.util.List;
 
+import pl.krzaq.metalscrap.dao.LangLabelDAO;
 import pl.krzaq.metalscrap.model.LangLabel;
 
 public interface LangLabelService {
 
+	
+	public LangLabelDAO getLangLabelDAO() ;
 	
 	public List<LangLabel> findAll() ;
 	

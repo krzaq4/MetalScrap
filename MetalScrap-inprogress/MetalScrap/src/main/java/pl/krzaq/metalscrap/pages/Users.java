@@ -7,7 +7,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 
 import pl.krzaq.metalscrap.model.User;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class Users extends HomePage {
 
@@ -16,7 +17,7 @@ public class Users extends HomePage {
 		// TODO Auto-generated method stub
 		super.doInit(page, arg1);
 		
-		List<User> users = ServicesImpl.getUserService().getUsers() ;
+		List<User> users = Utilities.getServices().getUserService().getUsers() ;
 		User user = new User() ;
 		
 		page.setAttribute("users", users) ;

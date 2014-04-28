@@ -3,11 +3,13 @@ package pl.krzaq.metalscrap.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import pl.krzaq.metalscrap.dao.CommodityTypeDAO;
 import pl.krzaq.metalscrap.model.CommodityType;
 import pl.krzaq.metalscrap.service.CommodityTypeService;
 
+@Component(value="commodityTypeService")
 public class CommodityTypeServiceImpl implements CommodityTypeService {
 
 	

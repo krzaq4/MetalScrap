@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import pl.krzaq.metalscrap.dao.CategoryDAO;
 import pl.krzaq.metalscrap.model.Category;
@@ -11,6 +12,7 @@ import pl.krzaq.metalscrap.model.Property;
 import pl.krzaq.metalscrap.service.CategoryService;
 import pl.krzaq.metalscrap.utils.Utilities;
 
+@Component(value="categoryService")
 public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired

@@ -63,6 +63,8 @@ body {
 	
 }
 
+
+
 .remind a {
 	
 	color: #666666;
@@ -287,6 +289,18 @@ body {
 	transition: border 1s;
 }
 
+.default-s.z-decimalbox {
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	font-size: 15px ;
+	font-family: verdana;
+	color:#555555;
+	height: 25px ;
+	-webkit-transition: border 1s; /* For Safari 3.1 to 6.0 */
+	transition: border 1s;
+}
+
 .default-s.correctValue.z-textbox {
 	box-shadow: 2px 1px 1px #49c318 !important;
 	-webkit-transition: border 1s; /* For Safari 3.1 to 6.0 */
@@ -433,32 +447,42 @@ border-radius: 8px;
 .tilesInside {
 	
 	display: block ;
+	position: relative ;
 	width: 100%;
 	height: 100% ;
 	padding: 10px 10px 10px 10px ;
 	opacity: 1 ;
 	transition: all 1s ;
+	transition-delay: 0.5s;
+	z-index: 1 ;
 }
 
 .tilesInside.wrapped {
 	width: 0 ;
 	height: 0 ;
 	opacity: 0 ;
+	transition: all 0.5s ;
+	z-index: -2;
+	left: -1900px ;
 }
 
 .tilesInsideUp {
 	
 	display: block ;
+	position: relative ;
 	width: 100%;
 	height: 50px ;
 	padding: 4px 10px 4px 10px ;
 	opacity : 1 ;
 	transition: all 1s ;
+	transition-delay: 0.5s ;
 }
 
 .tilesInsideUp.wrapped {
+	left: -1900px ;
 	width: 0 ;
 	opacity: 0 ;
+	transition: all 0.5s;
 }
 
 
@@ -466,16 +490,35 @@ border-radius: 8px;
 .configDiv {
 	
 	display: block ;
-	width: 100% ;
+	width: 95% ;
 	height: 90% ;
 	transition: all 1s ;
+	transition-delay: 0.5s;
 	opacity: 1 ;
+	border: 1px solid #eeeeee;
+	z-index:1 ;
+}
+
+.configDiv.inner {
+	width: 100%;
+	border: none ;
+	padding: 10px 10px 10px 10px ;
+	color: #454545;
+	font-family: verdana ;
+}
+
+.configDiv.inner .z-label {
+	
+	color: #454545;
+	font-family: verdana ;
 }
 
 .configDiv.wrapped {
 	width: 0 ;
 	height: 0 ;
 	opacity: 0 ;
+	transition: all 0.5s;
+	z-index: -1;
 }
 
 .tileButton{
@@ -500,13 +543,46 @@ border-radius: 8px;
 }
 
 
-.tileButtonSmall {
+.tileButtonSmall  {
 	display: inline ;
 	position: relative ;
 	
 	margin: 15px 15px 15px 15px ;
-	width: 180px ;
+	width: 210px ;
+	height: 75px ;
+	font-size: 10px ;
+	
+	background: none ;
+	
+	-webkit-box-shadow: 2px 3px 8px 0px rgba(50, 50, 50, 0.68);
+	-moz-box-shadow:    2px 3px 8px 0px rgba(50, 50, 50, 0.68);
+	box-shadow:         2px 3px 8px 0px rgba(50, 50, 50, 0.68);
+	
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	
+	-webkit-border-bottom-right-radius: 0px;
+	-webkit-border-bottom-left-radius: 0px;
+	-moz-border-radius-bottomright: 0px;
+	-moz-border-radius-bottomleft: 0px;
+	border-bottom-right-radius: 0px;
+	border-bottom-left-radius: 0px;
+	transition: all 1s ;
+	
+}
+
+.tileButtonSmall.selected {
+	display: inline ;
+	position: relative ;
+	top:-5px;
+	margin: 15px 15px 15px 15px ;
+	width: 210px ;
 	height: 80px ;
+	font-size: 10px ;
 	
 	background: none ;
 	
@@ -1640,6 +1716,36 @@ div.z-treecell-cnt {
 	
 }
 
+
+
+.z-button-os.previous {
+	position: relative ;
+	width: 32px;
+	height: 32px ;
+	background: none ;
+	border: none ;
+	background-image: url(../images/back-ico32.png) ;
+	background-repeat: no-repeat;
+	transition: all 0.5s ;
+	
+}
+
+.z-button-os.previous:hover {
+	
+	top:-1px;
+	transition: top 0.5s ;
+}
+
+.z-button-os-disd.previous {
+	border: none ;
+	background-image: url(../images/back-ico32-disd.png) ;
+}
+
+.z-button-os-disd.previous:hover {
+	top:0;
+}
+
+
 .z-button-os.button {
    border-top: 1px solid #e297f7;
    background: #b065d6;
@@ -1787,7 +1893,7 @@ div.z-treecell-cnt {
 	font-weight:bold;
 	padding:2px 16px;
 	text-decoration:none;
-	text-shadow:0px 1px 0px #1570cd;
+	text-shadow:0px 1px 0px #fefefe;
 	transition: all 2s ;
 }
 .z-button-os.white:hover {
@@ -1805,6 +1911,54 @@ div.z-treecell-cnt {
 	position:relative;
 	top:1px;
 }
+
+
+.z-button-os.black {
+	-moz-box-shadow:inset 0px 1px 0px 0px #97c4fe;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #97c4fe;
+	
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #bababa), color-stop(1, #111111));
+	background:-moz-linear-gradient(top, #bababa 5%, #111111 100%);
+	background:-webkit-linear-gradient(top, #bababa 5%, #111111 100%);
+	background:-o-linear-gradient(top, #bababa 5%, #111111 100%);
+	background:-ms-linear-gradient(top, #bababa 5%, #111111 100%);
+	background:linear-gradient(to bottom, #bababa 5%, #111111 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#bababa', endColorstr='#111111',GradientType=0);
+	background-color:#bababa;
+	
+	box-shadow:inset 0px 1px 0px 0px #cdcdcd;
+	
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #cdcdcd;
+	display:inline-block;
+	cursor:pointer;
+	color:#efefef;
+	font-family:arial;
+	font-size:13px;
+	font-weight:bold;
+	padding:2px 16px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #dadada;
+	transition: all 2s ;
+}
+.z-button-os.black:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #cdcdcd), color-stop(1, #fefefe));
+	background:-moz-linear-gradient(top, #cdcdcd 5%, #fefefe 100%);
+	background:-webkit-linear-gradient(top, #cdcdcd 5%, #fefefe 100%);
+	background:-o-linear-gradient(top, #cdcdcd 5%, #fefefe 100%);
+	background:-ms-linear-gradient(top, #cdcdcd 5%, #fefefe 100%);
+	background:linear-gradient(to bottom, #cdcdcd 5%, #fefefe 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#cdcdcd', endColorstr='#fefefe',GradientType=0);
+	background-color:#cdcdcd;
+	transition: all 2s ;
+}
+.z-button-os.black:active {
+	position:relative;
+	top:1px;
+}
+
 
 
 .z-window-modal {

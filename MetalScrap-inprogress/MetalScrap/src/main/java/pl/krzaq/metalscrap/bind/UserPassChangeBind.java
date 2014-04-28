@@ -17,7 +17,6 @@ import org.zkoss.zul.Div;
 import org.zkoss.zul.Textbox;
 
 import pl.krzaq.metalscrap.model.User;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 import pl.krzaq.metalscrap.utils.Constants;
 import pl.krzaq.metalscrap.utils.Utilities;
 
@@ -54,7 +53,7 @@ public class UserPassChangeBind {
 	@NotifyChange({"message", "emailInvalid", "requestSent"})
 	public void requestPassword(){
 		
-		User user = ServicesImpl.getUserService().getUserByEmail(email.getValue()) ;
+		User user = Utilities.getServices().getUserService().getUserByEmail(email.getValue()) ;
 		if(user.getPasswordChange()) {
 			
 			emailInvalid = true ;
@@ -69,9 +68,9 @@ public class UserPassChangeBind {
 			error.setSclass("error");
 			
 			user.setPasswordChange(true);
-			ServicesImpl.getUserService().update(user);
+			Utilities.getServices().getUserService().update(user);
 			
-			String hostName = ServicesImpl.getConfigService().findByKey("host.address").getValue() ;
+			String hostName = Utilities.getServices().getConfigService().findByKey("host.address").getValue() ;
 			String remindToken = user.getRemindToken() ;
 			
 			String link = hostName+"/app/remindpass?user="+remindToken ;
@@ -81,7 +80,7 @@ public class UserPassChangeBind {
 			mailModel.put("email", user.getEmail()) ;
 			mailModel.put("link", link) ;
 			
-			ServicesImpl.getMailService().sendMail(Constants.MAIL_PASSWORD_REMIND, mailModel, "Przypomnienie hasła", user.getEmail());
+			Utilities.getServices().getMailService().sendMail(Constants.MAIL_PASSWORD_REMIND, mailModel, "Przypomnienie hasła", user.getEmail());
 			
 			requestSent = true ;
 			
@@ -98,7 +97,7 @@ public class UserPassChangeBind {
 		
 		if (emailAddress!=null && emailAddress.length()>0) {
 		
-			if (ServicesImpl.getUserService().getUserByEmail(emailAddress)!=null) {
+			if (Utilities.getServices().getUserService().getUserByEmail(emailAddress)!=null) {
 				
 				allowRequest = true ;
 				message = "" ;
@@ -177,7 +176,7 @@ public class UserPassChangeBind {
 		try {
 			// ostatnia modyfiakcja do doklejenia
 			user.setPassword(Utilities.hash(Utilities.HASH_METHOD_MD5, pass.getValue()));
-			ServicesImpl.getUserService().update(user);
+			Utilities.getServices().getUserService().update(user);
 			setPasswordChanged(true) ;
 		} catch(NoSuchAlgorithmException ex) {
 			setPasswordChanged(false) ;

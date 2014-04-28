@@ -16,6 +16,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import pl.krzaq.metalscrap.model.Auction;
@@ -25,6 +26,7 @@ import pl.krzaq.metalscrap.model.Commodity;
 import pl.krzaq.metalscrap.model.User;
 
 @Transactional
+@Component(value="auctionDAO")
 public class AuctionDAO {
 
 	@Autowired

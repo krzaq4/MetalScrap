@@ -37,10 +37,11 @@ import pl.krzaq.metalscrap.model.Event;
 import pl.krzaq.metalscrap.model.Role;
 import pl.krzaq.metalscrap.model.User;
 import pl.krzaq.metalscrap.service.UserService;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+
 import pl.krzaq.metalscrap.service.impl.UserServiceImpl;
 import pl.krzaq.metalscrap.utils.ApplicationContextProvider;
 import pl.krzaq.metalscrap.utils.Constants;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 @VariableResolver(org.zkoss.zkplus.spring.DelegatingVariableResolver.class)
 public class HomePage implements Initiator, InitiatorExt {
@@ -71,9 +72,9 @@ public class HomePage implements Initiator, InitiatorExt {
 		boolean isLoggedIn = ((UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal())!=null ;
 		
 		
-		Boolean isCategoriesVisible = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("auction_categories_visible").getValue()) ;
-		Boolean isCommoditiesVisible = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("auction_commodities_visible").getValue());
-		boolean userVerificationModeAuto = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("user.verification.mode.auto").getValue()).booleanValue() ;
+		Boolean isCategoriesVisible = Boolean.valueOf(Utilities.getServices().getConfigService().findByKey("auction_categories_visible").getValue()) ;
+		Boolean isCommoditiesVisible = Boolean.valueOf(Utilities.getServices().getConfigService().findByKey("auction_commodities_visible").getValue());
+		boolean userVerificationModeAuto = Boolean.valueOf(Utilities.getServices().getConfigService().findByKey("user.verification.mode.auto").getValue()).booleanValue() ;
 		
 		
 		if ( isLoggedIn ) {
@@ -84,7 +85,7 @@ public class HomePage implements Initiator, InitiatorExt {
 			currentUser =userService.getUserByLogin(login); 
 			if (currentUser != null) {
 				
-				currentUser = ServicesImpl.getUserService().getUserById(currentUser.getId()) ;
+				currentUser = Utilities.getServices().getUserService().getUserById(currentUser.getId()) ;
 				page.setAttribute("currentUser", currentUser);
 			Set<Role> roles = currentUser.getRoles() ;
 			//Iterator<Role> iterator = .iterator() ; 

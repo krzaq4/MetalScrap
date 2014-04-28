@@ -35,17 +35,18 @@
 		<image  src="../../resources/images/config-ico64.png" ></image>
 		<label style="position: relative; top: 20px; vertical-align: top; font-size: 24px; color: #4569d0 ; font-family: verdana;" value="${labels.admin.menu.configuration.$}" />
 	</div>
-<div sclass="tiles" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('pl.krzaq.metalscrap.bind.ConfigBind') ">
+<div sclass="tiles" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('pl.krzaq.metalscrap.bind.ConfigBind') " align="center">
 
 <div id="tilesInsideUp" class="wrapped tilesInsideUp" align="center">
 	<hbox>
-		<button sclass="white tileButtonSmall" image="../../resources/images/integration-ico32.png" label="${labels.admin.config.integrationcfg}" onClick="@command('showIntegrationMenu')" />
-		<button sclass="white tileButtonSmall" image="../../resources/images/sysconfig-ico64.png" label="${labels.admin.config.sysconfig}" onClick="@command('showSysConfigMenu')"></button>
-		<button sclass="white tileButtonSmall" image="../../resources/images/auctionconfig-ico64.png" label="${labels.admin.config.auctioncfg}" onClick="@command('showAuctionConfigMenu')"></button>
-		<button sclass=" white tileButtonSmall" image="../../resources/images/lookconfig-ico64.png" label="${labels.common.lookandfeel}" onClick="@command('showLookConfigMenu')"></button>
+		<button sclass="@load(vm.menuIntegration eq true?'black selected tileButtonSmall':'white tileButtonSmall')" image="@load(vm.menuIntegration eq true?'../../resources/images/integration-icowhite32.png':'../../resources/images/integration-ico32.png')" label="${labels.admin.config.integrationcfg}" onClick="@command('showIntegrationMenu')" />
+		<button sclass="@load(vm.menuSysConfig eq true?'black selected tileButtonSmall':'white tileButtonSmall')" image="@load(vm.menuSysConfig eq true?'../../resources/images/sysconfig-icowhite32.png':'../../resources/images/sysconfig-ico32.png')" onClick="@command('showSysConfigMenu')" label="${labels.admin.config.sysconfig}" ></button>
+		<button sclass="@load(vm.menuAuctionConfig eq true?'black selected tileButtonSmall':'white tileButtonSmall')" image="@load(vm.menuAuctionConfig eq true?'../../resources/images/auctionconfig-icowhite32.png':'../../resources/images/auctionconfig-ico32.png')" label="${labels.admin.config.auctioncfg}" onClick="@command('showAuctionConfigMenu')"></button>
+		<button sclass="@load(vm.menuLookConfig eq true?'black selected tileButtonSmall':'white tileButtonSmall')" image="@load(vm.menuLookConfig eq true?'../../resources/images/lookconfig-icowhite32.png':'../../resources/images/lookconfig-ico32.png')" label="${labels.common.lookandfeel}" onClick="@command('showLookConfigMenu')"></button>
 	</hbox>
 </div>
-
+<separator orient="horizontal"></separator>
+<space></space>
 <div id="tilesInside" sclass="tilesInside" align="center">
 
 <vbox>
@@ -62,21 +63,91 @@
 </vbox>
 
 </div>
-
-<div class="wrapped configDiv" id="integrationDiv">
-
+<space/>
+<div class="wrapped configDiv" id="integrationDiv" >
+	<div class="inner configDiv" align="left">
+		<vbox hflex="1">
+			<button label="back" onClick="@command('backToMainMenu')" />
+			
+		</vbox>
+	</div>
 </div>
 
-<div class="wrapped configDiv" id="sysConfigDiv">
-
+<div class="wrapped configDiv" id="sysConfigDiv" >
+<div class="inner configDiv" align="left">
+		<button class="previous"  onClick="@command('backToMainMenu')" />
+	
+			<hbox hflex="1">
+				<div width="280px">
+					<label class="register-s" value="${labels.admin.auctioncategories.visible}" />
+				</div>
+				<div width="300px">
+					<radiogroup onCheck="@command('selectAuctionCategoriesVisible', val=self.selectedItem.value)" orient="horizontal">
+						<radio label="${labels.common.yes}" value="true" checked="@load(vm.auctionCategoriesVisible eq true)"></radio>
+						<radio label="${labels.common.no}" value="false" checked="@load(vm.auctionCategoriesVisible eq false)"></radio>
+					</radiogroup>
+				</div>
+			</hbox>
+			<hbox hflex="1">
+				<div width="280px">
+					<label class="register-s" value="${labels.admin.currencysymbol}" />
+				</div>
+				<div width="300px">
+					<textbox class="default-s" value="@bind(vm.currencySymbol)" onChange="@command('updateCurrencySymbol')" cols="15" maxlength="15" />
+				</div>
+			</hbox>
+			<hbox hflex="1">
+				<div width="280px">
+					<label class="register-s" value="${labels.admin.hostaddress}" />
+				</div>
+				<div width="300px">
+					<textbox class="default-s" value="@bind(vm.hostAddress)" onChange="@command('updateHostAddress')" cols="35" maxlength="35" />
+				</div>
+			</hbox>
+			<hbox hflex="1">
+				<div width="280px">
+					<label class="register-s" value="${labels.admin.autobidderstep}" />
+				</div>
+				<div width="300px">
+					<decimalbox class="default-s" value="@bind(vm.autobidderStep)" onChange="@command('updateAutobidderStep')" />
+				</div>
+			</hbox>
+			<hbox hflex="1">
+				<div width="280px">
+					<label class="register-s" value="${labels.admin.userverification.$}" />
+				</div>
+				<div width="300px">
+					<radiogroup onCheck="@command('selectUserVerificationMode', val=self.selectedItem.value)">
+						<radio label="${labels.common.auto}" value="true" checked="@load(vm.userVerificationMode eq true)"></radio>
+						<radio label="${labels.common.manual}" value="false" checked="@load(vm.userVerificationMode eq false)"></radio>
+					</radiogroup>
+				</div>
+			</hbox>
+			<hbox hflex="1" visible="@load(vm.userVerificationMode eq false)">
+				<div width="280px">
+					<label class="register-s" value="${labels.admin.userverification.type}" />
+				</div>
+				<div width="300px">
+					<radiogroup onCheck="@command('selectUserVerificationType', val=self.selectedItem.value)">
+						<radio label="${labels.common.letter}" value="letter" checked="@load(vm.userVerificationType eq 'letter')"></radio>
+						<radio label="${labels.common.sms}" value="sms" checked="@load(vm.userVerificationType eq 'sms')"></radio>
+						<radio label="${labels.common.manual}" value="manual" checked="@load(vm.userVerificationType eq 'manual')"></radio>
+					</radiogroup>
+				</div>
+			</hbox>
+	</div>
 </div>
 
-<div class="wrapped configDiv" id="auctionConfigDiv">
-
+<div class="wrapped configDiv" id="auctionConfigDiv" >
+<div class="inner configDiv" align="left">
+		<button label="back" onClick="@command('backToMainMenu')" />
+	</div>
 </div>
 
-<div class="wrapped configDiv" id="lookConfigDiv">
-
+<div class="wrapped configDiv" id="lookConfigDiv" >
+<div class="inner configDiv" align="left">
+		<button label="back" onClick="@command('backToMainMenu')" />
+	</div>
 </div>
 
 

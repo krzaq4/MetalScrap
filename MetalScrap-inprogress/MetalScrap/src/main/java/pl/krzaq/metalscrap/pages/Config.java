@@ -15,7 +15,7 @@ import org.zkoss.zk.ui.util.Initiator;
 
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.service.impl.AuctionServiceImpl;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class Config extends HomePage{
 
@@ -47,10 +47,10 @@ public class Config extends HomePage{
 	public void doInit(Page page, Map<String, Object> arg1) throws Exception {
 	
 		super.doInit(page, arg1);
-		pl.krzaq.metalscrap.model.Config commoditiesVisible = ServicesImpl.getConfigService().findByKey("auction_commodities_visible") ;
-		pl.krzaq.metalscrap.model.Config categoriesVisible = ServicesImpl.getConfigService().findByKey("auction_categories_visible") ;
+		pl.krzaq.metalscrap.model.Config commoditiesVisible = Utilities.getServices().getConfigService().findByKey("auction_commodities_visible") ;
+		pl.krzaq.metalscrap.model.Config categoriesVisible = Utilities.getServices().getConfigService().findByKey("auction_categories_visible") ;
 		
-		List<pl.krzaq.metalscrap.model.Config> configs = ServicesImpl.getConfigService().findAll() ;
+		List<pl.krzaq.metalscrap.model.Config> configs = Utilities.getServices().getConfigService().findAll() ;
 		page.setAttribute("configs", configs) ;
 		
 		page.setAttribute("commoditiesVisible", Boolean.valueOf(commoditiesVisible.getValue()).booleanValue()) ;

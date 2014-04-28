@@ -48,7 +48,7 @@ import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.model.Property;
 import pl.krzaq.metalscrap.model.PropertyAttribute;
 import pl.krzaq.metalscrap.model.PropertyAttributeValue;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+
 import pl.krzaq.metalscrap.utils.Utilities;
 
 public class CategoryEvents {
@@ -100,7 +100,7 @@ public class CategoryEvents {
 			
 			
 			
-		List<Category> subs = ServicesImpl.getCategoryService().findSubCategoriesByLang(category, locale.getLanguage()) ;
+		List<Category> subs = Utilities.getServices().getCategoryService().findSubCategoriesByLang(category, locale.getLanguage()) ;
 		
 		//if(subs != null && subs.size()>0) {
 			
@@ -201,17 +201,17 @@ public class CategoryEvents {
 		
 		/*}else {
 			
-			List<Category> subs = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
+			List<Category> subs = Utilities.getServices().getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
 			Collections.sort(subs);
 			
 			
 			if (category.getId()!=null) {
-				subs = ServicesImpl.getCategoryService().findSubCategoriesByLang(category.getParent(), locale.getLanguage()) ;
+				subs = Utilities.getServices().getCategoryService().findSubCategoriesByLang(category.getParent(), locale.getLanguage()) ;
 				Collections.sort(subs);
 				Category back = new Category(Labels.getLabel("auction.auctioncategory.back"), Labels.getLabel("auction.auctioncategory.back"), category.getParent()) ;
 				subs.add(0, back) ;
 			} else {
-				subs = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
+				subs = Utilities.getServices().getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
 				Collections.sort(subs);				
 			}
 			
@@ -251,7 +251,7 @@ public class CategoryEvents {
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 		Category blank = new Category(Labels.getLabel("common.nocategory"), Labels.getLabel("common.nocategory.description"), null, locale.getLanguage()) ;
 		Category newCat = new Category("", "", null, locale.getLanguage()) ;
-		List<Category> root = ServicesImpl.getCategoryService().findAllByLang(locale.getLanguage()) ;
+		List<Category> root = Utilities.getServices().getCategoryService().findAllByLang(locale.getLanguage()) ;
 		root.add(0, blank) ;
 		BindingListModel<Category> lml = new BindingListModelList<Category>(root, true) ;
 		
@@ -291,7 +291,7 @@ public class CategoryEvents {
 		
 		if(parent!=null) {
 			
-			List<Category> categories = ServicesImpl.getCategoryService().findSubCategoriesByLang(parent, locale.getLanguage()) ;
+			List<Category> categories = Utilities.getServices().getCategoryService().findSubCategoriesByLang(parent, locale.getLanguage()) ;
 			Collections.sort(categories);
 			int currentPosition = category.getPosition() ;
 			
@@ -301,12 +301,12 @@ public class CategoryEvents {
 				int previousPosition = previous.getPosition() ;
 				
 				category.setPosition(previousPosition);
-				ServicesImpl.getCategoryService().update(category);
+				Utilities.getServices().getCategoryService().update(category);
 				
 				previous.setPosition(currentPosition);
-				ServicesImpl.getCategoryService().update(previous);
+				Utilities.getServices().getCategoryService().update(previous);
 								
-				categories  = ServicesImpl.getCategoryService().findSubCategoriesByLang(category.getParent(), locale.getLanguage()) ;
+				categories  = Utilities.getServices().getCategoryService().findSubCategoriesByLang(category.getParent(), locale.getLanguage()) ;
 				Collections.sort(categories);
 				page.setAttribute("categories", categories) ;
 				page.setAttribute("category", category) ;
@@ -318,7 +318,7 @@ public class CategoryEvents {
 			
 		} else {
 			
-			List<Category> categories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
+			List<Category> categories = Utilities.getServices().getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
 			Collections.sort(categories);
 			int currentPosition = category.getPosition() ;
 			
@@ -329,10 +329,10 @@ public class CategoryEvents {
 				category.setPosition(previousPosition);
 				previous.setPosition(currentPosition);
 				
-				ServicesImpl.getCategoryService().update(category);
-				ServicesImpl.getCategoryService().update(previous);
+				Utilities.getServices().getCategoryService().update(category);
+				Utilities.getServices().getCategoryService().update(previous);
 				
-				categories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
+				categories = Utilities.getServices().getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
 				Collections.sort(categories);
 				page.setAttribute("categories", categories) ;
 				page.setAttribute("category", category) ;
@@ -355,7 +355,7 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 		
 		if(parent!=null) {
 			
-			List<Category> categories = ServicesImpl.getCategoryService().findSubCategoriesByLang(parent, locale.getLanguage()) ;
+			List<Category> categories = Utilities.getServices().getCategoryService().findSubCategoriesByLang(parent, locale.getLanguage()) ;
 			Collections.sort(categories);
 			int currentPosition = category.getPosition() ;
 			
@@ -365,12 +365,12 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 				int nextPosition = next.getPosition() ;
 				
 				category.setPosition(nextPosition);
-				ServicesImpl.getCategoryService().update(category) ;
+				Utilities.getServices().getCategoryService().update(category) ;
 				
 				next.setPosition(currentPosition);
-				ServicesImpl.getCategoryService().update(next) ;
+				Utilities.getServices().getCategoryService().update(next) ;
 				
-				categories  = ServicesImpl.getCategoryService().findSubCategoriesByLang(category.getParent(), locale.getLanguage()) ;
+				categories  = Utilities.getServices().getCategoryService().findSubCategoriesByLang(category.getParent(), locale.getLanguage()) ;
 				Collections.sort(categories);
 				page.setAttribute("categories", categories) ;
 				page.setAttribute("category", category) ;
@@ -381,7 +381,7 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 			
 		} else {
 			
-			List<Category> categories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
+			List<Category> categories = Utilities.getServices().getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
 			Collections.sort(categories);
 			int currentPosition = category.getPosition() ;
 			
@@ -392,10 +392,10 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 				category.setPosition(nextPosition);
 				next.setPosition(currentPosition);
 				
-				ServicesImpl.getCategoryService().update(category) ;
-				ServicesImpl.getCategoryService().update(next) ;
+				Utilities.getServices().getCategoryService().update(category) ;
+				Utilities.getServices().getCategoryService().update(next) ;
 				
-				categories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
+				categories = Utilities.getServices().getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
 				Collections.sort(categories);
 				page.setAttribute("categories", categories) ;
 				page.setAttribute("category", category) ;
@@ -423,17 +423,17 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 		
 				if (cmbx.getSelectedIndex()>-1){
 					if (((Category) cmbx.getItemAtIndex(cmbx.getSelectedIndex()).getValue()).getId()!=null)
-						parent = ServicesImpl.getCategoryService().findById(((Category) cmbx.getItemAtIndex(cmbx.getSelectedIndex()).getValue()).getId()) ; //(Category) cmbx.getItemAtIndex(cmbx.getSelectedIndex()).getValue() ;	
+						parent = Utilities.getServices().getCategoryService().findById(((Category) cmbx.getItemAtIndex(cmbx.getSelectedIndex()).getValue()).getId()) ; //(Category) cmbx.getItemAtIndex(cmbx.getSelectedIndex()).getValue() ;	
 				} 
 		
-				List<String> langs = ServicesImpl.getLangLabelService().findAllLangs() ;
+				List<String> langs = Utilities.getServices().getLangLabelService().findAllLangs() ;
 		
 				category.setAuctions(new ArrayList<Auction>());
 				
 				for (String lang:langs) {
 				
 					/*if (parent!=null) {
-						parent = ServicesImpl.getCategoryService().getEqual( Utilities.hash(Utilities.HASH_METHOD_MD5, parent.getName().concat(parent.getDescription())) , lang) ;
+						parent = Utilities.getServices().getCategoryService().getEqual( Utilities.hash(Utilities.HASH_METHOD_MD5, parent.getName().concat(parent.getDescription())) , lang) ;
 					}
 			
 					category.setParent(parent);
@@ -450,11 +450,11 @@ public void moveCategoryDown(Category category, Listbox grid, AnnotateDataBinder
 					
 					category = category.clone(lang, true); 
 					
-					//ServicesImpl.getCategoryService().save(category);
+					//Utilities.getServices().getCategoryService().save(category);
 				
 				}
 		
-				List<Category> categories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
+				List<Category> categories = Utilities.getServices().getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
 				Collections.sort(categories);
 				page.setAttribute("categories", categories ) ;
 		
@@ -480,7 +480,7 @@ try {
 			if(prop.getEqualIdentifier()==null) {
 				// New Property in category	
 				
-				for(Category cat:ServicesImpl.getCategoryService().getEquals(equalIdent)){
+				for(Category cat:Utilities.getServices().getCategoryService().getEquals(equalIdent)){
 				
 					Property newProp = new Property() ;
 					
@@ -513,9 +513,9 @@ try {
 				
 					cat.getProps().add(newProp);
 					
-				ServicesImpl.getPropertyService().save(newProp);	
+				Utilities.getServices().getPropertyService().save(newProp);	
 				
-				ServicesImpl.getCategoryService().update(cat);
+				Utilities.getServices().getCategoryService().update(cat);
 				
 				}	
 					
@@ -526,7 +526,7 @@ try {
 				
 				// iterate through other categories
 				// check if propertyAttributes or propertyAttributeValues has changed
-				for(Category cat:ServicesImpl.getCategoryService().getEquals(equalIdent)){
+				for(Category cat:Utilities.getServices().getCategoryService().getEquals(equalIdent)){
 					
 					if(!cat.getLang().equals(category.getLang())){
 						
@@ -591,8 +591,8 @@ try {
 									}
 								}
 								
-								ServicesImpl.getPropertyService().update(catProp);
-								ServicesImpl.getPropertyService().update(prop);
+								Utilities.getServices().getPropertyService().update(catProp);
+								Utilities.getServices().getPropertyService().update(prop);
 								//continue;
 							}
 							
@@ -600,8 +600,8 @@ try {
 								if(cat.getProps().contains(catProp)) {
 									cat.getProps().remove(catProp) ;
 								}
-								//ServicesImpl.getPropertyService().delete(prop);
-								ServicesImpl.getPropertyService().delete(catProp);
+								//Utilities.getServices().getPropertyService().delete(prop);
+								Utilities.getServices().getPropertyService().delete(catProp);
 						}*/
 						
 						
@@ -609,7 +609,7 @@ try {
 						}
 					}
 					
-					ServicesImpl.getCategoryService().update(cat);
+					Utilities.getServices().getCategoryService().update(cat);
 				}
 				
 			}
@@ -620,9 +620,9 @@ try {
 		
 		
 		
-		//ServicesImpl.getCategoryService().update(category);
+		//Utilities.getServices().getCategoryService().update(category);
 		
-		/*for(Category cat:ServicesImpl.getCategoryService().getEquals(equalIdent)){
+		/*for(Category cat:Utilities.getServices().getCategoryService().getEquals(equalIdent)){
 				
 				if(!cat.getLang().equals(category.getLang())){
 				Iterator<Property> itProp = category.getProps().iterator() ;
@@ -695,7 +695,7 @@ try {
 			//	cat.setDescription(category.getDescription());
 			//}
 				}
-			ServicesImpl.getCategoryService().update(cat);
+			Utilities.getServices().getCategoryService().update(cat);
 			
 			
 		}*/
@@ -704,7 +704,7 @@ try {
 		deleteUnusedProperty(category) ;
 		
 		win.setVisible(false) ;
-		List<Category> categories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
+		List<Category> categories = Utilities.getServices().getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
 		Collections.sort(categories);
 		page.setAttribute("categories", categories) ;
 		binder.loadComponent(grid);
@@ -718,7 +718,7 @@ try {
 	
 	private void deleteUnusedProperty(Category category) {
 		
-		for(Category cat:ServicesImpl.getCategoryService().getEquals(category.getEqualIdentifier())){
+		for(Category cat:Utilities.getServices().getCategoryService().getEquals(category.getEqualIdentifier())){
 			
 			Iterator<Property> it = cat.getProps().iterator() ;
 			
@@ -736,8 +736,8 @@ try {
 				
 				if(toDelete) {
 					it.remove();
-					ServicesImpl.getCategoryService().update(cat);
-					ServicesImpl.getPropertyService().delete(p);
+					Utilities.getServices().getCategoryService().update(cat);
+					Utilities.getServices().getPropertyService().delete(p);
 					
 				}
 				
@@ -762,10 +762,10 @@ try {
 
 					if (event.getName().equalsIgnoreCase("onOK")){
 						String equalIdent = category.getEqualIdentifier();
-						for (String lang:ServicesImpl.getLangLabelService().findAllLangs()) {
+						for (String lang:Utilities.getServices().getLangLabelService().findAllLangs()) {
 						
-							Category cat = ServicesImpl.getCategoryService().getEqual(equalIdent, lang) ;
-							ServicesImpl.getCategoryService().delete(cat);
+							Category cat = Utilities.getServices().getCategoryService().getEqual(equalIdent, lang) ;
+							Utilities.getServices().getCategoryService().delete(cat);
 						
 						}
 						
@@ -776,7 +776,7 @@ try {
 			
 		}) ;
 		
-		page.setAttribute("categories", ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage())) ;	
+		page.setAttribute("categories", Utilities.getServices().getCategoryService().findRootCategoriesByLang(locale.getLanguage())) ;	
 		binder.loadComponent(grid);
 		
 	}
@@ -881,12 +881,12 @@ try {
 		try{
 		
 		String equalIdent = category.getEqualIdentifier();
-		//List<Category> equals = ServicesImpl.getCategoryService().getEquals(equalIdent) ;
+		//List<Category> equals = Utilities.getServices().getCategoryService().getEquals(equalIdent) ;
 		
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 		Category cat ;
-		for (String lang:ServicesImpl.getLangLabelService().findAllLangs()) {
-			cat = ServicesImpl.getCategoryService().getEqual(equalIdent, lang) ;
+		for (String lang:Utilities.getServices().getLangLabelService().findAllLangs()) {
+			cat = Utilities.getServices().getCategoryService().getEqual(equalIdent, lang) ;
 			String propEqualIdent = Utilities.hash(Utilities.HASH_METHOD_MD5,property.getName().concat(property.getDescription())) ;
 			Property newProp = new Property() ;
 			List<PropertyAttribute> newAttrs = new ArrayList<PropertyAttribute>() ;
@@ -1024,15 +1024,15 @@ try {
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 		
 		//catParam.setValues(paramValues);
-		List<String> langs = ServicesImpl.getLangLabelService().findAllLangs();
+		List<String> langs = Utilities.getServices().getLangLabelService().findAllLangs();
 		if (catParam.getId()==null) {
 		for (String lang:langs){
 			catParam.setLang(lang);
-			ServicesImpl.getCategoryParameterService().save(catParam);
+			Utilities.getServices().getCategoryParameterService().save(catParam);
 		}
 		} else {
 			
-			ServicesImpl.getCategoryParameterService().save(catParam);
+			Utilities.getServices().getCategoryParameterService().save(catParam);
 		}
 		
 		Messagebox.show(Labels.getLabel("common.categoryparametersaved")) ;
@@ -1045,9 +1045,9 @@ try {
 		
 		Page page = c.getPage() ;
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
-		List<Category> cats = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
+		List<Category> cats = Utilities.getServices().getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
 		if(category.getParent()!=null)
-			cats = ServicesImpl.getCategoryService().findSubCategoriesByLang(category.getParent(), locale.getLanguage()) ;
+			cats = Utilities.getServices().getCategoryService().findSubCategoriesByLang(category.getParent(), locale.getLanguage()) ;
 		page.setAttribute("categories", cats) ;
 		page.setAttribute("category", null) ;
 		binder.loadAll();

@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.mysql.jdbc.StringUtils;
 
@@ -17,7 +18,9 @@ import pl.krzaq.metalscrap.model.DeliveryType;
 import pl.krzaq.metalscrap.model.PaymentMethod;
 import pl.krzaq.metalscrap.model.User;
 import pl.krzaq.metalscrap.service.AuctionService;
+import pl.krzaq.metalscrap.utils.Utilities;
 
+@Component(value="auctionService")
 public class AuctionServiceImpl implements AuctionService {
 
 	@Autowired
@@ -68,7 +71,7 @@ public class AuctionServiceImpl implements AuctionService {
 	public Auction findWithCollection(Long id) {
 		Auction result = auctionDAO.findById(id) ;
 		result.getCommodities().addAll(auctionDAO.findAuctionCommodities(result)) ;
-		result.setFiles(ServicesImpl.getAttachementFileService().findByAuction(result)) ;
+		result.setFiles(Utilities.getServices().getAttachementFileService().findByAuction(result)) ;
 		return result ;
 	}
 	
@@ -212,8 +215,8 @@ public class AuctionServiceImpl implements AuctionService {
 					
 					it.remove(); 
 					
-					if (ServicesImpl.getCategoryService().findSubCategories(cat).size()>0) {
-						findAuctions(ServicesImpl.getCategoryService().findSubCategories(cat), result, status) ;
+					if (Utilities.getServices().getCategoryService().findSubCategories(cat).size()>0) {
+						findAuctions(Utilities.getServices().getCategoryService().findSubCategories(cat), result, status) ;
 					}
 					
 				}

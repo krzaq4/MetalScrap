@@ -3,11 +3,13 @@ package pl.krzaq.metalscrap.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import pl.krzaq.metalscrap.dao.ConfigDAO;
 import pl.krzaq.metalscrap.model.Config;
 import pl.krzaq.metalscrap.service.ConfigService;
 
+@Component(value="configService")
 public class ConfigServiceImpl implements ConfigService {
 
 	@Autowired

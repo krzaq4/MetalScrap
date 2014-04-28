@@ -15,6 +15,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMailMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Component;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.zkoss.util.resource.Labels;
 
@@ -26,6 +27,7 @@ import pl.krzaq.metalscrap.model.Company;
 import pl.krzaq.metalscrap.model.User;
 import pl.krzaq.metalscrap.service.MailService;
 
+@Component(value="mailService")
 public class MailServiceImpl implements MailService {
 
 	@Value("${mail.smtp.server}")

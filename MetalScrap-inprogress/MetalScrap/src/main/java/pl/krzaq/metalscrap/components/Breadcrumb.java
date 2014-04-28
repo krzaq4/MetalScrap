@@ -14,7 +14,8 @@ import org.zkoss.zul.Treeitem;
 
 import pl.krzaq.metalscrap.model.AuctionStatus;
 import pl.krzaq.metalscrap.model.Category;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.Utilities;
+
 
 public class Breadcrumb extends Div {
 
@@ -44,7 +45,7 @@ public class Breadcrumb extends Div {
 		//Category selectedCategory = (Category) page.getAttribute("selectedCategory") ;
 		
 		List<Label> crumbs = new ArrayList<Label>() ;
-		AuctionStatus status = ServicesImpl.getAuctionService().findStatusByCode(AuctionStatus.STATUS_STARTED) ;
+		AuctionStatus status = Utilities.getServices().getAuctionService().findStatusByCode(AuctionStatus.STATUS_STARTED) ;
 		
 		
 		if(currentCategory!=null) {
@@ -161,7 +162,7 @@ public class Breadcrumb extends Div {
 		public void onEvent(Event event) throws Exception {
 			Page p = event.getTarget().getPage() ;
 			currentCategory = this.category ;
-			p.setAttribute("categoryAuctions", ServicesImpl.getAuctionService().findByCategoryDown(this.category, this.status)) ;
+			p.setAttribute("categoryAuctions", Utilities.getServices().getAuctionService().findByCategoryDown(this.category, this.status)) ;
 			if (p.hasFellow("allAuctions"))
 				binder.loadComponent(p.getFellow("allAuctions"));
 			if (!standalone) {

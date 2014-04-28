@@ -6,10 +6,13 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 
+import pl.krzaq.metalscrap.dao.EventDAO;
 import pl.krzaq.metalscrap.model.Event;
 import pl.krzaq.metalscrap.model.User;
 
 public interface EventService {
+	
+	public EventDAO getEventDAO() ;
 	
 	public List<Event> findEvents() ;
 	

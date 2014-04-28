@@ -15,15 +15,17 @@ import pl.krzaq.metalscrap.service.impl.UserServiceImpl;
 public interface Services {
 
 	
-	public AuctionServiceImpl getAuctionService() ;
-	public UserServiceImpl getUserService() ;
-	public DeliveryTypeServiceImpl getDeliveryTypeService() ;
-	public PaymentMethodServiceImpl getPaymentMethodService() ;
-	public ConfigServiceImpl getConfigService();
-	public CategoryServiceImpl getCategoryService() ;
-	public AttachementFileServiceImpl getAttachementFileService() ;
-	public LangLabelServiceImpl getLangLabelService() ;
-	public MailServiceImpl getMailService();
-	public PropertyServiceImpl getPropertyService() ;
-	public EventServiceImpl getEventService() ;
+	public AuctionService getAuctionService() ;
+	public UserService getUserService() ;
+	public DeliveryTypeService getDeliveryTypeService() ;
+	public PaymentMethodService getPaymentMethodService() ;
+	public ConfigService getConfigService();
+	public CategoryService getCategoryService() ;
+	public AttachementFileService getAttachementFileService() ;
+	public LangLabelService getLangLabelService() ;
+	public MailService getMailService();
+	public PropertyService getPropertyService() ;
+	public EventService getEventService() ;
+	public UserOfferService getUserOfferService() ;
+	public CommodityTypeService getCommodityTypeService() ;
 }

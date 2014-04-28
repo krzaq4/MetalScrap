@@ -32,6 +32,9 @@ public class Message {
 	@JoinColumn(name="parent")
 	private Message parent ;
 	
+	@Column(name="is_read")
+	private Boolean read ;
+	
 	@ManyToOne
 	@JoinTable(name="auction_messages", joinColumns=@JoinColumn(name="message_id", referencedColumnName="id"), inverseJoinColumns=@JoinColumn(name="auction_id", referencedColumnName="id"))
 	private Auction auction ;
@@ -97,6 +100,14 @@ public class Message {
 
 	public void setIssued(Date issued) {
 		this.issued = issued;
+	}
+
+	public Boolean getRead() {
+		return read;
+	}
+
+	public void setRead(Boolean read) {
+		this.read = read;
 	}
 	
 	

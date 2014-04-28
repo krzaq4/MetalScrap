@@ -4,7 +4,7 @@ import org.zkoss.zkplus.databind.AnnotateDataBinder;
 import org.zkoss.zul.Checkbox;
 
 import pl.krzaq.metalscrap.model.Config;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class ConfigEvents {
 
@@ -21,10 +21,10 @@ public class ConfigEvents {
 	
 	private void changeConfig(String key, boolean checked) {
 		
-		Config cfg = ServicesImpl.getConfigService().findByKey(key) ;
+		Config cfg = Utilities.getServices().getConfigService().findByKey(key) ;
 		String newValue = String.valueOf(checked) ;
 		cfg.setValue(newValue);
-		ServicesImpl.getConfigService().update(cfg);
+		Utilities.getServices().getConfigService().update(cfg);
 		
 	}
 	

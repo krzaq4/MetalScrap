@@ -2,10 +2,12 @@ package pl.krzaq.metalscrap.service;
 
 import java.util.List;
 
+import pl.krzaq.metalscrap.dao.ConfigDAO;
 import pl.krzaq.metalscrap.model.Config;
 
 public interface ConfigService {
 
+	public ConfigDAO getConfigDAO();
 	
 	public Config findByKey(String key) ;
 	

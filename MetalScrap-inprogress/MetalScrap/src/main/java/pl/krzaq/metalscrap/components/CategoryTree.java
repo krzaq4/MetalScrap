@@ -32,8 +32,8 @@ import pl.krzaq.metalscrap.dao.CategoryDAO;
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.AuctionStatus;
 import pl.krzaq.metalscrap.model.Category;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 import pl.krzaq.metalscrap.utils.ApplicationContextProvider;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class CategoryTree extends Tree {
 
@@ -95,7 +95,7 @@ public class CategoryTree extends Tree {
 					  
 					  TreeNode<Category> rootNode ;
 					  
-					  if (ServicesImpl.getCategoryService().findSubCategories(root).size()>0) {
+					  if (Utilities.getServices().getCategoryService().findSubCategories(root).size()>0) {
 						  
 						  rootNode = new DefaultTreeNode<Category>(root, getSubCategories(root) ) ;
 						  nds[j] = rootNode ;
@@ -128,13 +128,13 @@ public class CategoryTree extends Tree {
 	
 	private TreeNode<Category>[] getSubCategories(Category category) {
 		
-		DefaultTreeNode<Category>[] result  = new DefaultTreeNode[ServicesImpl.getCategoryService().findSubCategories(category).size()] ;
+		DefaultTreeNode<Category>[] result  = new DefaultTreeNode[Utilities.getServices().getCategoryService().findSubCategories(category).size()] ;
 		int i=0;
-		List<Category> childCategories = ServicesImpl.getCategoryService().findSubCategories(category) ;
+		List<Category> childCategories = Utilities.getServices().getCategoryService().findSubCategories(category) ;
 		Collections.sort(childCategories);
 		for (Category sub:childCategories) {
 			
-			if (ServicesImpl.getCategoryService().findSubCategories(sub).size()>0) {
+			if (Utilities.getServices().getCategoryService().findSubCategories(sub).size()>0) {
 				result[i] = new DefaultTreeNode<Category>(sub, getSubCategories(sub)) ;
 			} else {
 				
@@ -158,7 +158,7 @@ public class CategoryTree extends Tree {
 	    public void render(Treeitem item, DefaultTreeNode<Category> data, int index) throws Exception {
 	    	
 	        Category fi = data.getData();
-	        AuctionStatus status = ServicesImpl.getAuctionService().findStatusByCode(AuctionStatus.STATUS_STARTED) ;
+	        AuctionStatus status = Utilities.getServices().getAuctionService().findStatusByCode(AuctionStatus.STATUS_STARTED) ;
 	        
 	        Treerow tr = new Treerow();
 	        tr.setSclass("category");
@@ -179,7 +179,7 @@ public class CategoryTree extends Tree {
 	        	if (showCountInSelectedOnly){
 	        		if(item.getTree().getSelectedItem().equals(item)) {
 	        			
-	        			String qty = "("+ServicesImpl.getAuctionService().findByCategoryDown(fi, ServicesImpl.getAuctionService().findStatusByCode(AuctionStatus.STATUS_STARTED)).size()+")" ;
+	        			String qty = "("+Utilities.getServices().getAuctionService().findByCategoryDown(fi, Utilities.getServices().getAuctionService().findStatusByCode(AuctionStatus.STATUS_STARTED)).size()+")" ;
 	    	        	Label qtyLabel = new Label(qty) ;
 	    	        	Hbox hbox = new Hbox() ;
 	    	        	hbox.appendChild(name) ;
@@ -191,7 +191,7 @@ public class CategoryTree extends Tree {
 	        		}
 	        	} else {
 	        	
-	        		String qty = "("+ServicesImpl.getAuctionService().findByCategoryDown(fi, ServicesImpl.getAuctionService().findStatusByCode(AuctionStatus.STATUS_STARTED)).size()+")" ;
+	        		String qty = "("+Utilities.getServices().getAuctionService().findByCategoryDown(fi, Utilities.getServices().getAuctionService().findStatusByCode(AuctionStatus.STATUS_STARTED)).size()+")" ;
 	        		Label qtyLabel = new Label(qty) ;
 	        		Hbox hbox = new Hbox() ;
 	        		hbox.appendChild(name) ;
@@ -243,10 +243,10 @@ public class CategoryTree extends Tree {
 				((Treeitem) event.getTarget()).setOpen(!((Treeitem) event.getTarget()).isOpen());
 				event.getTarget().getPage().setAttribute("selectedCategory", selectedCategory) ;
 				
-				List<Auction> auctions = ServicesImpl.getAuctionService().findByCategoryDown(selectedCategory, status) ;
+				List<Auction> auctions = Utilities.getServices().getAuctionService().findByCategoryDown(selectedCategory, status) ;
 				
 				if (showAllAuctions)
-					auctions = ServicesImpl.getAuctionService().findByCategoryDown(selectedCategory) ;
+					auctions = Utilities.getServices().getAuctionService().findByCategoryDown(selectedCategory) ;
 				
 				((ListModelList) auctionList.getListModel()).clear();
 				((ListModelList) auctionList.getListModel()).addAll(auctions) ;

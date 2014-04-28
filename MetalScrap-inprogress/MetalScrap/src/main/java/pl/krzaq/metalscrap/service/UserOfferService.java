@@ -5,11 +5,14 @@ import java.util.List;
 
 import org.hibernate.criterion.Restrictions;
 
+import pl.krzaq.metalscrap.dao.UserOfferDAO;
 import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.UserOffer;
 
 public interface UserOfferService {
 
+	public UserOfferDAO getUserOfferDAO() ;
+	
 	public List<UserOffer> findAll() ;
 	public List<UserOffer> findByAuction(Auction auction) ;
 	

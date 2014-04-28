@@ -12,12 +12,14 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import pl.krzaq.metalscrap.model.Role;
 import pl.krzaq.metalscrap.model.User;
 
 @Transactional
+@Component(value="userDAO")
 public class UserDAO {
 
 	

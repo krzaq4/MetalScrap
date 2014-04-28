@@ -11,7 +11,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 
 import pl.krzaq.metalscrap.model.LangLabel;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class Translations extends HomePage {
 
@@ -20,21 +21,21 @@ public class Translations extends HomePage {
 		// TODO Auto-generated method stub
 		super.doInit(page, arg1);
 		
-		List<LangLabel> aboutLabels = ServicesImpl.getLangLabelService().findLikeKey("%about%") ;
-		List<LangLabel> adminLabels = ServicesImpl.getLangLabelService().findLikeKeyUnique("%admin%") ;
-		List<LangLabel> adminLabelsAll = ServicesImpl.getLangLabelService().findLikeKey("%admin%") ;
-		List<LangLabel> auctionLabels = ServicesImpl.getLangLabelService().findLikeKey("%auction%") ;
-		List<LangLabel> cmsLabels = ServicesImpl.getLangLabelService().findLikeKey("%cms%") ;
-		List<LangLabel> regulationLabels = ServicesImpl.getLangLabelService().findLikeKey("%regulation%") ;
-		List<LangLabel> helpLabels = ServicesImpl.getLangLabelService().findLikeKey("%help%") ;
-		List<LangLabel> contactLabels = ServicesImpl.getLangLabelService().findLikeKey("%contact%") ;
-		List<String> langs = ServicesImpl.getLangLabelService().findAllLangs() ;
+		List<LangLabel> aboutLabels = Utilities.getServices().getLangLabelService().findLikeKey("%about%") ;
+		List<LangLabel> adminLabels = Utilities.getServices().getLangLabelService().findLikeKeyUnique("%admin%") ;
+		List<LangLabel> adminLabelsAll = Utilities.getServices().getLangLabelService().findLikeKey("%admin%") ;
+		List<LangLabel> auctionLabels = Utilities.getServices().getLangLabelService().findLikeKey("%auction%") ;
+		List<LangLabel> cmsLabels = Utilities.getServices().getLangLabelService().findLikeKey("%cms%") ;
+		List<LangLabel> regulationLabels = Utilities.getServices().getLangLabelService().findLikeKey("%regulation%") ;
+		List<LangLabel> helpLabels = Utilities.getServices().getLangLabelService().findLikeKey("%help%") ;
+		List<LangLabel> contactLabels = Utilities.getServices().getLangLabelService().findLikeKey("%contact%") ;
+		List<String> langs = Utilities.getServices().getLangLabelService().findAllLangs() ;
 		Collections.sort(langs);
 		Collections.sort(adminLabels);
 		Collections.sort(adminLabelsAll);
 		
 		
-		List<String> availableLanguages = ServicesImpl.getLangLabelService().findAllLangs() ;//Arrays.asList(Locale.getISOCountries()) ;
+		List<String> availableLanguages = Utilities.getServices().getLangLabelService().findAllLangs() ;//Arrays.asList(Locale.getISOCountries()) ;
 		List<String> allLanguages = new ArrayList<String>(Arrays.asList(Locale.getISOLanguages())) ;
 		allLanguages.removeAll(availableLanguages) ;
 		

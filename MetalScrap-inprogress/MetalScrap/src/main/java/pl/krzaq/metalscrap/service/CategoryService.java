@@ -5,10 +5,13 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 
+import pl.krzaq.metalscrap.dao.CategoryDAO;
 import pl.krzaq.metalscrap.model.Category;
 
 public interface CategoryService {
 
+	public CategoryDAO getCategoryDAO();
+	
 	public List<Category> findAll() ;
 	
 	public Category findById(Long id) ;

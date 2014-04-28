@@ -35,5 +35,7 @@
 		<mapping class="pl.krzaq.metalscrap.model.Event" />
 		<mapping class="pl.krzaq.metalscrap.model.Comment" />
 		<mapping class="pl.krzaq.metalscrap.model.Message" />
+		<mapping class="pl.krzaq.metalscrap.model.Charge" />
+		<mapping class="pl.krzaq.metalscrap.model.AuctionCharge" />
 	</session-factory>
 	</hibernate-configuration>

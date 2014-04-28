@@ -8,6 +8,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,6 +25,7 @@ import pl.krzaq.metalscrap.service.DBUserService;
 
 public class DBUserServiceImpl implements UserDetailsService {
 
+	@Autowired
 	private UserServiceImpl userService ;
 	
 	

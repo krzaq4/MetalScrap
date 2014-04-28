@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 
 
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpRequest;
@@ -32,7 +33,7 @@ import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.model.Company;
 import pl.krzaq.metalscrap.model.Role;
 import pl.krzaq.metalscrap.model.User;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class Login implements Initiator, InitiatorExt {
 
@@ -44,9 +45,9 @@ public class Login implements Initiator, InitiatorExt {
 		// TODO Auto-generated method stub
 		//super.doInit(page, arg1);
 		// wyświetlanie sub menu
-		Boolean isCategoriesVisible = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("auction_categories_visible").getValue()) ;
-		Boolean isCommoditiesVisible = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("auction_commodities_visible").getValue());
-		boolean userVerificationModeAuto = Boolean.valueOf(ServicesImpl.getConfigService().findByKey("user.verification.mode.auto").getValue()).booleanValue() ;
+		Boolean isCategoriesVisible = Boolean.valueOf(Utilities.getServices().getConfigService().findByKey("auction_categories_visible").getValue()) ;
+		Boolean isCommoditiesVisible = Boolean.valueOf(Utilities.getServices().getConfigService().findByKey("auction_commodities_visible").getValue());
+		boolean userVerificationModeAuto = Boolean.valueOf(Utilities.getServices().getConfigService().findByKey("user.verification.mode.auto").getValue()).booleanValue() ;
 		
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 		
@@ -67,8 +68,8 @@ public class Login implements Initiator, InitiatorExt {
 		boolean isAdmin = false;
 		boolean isSuperAdmin = false;
 		
-		List<Category> categories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
-		List<Auction> auctions = ServicesImpl.getAuctionService().findByStatus(ServicesImpl.getAuctionService().findStatusByCode(AuctionStatus.STATUS_STARTED)) ;
+		List<Category> categories = Utilities.getServices().getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
+		List<Auction> auctions = Utilities.getServices().getAuctionService().findByStatus(Utilities.getServices().getAuctionService().findStatusByCode(AuctionStatus.STATUS_STARTED)) ;
 		
 		page.setAttribute("auctionsSubMenu", false);
 		page.setAttribute("companiesSubMenu", false);
@@ -103,7 +104,7 @@ public class Login implements Initiator, InitiatorExt {
 			confirmation = true ;
 			page.setAttribute("token", token) ;
 			
-			List<User> allUsers = ServicesImpl.getUserService().getUsers() ;
+			List<User> allUsers = Utilities.getServices().getUserService().getUsers() ;
 			for(User u:allUsers) {
 				String utoken = u.getToken() ;
 				if(utoken.equals(token) && !u.getStatus().equals(User.STATUS_CONFIRMED)) {
@@ -124,14 +125,14 @@ public class Login implements Initiator, InitiatorExt {
 				
 				
 				
-				ServicesImpl.getUserService().update(user);
+				Utilities.getServices().getUserService().update(user);
 				confirmation = true ;
 			}
 		}
 		
 		if(remindToken!=null) {
 			
-			List<User> allUsers = ServicesImpl.getUserService().getUsers() ;
+			List<User> allUsers = Utilities.getServices().getUserService().getUsers() ;
 			for (User us: allUsers){
 				if (us.getRemindToken().equals(remindToken)) {
 					user = us ;

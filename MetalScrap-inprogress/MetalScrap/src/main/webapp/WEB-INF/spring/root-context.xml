@@ -94,60 +94,7 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
 
-	<bean name="propertyDAO" class="pl.krzaq.metalscrap.dao.PropertyDAO">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-
-	<bean name="langLabelDAO" class="pl.krzaq.metalscrap.dao.LangLabelDAO">
-		<property name="sessionFactory" ref="sessionFactory"/>
-	</bean>
-	<bean name="userOfferDAO" class="pl.krzaq.metalscrap.dao.UserOfferDAO">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-
-	<bean name="attachementFileDAO" class="pl.krzaq.metalscrap.dao.AttachementFileDAO">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-
-	<bean name="userDAO" class="pl.krzaq.metalscrap.dao.UserDAO">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
 	
-	<bean name="commodityTypeDAO" class="pl.krzaq.metalscrap.dao.CommodityTypeDAO">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-	
-	<bean name="companyDAO" class="pl.krzaq.metalscrap.dao.CompanyDAO">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-	
-	<bean name="auctionDAO" class="pl.krzaq.metalscrap.dao.AuctionDAO">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-	
-	<bean name="configDAO" class="pl.krzaq.metalscrap.dao.ConfigDAO">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-	
-	<bean name="paymentMethodDAO" class="pl.krzaq.metalscrap.dao.PaymentMethodDAO">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-	
-	<bean name="deliveryTypeDAO" class="pl.krzaq.metalscrap.dao.DeliveryTypeDAO">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-	
-	<bean name="roleDAO" class="pl.krzaq.metalscrap.dao.RoleDAO">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-	
-	<bean name="addressDAO" class="pl.krzaq.metalscrap.dao.AddressDAO">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-	
-	<bean name="categoryDAO" class="pl.krzaq.metalscrap.dao.CategoryDAO">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
 	
 	<bean name="mailService" class="pl.krzaq.metalscrap.service.impl.MailServiceImpl">
 		<property name="mailSender" ref="mailSender"/>
@@ -169,76 +116,16 @@
 	</bean>
 	
 
-	<bean name="propertyService" class="pl.krzaq.metalscrap.service.impl.PropertyServiceImpl">
-		<property name="propertyDAO" ref="propertyDAO" />
-	</bean>
 	
-	<bean name="langLabelService" class="pl.krzaq.metalscrap.service.impl.LangLabelServiceImpl">
-		<property name="langLabelDAO" ref="langLabelDAO" />
-	</bean>
-	
-	<bean name="userOfferService" class="pl.krzaq.metalscrap.service.impl.UserOfferServiceImpl">
-		<property name="userOfferDAO" ref="userOfferDAO" />
-	</bean>
-	
-	<bean name="attachementFileService" class="pl.krzaq.metalscrap.service.impl.AttachementFileServiceImpl">
-		<property name="attachementFileDAO" ref="attachementFileDAO" />
-	</bean>
-		
-	<bean name="categoryService" class="pl.krzaq.metalscrap.service.impl.CategoryServiceImpl">
-		<property name="categoryDAO" ref="categoryDAO" />
-	</bean>	
-		
-	<bean name="userService" class="pl.krzaq.metalscrap.service.impl.UserServiceImpl">
-		<property name="userDAO" ref="userDAO" />
-	</bean>
-	
-	<bean name="paymentMethodService" class="pl.krzaq.metalscrap.service.impl.PaymentMethodServiceImpl">
-		<property name="paymentMethodDAO" ref="paymentMethodDAO" />
-	</bean>
-	
-	<bean name="deliveryTypeService" class="pl.krzaq.metalscrap.service.impl.DeliveryTypeServiceImpl">
-		<property name="deliveryTypeDAO" ref="deliveryTypeDAO" />
-	</bean>
-	
-	<bean name="commodityTypeService" class="pl.krzaq.metalscrap.service.impl.CommodityTypeServiceImpl">
-		<property name="commodityTypeDAO" ref="commodityTypeDAO" />
-	</bean>
 	
 	<bean name="DBUserService" class="pl.krzaq.metalscrap.service.impl.DBUserServiceImpl">
 		<property name="userService" ref="userService" />
 	</bean>
 	
-	<bean name="configService" class="pl.krzaq.metalscrap.service.impl.ConfigServiceImpl">
-		<property name="configDAO" ref="configDAO" />
-	</bean>
-
 	<bean name="restLoginService" class="pl.krzaq.metalscrap.service.impl.RESTLoginServiceImpl">
 	
 	</bean>
 	
-	<bean name="auctionService" class="pl.krzaq.metalscrap.service.impl.AuctionServiceImpl">
-		<property name="auctionDAO" ref="auctionDAO"></property>
-	</bean>
-	
-	<bean name="applicationContextProvider" class="pl.krzaq.metalscrap.utils.ApplicationContextProvider" >
-	</bean>
-	
-	<bean name="services" class="pl.krzaq.metalscrap.service.impl.ServicesImpl">
-		<property name="userService" ref="userService"/>
-		<property name="auctionService" ref="auctionService"/>
-		<property name="paymentMethodService" ref="paymentMethodService"/>
-		<property name="deliveryTypeService" ref="deliveryTypeService"/>
-		<property name="commodityTypeService" ref="commodityTypeService"/>
-		<property name="configService" ref="configService"/>
-		<property name="categoryService" ref="categoryService"/>
-		<property name="attachementFileService" ref="attachementFileService"/>
-		<property name="userOfferService" ref="userOfferService" />
-		<property name="langLabelService" ref="langLabelService" />
-		<property name="mailService" ref="mailService"></property>
-		<property name="propertyService" ref="propertyService" />
-		<property name="eventService" ref="eventService" />
-	</bean>
 	
 	<bean id="langEvents" class="pl.krzaq.metalscrap.events.LangEvents"></bean>
 	<bean id="formEvents" class="pl.krzaq.metalscrap.events.FormEvents"></bean>

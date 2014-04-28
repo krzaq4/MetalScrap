@@ -40,7 +40,7 @@ import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.model.User;
 import pl.krzaq.metalscrap.model.UserOffer;
 import pl.krzaq.metalscrap.service.impl.RESTLoginServiceImpl;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+
 import pl.krzaq.metalscrap.utils.Utilities;
 
 import javax.json.Json;
@@ -156,19 +156,19 @@ public class HomeController {
 			List<Auction> auctions = new ArrayList<Auction>() ;
 			AuctionStatus auctionStatus = null ;
 			if(status!=null)
-				auctionStatus = ServicesImpl.getAuctionService().findStatusByCode(status) ;
+				auctionStatus = Utilities.getServices().getAuctionService().findStatusByCode(status) ;
 			if (category_id!=null) {
 				
 				if (auctionStatus!=null)
-					auctions = ServicesImpl.getAuctionService().findByCategoryDown(ServicesImpl.getCategoryService().findById(Long.valueOf(category_id)), auctionStatus);
+					auctions = Utilities.getServices().getAuctionService().findByCategoryDown(Utilities.getServices().getCategoryService().findById(Long.valueOf(category_id)), auctionStatus);
 				else
-					auctions = ServicesImpl.getAuctionService().findByCategoryDown(ServicesImpl.getCategoryService().findById(Long.valueOf(category_id)));
+					auctions = Utilities.getServices().getAuctionService().findByCategoryDown(Utilities.getServices().getCategoryService().findById(Long.valueOf(category_id)));
 			
 				} else {
 					if (auctionStatus!=null)
-						auctions = ServicesImpl.getAuctionService().findByStatus(ServicesImpl.getAuctionService().findStatusByCode(status)) ;
+						auctions = Utilities.getServices().getAuctionService().findByStatus(Utilities.getServices().getAuctionService().findStatusByCode(status)) ;
 					else 
-						auctions = ServicesImpl.getAuctionService().findAll() ;
+						auctions = Utilities.getServices().getAuctionService().findAll() ;
 				}
 			
 			for (Auction a:auctions) {
@@ -235,7 +235,7 @@ public class HomeController {
 		
 			AuctionTimeLeftConverter cv = new AuctionTimeLeftConverter() ;
 		
-			Auction a = ServicesImpl.getAuctionService().findById(Long.valueOf(id)) ;
+			Auction a = Utilities.getServices().getAuctionService().findById(Long.valueOf(id)) ;
 			boolean started = (a.getStatus().getCode().equals(AuctionStatus.STATUS_STARTED)) ;
 		
 			String timeLeft = (String) cv.coerceToUi(a, null);
@@ -275,7 +275,7 @@ public class HomeController {
 			a.setName(name);		
 			a.setStartDate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss:SS", Locale.getDefault()).parse(dateFrom));
 			a.setEndDate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss:SS", Locale.getDefault()).parse(dateTo));
-			ServicesImpl.getAuctionService().save(a);
+			Utilities.getServices().getAuctionService().save(a);
 			operationStatus = true ;
 			operationMessage = "OK" ;
 		} catch (ParseException e) {
@@ -294,11 +294,11 @@ public class HomeController {
 		boolean operationStatus = false ;
 		String operationMessage = "ERROR" ;
 		try {
-			Auction a = ServicesImpl.getAuctionService().findById(Long.valueOf(id)) ;
+			Auction a = Utilities.getServices().getAuctionService().findById(Long.valueOf(id)) ;
 			a.setName(name);		
 			a.setStartDate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss:SS", Locale.getDefault()).parse(dateFrom));
 			a.setEndDate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss:SS", Locale.getDefault()).parse(dateTo));
-			ServicesImpl.getAuctionService().update(a);
+			Utilities.getServices().getAuctionService().update(a);
 			operationStatus = true ;
 			operationMessage = "OK" ;			
 		} catch(Exception ex) {
@@ -318,7 +318,7 @@ public class HomeController {
 		boolean operationStatus = false ;
 		String operationMessage = "ERROR" ;
 		try {
-			Auction a = ServicesImpl.getAuctionService().findById(Long.valueOf(id)) ;
+			Auction a = Utilities.getServices().getAuctionService().findById(Long.valueOf(id)) ;
 			Integer code = a.getStatus().getCode() ;
 			map.put("status", code) ;
 			operationStatus = true ;
@@ -340,8 +340,8 @@ public class HomeController {
 		boolean operationStatus = false ;
 		String operationMessage = "ERROR" ;
 		try {
-			Auction a = ServicesImpl.getAuctionService().findById(Long.valueOf(id)) ;
-			AuctionStatus stat = ServicesImpl.getAuctionService().findStatusByCode(status) ; 
+			Auction a = Utilities.getServices().getAuctionService().findById(Long.valueOf(id)) ;
+			AuctionStatus stat = Utilities.getServices().getAuctionService().findStatusByCode(status) ; 
 			a.setStatus(stat);
 			operationStatus = true ;
 			operationMessage = "OK" ;			
@@ -365,7 +365,7 @@ public class HomeController {
 		try {
 			
 			
-			List<AuctionStatus> statuses = ServicesImpl.getAuctionService().findAllStatuses() ;
+			List<AuctionStatus> statuses = Utilities.getServices().getAuctionService().findAllStatuses() ;
 			for (AuctionStatus status:statuses){
 				
 				mmap.put("status", status.getCode()) ;
@@ -400,7 +400,7 @@ public class HomeController {
 		try {
 			
 			UserOffer uo = new UserOffer() ;
-			Auction a = ServicesImpl.getAuctionService().findById(Long.valueOf(auction_id)) ;
+			Auction a = Utilities.getServices().getAuctionService().findById(Long.valueOf(auction_id)) ;
 			
 			if (value.contains(".") || value.contains(" ")) {
 				value.replace(".", ",") ;
@@ -414,7 +414,7 @@ public class HomeController {
 				uo.setPrice(Double.valueOf(value));
 				uo.setUser(null);
 				a.setBestUserOffer(uo);
-				ServicesImpl.getUserOfferService().save(uo);
+				Utilities.getServices().getUserOfferService().save(uo);
 			}
 			
 			
@@ -497,9 +497,9 @@ public class HomeController {
 			
 			user.setMainAddress(mainAddress);
 			
-			if (ServicesImpl.getUserService().getUserByLogin(login)==null && ServicesImpl.getUserService().getUserByEmail(email)==null) {
+			if (Utilities.getServices().getUserService().getUserByLogin(login)==null && Utilities.getServices().getUserService().getUserByEmail(email)==null) {
 				
-				ServicesImpl.getUserService().save(user);
+				Utilities.getServices().getUserService().save(user);
 				operationStatus = true ;
 				operationMessage = "OK" ;
 				
@@ -550,7 +550,7 @@ public class HomeController {
 			
 			Long id = Long.valueOf((Integer) json.get("user_id"));
 			String token = (String) json.get("token") ;
-			User user = ServicesImpl.getUserService().getUserById(id);
+			User user = Utilities.getServices().getUserService().getUserById(id);
 			
 			
 			
@@ -617,7 +617,7 @@ public class HomeController {
 			
 			Long id = Long.valueOf((Integer) json.get("user_id"));
 			String token = (String) json.get("token") ;
-			User user = ServicesImpl.getUserService().getUserById(id);
+			User user = Utilities.getServices().getUserService().getUserById(id);
 			
 			
 			
@@ -661,9 +661,9 @@ public class HomeController {
 				
 				user.setMainAddress(mainAddress);
 				
-				if (ServicesImpl.getUserService().getUserByLogin(login)==null && ServicesImpl.getUserService().getUserByEmail(email)==null) {
+				if (Utilities.getServices().getUserService().getUserByLogin(login)==null && Utilities.getServices().getUserService().getUserByEmail(email)==null) {
 					
-					ServicesImpl.getUserService().update(user);
+					Utilities.getServices().getUserService().update(user);
 					operationStatus = true ;
 					operationMessage = "OK" ;
 					
@@ -716,9 +716,9 @@ public class HomeController {
 			Long lid = Long.valueOf(parent_id) ;
 			List<Category> cats = new ArrayList<Category>(); 
 			if (lid!=null && lid!=0) {
-				cats = ServicesImpl.getCategoryService().findSubCategoriesByLang(ServicesImpl.getCategoryService().findById(lid), locale.getLanguage()) ;
+				cats = Utilities.getServices().getCategoryService().findSubCategoriesByLang(Utilities.getServices().getCategoryService().findById(lid), locale.getLanguage()) ;
 			} else {
-				cats = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
+				cats = Utilities.getServices().getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
 			}
 			
 			
@@ -804,7 +804,7 @@ public class HomeController {
 		try{
 			
 		
-			ServicesImpl.getMailService().sendMail("mail_contact_form_mail.ftl", model, title, to);
+			Utilities.getServices().getMailService().sendMail("mail_contact_form_mail.ftl", model, title, to);
 			
 		} catch(Exception ex){}
 		

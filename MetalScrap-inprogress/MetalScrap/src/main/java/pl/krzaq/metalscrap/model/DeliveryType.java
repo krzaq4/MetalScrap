@@ -17,7 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import pl.krzaq.metalscrap.model.generalization.Translatable;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 
 @Entity
@@ -105,7 +105,7 @@ public class DeliveryType implements Serializable, Translatable {
 		dt.setName(this.getName());
 		
 		if(save) {
-			ServicesImpl.getAuctionService().getAuctionDAO().save(dt);
+			Utilities.getServices().getAuctionService().getAuctionDAO().save(dt);
 		}
 		return dt ;
 	}

@@ -12,8 +12,9 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 
 import pl.krzaq.metalscrap.model.Role;
 import pl.krzaq.metalscrap.model.User;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+
 import pl.krzaq.metalscrap.utils.Constants;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class BasePage implements Initiator, InitiatorExt {
 
@@ -49,7 +50,7 @@ public class BasePage implements Initiator, InitiatorExt {
 			System.out.println("Logged in user: "+login) ;
 			
 			// Aktualnie zalogowany użytkownik
-			User currentUser = ServicesImpl.getUserService().getUserByLogin(login); 
+			User currentUser = Utilities.getServices().getUserService().getUserByLogin(login); 
 			if (currentUser != null) {
 			page.setAttribute("currentUser", currentUser);
 

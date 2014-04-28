@@ -21,7 +21,7 @@ import org.zkoss.zul.Textbox;
 
 import pl.krzaq.metalscrap.components.TranslationsGrid;
 import pl.krzaq.metalscrap.model.LangLabel;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class LangEvents {
 
@@ -38,10 +38,10 @@ public class LangEvents {
 			for (Component child:rowChildren) {
 				if(child instanceof Textbox) {
 					Long id = Long.valueOf(((Textbox)child).getName()) ;
-					LangLabel toUpdate = ServicesImpl.getLangLabelService().findById(id) ;
+					LangLabel toUpdate = Utilities.getServices().getLangLabelService().findById(id) ;
 					if (!toUpdate.getLvalue().equals(((Textbox)child).getValue())) {
 						toUpdate.setLvalue( ((Textbox)child).getValue() );
-						ServicesImpl.getLangLabelService().update(toUpdate);
+						Utilities.getServices().getLangLabelService().update(toUpdate);
 					}
 				}
 			}
@@ -83,19 +83,19 @@ public class LangEvents {
 	public void addNewLanguage(String lang, Combobox cmbx1,Combobox cmbx2, Combobox cmbx3 ,Combobox cmbx4, AnnotateDataBinder binder) {
 		
 		Page page = cmbx1.getPage() ;
-		List<String> allLangs = ServicesImpl.getLangLabelService().findAllLangs() ;
+		List<String> allLangs = Utilities.getServices().getLangLabelService().findAllLangs() ;
 		if (!allLangs.contains(lang)) {
 			
-			List<String> allKeys = ServicesImpl.getLangLabelService().findAllKeysUnique() ;
+			List<String> allKeys = Utilities.getServices().getLangLabelService().findAllKeysUnique() ;
 			
 			for (String key:allKeys){
 				
-				ServicesImpl.getLangLabelService().save(new LangLabel(key,lang,""));
+				Utilities.getServices().getLangLabelService().save(new LangLabel(key,lang,""));
 				
 			}
 			
 			
-			List<String> availableLanguages = ServicesImpl.getLangLabelService().findAllLangs() ;//Arrays.asList(Locale.getISOCountries()) ;
+			List<String> availableLanguages = Utilities.getServices().getLangLabelService().findAllLangs() ;//Arrays.asList(Locale.getISOCountries()) ;
 			List<String> allLanguages = new ArrayList<String>(Arrays.asList(Locale.getISOLanguages())) ;
 			allLanguages.removeAll(availableLanguages) ;
 			
@@ -115,19 +115,19 @@ public class LangEvents {
 public void delLanguage(String lang, Combobox cmbx1,Combobox cmbx2, Combobox cmbx3 ,Combobox cmbx4, AnnotateDataBinder binder) {
 		
 		Page page = cmbx1.getPage() ;
-		List<String> allLangs = ServicesImpl.getLangLabelService().findAllLangs() ;
+		List<String> allLangs = Utilities.getServices().getLangLabelService().findAllLangs() ;
 		if (allLangs.contains(lang)) {
 			
-			List<String> allKeys = ServicesImpl.getLangLabelService().findAllKeysUnique() ;
+			List<String> allKeys = Utilities.getServices().getLangLabelService().findAllKeysUnique() ;
 			
 			for (String key:allKeys){
 				
-				ServicesImpl.getLangLabelService().delete(ServicesImpl.getLangLabelService().findByKey(key, lang));
+				Utilities.getServices().getLangLabelService().delete(Utilities.getServices().getLangLabelService().findByKey(key, lang));
 				
 			}
 			
 			
-			List<String> availableLanguages = ServicesImpl.getLangLabelService().findAllLangs() ;//Arrays.asList(Locale.getISOCountries()) ;
+			List<String> availableLanguages = Utilities.getServices().getLangLabelService().findAllLangs() ;//Arrays.asList(Locale.getISOCountries()) ;
 			List<String> allLanguages = new ArrayList<String>(Arrays.asList(Locale.getISOLanguages())) ;
 			allLanguages.removeAll(availableLanguages) ;
 			

@@ -39,7 +39,8 @@ import org.zkoss.zul.Window;
 
 import pl.krzaq.metalscrap.model.AttachementFile;
 import pl.krzaq.metalscrap.model.CommodityType;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.Utilities;
+
 
 
 
@@ -61,7 +62,7 @@ public class FormEvents {
 		
 		final Div overflow = (Div)page.getFellow("galleryOverflow") ;
 		
-		String nextName = ServicesImpl.getAttachementFileService().getNextName() ;
+		String nextName = Utilities.getServices().getAttachementFileService().getNextName() ;
 		File file = new File(uploadPath+"/"+nextName+"."+media.getFormat()) ;
 		
 		FileOutputStream fo;
@@ -72,7 +73,7 @@ public class FormEvents {
 			af.setName(nextName);
 			af.setPath(uploadPath+nextName+"."+media.getFormat());
 			af.setMain(false);
-			ServicesImpl.getAttachementFileService().save(af);
+			Utilities.getServices().getAttachementFileService().save(af);
 			
 			
 			Image img = new Image() ;

@@ -3,11 +3,13 @@ package pl.krzaq.metalscrap.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import pl.krzaq.metalscrap.dao.LangLabelDAO;
 import pl.krzaq.metalscrap.model.LangLabel;
 import pl.krzaq.metalscrap.service.LangLabelService;
 
+@Component(value="langLabelService")
 public class LangLabelServiceImpl implements LangLabelService {
 
 	@Autowired

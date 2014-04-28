@@ -8,6 +8,8 @@ import pl.krzaq.metalscrap.model.User;
 
 public interface UserService {
 
+public UserDAO getUserDAO() ;
+
 public Role getRoleByName(String name) ;
 
 public List<User> getUsers() ;

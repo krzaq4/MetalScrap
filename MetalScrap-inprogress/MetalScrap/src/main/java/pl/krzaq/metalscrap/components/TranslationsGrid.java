@@ -18,7 +18,7 @@ import org.zkoss.zul.Rows;
 import org.zkoss.zul.Textbox;
 
 import pl.krzaq.metalscrap.model.LangLabel;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class TranslationsGrid extends Grid {
 
@@ -56,13 +56,13 @@ public class TranslationsGrid extends Grid {
 		
 		Rows rows = new Rows() ;
 		
-		List<LangLabel> labelsUnique = ServicesImpl.getLangLabelService().findLikeKeyUnique("%"+prefix+"%");
+		List<LangLabel> labelsUnique = Utilities.getServices().getLangLabelService().findLikeKeyUnique("%"+prefix+"%");
 		
 		for (LangLabel l:labelsUnique){
 			Row nextRow = new Row() ;
 			for(String lang:languages){
 				
-				LangLabel current = ServicesImpl.getLangLabelService().findByKey(l.getLkey(), lang) ;
+				LangLabel current = Utilities.getServices().getLangLabelService().findByKey(l.getLkey(), lang) ;
 				Textbox keyBox = new Textbox() ;
 				keyBox.setName(String.valueOf(current.getId() )) ;
 				keyBox.setValue(current.getLvalue());

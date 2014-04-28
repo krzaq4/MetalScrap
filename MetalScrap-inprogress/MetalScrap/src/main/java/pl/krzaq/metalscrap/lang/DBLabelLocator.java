@@ -9,7 +9,7 @@ import java.util.Locale;
 import org.zkoss.util.resource.LabelLocator2;
 
 import pl.krzaq.metalscrap.model.LangLabel;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class DBLabelLocator implements LabelLocator2 {
 
@@ -29,7 +29,7 @@ public class DBLabelLocator implements LabelLocator2 {
 		
 	System.out.println("locale web: "+locale) ;
 		if (locale!=null) {
-		List<LangLabel> ll = ServicesImpl.getLangLabelService().findAllByLang(locale.toString()) ;
+		List<LangLabel> ll = Utilities.getServices().getLangLabelService().findAllByLang(locale.toString()) ;
 		
 		StringBuffer sb = new StringBuffer();
 		int i=0;

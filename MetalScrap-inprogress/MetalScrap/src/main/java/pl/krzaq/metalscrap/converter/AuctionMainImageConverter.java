@@ -10,7 +10,7 @@ import org.zkoss.zkplus.databind.TypeConverter;
 
 import pl.krzaq.metalscrap.model.AttachementFile;
 import pl.krzaq.metalscrap.model.Auction;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class AuctionMainImageConverter implements TypeConverter {
 
@@ -27,7 +27,7 @@ public class AuctionMainImageConverter implements TypeConverter {
 	@Override
 	public Object coerceToUi(Object arg0, Component arg1) {
 		Auction a = (Auction) arg0 ;
-		AttachementFile af = ServicesImpl.getAttachementFileService().findAuctionMain(a) ;
+		AttachementFile af = Utilities.getServices().getAttachementFileService().findAuctionMain(a) ;
 		AImage aimg = null ;
 		try{
 		

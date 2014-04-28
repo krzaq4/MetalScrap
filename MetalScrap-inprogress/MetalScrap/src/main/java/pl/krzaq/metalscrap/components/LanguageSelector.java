@@ -23,7 +23,8 @@ import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 
 import pl.krzaq.metalscrap.model.Category;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.Utilities;
+
 
 public class LanguageSelector extends Div {
 
@@ -41,7 +42,7 @@ public class LanguageSelector extends Div {
 	
 		locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 		
-		List<String> langs = ServicesImpl.getLangLabelService().findAllLangs() ;
+		List<String> langs = Utilities.getServices().getLangLabelService().findAllLangs() ;
 	
 		langLbx = new Listbox() ;
 		langLbx.setMold("select");

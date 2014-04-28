@@ -84,7 +84,6 @@ import pl.krzaq.metalscrap.model.PropertyAttribute;
 import pl.krzaq.metalscrap.model.PropertyAttributeValue;
 import pl.krzaq.metalscrap.model.User;
 import pl.krzaq.metalscrap.model.UserOffer;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
 import pl.krzaq.metalscrap.utils.Constants;
 import pl.krzaq.metalscrap.utils.Utilities;
 
@@ -126,14 +125,14 @@ public void saveNewAuction(Auction auction, Page p) {
 		String pref = p.getId() ;
 	
 		/*if (auction.getId()!=null) {
-			auction = ServicesImpl.getAuctionService().findWithCollection(auction.getId()) ;
+			auction = Utilities.getServices().getAuctionService().findWithCollection(auction.getId()) ;
 		}*/
 		
 		User currentUser = userDAO.getUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName()) ;
-		currentUser = ServicesImpl.getUserService().getUserById(currentUser.getId()) ;
+		currentUser = Utilities.getServices().getUserService().getUserById(currentUser.getId()) ;
 		Company currentCompany = currentUser.getCompany() ;
 		
-		if (auction.getId()==null && ServicesImpl.getAuctionService().findByNumber(auction.getNumber())!=null) {
+		if (auction.getId()==null && Utilities.getServices().getAuctionService().findByNumber(auction.getNumber())!=null) {
 			wrongValueComponent = p.getFellow("auction_number") ;
 			wrongValueMessage = "Aukcja o podanym numerze istnieje już w systemie" ;
 			throw new WrongValueException(wrongValueComponent, wrongValueMessage) ;
@@ -202,16 +201,16 @@ public void saveNewAuction(Auction auction, Page p) {
 		}
 		
 		
-		auction.setStatus(ServicesImpl.getAuctionService().findStatusByCode(AuctionStatus.STATUS_NEW));
+		auction.setStatus(Utilities.getServices().getAuctionService().findStatusByCode(AuctionStatus.STATUS_NEW));
 		
 		auction.setOwnerUser(currentUser);
 		currentUser.getAuctions().add(auction) ;
-		ServicesImpl.getUserService().update(currentUser);
+		Utilities.getServices().getUserService().update(currentUser);
 		// zapis aukcji
 		
 		//Utilities.validate(p.getFellow("auction_category_attributes"), true)  ;
 		
-		List<Property> props = Utilities.populateProperties(p.getFellow("auction_category_attributes"), ServicesImpl.getCategoryService().findById(auction.getCategory().getId())) ;
+		List<Property> props = Utilities.populateProperties(p.getFellow("auction_category_attributes"), Utilities.getServices().getCategoryService().findById(auction.getCategory().getId())) ;
 		
 		auction.setProperties(props);
 		
@@ -249,14 +248,14 @@ public void saveNewAuction(Auction auction, Page p) {
 public void addToObserved(Auction auction, Button btn) {
 	Page p = btn.getPage();
 	//auction.getObeservers().add(e)
-	User currentUser = 	(User) p.getAttribute("currentUser") ; //ServicesImpl.getUserService().getLoggedinUser();
+	User currentUser = 	(User) p.getAttribute("currentUser") ; //Utilities.getServices().getUserService().getLoggedinUser();
 	auction.getObeservers().add(currentUser) ;
 	
-	List<Auction> observed = ServicesImpl.getAuctionService().findByObserver(currentUser) ;
+	List<Auction> observed = Utilities.getServices().getAuctionService().findByObserver(currentUser) ;
 	String message = "Dodano aukcję "+auction.getName()+" do obserwowanych" ;
 	
 	
-	//ServicesImpl.getAuctionService().update(auction);
+	//Utilities.getServices().getAuctionService().update(auction);
 	
 	if (observed==null || observed.size()==0) {
 		observed = new ArrayList<Auction>() ;
@@ -267,8 +266,8 @@ public void addToObserved(Auction auction, Button btn) {
 		observed.add(auction) ;
 		currentUser.getObserved().add(auction);
 		
-		//ServicesImpl.getUserService().update(currentUser);
-		ServicesImpl.getAuctionService().update(auction);
+		//Utilities.getServices().getUserService().update(currentUser);
+		Utilities.getServices().getAuctionService().update(auction);
 		
 		
 	} else {
@@ -294,7 +293,7 @@ public void onClickRefreshAuctionForm(Auction auction, Button but, AnnotateDataB
 	Grid offers_history = (Grid) page.getFellow("offers_history") ;
 	Label offers_qty = (Label) page.getFellow("offers_qty") ;
 	
-	List<UserOffer> offers = ServicesImpl.getUserOfferService().findByAuction(auction) ;
+	List<UserOffer> offers = Utilities.getServices().getUserOfferService().findByAuction(auction) ;
 	Collections.sort(offers);
 	if (offers!=null && offers.size()>0) {
 		
@@ -348,11 +347,11 @@ public void onClickPlaceBid(Decimalbox dbox, Auction auction, AnnotateDataBinder
 		newOffer.setAuction(auction);
 		newOffer.setDateIssued(new Date());
 		newOffer.setPrice(price.doubleValue());
-		newOffer.setUser(ServicesImpl.getUserService().getLoggedinUser());
+		newOffer.setUser(Utilities.getServices().getUserService().getLoggedinUser());
 		auction.getUserOffers().add(newOffer) ;
 		
-		//ServicesImpl.getUserOfferService().save(newOffer);
-		List<UserOffer> offers = auction.getUserOffers() ; //ServicesImpl.getUserOfferService().findByAuction(auction) ;
+		//Utilities.getServices().getUserOfferService().save(newOffer);
+		List<UserOffer> offers = auction.getUserOffers() ; //Utilities.getServices().getUserOfferService().findByAuction(auction) ;
 		Collections.sort(offers, Collections.reverseOrder());
 		auction.setBestUserOffer(newOffer);
 		
@@ -360,7 +359,7 @@ public void onClickPlaceBid(Decimalbox dbox, Auction auction, AnnotateDataBinder
 	
 		dbox.getPage().setAttribute("currentOffer", newOffer) ;
 		
-		ServicesImpl.getAuctionService().update(auction);
+		Utilities.getServices().getAuctionService().update(auction);
 		binder.loadComponent(dbox.getPage().getFellow("current_price"));
 		binder.loadComponent(dbox.getPage().getFellow("offers_history"));
 	}  else {
@@ -464,7 +463,7 @@ public void registerCompanyUser(Company company, User user) {
 	model.put("platformnamelabel", "Licytuj.to - platforma aukcyjna") ;
 	model.put("platforminfo", "Witamy na platformie") ;
 	model.put("platforminfo2", "Dziękujemy za rejestrację") ;
-	ServicesImpl.getMailService().sendUserMail("mail_registration_confirmation.ftl", model, "Rejestracja", user);
+	Utilities.getServices().getMailService().sendUserMail("mail_registration_confirmation.ftl", model, "Rejestracja", user);
 	//companyDAO.saveCompany(company);
 	
 	
@@ -492,10 +491,10 @@ public void redirectToAuctionView(Auction auction) {
 
 public void populateEqual(){
 	try {
-	List<Property> list = ServicesImpl.getPropertyService().findAll() ;
+	List<Property> list = Utilities.getServices().getPropertyService().findAll() ;
 	for(Property p:list){
 		p.setEqualIdentifier(Utilities.hash(Utilities.HASH_METHOD_MD5, p.getName().concat(p.getDescription())));
-		ServicesImpl.getPropertyService().update(p);
+		Utilities.getServices().getPropertyService().update(p);
 	}
 	}catch(NoSuchAlgorithmException nsa) {}
 }
@@ -510,7 +509,7 @@ public void onSelectAuctionCategory(Listitem item, AnnotateDataBinder binder) {
 		
 		if (selectedCategory.getParent()!=null) {
 			
-			List<Category> subCategories = ServicesImpl.getCategoryService().findSubCategoriesByLang(selectedCategory.getParent(), locale.getLanguage()) ;
+			List<Category> subCategories = Utilities.getServices().getCategoryService().findSubCategoriesByLang(selectedCategory.getParent(), locale.getLanguage()) ;
 			Category previous = new Category(Labels.getLabel("auction.auctioncategory.back"), "Powrót do nadrzędnej kategorii", selectedCategory.getParent().getParent()) ;
 			subCategories.add(0, previous) ;
 			
@@ -522,7 +521,7 @@ public void onSelectAuctionCategory(Listitem item, AnnotateDataBinder binder) {
 			
 		} else {
 			
-			List<Category> subCategories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
+			List<Category> subCategories = Utilities.getServices().getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
 			
 			
 			
@@ -537,7 +536,7 @@ public void onSelectAuctionCategory(Listitem item, AnnotateDataBinder binder) {
 	else
 	if (selectedCategory.getChildren()!=null && selectedCategory.getChildren().size()>0) {
 		
-		List<Category> subCategories = ServicesImpl.getCategoryService().findSubCategoriesByLang(selectedCategory, locale.getLanguage());
+		List<Category> subCategories = Utilities.getServices().getCategoryService().findSubCategoriesByLang(selectedCategory, locale.getLanguage());
 		Category previous = new Category(Labels.getLabel("auction.auctioncategory.back"), "Powrót do nadrzędnej kategorii", selectedCategory.getParent()) ;
 		subCategories.add(0, previous) ;
 		
@@ -693,7 +692,7 @@ public void deleteSelectedAuctions(final Listbox lbx, final AnnotateDataBinder b
 						u.getObserved().remove(toDel) ;
 					}*/
 					
-					ServicesImpl.getAuctionService().delete(toDel);
+					Utilities.getServices().getAuctionService().delete(toDel);
 				}
 					
 				ListModelList lml = ( (ListModelList) lbx.getListModel()); 
@@ -717,7 +716,7 @@ public void deleteSelectedAuctions(final Listbox lbx, final AnnotateDataBinder b
 	} else {
 		
 		for (Auction toDel:selectedAuctions){
-			ServicesImpl.getAuctionService().delete(ServicesImpl.getAuctionService().findById(toDel.getId()));
+			Utilities.getServices().getAuctionService().delete(Utilities.getServices().getAuctionService().findById(toDel.getId()));
 		}
 			
 		ListModelList lml = ( (ListModelList) lbx.getListModel()); 
@@ -752,7 +751,7 @@ public void changeSelectedStatus(Window win, AnnotateDataBinder binder) {
 	for (Auction a: selectedAuctions) {
 		
 		a.setStatus(selectedStatus);
-		ServicesImpl.getAuctionService().update(a);
+		Utilities.getServices().getAuctionService().update(a);
 		
 	}
 	
@@ -795,7 +794,7 @@ public void changeSelectedAuctionsStatus(Listbox lbx, AnnotateDataBinder binder)
 		
 		args.put("auctionCount", selectedCount) ;
 		args.put("auctionDetails", sb.toString()) ;
-		ListModelList lml = new ListModelList(ServicesImpl.getAuctionService().findAllStatuses()) ;
+		ListModelList lml = new ListModelList(Utilities.getServices().getAuctionService().findAllStatuses()) ;
 		args.put("statuses", lml) ;
 		
 		Window changeStatusWindow = (Window) Executions.createComponents("/secured/auctions/windows/change_status.zul", null, args) ;
@@ -854,8 +853,8 @@ public void endSelectedAuctions(final Listbox lbx, final AnnotateDataBinder bind
 					
 					
 					
-					a.setStatus(ServicesImpl.getAuctionService().findStatusByCode(AuctionStatus.STATUS_FINISHED));
-					ServicesImpl.getAuctionService().update(a);
+					a.setStatus(Utilities.getServices().getAuctionService().findStatusByCode(AuctionStatus.STATUS_FINISHED));
+					Utilities.getServices().getAuctionService().update(a);
 					
 					
 				}	
@@ -883,8 +882,8 @@ public void endSelectedAuctions(final Listbox lbx, final AnnotateDataBinder bind
 			
 			
 			
-			a.setStatus(ServicesImpl.getAuctionService().findStatusByCode(AuctionStatus.STATUS_FINISHED));
-			ServicesImpl.getAuctionService().update(a);
+			a.setStatus(Utilities.getServices().getAuctionService().findStatusByCode(AuctionStatus.STATUS_FINISHED));
+			Utilities.getServices().getAuctionService().update(a);
 			
 			
 		}	
@@ -913,7 +912,7 @@ public void filterAuctionList(Listbox lbx, AnnotateDataBinder binder) {
 	Date searchStartDate = ((Datebox) page.getFellow("startDateSearch")).getValue() ;
 	Date searchEndDate = ((Datebox) page.getFellow("endDateSearch")).getValue() ;
 	
-	List<Auction> result = ServicesImpl.getAuctionService().filter(searchPhrase, searchStatus, searchPayment, searchDelivery, searchStartDate, searchEndDate) ;
+	List<Auction> result = Utilities.getServices().getAuctionService().filter(searchPhrase, searchStatus, searchPayment, searchDelivery, searchStartDate, searchEndDate) ;
 	
 	ListModelList lml = ((ListModelList) lbx.getListModel()) ;
 	lml.clear();

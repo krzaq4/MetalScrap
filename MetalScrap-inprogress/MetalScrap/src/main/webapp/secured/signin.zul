@@ -151,7 +151,8 @@ function loginStatusInfo(fbsec) {
 		<vbox style="padding:10px 10px 10px 10px">
 			<label value="@bind(vm.userMessage)" class="validation" visible="@bind(vm.userInvalid)" />
 			<label value="@bind(vm.passMessage)" class="validation" visible="@bind(vm.passInvalid)" />
-			<label value="Logowanie nie powiodło się" class="validation" visible="@bind(vm.loginFailed)" />
+			<label value="${labels.common.error.loginfailed}" class="validation" visible="@bind(vm.loginFailed)" />
+			<label value="${labels.common.error.sessionexpired}" class="validation" visible="@bind(vm.timeout)" />
 		</vbox>
 	</div>
 	<div height="30px"></div>

@@ -58,7 +58,7 @@ import pl.krzaq.metalscrap.model.PropertyAttribute;
 import pl.krzaq.metalscrap.model.PropertyAttributeValue;
 import pl.krzaq.metalscrap.service.Services;
 import pl.krzaq.metalscrap.service.impl.AuctionServiceImpl;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class AuctionNew extends HomePage{
 
@@ -84,11 +84,11 @@ public class AuctionNew extends HomePage{
 			
 			if (cat!=null && cat.getParent()!=null){
 				Category previous = new Category(Labels.getLabel("auction.auctioncategory.back.$"), Labels.getLabel("auction.auctioncategory.back.description"), cat.getParent().getParent()) ;
-				model = ServicesImpl.getCategoryService().findSubCategoriesByLang(cat.getParent(), locale.getLanguage()) ;
+				model = Utilities.getServices().getCategoryService().findSubCategoriesByLang(cat.getParent(), locale.getLanguage()) ;
 				model.add(0,previous) ;
 				
 			} else {
-				model = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
+				model = Utilities.getServices().getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
 			}
 			
 			int i = 0 ;
@@ -344,7 +344,7 @@ public class AuctionNew extends HomePage{
 		
 		HttpSession ses = (HttpSession) Executions.getCurrent().getSession().getNativeSession() ;
 		
-		List<Category> auctionCategories = ServicesImpl.getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
+		List<Category> auctionCategories = Utilities.getServices().getCategoryService().findRootCategoriesByLang(locale.getLanguage()) ;
 		
 		// Tryb edycji
 		
@@ -353,12 +353,12 @@ public class AuctionNew extends HomePage{
 			Long id = Long.valueOf(request.getParameter("id")) ;
 			
 			
-			auction = ServicesImpl.getAuctionService().findWithCollection(id) ;
+			auction = Utilities.getServices().getAuctionService().findWithCollection(id) ;
 			
 			List<Image> imgs = new ArrayList<Image>() ;
 			int i=0 ;
 			int selectedPhotoIndex = -1 ;
-			for (AttachementFile af:ServicesImpl.getAttachementFileService().findByAuction(auction)) {
+			for (AttachementFile af:Utilities.getServices().getAttachementFileService().findByAuction(auction)) {
 				if (af.getMain()) {
 					selectedPhotoIndex = i ;
 				}
@@ -373,7 +373,7 @@ public class AuctionNew extends HomePage{
 				i++ ;
 			}
 			
-			ses.setAttribute("existingfiles", ServicesImpl.getAttachementFileService().findByAuction(auction));
+			ses.setAttribute("existingfiles", Utilities.getServices().getAttachementFileService().findByAuction(auction));
 			
 			if (auction.getCategory()!=null) {
 				
@@ -395,8 +395,8 @@ public class AuctionNew extends HomePage{
 		page.setAttribute("auctionCategories", auctionCategories) ;
 		page.setAttribute("auction", auction) ;
 		page.setAttribute("commodity", new Commodity() ) ;
-		page.setAttribute("paymentMethods", ServicesImpl.getPaymentMethodService().findAll()) ;
-		page.setAttribute("deliveryTypes", ServicesImpl.getDeliveryTypeService().findAll()) ;
+		page.setAttribute("paymentMethods", Utilities.getServices().getPaymentMethodService().findAll()) ;
+		page.setAttribute("deliveryTypes", Utilities.getServices().getDeliveryTypeService().findAll()) ;
 		
 		
 		System.out.println("Page init") ;
@@ -413,7 +413,7 @@ public class AuctionNew extends HomePage{
 
 	private void buildProperties(Auction auction, Page page) {
 		
-		Category category = ServicesImpl.getCategoryService().findById(auction.getCategory().getId()) ;
+		Category category = Utilities.getServices().getCategoryService().findById(auction.getCategory().getId()) ;
 		Groupbox vbox = (Groupbox) page.getFellow("auction_category_attributes") ;
 		vbox.getChildren().clear(); 
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;

@@ -2,164 +2,179 @@ package pl.krzaq.metalscrap.service.impl;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import pl.krzaq.metalscrap.service.AttachementFileService;
+import pl.krzaq.metalscrap.service.AuctionService;
+import pl.krzaq.metalscrap.service.CategoryService;
+import pl.krzaq.metalscrap.service.CommodityTypeService;
+import pl.krzaq.metalscrap.service.ConfigService;
+import pl.krzaq.metalscrap.service.DeliveryTypeService;
+import pl.krzaq.metalscrap.service.EventService;
+import pl.krzaq.metalscrap.service.LangLabelService;
+import pl.krzaq.metalscrap.service.MailService;
+import pl.krzaq.metalscrap.service.MessageService;
+import pl.krzaq.metalscrap.service.PaymentMethodService;
+import pl.krzaq.metalscrap.service.PropertyService;
+import pl.krzaq.metalscrap.service.UserOfferService;
 
+@Component(value="services")
 public class ServicesImpl {
 
 	@Autowired
-	private static UserServiceImpl userService ;
-	@Autowired
-	private static AuctionServiceImpl auctionService ;
+	private  UserServiceImpl userService ;
 	
 	@Autowired
-	private static DeliveryTypeServiceImpl deliveryTypeService ;
+	private  AuctionService auctionService ;
 	
 	@Autowired
-	private static PaymentMethodServiceImpl paymentMethodService ;
+	private DeliveryTypeService deliveryTypeService ;
+	
+	@Autowired
+	private PaymentMethodService paymentMethodService ;
 
 	@Autowired
-	private static CommodityTypeServiceImpl commodityTypeService ;
+	private CommodityTypeService commodityTypeService ;
 	
 	@Autowired 
-	private static ConfigServiceImpl configService ;
+	private ConfigService configService ;
 	
 	@Autowired 
-	private static CategoryServiceImpl categoryService ;
+	private CategoryService categoryService ;
 	
 	@Autowired
-	private static AttachementFileServiceImpl attachementFileService ;
+	private AttachementFileService attachementFileService ;
 	
 	@Autowired
-	private static UserOfferServiceImpl userOfferService ;
+	private UserOfferService userOfferService ;
 	
 	@Autowired
-	private static LangLabelServiceImpl langLabelService ;
+	private LangLabelService langLabelService ;
 	
 	@Autowired 
-	private static MailServiceImpl mailService ;
+	private MailService mailService ;
 	
 	@Autowired 
-	private static PropertyServiceImpl propertyService ;
+	private PropertyService propertyService ;
 	
 	@Autowired
-	private static EventServiceImpl eventService ;
+	private EventService eventService ;
 	
-	public static EventServiceImpl getEventService() {
-		return eventService ;
-	}
-	
-	public static PropertyServiceImpl getPropertyService() {
-		return propertyService ;
-	}
-	
-	public static MailServiceImpl getMailService(){
-		return mailService ;
+	@Autowired
+	private MessageService messageService ;
+
+	public UserServiceImpl getUserService() {
+		return userService;
 	}
 
-	public static LangLabelServiceImpl getLangLabelService() {
-		return langLabelService ;
-	}
-	
-	public static AuctionServiceImpl getAuctionService() {
-		return auctionService ;
-	}
-	
-	public static UserServiceImpl getUserService() {
-		
-		return userService ;
-	}
-
-	public void setMailService(MailServiceImpl mailService){
-		this.mailService = mailService ;
-	}
-	
-	public void setLangLabelService(LangLabelServiceImpl langLabelService) {
-		this.langLabelService = langLabelService ;
-	}
-	
 	public void setUserService(UserServiceImpl userService) {
 		this.userService = userService;
 	}
 
-	public void setAuctionService(AuctionServiceImpl auctionService) {
+	public AuctionService getAuctionService() {
+		return auctionService;
+	}
+
+	public void setAuctionService(AuctionService auctionService) {
 		this.auctionService = auctionService;
 	}
 
-	public static DeliveryTypeServiceImpl getDeliveryTypeService() {
+	public DeliveryTypeService getDeliveryTypeService() {
 		return deliveryTypeService;
 	}
 
-	public void setDeliveryTypeService(
-			DeliveryTypeServiceImpl deliveryTypeService) {
+	public void setDeliveryTypeService(DeliveryTypeService deliveryTypeService) {
 		this.deliveryTypeService = deliveryTypeService;
 	}
 
-	public static PaymentMethodServiceImpl getPaymentMethodService() {
+	public PaymentMethodService getPaymentMethodService() {
 		return paymentMethodService;
 	}
 
-	public void setPaymentMethodService(
-			PaymentMethodServiceImpl paymentMethodService) {
+	public void setPaymentMethodService(PaymentMethodService paymentMethodService) {
 		this.paymentMethodService = paymentMethodService;
 	}
-	
-	public  void setConfigService(ConfigServiceImpl configService) {
-		this.configService = configService;
+
+	public CommodityTypeService getCommodityTypeService() {
+		return commodityTypeService;
 	}
 
-	public void setCommodityTypeService(
-			CommodityTypeServiceImpl commodityTypeService) {
+	public void setCommodityTypeService(CommodityTypeService commodityTypeService) {
 		this.commodityTypeService = commodityTypeService;
 	}
 
-	public static CommodityTypeServiceImpl getCommodityTypeService() {
-		return commodityTypeService;
+	public ConfigService getConfigService() {
+		return configService;
 	}
-	
-	
-	public void setCategoryService(CategoryServiceImpl categoryService) {
+
+	public void setConfigService(ConfigService configService) {
+		this.configService = configService;
+	}
+
+	public CategoryService getCategoryService() {
+		return categoryService;
+	}
+
+	public void setCategoryService(CategoryService categoryService) {
 		this.categoryService = categoryService;
 	}
 
-	public static AttachementFileServiceImpl getAttachementFileService() {
-		return attachementFileService ;
-	}
-	
-	public void setAttachementFileService(AttachementFileServiceImpl attachementFileService) {
-		this.attachementFileService = attachementFileService ;
-	}
-	
-	public static ConfigServiceImpl getConfigService() {
-		
-		return configService ;
-		
-	}
-	
-	public static CategoryServiceImpl getCategoryService() {
-		
-		return categoryService ;
-		
-	}
-	
-	public static UserOfferServiceImpl getUserOfferService() {
-		return userOfferService ;
-	}
-	
-	public void setUserOfferService(UserOfferServiceImpl userOfferService) {
-		this.userOfferService = userOfferService ;
+	public AttachementFileService getAttachementFileService() {
+		return attachementFileService;
 	}
 
-	
-	public void setPropertyService(PropertyServiceImpl propertyService){
-		this.propertyService = propertyService ;
+	public void setAttachementFileService(
+			AttachementFileService attachementFileService) {
+		this.attachementFileService = attachementFileService;
 	}
 
-	public void setEventService(EventServiceImpl eventService) {
+	public LangLabelService getLangLabelService() {
+		return langLabelService;
+	}
+
+	public void setLangLabelService(LangLabelService langLabelService) {
+		this.langLabelService = langLabelService;
+	}
+
+	public MailService getMailService() {
+		return mailService;
+	}
+
+	public void setMailService(MailService mailService) {
+		this.mailService = mailService;
+	}
+
+	public PropertyService getPropertyService() {
+		return propertyService;
+	}
+
+	public void setPropertyService(PropertyService propertyService) {
+		this.propertyService = propertyService;
+	}
+
+	public EventService getEventService() {
+		return eventService;
+	}
+
+	public void setEventService(EventService eventService) {
 		this.eventService = eventService;
 	}
-	
-	
-	
+
+	public MessageService getMessageService() {
+		return messageService;
+	}
+
+	public void setMessageService(MessageService messageService) {
+		this.messageService = messageService;
+	}
+
+	public UserOfferService getUserOfferService() {
+		return userOfferService;
+	}
+
+	public void setUserOfferService(UserOfferService userOfferService) {
+		this.userOfferService = userOfferService;
+	}
 	
 	
 }

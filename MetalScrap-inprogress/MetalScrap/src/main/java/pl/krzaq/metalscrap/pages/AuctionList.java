@@ -19,8 +19,9 @@ import pl.krzaq.metalscrap.model.Auction;
 import pl.krzaq.metalscrap.model.AuctionStatus;
 import pl.krzaq.metalscrap.model.DeliveryType;
 import pl.krzaq.metalscrap.model.PaymentMethod;
+import pl.krzaq.metalscrap.service.AuctionService;
 import pl.krzaq.metalscrap.service.impl.AuctionServiceImpl;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 public class AuctionList extends HomePage{
 
@@ -70,13 +71,13 @@ public class AuctionList extends HomePage{
 	@Override
 	public void doInit(Page page, Map<String, Object> arg1) throws Exception {
 	
-		AuctionServiceImpl auctionService = ServicesImpl.getAuctionService() ;
+		AuctionService auctionService = Utilities.getServices().getAuctionService() ;
 		super.doInit(page, arg1) ;
 		
 		List<Auction> auctions = auctionService.findAll() ;
 		List<AuctionStatus> statuses = auctionService.findAllStatuses() ;
-		List<PaymentMethod> payments = ServicesImpl.getPaymentMethodService().findAll() ;
-		List<DeliveryType> deliveries = ServicesImpl.getDeliveryTypeService().findAll() ;
+		List<PaymentMethod> payments = Utilities.getServices().getPaymentMethodService().findAll() ;
+		List<DeliveryType> deliveries = Utilities.getServices().getDeliveryTypeService().findAll() ;
 		
 		AuctionStatus as = new AuctionStatus() ;
 		as.setCode(-1);

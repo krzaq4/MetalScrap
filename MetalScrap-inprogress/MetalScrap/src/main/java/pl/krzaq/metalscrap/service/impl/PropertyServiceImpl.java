@@ -3,6 +3,7 @@ package pl.krzaq.metalscrap.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import pl.krzaq.metalscrap.dao.PropertyDAO;
 import pl.krzaq.metalscrap.model.Property;
@@ -10,6 +11,7 @@ import pl.krzaq.metalscrap.model.PropertyAttribute;
 import pl.krzaq.metalscrap.model.PropertyAttributeValue;
 import pl.krzaq.metalscrap.service.PropertyService;
 
+@Component(value="propertyService")
 public class PropertyServiceImpl implements PropertyService {
 
 	@Autowired

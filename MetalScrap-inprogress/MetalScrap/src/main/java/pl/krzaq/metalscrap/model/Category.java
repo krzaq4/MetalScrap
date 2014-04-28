@@ -22,7 +22,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.IndexColumn;
 
 import pl.krzaq.metalscrap.model.generalization.Translatable;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 
 @Entity
@@ -246,7 +246,7 @@ public Category(String name, String description, Category parent, String lang) {
 		Category par = this.getParent() ;
 		List<Property> props = new ArrayList<Property>() ;
 		while(par!=null) {
-			List<Property> newProps = ServicesImpl.getCategoryService().findById(par.getId()).getProperties() ;
+			List<Property> newProps = Utilities.getServices().getCategoryService().findById(par.getId()).getProperties() ;
 			if(newProps!=null && newProps.size()>0) {
 				props.addAll(newProps) ;
 			}
@@ -299,7 +299,7 @@ public Category(String name, String description, Category parent, String lang) {
 		ca.setName(this.getName());
 		
 		if(this.getParent()!=null) {
-			ca.setParent(ServicesImpl.getCategoryService().getCategoryDAO().findEqualByLang(lang, this.getParent().getEqualIdentifier())) ;			
+			ca.setParent(Utilities.getServices().getCategoryService().getCategoryDAO().findEqualByLang(lang, this.getParent().getEqualIdentifier())) ;			
 		} else {
 			ca.setParent(null);
 		}
@@ -374,7 +374,7 @@ public Category(String name, String description, Category parent, String lang) {
 		}
 		
 		if(save) {
-			ServicesImpl.getCategoryService().save(ca);
+			Utilities.getServices().getCategoryService().save(ca);
 		}
 		
 		return ca ;

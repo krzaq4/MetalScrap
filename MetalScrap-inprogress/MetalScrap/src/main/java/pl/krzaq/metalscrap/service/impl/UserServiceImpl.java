@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import pl.krzaq.metalscrap.model.Role;
@@ -11,7 +12,7 @@ import pl.krzaq.metalscrap.model.User;
 import pl.krzaq.metalscrap.service.UserService;
 import pl.krzaq.metalscrap.dao.UserDAO; 
 
-
+@Component(value="userService")
 public class UserServiceImpl implements UserService {
 
 	@Autowired

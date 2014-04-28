@@ -52,7 +52,7 @@ import com.restfb.types.Photo;
 import com.restfb.types.User;
 
 import pl.krzaq.metalscrap.model.Role;
-import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+
 import pl.krzaq.metalscrap.utils.ApplicationContextProvider;
 import pl.krzaq.metalscrap.utils.Utilities;
 
@@ -82,6 +82,8 @@ public class UserLoginBind {
 	
 	private boolean loginFailed = false ;
 	
+	private boolean timeout = false ;
+	
 		private boolean userInvalid = false ;
 		
 		private boolean passInvalid = false ;
@@ -103,7 +105,7 @@ public class UserLoginBind {
 			FacebookClient fbc = new DefaultFacebookClient(accessToken) ;
 			fbUser = fbc.fetchObject("me", User.class) ;
 			
-			pl.krzaq.metalscrap.model.User fbAppUser = ServicesImpl.getUserService().getUserDAO().getUserbyFbId(fbUser.getId()) ;
+			pl.krzaq.metalscrap.model.User fbAppUser = Utilities.getServices().getUserService().getUserDAO().getUserbyFbId(fbUser.getId()) ;
 			if(fbAppUser!=null) {
 				// registered
 				
@@ -141,9 +143,9 @@ public class UserLoginBind {
 				
 				fbAppUser.setEmail(fbUser.getEmail());
 				
-				if(ServicesImpl.getUserService().getUserByLogin(fbAppUser.getLogin())!=null 
-						|| ServicesImpl.getUserService().getUserByLogin(fbAppUser.getEmail())!=null							 
-							|| ServicesImpl.getUserService().getUserByEmail(fbAppUser.getEmail())!=null){
+				if(Utilities.getServices().getUserService().getUserByLogin(fbAppUser.getLogin())!=null 
+						|| Utilities.getServices().getUserService().getUserByLogin(fbAppUser.getEmail())!=null							 
+							|| Utilities.getServices().getUserService().getUserByEmail(fbAppUser.getEmail())!=null){
 					
 					//login or email already taken
 					fbUser = new User() ;
@@ -167,14 +169,14 @@ public class UserLoginBind {
 					fbAppUser.setStatus(pl.krzaq.metalscrap.model.User.STATUS_CONFIRMED);
 					
 					Set<Role> roles = new HashSet<Role>() ;
-					roles.add(ServicesImpl.getUserService().getRoleByName("ROLE_USER"));
+					roles.add(Utilities.getServices().getUserService().getRoleByName("ROLE_USER"));
 					
 					fbAppUser.setRoles(roles);
 					fbAppUser.setPassword(Utilities.hash(Utilities.HASH_METHOD_MD5, fbAppUser.getLogin().concat(fbAppUser.getEmail())));
 					Calendar cal = new GregorianCalendar() ;
 					fbAppUser.setFbId(fbUser.getId());
 					fbAppUser.setCreatedOn(cal.getTime());
-					ServicesImpl.getUserService().save(fbAppUser);
+					Utilities.getServices().getUserService().save(fbAppUser);
 					
 					String dataDir = System.getProperty("jboss.server.data.dir") ;
 					dataDir = dataDir.concat("/platform/users");
@@ -264,7 +266,7 @@ public class UserLoginBind {
 			String jUser = jUserName.getValue() ;
 			if (jUser!=null && jUser.length()>0) {
 				
-				if(ServicesImpl.getUserService().getUserByLogin(jUser)!=null) {
+				if(Utilities.getServices().getUserService().getUserByLogin(jUser)!=null) {
 					userInvalid = false ;
 					userMessage = "" ;
 					jUserName.setSclass("default correctValue");
@@ -349,7 +351,7 @@ public class UserLoginBind {
 		 
 		 
 		 @AfterCompose
-		 @NotifyChange({"userMessage", "passMessage", "userInvalid", "passInvalid", "allowLogin", "loginFailed"})
+		 @NotifyChange({"userMessage", "passMessage", "userInvalid", "passInvalid", "allowLogin", "loginFailed", "timeout"})
 		    public void afterCompose(@ContextParam(ContextType.VIEW) Component view){
 		        
 			 	allowLogin = false ;
@@ -368,14 +370,14 @@ public class UserLoginBind {
 		    	loginFailed = true ;
 		    	error.setSclass("one error");
 		    	
+		    } else 
+		    if(status!=null && status.equals("timeout")) {
+		    	timeout = true ;
+		    	error.setSclass("one error");
 		    }
 		    	
-		        
-		    	
-		        
-		        //wire event listener
-//		      Selectors.wireEventListeners(view, this);
-		    }
+		  
+	}
 		 
 		 
 		 @Init
@@ -578,6 +580,14 @@ public class UserLoginBind {
 
 		public void setLoginFailed(boolean loginFailed) {
 			this.loginFailed = loginFailed;
+		}
+
+		public boolean isTimeout() {
+			return timeout;
+		}
+
+		public void setTimeout(boolean timeout) {
+			this.timeout = timeout;
 		}
 		
 		
