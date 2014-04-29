@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import pl.krzaq.metalscrap.dao.ConfigDAO;
 import pl.krzaq.metalscrap.model.Config;
 import pl.krzaq.metalscrap.service.ConfigService;
 
 @Component(value="configService")
+@Service
 public class ConfigServiceImpl implements ConfigService {
 
 	@Autowired

@@ -11,7 +11,7 @@ import pl.krzaq.metalscrap.model.generalization.Translatable;
 public class LangUtils {
 
 	
-	public static boolean translateInto(String lang, Translatable source) {
+	/*public static boolean translateInto(String lang, Translatable source) {
 		
 		List<Translatable> tmp = new ArrayList<Translatable>() ;
 		tmp.add(source) ;
@@ -109,7 +109,7 @@ public static Collection translateInto(String lang, Collection source, List ar) 
 		
 		return res ;
 	}
-	
+	*/
 	
 	/*private boolean isAvailableIn(String lang) {
 		

@@ -16,12 +16,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.access.ContextBeanFactoryReference;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,7 +42,6 @@ import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.model.User;
 import pl.krzaq.metalscrap.model.UserOffer;
 import pl.krzaq.metalscrap.service.impl.RESTLoginServiceImpl;
-
 import pl.krzaq.metalscrap.utils.Utilities;
 
 import javax.json.Json;

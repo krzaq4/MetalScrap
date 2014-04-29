@@ -728,7 +728,7 @@ try {
 				
 				for(Property pp:category.getProps()) {
 					
-					if(pp.getEqualIdentifier().equals(p.getEqualIdentifier())) {
+					if(pp.getEqualIdentifier()==null || (pp.getEqualIdentifier()!=null && pp.getEqualIdentifier().equals(p.getEqualIdentifier()))) {
 						toDelete = false ;
 					}
 					

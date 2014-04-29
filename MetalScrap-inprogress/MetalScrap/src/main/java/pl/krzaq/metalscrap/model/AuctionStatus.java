@@ -18,6 +18,7 @@ import javax.persistence.Table;
 
 import pl.krzaq.metalscrap.model.generalization.Translatable;
 import pl.krzaq.metalscrap.service.impl.ServicesImpl;
+import pl.krzaq.metalscrap.utils.Utilities;
 
 
 @Entity
@@ -116,7 +117,7 @@ public class AuctionStatus implements Serializable, Translatable{
 		}
 		
 		if(save) {
-			ServicesImpl.getAuctionService().getAuctionDAO().save(as);
+			Utilities.getServices().getAuctionService().getAuctionDAO().save(as);
 		}
 		
 		return as ;

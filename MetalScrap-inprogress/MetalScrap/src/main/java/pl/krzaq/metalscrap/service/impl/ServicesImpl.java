@@ -1,8 +1,11 @@
 package pl.krzaq.metalscrap.service.impl;
 
 
+import javax.inject.Named;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import pl.krzaq.metalscrap.service.AttachementFileService;
 import pl.krzaq.metalscrap.service.AuctionService;
@@ -16,10 +19,12 @@ import pl.krzaq.metalscrap.service.MailService;
 import pl.krzaq.metalscrap.service.MessageService;
 import pl.krzaq.metalscrap.service.PaymentMethodService;
 import pl.krzaq.metalscrap.service.PropertyService;
+import pl.krzaq.metalscrap.service.Services;
 import pl.krzaq.metalscrap.service.UserOfferService;
 
+@Service
 @Component(value="services")
-public class ServicesImpl {
+public class ServicesImpl implements Services {
 
 	@Autowired
 	private  UserServiceImpl userService ;

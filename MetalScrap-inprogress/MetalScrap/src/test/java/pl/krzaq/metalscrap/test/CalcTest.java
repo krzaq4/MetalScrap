@@ -117,7 +117,7 @@ public class CalcTest {
 		
 		
 		*/
-		List dd = new ArrayList() ;
+		/*List dd = new ArrayList() ;
 		Property p1 = new Property() ;
 		p1.setDescription("desc");
 		p1.setExposed(true);
@@ -186,16 +186,16 @@ public class CalcTest {
 		
 		
 		List rr = new ArrayList() ;
-		LangUtils.translateInto("de", dd, rr) ;
+		LangUtils.translateInto("de", dd, rr) ;*/
 		
 		System.out.println(" --------------------------------- ");
-		System.out.println("");
+		/*System.out.println("");
 		
 		for (Object o: rr) {
 			System.out.println("Object:  "+o.toString());
 			System.out.println("Lang:  "+((Property)o).getLang());
 			System.out.println("Attrs:  "+((Property)o).getAttributes());
-		}
+		}*/
 		
 		System.out.println(" --------------------------------- ");
 		

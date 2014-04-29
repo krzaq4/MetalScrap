@@ -3,8 +3,10 @@ package pl.krzaq.metalscrap.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import pl.krzaq.metalscrap.model.Role;
@@ -13,8 +15,9 @@ import pl.krzaq.metalscrap.service.UserService;
 import pl.krzaq.metalscrap.dao.UserDAO; 
 
 @Component(value="userService")
+@Service
 public class UserServiceImpl implements UserService {
-
+	
 	@Autowired
 	private UserDAO userDAO ;
 	

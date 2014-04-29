@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 
 
 
+
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpRequest;
@@ -33,6 +35,8 @@ import pl.krzaq.metalscrap.model.Category;
 import pl.krzaq.metalscrap.model.Company;
 import pl.krzaq.metalscrap.model.Role;
 import pl.krzaq.metalscrap.model.User;
+import pl.krzaq.metalscrap.service.ConfigService;
+import pl.krzaq.metalscrap.service.Services;
 import pl.krzaq.metalscrap.utils.Utilities;
 
 public class Login implements Initiator, InitiatorExt {
@@ -45,6 +49,8 @@ public class Login implements Initiator, InitiatorExt {
 		// TODO Auto-generated method stub
 		//super.doInit(page, arg1);
 		// wyświetlanie sub menu
+		Services ss = Utilities.getServices() ;
+		ConfigService cs = ss.getConfigService() ;
 		Boolean isCategoriesVisible = Boolean.valueOf(Utilities.getServices().getConfigService().findByKey("auction_categories_visible").getValue()) ;
 		Boolean isCommoditiesVisible = Boolean.valueOf(Utilities.getServices().getConfigService().findByKey("auction_commodities_visible").getValue());
 		boolean userVerificationModeAuto = Boolean.valueOf(Utilities.getServices().getConfigService().findByKey("user.verification.mode.auto").getValue()).booleanValue() ;

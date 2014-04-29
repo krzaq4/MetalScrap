@@ -15,6 +15,8 @@ import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.web.Attributes;
 import org.zkoss.zk.ui.Component;
@@ -50,11 +52,11 @@ public class Utilities {
 	public static String HASH_METHOD_SHA512 = "sha" ;
 	static Logger log = LoggerFactory.getLogger(Utilities.class) ;
 	
-	private static Services services ;
+	
 	
 	
 	public static Services getServices() {
-		return services ;
+		return (Services) ApplicationContextProvider.getApplicationContext().getBean("services");
 	}
 	
 	public static String hash(String hashMethod, String input) throws NoSuchAlgorithmException {
@@ -240,7 +242,7 @@ public class Utilities {
 		
 		Locale locale = (Locale) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_LOCALE) ;
 		
-		for (String lang:services.getLangLabelService().findAllLangs()) {
+		for (String lang:getServices().getLangLabelService().findAllLangs()) {
 			
 		for (Component cc:list) {
 			
@@ -260,7 +262,7 @@ public class Utilities {
 					
 					if (at instanceof Label) {
 						equalIdent = ( (Label) cc).getId() ;
-						equalProp = services.getPropertyService().findEqual(equalIdent, lang) ;
+						equalProp = getServices().getPropertyService().findEqual(equalIdent, lang) ;
 						newProp.setName( equalProp.getName() );
 						//Property inLangProp = ServicesImpl.getPropertyService().findEqual(equalIdentifier, lang)
 					}

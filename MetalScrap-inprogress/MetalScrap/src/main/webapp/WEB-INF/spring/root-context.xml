@@ -31,7 +31,7 @@
 	</bean>
 	
 	
-	<context:component-scan base-package="pl.krzaq.metalscrap"></context:component-scan>
+	<context:component-scan base-package="pl.krzaq.metalscrap , pl.krzaq.metalscrap.utils , pl.krzaq.metalscrap.dao , pl.krzaq.metalscrap.service.impl"></context:component-scan>
 	<context:annotation-config/>
 	<mvc:annotation-driven/>
 
