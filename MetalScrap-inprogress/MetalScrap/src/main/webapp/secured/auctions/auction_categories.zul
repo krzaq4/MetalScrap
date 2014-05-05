@@ -279,6 +279,10 @@
 					<label value="Widoczny na liście aukcji:" />
 					<checkbox checked="@{newParameter.exposed}" />
 				</row>
+				<row>
+					<label value="Obowiązkowy:" />
+					<checkbox checked="@{newParameter.required}" />
+				</row>
 			</rows>
 		</grid>
 		<hbox style="float: right;">
@@ -303,7 +307,7 @@
 						</listitem>
 					</listbox>
 					
-					<hbox id="add_value_button" style="float: right;">
+					<hbox id="add_value_button" style="float: right;" visible=@{attr.type, converter='pl.krzaq.converter.AttributeValuesAvailableConverter'}>
 							<label sclass="smallLabel" value="${labels.common.add} wartość" />
 							<button sclass="addButton"  onClick="categoryEvents.admin_onAddPropertyAttrValue(self.getParent().getParent(), edit_category_popup, binder)" />
 					</hbox>

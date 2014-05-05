@@ -175,9 +175,10 @@
 	
 	</div>
 	
+
 	
+	<window id="edit_category_popup" mode="modal" onSize="@command('onWindowOpen')" closable="false" visible="false" width="auto" height="auto" title="Edytuj kategorię" sizable="true" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('pl.krzaq.metalscrap.bind.AuctionCategoriesBind') ">
 	
-	<window id="edit_category_popup" mode="modal" closable="false" visible="false" width="auto" height="auto" title="Edytuj kategorię" sizable="true" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('pl.krzaq.metalscrap.bind.AuctionCategoriesBind') ">
 	<zscript>
 	<![CDATA[
 	
@@ -199,17 +200,17 @@
 			<column width="60%" />
 		</columns>
 		<rows>
-			<row visible="@{parent, converter='pl.krzaq.metalscrap.converter.CategorySelectedConverter'}">
+			<row visible="@load(vm.selectedCategory.parent ne null and vm.selectedCategory.parent.id ne null)">
 				<label value="${labels.common.parentcategory}" />
-				<textbox disabled="true" value="@{parent.name}" width="100%"/>
+				<textbox disabled="true" value="@load(vm.parentCategory.name)" width="100%"/>
 			</row>
 			<row>
 				<label value="${labels.common.name}" />
-				<textbox value="@{category.name}" width="100%" maxlength="128" constraint="no empty"/>
+				<textbox value="@load(vm.selectedCategory.name)" width="100%" maxlength="128" constraint="no empty"/>
 			</row>
 			<row>
 				<label value="${labels.common.description}" />
-				<textbox multiline="true" rows="2"  value="@{category.description}" width="100%" maxlength="255"></textbox>
+				<textbox multiline="true" rows="2"  value="@load(vm.selectedCategory.description)" width="100%" maxlength="255"></textbox>
 			</row>
 		</rows>
 	</grid>
@@ -232,18 +233,20 @@
 						<label sclass="normalLabel" value="${labels.common.categoryparameters}" />
 						
 					
-					<grid id="catParamsGrid" model="@{category.props}" >
+					<grid id="catParamsGrid" model="@load(vm.selectedCategory.props)" >
 					
 						<columns>
 							<column width="90%"></column>
 							<column width="10%"></column>
 						</columns>
+						<template name="model" var="parametr">
 						<rows>
-							<row self="@{each=parametr}" value="@{parametr}">
-								<label sclass="normalLabel" value="@{parametr.name}" onClick="categoryEvents.admin_onClickExistingCategoryParameter(self.getParent(), props, attributes, attributes_div,edit_category_popup, binder)"/>
+							<row value="@load(parametr)">
+								<label sclass="normalLabel" value="@load(parametr.name)" onClick="categoryEvents.admin_onClickExistingCategoryParameter(self.getParent(), props, attributes, attributes_div,edit_category_popup, binder)"/>
 								<button sclass="deleteButton" onClick="categoryEvents.admin_onClickDeleteCategoryParameter(category, self.getParent(), edit_category_popup, binder)"/>
 							</row>						
 						</rows>
+						</template>
 					</grid>
 					</vbox>
 				</div>
@@ -269,15 +272,15 @@
 			<rows>
 				<row>
 					<label value="Nazwa atrybutu:"></label>
-					<textbox value="@{newParameter.name}" width="100%" maxlength="128" constraint="no empty"></textbox>
+					<textbox value="@load(vm.newProperty.name)" width="100%" maxlength="128" constraint="no empty"></textbox>
 				</row>
 				<row>
 					<label value="Opis:"></label>
-					<textbox multiline="true" rows="2" value="@{newParameter.description}" width="100%" maxlength="255"></textbox>
+					<textbox multiline="true" rows="2" value="@load(vm.newProperty.description)" width="100%" maxlength="255"></textbox>
 				</row>
 				<row>
 					<label value="Widoczny na liście aukcji:" />
-					<checkbox checked="@{newParameter.exposed}" />
+					<checkbox checked="@load(vm.newProperty.exposed)" />
 				</row>
 			</rows>
 		</grid>
@@ -286,21 +289,24 @@
 			<button sclass="addButton" onClick="categoryEvents.admin_onClickAddCategoryParameterAttribute(newParameter, attributes,edit_category_popup, binder)"></button>
 		</hbox>
 		<space></space>
-		<grid id="attributes"  model="@{newParameter.attributes}" width="100%">
+		<grid id="attributes"  model="@load(vm.newProperty.attributes)" width="100%">
 			<columns>		
 				<column width="35%" label="Nazwa (opcjonalnie)" valign="top"></column>
 				<column width="57%" label="Typ"></column>
 				<column width="8%" valign="top"></column>
 			</columns>
+			<template name="model" var="attr">
 			<rows>
-				<row self="@{each=attr}"  value="@{attr}">	
-					<textbox value="@{attr.name}" width="100%" maxlength="128"/>			
+				<row  value="@load(attr)">	
+					<textbox value="@load(attr.name)" width="100%" maxlength="128"/>			
 					<vbox id="vb" width="100%">	
-					<listbox id="ats" mold="select" model="@{types}"  selectedItem="@{attr.type}" onSelect="categoryEvents.admin_onSelectAttributeType(self.getParent(), edit_category_popup, binder)" width="100%">
-						<listitem self="@{each=type}"  value="@{type}">
-							<listcell label="@{type, converter='pl.krzaq.metalscrap.converter.CategoryParameterTypeConverter'}">
+					<listbox id="ats" mold="select" model="@load(vm.propertyAttributeTypes)"  selectedItem="@load(attr.type)" onSelect="categoryEvents.admin_onSelectAttributeType(self.getParent(), edit_category_popup, binder)" width="100%">
+					<template name="model" var="type">
+						<listitem value="@load(type)">
+							<listcell label="@load(type)">
 							</listcell>
 						</listitem>
+					</template>
 					</listbox>
 					
 					<hbox id="add_value_button" style="float: right;">
@@ -308,26 +314,28 @@
 							<button sclass="addButton"  onClick="categoryEvents.admin_onAddPropertyAttrValue(self.getParent().getParent(), edit_category_popup, binder)" />
 					</hbox>
 					
-					<grid id="valsGrid"  model="@{attr.values}">
+					<grid id="valsGrid"  model="@load(attr.values)">
 						<columns>
 							<column width="35%"></column>
 							<column width="55%"></column>
 							<column width="15%"></column>
 						</columns>
+						<template name="model" var="val">
 						<rows  >
-							<row self="@{each=val}" value="@{val}">
+							<row value="@load(val)">
 								<label value="Wartość:" />
-								<textbox value="@{val.value}" maxlength="128" constraint="no empty"/>
+								<textbox value="@load(val.value)" maxlength="128" constraint="no empty"/>
 								<button sclass="deleteButton-S" onClick="categoryEvents.admin_onClickDeleteAttributeValue(newParameter, attr, self.getParent(), edit_category_popup, binder)"/>
 							</row>
 						</rows>
+						</template>
 					</grid>		
 					
 					</vbox>
 					<button sclass="deleteButton" onClick="categoryEvents.admin_onClickDeletePropertyAttribute(newParameter, self.getParent(), edit_category_popup, binder)"/>
 				</row>
 			</rows>
-		
+		</template>
 		</grid>
 		<button sclass="blue" visible="@{existingAttribute}" onClick="categoryEvents.admin_onClickUpdateCategoryProperty(category, newParameter, catParamsGrid, edit_category_popup, binder)" label="Aktualizuj"></button>
 		<button sclass="blue" visible="@{existingAttribute, converter='pl.krzaq.metalscrap.converter.NegativeConverter'}" onClick="categoryEvents.admin_onClickAddPropertyToCategory(category, newParameter,catParamsGrid, edit_category_popup, binder)" label="Dodaj do kategorii"></button>

@@ -27,7 +27,7 @@
 	</desktop-config>
 	<device-config>
 		<device-type>ajax</device-type>
-		<timeout-uri>/signin?status=timeout</timeout-uri><!-- An empty URL can cause the browser to reload the same URL -->
+		<timeout-uri>/app/signin?status=timeout</timeout-uri><!-- An empty URL can cause the browser to reload the same URL -->
 			
 	</device-config>
 	

@@ -1,5 +1,6 @@
 package pl.krzaq.metalscrap.bind;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.zkoss.bind.annotation.AfterCompose;
@@ -32,6 +33,8 @@ public class AuctionCategoriesBind {
 	
 	private Category selectedCategory ;
 	
+	private Category parentCategory ;
+	
 	private Property newProperty ;
 	
 	private Property selectedProperty ;
@@ -46,17 +49,19 @@ public class AuctionCategoriesBind {
 	
 	private List<PropertyAttributeValue> attributeValues ;
 	
+	private List<Integer> propertyAttributeTypes ;
 	
 	@AfterCompose
-	@NotifyChange({"selectedCategory", "categoryProperties"})
+	@NotifyChange({"selectedCategory", "categoryProperties", "propertyAttributeTypes"})
 	public void afterCompose(@ContextParam(ContextType.VIEW) Component view){
 	
 		 Selectors.wireComponents(view, this, false);
-		 
-		 selectedCategory = (Category) win.getAttribute("category") ;
-		 
-		 categoryProperties = selectedCategory.getProps() ;
-		 
+		 propertyAttributeTypes = new ArrayList<Integer>() ;
+		 propertyAttributeTypes.add(PropertyAttribute.TYPE_DATE) ;
+		 propertyAttributeTypes.add(PropertyAttribute.TYPE_DECIMAL) ;
+		 propertyAttributeTypes.add(PropertyAttribute.TYPE_MULTISELECT) ;
+		 propertyAttributeTypes.add(PropertyAttribute.TYPE_SELECT) ;
+		 propertyAttributeTypes.add(PropertyAttribute.TYPE_TEXT) ;
 		 
 	}
 	
@@ -65,6 +70,15 @@ public class AuctionCategoriesBind {
 	public void init() {
 		
 		
+	}
+	
+	
+	@Command
+	@NotifyChange({"selectedCategory", "categoryProperties", "parentCategory"})
+	public void onWindowOpen() {
+		selectedCategory = (Category) win.getAttribute("category") ;
+		categoryProperties = selectedCategory.getProps() ;
+		parentCategory = selectedCategory.getParent() ;
 	}
 	
 	
@@ -122,6 +136,138 @@ public class AuctionCategoriesBind {
 	@Command
 	public void deleteAttributeValue() {
 		
+	}
+
+
+	public Grid getCategoryPropertiesGrid() {
+		return categoryPropertiesGrid;
+	}
+
+
+	public void setCategoryPropertiesGrid(Grid categoryPropertiesGrid) {
+		this.categoryPropertiesGrid = categoryPropertiesGrid;
+	}
+
+
+	public Grid getAttributeValuesGrid() {
+		return attributeValuesGrid;
+	}
+
+
+	public void setAttributeValuesGrid(Grid attributeValuesGrid) {
+		this.attributeValuesGrid = attributeValuesGrid;
+	}
+
+
+	public Window getWin() {
+		return win;
+	}
+
+
+	public void setWin(Window win) {
+		this.win = win;
+	}
+
+
+	public Category getSelectedCategory() {
+		return selectedCategory;
+	}
+
+
+	public void setSelectedCategory(Category selectedCategory) {
+		this.selectedCategory = selectedCategory;
+	}
+
+
+	public Category getParentCategory() {
+		return parentCategory;
+	}
+
+
+	public void setParentCategory(Category parentCategory) {
+		this.parentCategory = parentCategory;
+	}
+
+
+	public Property getNewProperty() {
+		return newProperty;
+	}
+
+
+	public void setNewProperty(Property newProperty) {
+		this.newProperty = newProperty;
+	}
+
+
+	public Property getSelectedProperty() {
+		return selectedProperty;
+	}
+
+
+	public void setSelectedProperty(Property selectedProperty) {
+		this.selectedProperty = selectedProperty;
+	}
+
+
+	public List<Property> getCategoryProperties() {
+		return categoryProperties;
+	}
+
+
+	public void setCategoryProperties(List<Property> categoryProperties) {
+		this.categoryProperties = categoryProperties;
+	}
+
+
+	public PropertyAttribute getSelectedPropertyAttribute() {
+		return selectedPropertyAttribute;
+	}
+
+
+	public void setSelectedPropertyAttribute(
+			PropertyAttribute selectedPropertyAttribute) {
+		this.selectedPropertyAttribute = selectedPropertyAttribute;
+	}
+
+
+	public List<PropertyAttribute> getPropertyAttributes() {
+		return propertyAttributes;
+	}
+
+
+	public void setPropertyAttributes(List<PropertyAttribute> propertyAttributes) {
+		this.propertyAttributes = propertyAttributes;
+	}
+
+
+	public PropertyAttributeValue getSelectedAttributeValue() {
+		return selectedAttributeValue;
+	}
+
+
+	public void setSelectedAttributeValue(
+			PropertyAttributeValue selectedAttributeValue) {
+		this.selectedAttributeValue = selectedAttributeValue;
+	}
+
+
+	public List<PropertyAttributeValue> getAttributeValues() {
+		return attributeValues;
+	}
+
+
+	public void setAttributeValues(List<PropertyAttributeValue> attributeValues) {
+		this.attributeValues = attributeValues;
+	}
+
+
+	public List<Integer> getPropertyAttributeTypes() {
+		return propertyAttributeTypes;
+	}
+
+
+	public void setPropertyAttributeTypes(List<Integer> propertyAttributeTypes) {
+		this.propertyAttributeTypes = propertyAttributeTypes;
 	}
 	
 	//--------------------

@@ -48,6 +48,9 @@ public class Property implements Serializable, Translatable {
 	@Column(name="exposed")
 	private Boolean exposed ;
 	
+	@Column(name="required")
+	private Boolean required ;
+	
 	@Column(name="equal_ident")
 	private String equalIdentifier ;
 	
@@ -154,6 +157,14 @@ public class Property implements Serializable, Translatable {
 	@Override
 	public Boolean isChild() {
 		return this.isChild ;
+	}
+
+	public Boolean getRequired() {
+		return required;
+	}
+
+	public void setRequired(Boolean required) {
+		this.required = required;
 	}
 
 	

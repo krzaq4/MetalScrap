@@ -237,6 +237,7 @@ public class CategoryEvents {
 		win.setAttribute("existingAttribute", false) ;
 		win.setAttribute("parent", category.getParent()) ;
 		binder.loadComponent(win);
+		win.setWidth("auto");
 		win.setVisible(true) ;
 		
 		
